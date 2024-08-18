@@ -21,4 +21,5 @@ type Employee struct {
 	IsActive     bool               `bson:"is_active"`
 	CreatedAt    time.Time          `bson:"created_at"`
 	UpdatedAt    time.Time          `bson:"updated_at"`
+	UserID       primitive.ObjectID `bson:"user_id" json:"user_id"`
 }
