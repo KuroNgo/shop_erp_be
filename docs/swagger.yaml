@@ -1,0 +1,11 @@
+basePath: /api/v1
+host: localhost:8080
+info:
+  contact:
+    email: hoaiphong01012002@gmail.com
+    name: API Support
+  description: This is a server for Kuro API
+  title: Shop E-commerce ERP
+  version: "1.0"
+paths: {}
+swagger: "2.0"
