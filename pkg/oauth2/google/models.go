@@ -1,4 +1,4 @@
-package google
+package google_oauth2
 
 type OauthToken struct {
 	AccessToken string

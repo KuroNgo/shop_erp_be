@@ -21,10 +21,10 @@ func VerifyPassword(hashedPassword string, candidatePassword string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(candidatePassword))
 }
 
-// Santize để tránh bị SQL injection
+// Sanitize để tránh bị SQL injection
 // SQL injection là một loại tấn công về cơ sở dữ liệu
 // Hacker sẽ gửi một loạt các thông tin giả về cơ sở dữ liệu nhằm hủy hoại môi trường server
-func Santize(data string) string {
+func Sanitize(data string) string {
 	data = html.EscapeString(strings.TrimSpace(data))
 	return data
 }
