@@ -1,0 +1,1 @@
+package salary_domain
