@@ -1,4 +1,4 @@
-package user_repo
+package user_repository
 
 import (
 	"context"
@@ -9,6 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	userdomain "shop_erp_mono/domain/human_resource_management/user"
 	"shop_erp_mono/pkg/password"
+	user_validate "shop_erp_mono/repository/human_resource_management/user/validate"
 	"sync"
 	"time"
 )
@@ -139,8 +140,12 @@ func (u userRepository) Login(ctx context.Context, request userdomain.SignIn) (*
 	return user, nil
 }
 
-func (u userRepository) Create(ctx context.Context, user *userdomain.SignUp) error {
+func (u userRepository) Create(ctx context.Context, user *userdomain.User) error {
 	collectionUser := u.database.Collection(u.collectionUser)
+
+	if err := user_validate.IsInvalidUser(user); err != nil {
+		return err
+	}
 
 	filter := bson.M{"email": user.Email}
 	count, err := collectionUser.CountDocuments(ctx, filter)

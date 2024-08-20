@@ -8,7 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 	"log"
 	"shop_erp_mono/bootstrap"
-	user_repo "shop_erp_mono/repository/human_resource_management/user"
+	user_repo "shop_erp_mono/repository/human_resource_management/user/data_seeder"
 	"time"
 )
 
