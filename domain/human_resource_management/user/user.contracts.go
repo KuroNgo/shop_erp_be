@@ -15,7 +15,7 @@ type IUserRepository interface {
 
 	Login(ctx context.Context, request SignIn) (*User, error)
 	Create(ctx context.Context, user *SignUp) error
-	Update(ctx context.Context, user *User) error
+	Update(ctx context.Context, user *UpdateUser) error
 	UpdatePassword(ctx context.Context, user *User) error
 	UpdateVerify(ctx context.Context, user *User) (*mongo.UpdateResult, error)
 	UpdateVerifyForChangePassword(ctx context.Context, user *User) (*mongo.UpdateResult, error)
@@ -36,7 +36,7 @@ type IUserUseCase interface {
 	Create(ctx context.Context, user *SignUp) error
 	UpsertUser(ctx context.Context, email string, user *User) (*User, error)
 	Login(ctx context.Context, request SignIn) (*User, error)
-	Update(ctx context.Context, user *User) error
+	Update(ctx context.Context, user *UpdateUser) error
 	UpdatePassword(ctx context.Context, user *User) error
 	UpdateVerify(ctx context.Context, user *User) (*mongo.UpdateResult, error)
 	UpdateVerifyForChangePassword(ctx context.Context, user *User) (*mongo.UpdateResult, error)

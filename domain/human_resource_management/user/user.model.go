@@ -11,13 +11,18 @@ const (
 
 // User represents a user in the system.
 type User struct {
-	ID           primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
-	Username     string             `bson:"username" json:"username"`
-	PasswordHash string             `bson:"password_hash" json:"password_hash"` // Hash of the password
-	Email        string             `bson:"email" json:"email"`
-	Role         string             `bson:"role" json:"role"` // Example: "Admin", "Manager", "Employee"
-	CreatedAt    time.Time          `bson:"created_at" json:"created_at"`
-	UpdatedAt    time.Time          `bson:"updated_at" json:"updated_at"`
+	ID               primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
+	Username         string             `bson:"username" json:"username"`
+	PasswordHash     string             `bson:"password_hash" json:"password_hash"` // Hash of the password
+	Email            string             `bson:"email" json:"email"`
+	Phone            string             `json:"phone" bson:"phone"`
+	AvatarURL        string             `bson:"avatar_url"  json:"avatar_url"`
+	Verified         bool               `bson:"verify"   json:"verify"`
+	VerificationCode string             `bson:"verification_code" json:"verification_code"`
+	Provider         string             `bson:"provider" json:"provider"`
+	Role             string             `bson:"role" json:"role"` // Example: "Admin", "Manager", "Employee"
+	CreatedAt        time.Time          `bson:"created_at" json:"created_at"`
+	UpdatedAt        time.Time          `bson:"updated_at" json:"updated_at"`
 }
 
 type Response struct {
@@ -25,17 +30,23 @@ type Response struct {
 }
 
 type SignUp struct {
-	FullName   string `json:"full_name"  bson:"full_name"`
-	Email      string `json:"email" bson:"email"`
-	Password   string `json:"password" bson:"password"`
-	AvatarURL  string `json:"avatar_url"  bson:"avatar_url"`
-	Specialize string `json:"specialize"  bson:"specialize"`
-	Phone      string `json:"phone" bson:"phone"`
+	Username     string `bson:"username" json:"username"`
+	PasswordHash string `bson:"password_hash" json:"password_hash"` // Hash of the password
+	Email        string `bson:"email" json:"email"`
+	AvatarURL    string `json:"avatar_url"  bson:"avatar_url"`
+	Phone        string `json:"phone" bson:"phone"`
 }
 
 type SignIn struct {
 	Email    string `json:"email" bson:"email"`
 	Password string `bson:"password"  json:"password"`
+}
+
+type UpdateUser struct {
+	ID        primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
+	Username  string             `bson:"username" json:"username"`
+	AvatarURL string             `json:"avatar_url"  bson:"avatar_url"`
+	UpdatedAt time.Time          `bson:"updated_at" json:"updated_at"`
 }
 
 type VerificationCode struct {
