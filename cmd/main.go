@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	_ "net/http/pprof"
 	"shop_erp_mono/api/routers"
 	"shop_erp_mono/infrastructor"
 	"time"

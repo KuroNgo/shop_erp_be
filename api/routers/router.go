@@ -5,12 +5,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 	"shop_erp_mono/api/middlewares"
-	user_route "shop_erp_mono/api/routers/human_resources_management/user"
+	userroute "shop_erp_mono/api/routers/human_resources_management/user"
+	swaggerroute "shop_erp_mono/api/routers/swagger"
 	"shop_erp_mono/bootstrap"
 	"time"
 )
 
 func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, gin *gin.Engine) {
+	SwaggerRouter := gin.Group("")
 	publicRouter := gin.Group("/api")
 	// Middleware
 	publicRouter.Use(
@@ -26,5 +28,6 @@ func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, g
 	publicRouter.OPTIONS("/*path", middlewares.OptionMessages)
 
 	// All Public APIs
-	user_route.UserRouter(env, timeout, db, publicRouter)
+	userroute.UserRouter(env, timeout, db, publicRouter)
+	swaggerroute.SwaggerRouter(env, timeout, db, SwaggerRouter)
 }

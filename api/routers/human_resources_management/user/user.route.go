@@ -29,4 +29,5 @@ func UserRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Databa
 	router.GET("/info", user.GetMe)
 	router.GET("/refresh", user.RefreshToken)
 	router.GET("/logout", middlewares.DeserializeUser(), user.LogoutUser)
+
 }
