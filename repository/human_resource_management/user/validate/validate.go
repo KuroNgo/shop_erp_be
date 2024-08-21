@@ -11,3 +11,38 @@ func IsInvalidUser(user *userdomain.User) error {
 	}
 	return nil
 }
+
+func IsNilUsername(user *userdomain.User) error {
+	if user.Username == "" {
+		return errors.New("the user's information cannot be empty")
+	}
+	return nil
+}
+
+func IsNilEmail(user *userdomain.User) error {
+	if user.Email == "" {
+		return errors.New("the user's information cannot be empty")
+	}
+	return nil
+}
+
+func IsNilPasswordHash(user *userdomain.User) error {
+	if user.PasswordHash == "" {
+		return errors.New("the user's information cannot be empty")
+	}
+	return nil
+}
+
+func IsNilPhone(user *userdomain.User) error {
+	if user.Phone == "" {
+		return errors.New("the user's information cannot be empty")
+	}
+	return nil
+}
+
+func IsNilRole(user *userdomain.User) error {
+	if user.Role == "" {
+		return errors.New("the user's information cannot be empty")
+	}
+	return nil
+}

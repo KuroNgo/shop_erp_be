@@ -164,6 +164,16 @@ func (u userRepository) Create(ctx context.Context, user *userdomain.User) error
 func (u userRepository) Update(ctx context.Context, user *userdomain.UpdateUser) error {
 	collectionUser := u.database.Collection(u.collectionUser)
 
+	userData := userdomain.User{
+		Username:  user.Username,
+		AvatarURL: user.AvatarURL,
+		UpdatedAt: time.Now(),
+	}
+
+	if err := user_validate.IsNilUsername(&userData); err != nil {
+		return err
+	}
+
 	filter := bson.M{"_id": user.ID}
 	update := bson.M{"$set": user}
 

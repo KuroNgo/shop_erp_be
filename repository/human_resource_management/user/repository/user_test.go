@@ -43,3 +43,29 @@ func TestCreateOneUser(t *testing.T) {
 		assert.Error(t, err)
 	})
 }
+
+func TestUpdateUser(t *testing.T) {
+	client, database := infrastructor.SetupTestDatabase(t)
+	defer infrastructor.TearDownTestDatabase(client, t)
+
+	mockUser := &userdomain.UpdateUser{
+		ID:        primitive.NewObjectID(),
+		Username:  "test",
+		AvatarURL: "",
+		UpdatedAt: time.Now(),
+	}
+	mockEmptyUser := &userdomain.UpdateUser{}
+
+	t.Run("success", func(t *testing.T) {
+		ur := NewUserRepository(database, individual)
+		_ = ur.Update(context.Background(), mockUser)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		ur := NewUserRepository(database, individual)
+
+		// Trying to insert an empty user, expecting an error
+		err := ur.Update(context.Background(), mockEmptyUser)
+		assert.Error(t, err)
+	})
+}
