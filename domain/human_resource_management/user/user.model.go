@@ -16,6 +16,7 @@ type User struct {
 	PasswordHash     string             `bson:"password_hash" json:"password_hash"` // Hash of the password
 	Email            string             `bson:"email" json:"email"`
 	Phone            string             `json:"phone" bson:"phone"`
+	AssetURL         string             `bson:"asset_url"  json:"asset_url"`
 	AvatarURL        string             `bson:"avatar_url"  json:"avatar_url"`
 	Verified         bool               `bson:"verify"   json:"verify"`
 	VerificationCode string             `bson:"verification_code" json:"verification_code"`

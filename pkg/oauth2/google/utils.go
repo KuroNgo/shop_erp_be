@@ -24,7 +24,7 @@ func GetUserInfo(accessToken string) (map[string]interface{}, error) {
 	return userInfo, nil
 }
 
-// Function to sign a JWT with user information
+// SignJWT Function to sign a JWT with user information
 func SignJWT(userInfo map[string]interface{}) (string, error) {
 	// Customize the claims as needed
 	claims := jwt.MapClaims{

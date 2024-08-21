@@ -2,7 +2,6 @@ package user_domain
 
 import (
 	"context"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -10,7 +9,7 @@ import (
 type IUserRepository interface {
 	FetchMany(ctx context.Context) (Response, error)
 	GetByEmail(ctx context.Context, email string) (*User, error)
-	GetByID(ctx context.Context, id primitive.ObjectID) (*User, error)
+	GetByID(ctx context.Context, id string) (*User, error)
 	GetByVerificationCode(ctx context.Context, verificationCode string) (*User, error)
 	CheckVerify(ctx context.Context, verificationCode string) bool
 
@@ -30,7 +29,7 @@ type IUserRepository interface {
 type IUserUseCase interface {
 	FetchMany(ctx context.Context) (Response, error)
 	GetByEmail(ctx context.Context, email string) (*User, error)
-	GetByID(ctx context.Context, id primitive.ObjectID) (*User, error)
+	GetByID(ctx context.Context, id string) (*User, error)
 	CheckVerify(ctx context.Context, verificationCode string) bool
 	GetByVerificationCode(ctx context.Context, verificationCode string) (*User, error)
 

@@ -1,8 +1,7 @@
-package user
+package user_usecase
 
 import (
 	"context"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	userdomain "shop_erp_mono/domain/human_resource_management/user"
 	"time"
@@ -41,7 +40,7 @@ func (u userUseCase) GetByEmail(ctx context.Context, email string) (*userdomain.
 	return data, nil
 }
 
-func (u userUseCase) GetByID(ctx context.Context, id primitive.ObjectID) (*userdomain.User, error) {
+func (u userUseCase) GetByID(ctx context.Context, id string) (*userdomain.User, error) {
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
 

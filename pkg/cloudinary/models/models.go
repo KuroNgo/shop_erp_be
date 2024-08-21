@@ -1,4 +1,4 @@
-package cloudinary
+package models_cloudinary
 
 type UploadImage struct {
 	ImageURL string `bson:"image_url" json:"image_url"`

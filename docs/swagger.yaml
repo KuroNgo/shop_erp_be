@@ -1,4 +1,43 @@
 basePath: /api/v1
+definitions:
+  user_domain.SignIn:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  user_domain.User:
+    properties:
+      asset_url:
+        type: string
+      avatar_url:
+        type: string
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      password_hash:
+        description: Hash of the password
+        type: string
+      phone:
+        type: string
+      provider:
+        type: string
+      role:
+        description: 'Example: "Admin", "Manager", "Employee"'
+        type: string
+      updated_at:
+        type: string
+      username:
+        type: string
+      verification_code:
+        type: string
+      verify:
+        type: boolean
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -7,5 +46,123 @@ info:
   description: This is a server for Kuro API
   title: Shop E-commerce ERP
   version: "1.0"
-paths: {}
+paths:
+  /api/users/info:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the user's information using the access token stored
+        in cookies.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user_domain.User'
+        "400":
+          description: 'status: fail, message: detailed error message'
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: 'status: fail, message: You are not logged in!'
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - CookieAuth: []
+      summary: Get User Information
+      tags:
+      - User
+  /api/users/logout:
+    get:
+      consumes:
+      - application/json
+      description: Logout the current user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'status: success'
+        "400":
+          description: 'status: fail, message: detailed error message'
+        "401":
+          description: 'status: fail, message: You are not login!'
+      summary: Logout user
+      tags:
+      - User
+  /api/v1/users/login:
+    post:
+      consumes:
+      - application/json
+      description: Login user
+      parameters:
+      - description: User data
+        in: body
+        name: LoginUserRequestDto
+        required: true
+        schema:
+          $ref: '#/definitions/user_domain.SignIn'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 'status: success'
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Login user
+      tags:
+      - User
+  /api/v1/users/register:
+    post:
+      consumes:
+      - application/json
+      description: Create new user
+      parameters:
+      - description: User data
+        in: body
+        name: RegisterUserRequestDto
+        required: true
+        schema:
+          $ref: '#/definitions/user_domain.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 'status: success, message: created a new user'
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Register user
+      tags:
+      - User
+  /api/v1/users/update:
+    patch:
+      consumes:
+      - application/json
+      description: Updates the user's first name, last name, and username
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: 'status: fail, message: detailed error message'
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: 'status: fail, message: You are not logged in!'
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - CookieAuth: []
+      summary: Update User Information
+      tags:
+      - User
 swagger: "2.0"

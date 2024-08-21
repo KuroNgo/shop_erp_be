@@ -42,13 +42,13 @@ func TestGetByIDUser(t *testing.T) {
 	mockEmptyUser := userdomain.User{}
 
 	t.Run("success", func(t *testing.T) {
-		_, err = ur.GetByID(context.Background(), mockUser.ID)
+		_, err = ur.GetByID(context.Background(), mockUser.ID.String())
 		assert.Nil(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
 		// Trying to insert an empty user, expecting an error
-		_, err = ur.GetByID(context.Background(), mockEmptyUser.ID)
+		_, err = ur.GetByID(context.Background(), mockEmptyUser.ID.String())
 		assert.Error(t, err)
 	})
 }

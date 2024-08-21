@@ -90,10 +90,11 @@ func (u userRepository) GetByEmail(ctx context.Context, email string) (*userdoma
 	return user, nil
 }
 
-func (u userRepository) GetByID(ctx context.Context, id primitive.ObjectID) (*userdomain.User, error) {
+func (u userRepository) GetByID(ctx context.Context, id string) (*userdomain.User, error) {
 	collectionUser := u.database.Collection(u.collectionUser)
 
-	filter := bson.M{"_id": id}
+	userID, _ := primitive.ObjectIDFromHex(id)
+	filter := bson.M{"_id": userID}
 	var user *userdomain.User
 	if err := collectionUser.FindOne(ctx, filter).Decode(&user); err != nil {
 		return nil, errors.New(err.Error() + "error in the finding user into the database")
@@ -170,7 +171,6 @@ func (u userRepository) Update(ctx context.Context, user *userdomain.UpdateUser)
 
 	userData := userdomain.User{
 		Username:  user.Username,
-		AvatarURL: user.AvatarURL,
 		UpdatedAt: time.Now(),
 	}
 
