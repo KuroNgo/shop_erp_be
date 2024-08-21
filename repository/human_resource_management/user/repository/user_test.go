@@ -15,6 +15,68 @@ const (
 	individual = "user"
 )
 
+func TestGetAllUser(t *testing.T) {
+	client, database := infrastructor.SetupTestDatabase(t)
+	defer infrastructor.TearDownTestDatabase(client, t)
+
+	t.Run("success", func(t *testing.T) {
+		ur := NewUserRepository(database, individual)
+		_, err := ur.FetchMany(context.Background())
+		assert.Nil(t, err)
+	})
+}
+
+func TestGetByIDUser(t *testing.T) {
+	client, database := infrastructor.SetupTestDatabase(t)
+	defer infrastructor.TearDownTestDatabase(client, t)
+
+	userData := userdomain.User{
+		Email: "admin@admin.com",
+	}
+	ur := NewUserRepository(database, individual)
+	userReq, err := ur.GetByEmail(context.Background(), userData.Email)
+
+	mockUser := userdomain.User{
+		ID: userReq.ID,
+	}
+	mockEmptyUser := userdomain.User{}
+
+	t.Run("success", func(t *testing.T) {
+		_, err = ur.GetByID(context.Background(), mockUser.ID)
+		assert.Nil(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		// Trying to insert an empty user, expecting an error
+		_, err = ur.GetByID(context.Background(), mockEmptyUser.ID)
+		assert.Error(t, err)
+	})
+}
+
+func TestGetByEmailUser(t *testing.T) {
+	client, database := infrastructor.SetupTestDatabase(t)
+	defer infrastructor.TearDownTestDatabase(client, t)
+
+	mockUser := &userdomain.User{
+		Email: "admin@admin.com",
+	}
+	mockEmptyUser := &userdomain.User{}
+
+	t.Run("success", func(t *testing.T) {
+		ur := NewUserRepository(database, individual)
+		_, err := ur.GetByEmail(context.Background(), mockUser.Email)
+		assert.Nil(t, err)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		ur := NewUserRepository(database, individual)
+
+		// Trying to insert an empty user, expecting an error
+		_, err := ur.GetByEmail(context.Background(), mockEmptyUser.Email)
+		assert.Error(t, err)
+	})
+}
+
 func TestCreateOneUser(t *testing.T) {
 	client, database := infrastructor.SetupTestDatabase(t)
 	defer infrastructor.TearDownTestDatabase(client, t)

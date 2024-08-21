@@ -76,20 +76,24 @@ func (u userRepository) FetchMany(ctx context.Context) (userdomain.Response, err
 func (u userRepository) GetByEmail(ctx context.Context, email string) (*userdomain.User, error) {
 	collectionUser := u.database.Collection(u.collectionUser)
 
+	err := user_validate.IsNilEmail(email)
+	if err != nil {
+		return nil, err
+	}
+
 	filter := bson.M{"email": email}
 	var user *userdomain.User
-	if err := collectionUser.FindOne(ctx, filter).Decode(&user); err != nil {
+	if err = collectionUser.FindOne(ctx, filter).Decode(&user); err != nil {
 		return nil, errors.New(err.Error() + "error in the finding user into the database")
 	}
 
 	return user, nil
 }
 
-func (u userRepository) GetByID(ctx context.Context, id string) (*userdomain.User, error) {
+func (u userRepository) GetByID(ctx context.Context, id primitive.ObjectID) (*userdomain.User, error) {
 	collectionUser := u.database.Collection(u.collectionUser)
 
-	userID, _ := primitive.ObjectIDFromHex(id)
-	filter := bson.M{"_id": userID}
+	filter := bson.M{"_id": id}
 	var user *userdomain.User
 	if err := collectionUser.FindOne(ctx, filter).Decode(&user); err != nil {
 		return nil, errors.New(err.Error() + "error in the finding user into the database")

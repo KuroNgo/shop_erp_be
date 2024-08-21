@@ -19,8 +19,8 @@ func IsNilUsername(user *userdomain.User) error {
 	return nil
 }
 
-func IsNilEmail(user *userdomain.User) error {
-	if user.Email == "" {
+func IsNilEmail(email string) error {
+	if email == "" {
 		return errors.New("the user's information cannot be empty")
 	}
 	return nil
