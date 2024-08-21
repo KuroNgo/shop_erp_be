@@ -188,10 +188,15 @@ func (u userRepository) Update(ctx context.Context, user *userdomain.UpdateUser)
 func (u userRepository) UpdatePassword(ctx context.Context, user *userdomain.User) error {
 	collectionUser := u.database.Collection(u.collectionUser)
 
-	filter := bson.M{"_id": user.ID}
-	update := bson.M{"password": user.PasswordHash}
+	err := user_validate.IsNilPasswordHash(user)
+	if err != nil {
+		return err
+	}
 
-	_, err := collectionUser.UpdateOne(ctx, filter, update)
+	filter := bson.M{"_id": user.ID}
+	update := bson.M{"$set": bson.M{"password": user.PasswordHash}}
+
+	_, err = collectionUser.UpdateOne(ctx, filter, update)
 	if err != nil {
 		return errors.New(err.Error() + "error in the updating user into database")
 	}
@@ -204,7 +209,7 @@ func (u userRepository) UpdateVerify(ctx context.Context, user *userdomain.User)
 	collectionUser := u.database.Collection(u.collectionUser)
 
 	filter := bson.M{"_id": user.ID}
-	update := bson.M{"verify": user.Verified}
+	update := bson.M{"$set": bson.M{"verify": user.Verified}}
 
 	updateResult, err := collectionUser.UpdateOne(ctx, filter, update)
 	if err != nil {
@@ -219,7 +224,7 @@ func (u userRepository) UpdateVerifyForChangePassword(ctx context.Context, user 
 
 	filter := bson.D{{Key: "_id", Value: user.ID}}
 	update := bson.D{{Key: "$set", Value: bson.M{
-		"verified":   user.Verified,
+		"verify":     user.Verified,
 		"updated_at": user.UpdatedAt,
 	}}}
 
@@ -233,6 +238,11 @@ func (u userRepository) UpdateVerifyForChangePassword(ctx context.Context, user 
 func (u userRepository) UpsertOne(ctx context.Context, email string, user *userdomain.User) (*userdomain.User, error) {
 	collectionUser := u.database.Collection(u.collectionUser)
 
+	err := user_validate.IsNilUsername(user)
+	if err != nil {
+		return nil, err
+	}
+
 	filter := bson.M{"email": email}
 	update := bson.M{"$set": bson.M{
 		"username":   user.Username,
@@ -242,7 +252,7 @@ func (u userRepository) UpsertOne(ctx context.Context, email string, user *userd
 	}}
 
 	opts := options.Update().SetUpsert(true)
-	_, err := collectionUser.UpdateOne(ctx, filter, update, opts)
+	_, err = collectionUser.UpdateOne(ctx, filter, update, opts)
 	if err != nil {
 		return nil, errors.New(err.Error() + "error in the updating user's data into database")
 	}
@@ -253,11 +263,16 @@ func (u userRepository) UpsertOne(ctx context.Context, email string, user *userd
 func (u userRepository) UpdateImage(ctx context.Context, userID string, imageURL string) error {
 	collectionUser := u.database.Collection(u.collectionUser)
 
+	err := user_validate.IsNilImage(imageURL)
+	if err != nil {
+		return err
+	}
+
 	idUser, _ := primitive.ObjectIDFromHex(userID)
 	filter := bson.M{"_id": idUser}
-	update := bson.M{"image_url": imageURL}
+	update := bson.M{"$set": bson.M{"image_url": imageURL}}
 
-	_, err := collectionUser.UpdateOne(ctx, filter, update)
+	_, err = collectionUser.UpdateOne(ctx, filter, update)
 	if err != nil {
 		return errors.New(err.Error() + "error in the updating user's data into database")
 	}

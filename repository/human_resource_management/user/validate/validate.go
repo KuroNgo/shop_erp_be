@@ -33,6 +33,13 @@ func IsNilPasswordHash(user *userdomain.User) error {
 	return nil
 }
 
+func IsNilImage(avatarUrl string) error {
+	if avatarUrl == "" {
+		return errors.New("the user's information cannot be empty")
+	}
+	return nil
+}
+
 func IsNilPhone(user *userdomain.User) error {
 	if user.Phone == "" {
 		return errors.New("the user's information cannot be empty")
