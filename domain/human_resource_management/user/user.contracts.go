@@ -5,7 +5,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-//go:generate mockery --name IUserRepository
 type IUserRepository interface {
 	FetchMany(ctx context.Context) (Response, error)
 	GetByEmail(ctx context.Context, email string) (*User, error)
@@ -25,7 +24,6 @@ type IUserRepository interface {
 	UniqueVerificationCode(ctx context.Context, verificationCode string) bool
 }
 
-//go:generate mockery --name IUserUseCase
 type IUserUseCase interface {
 	FetchMany(ctx context.Context) (Response, error)
 	GetByEmail(ctx context.Context, email string) (*User, error)

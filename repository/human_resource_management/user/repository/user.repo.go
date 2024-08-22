@@ -198,7 +198,7 @@ func (u userRepository) UpdatePassword(ctx context.Context, user *userdomain.Use
 	}
 
 	filter := bson.M{"_id": user.ID}
-	update := bson.M{"$set": bson.M{"password": user.PasswordHash}}
+	update := bson.M{"$set": bson.M{"password_hash": user.PasswordHash}}
 
 	_, err = collectionUser.UpdateOne(ctx, filter, update)
 	if err != nil {
@@ -274,7 +274,7 @@ func (u userRepository) UpdateImage(ctx context.Context, userID string, imageURL
 
 	idUser, _ := primitive.ObjectIDFromHex(userID)
 	filter := bson.M{"_id": idUser}
-	update := bson.M{"$set": bson.M{"image_url": imageURL}}
+	update := bson.M{"$set": bson.M{"avatar_url": imageURL}}
 
 	_, err = collectionUser.UpdateOne(ctx, filter, update)
 	if err != nil {

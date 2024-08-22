@@ -1,4 +1,4 @@
-package repository
+package role_repository
 
 import (
 	"context"
