@@ -19,7 +19,9 @@ func UserRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Databa
 		Database:    env,
 	}
 
-	router := group.Group("/user")
+	router := group.Group("/users")
+	router.POST("/login", user.LoginUser)
+	router.GET("/google/callback", user.GoogleLoginWithUser)
 	router.POST("/signup", user.SignUp)
 	router.PATCH("/update", middlewares.DeserializeUser(), user.UpdateUser)
 	router.PATCH("/verify", user.VerificationCode)
@@ -28,6 +30,7 @@ func UserRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Databa
 	router.POST("/forget", user.ForgetPasswordInUser)
 	router.GET("/info", user.GetMe)
 	router.GET("/refresh", user.RefreshToken)
+	router.DELETE("/current/delete", middlewares.DeserializeUser(), user.DeleteCurrentUser)
 	router.GET("/logout", middlewares.DeserializeUser(), user.LogoutUser)
 
 }

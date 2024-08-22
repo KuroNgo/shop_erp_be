@@ -37,7 +37,7 @@ func (u *UserController) RefreshToken(ctx *gin.Context) {
 		return
 	}
 
-	access_token, err := token.CreateToken(u.Database.AccessTokenExpiresIn, user.ID, u.Database.AccessTokenPrivateKey)
+	accessToken, err := token.CreateToken(u.Database.AccessTokenExpiresIn, user.ID, u.Database.AccessTokenPrivateKey)
 	if err != nil {
 		ctx.JSON(http.StatusForbidden, gin.H{
 			"status":  "fail",
@@ -46,11 +46,21 @@ func (u *UserController) RefreshToken(ctx *gin.Context) {
 		return
 	}
 
-	ctx.SetCookie("access_token", access_token, u.Database.AccessTokenMaxAge*60, "/", "localhost", false, true)
+	refreshToken, err := token.CreateToken(u.Database.RefreshTokenExpiresIn, user.ID, u.Database.RefreshTokenPrivateKey)
+	if err != nil {
+		ctx.JSON(http.StatusForbidden, gin.H{
+			"status":  "fail",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	ctx.SetCookie("access_token", accessToken, u.Database.AccessTokenMaxAge*60, "/", "localhost", false, true)
+	ctx.SetCookie("refresh_token", refreshToken, u.Database.AccessTokenMaxAge*60, "/", "localhost", false, true)
 	ctx.SetCookie("logged_in", "true", u.Database.AccessTokenMaxAge*60, "/", "localhost", false, false)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status":       "success",
-		"access_token": access_token,
+		"access_token": accessToken,
 	})
 }

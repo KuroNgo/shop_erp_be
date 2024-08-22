@@ -3,7 +3,7 @@ package user_controller
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	user_domain "shop_erp_mono/domain/human_resource_management/user"
+	userdomain "shop_erp_mono/domain/human_resource_management/user"
 	"shop_erp_mono/pkg/token"
 )
 
@@ -19,7 +19,7 @@ import (
 // @Router /api/v1/users/login [post]
 func (l *UserController) LoginUser(ctx *gin.Context) {
 	//  Lấy thông tin từ request
-	var adminInput user_domain.SignIn
+	var adminInput userdomain.SignIn
 	if err := ctx.ShouldBindJSON(&adminInput); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
@@ -28,7 +28,7 @@ func (l *UserController) LoginUser(ctx *gin.Context) {
 		return
 	}
 
-	var userInput user_domain.SignIn
+	var userInput userdomain.SignIn
 	userInput.Email = adminInput.Email
 	userInput.Password = adminInput.Password
 
