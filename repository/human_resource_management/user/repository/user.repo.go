@@ -9,7 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	userdomain "shop_erp_mono/domain/human_resource_management/user"
 	"shop_erp_mono/pkg/password"
-	user_validate "shop_erp_mono/repository/human_resource_management/user/validate"
+	uservalidate "shop_erp_mono/repository/human_resource_management/user/validate"
 	"sync"
 	"time"
 )
@@ -76,7 +76,7 @@ func (u userRepository) FetchMany(ctx context.Context) (userdomain.Response, err
 func (u userRepository) GetByEmail(ctx context.Context, email string) (*userdomain.User, error) {
 	collectionUser := u.database.Collection(u.collectionUser)
 
-	err := user_validate.IsNilEmail(email)
+	err := uservalidate.IsNilEmail(email)
 	if err != nil {
 		return nil, err
 	}
@@ -148,7 +148,7 @@ func (u userRepository) Login(ctx context.Context, request userdomain.SignIn) (*
 func (u userRepository) Create(ctx context.Context, user *userdomain.User) error {
 	collectionUser := u.database.Collection(u.collectionUser)
 
-	if err := user_validate.IsInvalidUser(user); err != nil {
+	if err := uservalidate.IsInvalidUser(user); err != nil {
 		return err
 	}
 
@@ -174,7 +174,7 @@ func (u userRepository) Update(ctx context.Context, user *userdomain.UpdateUser)
 		UpdatedAt: time.Now(),
 	}
 
-	if err := user_validate.IsNilUsername(&userData); err != nil {
+	if err := uservalidate.IsNilUsername(&userData); err != nil {
 		return err
 	}
 
@@ -192,7 +192,7 @@ func (u userRepository) Update(ctx context.Context, user *userdomain.UpdateUser)
 func (u userRepository) UpdatePassword(ctx context.Context, user *userdomain.User) error {
 	collectionUser := u.database.Collection(u.collectionUser)
 
-	err := user_validate.IsNilPasswordHash(user)
+	err := uservalidate.IsNilPasswordHash(user)
 	if err != nil {
 		return err
 	}
@@ -242,7 +242,7 @@ func (u userRepository) UpdateVerifyForChangePassword(ctx context.Context, user 
 func (u userRepository) UpsertOne(ctx context.Context, email string, user *userdomain.User) (*userdomain.User, error) {
 	collectionUser := u.database.Collection(u.collectionUser)
 
-	err := user_validate.IsNilUsername(user)
+	err := uservalidate.IsNilUsername(user)
 	if err != nil {
 		return nil, err
 	}
@@ -267,7 +267,7 @@ func (u userRepository) UpsertOne(ctx context.Context, email string, user *userd
 func (u userRepository) UpdateImage(ctx context.Context, userID string, imageURL string) error {
 	collectionUser := u.database.Collection(u.collectionUser)
 
-	err := user_validate.IsNilImage(imageURL)
+	err := uservalidate.IsNilImage(imageURL)
 	if err != nil {
 		return err
 	}

@@ -17,3 +17,8 @@ type Role struct {
 	CreatedAt   time.Time          `bson:"created_at"`
 	UpdatedAt   time.Time          `bson:"updated_at"`
 }
+
+type Input struct {
+	Title       string `bson:"title"`
+	Description string `bson:"description"`
+}

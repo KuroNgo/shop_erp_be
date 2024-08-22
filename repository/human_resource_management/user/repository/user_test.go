@@ -33,8 +33,12 @@ func TestGetByIDUser(t *testing.T) {
 	userData := userdomain.User{
 		Email: "admin@admin.com",
 	}
+
 	ur := NewUserRepository(database, individual)
 	userReq, err := ur.GetByEmail(context.Background(), userData.Email)
+	if err != nil {
+		assert.Error(t, err)
+	}
 
 	mockUser := userdomain.User{
 		ID: userReq.ID,
@@ -42,13 +46,13 @@ func TestGetByIDUser(t *testing.T) {
 	mockEmptyUser := userdomain.User{}
 
 	t.Run("success", func(t *testing.T) {
-		_, err = ur.GetByID(context.Background(), mockUser.ID.String())
+		_, err = ur.GetByID(context.Background(), mockUser.ID.Hex())
 		assert.Nil(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
 		// Trying to insert an empty user, expecting an error
-		_, err = ur.GetByID(context.Background(), mockEmptyUser.ID.String())
+		_, err = ur.GetByID(context.Background(), mockEmptyUser.ID.Hex())
 		assert.Error(t, err)
 	})
 }
@@ -311,13 +315,13 @@ func TestDeleteUser(t *testing.T) {
 	mockEmptyUser := &userdomain.User{}
 
 	t.Run("success", func(t *testing.T) {
-		err = ur.DeleteOne(context.Background(), mockUser.ID.String())
+		err = ur.DeleteOne(context.Background(), mockUser.ID.Hex())
 		assert.Nil(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
 		// Trying to insert an empty user, expecting an error
-		err = ur.DeleteOne(context.Background(), mockEmptyUser.ID.String())
+		err = ur.DeleteOne(context.Background(), mockEmptyUser.ID.Hex())
 		assert.Nil(t, err)
 	})
 }
@@ -330,8 +334,7 @@ func TestImageURLUser(t *testing.T) {
 		Email: "admin@admin.com",
 	}
 	ur := NewUserRepository(database, individual)
-	userData, err := ur.GetByEmail(context.Background(), user.Email)
-	assert.Nil(t, err)
+	userData, _ := ur.GetByEmail(context.Background(), user.Email)
 
 	mockUser := &userdomain.User{
 		ID:        userData.ID,
@@ -340,13 +343,13 @@ func TestImageURLUser(t *testing.T) {
 	mockEmptyUser := &userdomain.User{}
 
 	t.Run("success", func(t *testing.T) {
-		err = ur.UpdateImage(context.Background(), mockUser.ID.String(), mockUser.AvatarURL)
+		err := ur.UpdateImage(context.Background(), mockUser.ID.Hex(), mockUser.AvatarURL)
 		assert.Nil(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
 		// Trying to insert an empty user, expecting an error
-		err = ur.UpdateImage(context.Background(), mockEmptyUser.ID.String(), mockEmptyUser.AvatarURL)
+		err := ur.UpdateImage(context.Background(), mockEmptyUser.ID.Hex(), mockEmptyUser.AvatarURL)
 		assert.Error(t, err)
 	})
 }

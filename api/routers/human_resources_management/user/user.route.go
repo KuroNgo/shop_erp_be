@@ -32,5 +32,4 @@ func UserRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Databa
 	router.GET("/refresh", user.RefreshToken)
 	router.DELETE("/current/delete", middlewares.DeserializeUser(), user.DeleteCurrentUser)
 	router.GET("/logout", middlewares.DeserializeUser(), user.LogoutUser)
-
 }

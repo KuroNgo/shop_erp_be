@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 	"log"
 	"shop_erp_mono/bootstrap"
+	role_repo "shop_erp_mono/repository/human_resource_management/role/data_seeder"
 	user_repo "shop_erp_mono/repository/human_resource_management/user/data_seeder"
 	"time"
 )
@@ -85,7 +86,7 @@ func NewMongoDatabase(env *bootstrap.Database) *mongo_driven.Client {
 	}
 
 	// migration
-	err = user_repo.SeedUser(ctx, client)
+	err = Migrations(ctx, client)
 	if err != nil {
 		return nil
 	}
@@ -100,4 +101,19 @@ func CloseMongoDBConnection(client *mongo_driven.Client) {
 	}
 
 	log.Println("Connection to MongoDB closed.")
+}
+
+func Migrations(ctx context.Context, client *mongo_driven.Client) error {
+	// migration
+	err := user_repo.SeedUser(ctx, client)
+	if err != nil {
+		return nil
+	}
+
+	err = role_repo.SeedRole(ctx, client)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
