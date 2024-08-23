@@ -12,7 +12,7 @@
     "host": "localhost:8080",
     "basePath": "/api/v1",
     "paths": {
-        "/api/all/departments": {
+        "/api/v1/all/departments": {
             "get": {
                 "security": [
                     {
@@ -57,7 +57,7 @@
                 }
             }
         },
-        "/api/all/roles": {
+        "/api/v1/all/roles": {
             "get": {
                 "security": [
                     {
@@ -95,242 +95,6 @@
                             "type": "object",
                             "additionalProperties": true
                         }
-                    }
-                }
-            }
-        },
-        "/api/one/departments/_id": {
-            "get": {
-                "security": [
-                    {
-                        "CookieAuth": []
-                    }
-                ],
-                "description": "Retrieves the department's information name",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Department"
-                ],
-                "summary": "Get Department Information By ID",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/departments_domain.Department"
-                        }
-                    },
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
-        "/api/one/departments/name": {
-            "get": {
-                "security": [
-                    {
-                        "CookieAuth": []
-                    }
-                ],
-                "description": "Retrieves the department's information name",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Department"
-                ],
-                "summary": "Get Department Information By Name",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/departments_domain.Department"
-                        }
-                    },
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
-        "/api/one/roles/_id": {
-            "get": {
-                "security": [
-                    {
-                        "CookieAuth": []
-                    }
-                ],
-                "description": "Retrieves the role's information name",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Role"
-                ],
-                "summary": "Get Role Information By Name",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/role_domain.Role"
-                        }
-                    },
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
-        "/api/one/roles/title": {
-            "get": {
-                "security": [
-                    {
-                        "CookieAuth": []
-                    }
-                ],
-                "description": "Retrieves the role's information name",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Role"
-                ],
-                "summary": "Get Role Information By Name",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/role_domain.Role"
-                        }
-                    },
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
-        "/api/users/info": {
-            "get": {
-                "security": [
-                    {
-                        "CookieAuth": []
-                    }
-                ],
-                "description": "Retrieves the user's information using the access token stored in cookies.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Get User Information",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/user_domain.User"
-                        }
-                    },
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
-        "/api/users/logout": {
-            "get": {
-                "description": "Logout the current user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Logout user",
-                "responses": {
-                    "200": {
-                        "description": "status: success"
-                    },
-                    "400": {
-                        "description": "status: fail, message: detailed error message"
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not login!"
                     }
                 }
             }
@@ -443,6 +207,174 @@
                 }
             }
         },
+        "/api/v1/one/departments/_id": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the department's information name",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Department"
+                ],
+                "summary": "Get Department Information By ID",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/departments_domain.Department"
+                        }
+                    },
+                    "400": {
+                        "description": "status: fail, message: detailed error message",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "status: fail, message: You are not logged in!",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/one/departments/name": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the department's information name",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Department"
+                ],
+                "summary": "Get Department Information By Name",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/departments_domain.Department"
+                        }
+                    },
+                    "400": {
+                        "description": "status: fail, message: detailed error message",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "status: fail, message: You are not logged in!",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/one/roles/_id": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the role's information name",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Get Role Information By Name",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/role_domain.Role"
+                        }
+                    },
+                    "400": {
+                        "description": "status: fail, message: detailed error message",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "status: fail, message: You are not logged in!",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/one/roles/title": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the role's information name",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Get Role Information By Name",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/role_domain.Role"
+                        }
+                    },
+                    "400": {
+                        "description": "status: fail, message: detailed error message",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "status: fail, message: You are not logged in!",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/roles/create": {
             "post": {
                 "security": [
@@ -519,6 +451,91 @@
                 }
             }
         },
+        "/api/v1/users/get/info": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the user's information using the access token stored in cookies.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get User Information",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user_domain.User"
+                        }
+                    },
+                    "400": {
+                        "description": "status: fail, message: detailed error message",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "status: fail, message: You are not logged in!",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users/get/refresh": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Refresh the user's access token using a valid refresh token stored in cookies.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Refresh Access Token",
+                "responses": {
+                    "200": {
+                        "description": "status: success",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "status: fail, message: detailed error message",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "403": {
+                        "description": "status: fail, message: could not refresh access token",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/users/login": {
             "post": {
                 "security": [
@@ -559,6 +576,32 @@
                 }
             }
         },
+        "/api/v1/users/logout": {
+            "get": {
+                "description": "Logout the current user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Logout user",
+                "responses": {
+                    "200": {
+                        "description": "status: success"
+                    },
+                    "400": {
+                        "description": "status: fail, message: detailed error message"
+                    },
+                    "401": {
+                        "description": "status: fail, message: You are not login!"
+                    }
+                }
+            }
+        },
         "/api/v1/users/register": {
             "post": {
                 "security": [
@@ -566,9 +609,10 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Create new user",
+                "description": "Register a new user with form data",
                 "consumes": [
-                    "application/json"
+                    "application/x-www-form-urlencoded",
+                    "multipart/form-data"
                 ],
                 "produces": [
                     "application/json"
@@ -579,18 +623,63 @@
                 "summary": "Register user",
                 "parameters": [
                     {
-                        "description": "User data",
-                        "name": "RegisterUserRequestDto",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/user_domain.User"
-                        }
+                        "type": "string",
+                        "example": "\"john.doe@example.com\"",
+                        "description": "Email of the user",
+                        "name": "email",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "example": "\"securepassword123\"",
+                        "description": "Password of the user",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "example": "\"John Doe\"",
+                        "description": "Full name of the user",
+                        "name": "fullName",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "example": "\"http://example.com/avatar.jpg\"",
+                        "description": "Avatar URL of the user",
+                        "name": "avatarUrl",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Image file to upload",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "example": "\"+1234567890\"",
+                        "description": "Phone number of the user",
+                        "name": "phone",
+                        "in": "formData",
+                        "required": true
                     }
                 ],
                 "responses": {
                     "201": {
-                        "description": "status: success, message: created a new user",
+                        "description": "status: success",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "status: error",
                         "schema": {
                             "type": "object",
                             "additionalProperties": true
@@ -681,10 +770,12 @@
             "type": "object",
             "properties": {
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "admin@admin.com"
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "12345"
                 }
             }
         },

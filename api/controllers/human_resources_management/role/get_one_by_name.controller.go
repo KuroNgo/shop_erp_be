@@ -14,7 +14,7 @@ import (
 // @Success 200 {object} role_domain.Role
 // @Failure 400 {object} map[string]interface{} "status: fail, message: detailed error message"
 // @Failure 401 {object} map[string]interface{} "status: fail, message: You are not logged in!"
-// @Router /api/one/roles/title [get]
+// @Router /api/v1/one/roles/title [get]
 // @Security CookieAuth
 func (r *RoleController) GetOneRoleByTitle(ctx *gin.Context) {
 	title := ctx.Param("title")

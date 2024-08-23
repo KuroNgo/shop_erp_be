@@ -7,6 +7,17 @@ import (
 	"shop_erp_mono/pkg/token"
 )
 
+// RefreshToken refreshes the user's access token.
+// @Summary Refresh Access Token
+// @Description Refresh the user's access token using a valid refresh token stored in cookies.
+// @Tags User
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} map[string]interface{} "status: success"
+// @Failure 400 {object} map[string]interface{} "status: fail, message: detailed error message"
+// @Failure 403 {object} map[string]interface{} "status: fail, message: could not refresh access token"
+// @Router /api/v1/users/get/refresh [get]
+// @Security CookieAuth
 func (u *UserController) RefreshToken(ctx *gin.Context) {
 	message := "could not refresh access token"
 
@@ -60,7 +71,8 @@ func (u *UserController) RefreshToken(ctx *gin.Context) {
 	ctx.SetCookie("logged_in", "true", u.Database.AccessTokenMaxAge*60, "/", "localhost", false, false)
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"status":       "success",
-		"access_token": accessToken,
+		"status":        "success",
+		"access_token":  accessToken,
+		"refresh_token": refreshToken,
 	})
 }

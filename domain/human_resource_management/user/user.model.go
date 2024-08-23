@@ -39,8 +39,8 @@ type SignUp struct {
 }
 
 type SignIn struct {
-	Email    string `json:"email" bson:"email"`
-	Password string `bson:"password"  json:"password"`
+	Email    string `json:"email" bson:"email" example:"admin@admin.com"`
+	Password string `bson:"password"  json:"password" example:"12345"`
 }
 
 type UpdateUser struct {

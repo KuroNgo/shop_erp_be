@@ -29,8 +29,10 @@ definitions:
   user_domain.SignIn:
     properties:
       email:
+        example: admin@admin.com
         type: string
       password:
+        example: "12345"
         type: string
     type: object
   user_domain.User:
@@ -73,7 +75,7 @@ info:
   title: Shop E-commerce ERP
   version: "1.0"
 paths:
-  /api/all/departments:
+  /api/v1/all/departments:
     get:
       consumes:
       - application/json
@@ -102,7 +104,7 @@ paths:
       summary: Get Department Information
       tags:
       - Department
-  /api/all/roles:
+  /api/v1/all/roles:
     get:
       consumes:
       - application/json
@@ -129,159 +131,6 @@ paths:
       summary: Get Role Information
       tags:
       - Role
-  /api/one/departments/_id:
-    get:
-      consumes:
-      - application/json
-      description: Retrieves the department's information name
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/departments_domain.Department'
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
-      security:
-      - CookieAuth: []
-      summary: Get Department Information By ID
-      tags:
-      - Department
-  /api/one/departments/name:
-    get:
-      consumes:
-      - application/json
-      description: Retrieves the department's information name
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/departments_domain.Department'
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
-      security:
-      - CookieAuth: []
-      summary: Get Department Information By Name
-      tags:
-      - Department
-  /api/one/roles/_id:
-    get:
-      consumes:
-      - application/json
-      description: Retrieves the role's information name
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/role_domain.Role'
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
-      security:
-      - CookieAuth: []
-      summary: Get Role Information By Name
-      tags:
-      - Role
-  /api/one/roles/title:
-    get:
-      consumes:
-      - application/json
-      description: Retrieves the role's information name
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/role_domain.Role'
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
-      security:
-      - CookieAuth: []
-      summary: Get Role Information By Name
-      tags:
-      - Role
-  /api/users/info:
-    get:
-      consumes:
-      - application/json
-      description: Retrieves the user's information using the access token stored
-        in cookies.
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/user_domain.User'
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
-      security:
-      - CookieAuth: []
-      summary: Get User Information
-      tags:
-      - User
-  /api/users/logout:
-    get:
-      consumes:
-      - application/json
-      description: Logout the current user
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 'status: success'
-        "400":
-          description: 'status: fail, message: detailed error message'
-        "401":
-          description: 'status: fail, message: You are not login!'
-      summary: Logout user
-      tags:
-      - User
   /api/v1/departments/create:
     post:
       consumes:
@@ -351,6 +200,114 @@ paths:
       summary: Update Department Information
       tags:
       - Department
+  /api/v1/one/departments/_id:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the department's information name
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/departments_domain.Department'
+        "400":
+          description: 'status: fail, message: detailed error message'
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: 'status: fail, message: You are not logged in!'
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - CookieAuth: []
+      summary: Get Department Information By ID
+      tags:
+      - Department
+  /api/v1/one/departments/name:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the department's information name
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/departments_domain.Department'
+        "400":
+          description: 'status: fail, message: detailed error message'
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: 'status: fail, message: You are not logged in!'
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - CookieAuth: []
+      summary: Get Department Information By Name
+      tags:
+      - Department
+  /api/v1/one/roles/_id:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the role's information name
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/role_domain.Role'
+        "400":
+          description: 'status: fail, message: detailed error message'
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: 'status: fail, message: You are not logged in!'
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - CookieAuth: []
+      summary: Get Role Information By Name
+      tags:
+      - Role
+  /api/v1/one/roles/title:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the role's information name
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/role_domain.Role'
+        "400":
+          description: 'status: fail, message: detailed error message'
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: 'status: fail, message: You are not logged in!'
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - CookieAuth: []
+      summary: Get Role Information By Name
+      tags:
+      - Role
   /api/v1/roles/create:
     post:
       consumes:
@@ -399,6 +356,63 @@ paths:
       summary: Update Role Information
       tags:
       - Role
+  /api/v1/users/get/info:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the user's information using the access token stored
+        in cookies.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/user_domain.User'
+        "400":
+          description: 'status: fail, message: detailed error message'
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: 'status: fail, message: You are not logged in!'
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - CookieAuth: []
+      summary: Get User Information
+      tags:
+      - User
+  /api/v1/users/get/refresh:
+    get:
+      consumes:
+      - application/json
+      description: Refresh the user's access token using a valid refresh token stored
+        in cookies.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'status: success'
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: 'status: fail, message: detailed error message'
+          schema:
+            additionalProperties: true
+            type: object
+        "403":
+          description: 'status: fail, message: could not refresh access token'
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - CookieAuth: []
+      summary: Refresh Access Token
+      tags:
+      - User
   /api/v1/users/login:
     post:
       consumes:
@@ -424,23 +438,75 @@ paths:
       summary: Login user
       tags:
       - User
+  /api/v1/users/logout:
+    get:
+      consumes:
+      - application/json
+      description: Logout the current user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'status: success'
+        "400":
+          description: 'status: fail, message: detailed error message'
+        "401":
+          description: 'status: fail, message: You are not login!'
+      summary: Logout user
+      tags:
+      - User
   /api/v1/users/register:
     post:
       consumes:
-      - application/json
-      description: Create new user
+      - application/x-www-form-urlencoded
+      - multipart/form-data
+      description: Register a new user with form data
       parameters:
-      - description: User data
-        in: body
-        name: RegisterUserRequestDto
+      - description: Email of the user
+        example: '"john.doe@example.com"'
+        in: formData
+        name: email
         required: true
-        schema:
-          $ref: '#/definitions/user_domain.User'
+        type: string
+      - description: Password of the user
+        example: '"securepassword123"'
+        in: formData
+        name: password
+        required: true
+        type: string
+      - description: Full name of the user
+        example: '"John Doe"'
+        in: formData
+        name: fullName
+        required: true
+        type: string
+      - description: Avatar URL of the user
+        example: '"http://example.com/avatar.jpg"'
+        in: formData
+        name: avatarUrl
+        required: true
+        type: string
+      - description: Image file to upload
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: Phone number of the user
+        example: '"+1234567890"'
+        in: formData
+        name: phone
+        required: true
+        type: string
       produces:
       - application/json
       responses:
         "201":
-          description: 'status: success, message: created a new user'
+          description: 'status: success'
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: 'status: error'
           schema:
             additionalProperties: true
             type: object

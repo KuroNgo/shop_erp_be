@@ -15,12 +15,19 @@ import (
 
 // SignUp Create a new user
 // @Summary Register user
-// @Description Create new user
+// @Description Register a new user with form data
 // @Tags User
-// @Accept json
+// @Accept x-www-form-urlencoded
+// @Accept multipart/form-data
 // @Produce json
-// @Param RegisterUserRequestDto body user_domain.User true "User data"
-// @Success 201 {object} map[string]interface{} "status: success, message: created a new user"
+// @Param email formData string true "Email of the user" example("john.doe@example.com")
+// @Param password formData string true "Password of the user" example("securepassword123")
+// @Param fullName formData string true "Full name of the user" example("John Doe")
+// @Param avatarUrl formData string true "Avatar URL of the user" example("http://example.com/avatar.jpg")
+// @Param file formData file true "Image file to upload"
+// @Param phone formData string true "Phone number of the user" example("+1234567890")
+// @Success 201 {object} map[string]interface{} "status: success"
+// @Failure 400 {object} map[string]interface{} "status: error"
 // @Security ApiKeyAuth
 // @Router /api/v1/users/register [post]
 func (u *UserController) SignUp(ctx *gin.Context) {
