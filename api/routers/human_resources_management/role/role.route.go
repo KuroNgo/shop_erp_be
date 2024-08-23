@@ -7,7 +7,7 @@ import (
 	"shop_erp_mono/bootstrap"
 	roledomain "shop_erp_mono/domain/human_resource_management/role"
 	role_repository "shop_erp_mono/repository/human_resource_management/role/repository"
-	role_usecase "shop_erp_mono/usecase/human_resource_management/role"
+	role_usecase "shop_erp_mono/usecase/human_resource_management/role/usecase"
 	"time"
 )
 

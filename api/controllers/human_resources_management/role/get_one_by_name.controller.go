@@ -5,19 +5,21 @@ import (
 	"net/http"
 )
 
-// GetAllRole retrieves the role's information
-// @Summary Get Role Information
-// @Description Retrieves the role's information
+// GetOneRoleByTitle retrieves the role's information
+// @Summary Get Role Information By Name
+// @Description Retrieves the role's information name
 // @Tags Role
 // @Accept  json
 // @Produce  json
 // @Success 200 {object} role_domain.Role
 // @Failure 400 {object} map[string]interface{} "status: fail, message: detailed error message"
 // @Failure 401 {object} map[string]interface{} "status: fail, message: You are not logged in!"
-// @Router /api/all/roles [get]
+// @Router /api/one/roles/title [get]
 // @Security CookieAuth
-func (r *RoleController) GetAllRole(ctx *gin.Context) {
-	data, err := r.RoleUseCase.GetAllRole(ctx)
+func (r *RoleController) GetOneRoleByTitle(ctx *gin.Context) {
+	title := ctx.Param("title")
+
+	data, err := r.RoleUseCase.GetByTitleRole(ctx, title)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",

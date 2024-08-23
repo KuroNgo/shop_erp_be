@@ -67,7 +67,7 @@ import (
 //	return client
 //}
 
-// test
+// unit_test
 func NewMongoDatabase(env *bootstrap.Database) *mongo_driven.Client {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()

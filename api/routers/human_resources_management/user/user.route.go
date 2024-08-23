@@ -8,7 +8,7 @@ import (
 	"shop_erp_mono/bootstrap"
 	userdomain "shop_erp_mono/domain/human_resource_management/user"
 	userrepository "shop_erp_mono/repository/human_resource_management/user/repository"
-	userusecase "shop_erp_mono/usecase/human_resource_management/user"
+	userusecase "shop_erp_mono/usecase/human_resource_management/user/usecase"
 	"time"
 )
 

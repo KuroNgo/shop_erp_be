@@ -1,4 +1,4 @@
-package user_repository
+package unit_test
 
 import (
 	"context"
@@ -7,6 +7,7 @@ import (
 	userdomain "shop_erp_mono/domain/human_resource_management/user"
 	"shop_erp_mono/infrastructor"
 	"shop_erp_mono/pkg/password"
+	"shop_erp_mono/repository/human_resource_management/user/repository"
 	"testing"
 	"time"
 )
@@ -20,7 +21,7 @@ func TestGetAllUser(t *testing.T) {
 	defer infrastructor.TearDownTestDatabase(client, t)
 
 	t.Run("success", func(t *testing.T) {
-		ur := NewUserRepository(database, individual)
+		ur := user_repository.NewUserRepository(database, individual)
 		_, err := ur.FetchMany(context.Background())
 		assert.Nil(t, err)
 	})
@@ -34,7 +35,7 @@ func TestGetByIDUser(t *testing.T) {
 		Email: "admin@admin.com",
 	}
 
-	ur := NewUserRepository(database, individual)
+	ur := user_repository.NewUserRepository(database, individual)
 	userReq, err := ur.GetByEmail(context.Background(), userData.Email)
 	if err != nil {
 		assert.Error(t, err)
@@ -67,13 +68,13 @@ func TestGetByEmailUser(t *testing.T) {
 	mockEmptyUser := &userdomain.User{}
 
 	t.Run("success", func(t *testing.T) {
-		ur := NewUserRepository(database, individual)
+		ur := user_repository.NewUserRepository(database, individual)
 		_, err := ur.GetByEmail(context.Background(), mockUser.Email)
 		assert.Nil(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
-		ur := NewUserRepository(database, individual)
+		ur := user_repository.NewUserRepository(database, individual)
 
 		// Trying to insert an empty user, expecting an error
 		_, err := ur.GetByEmail(context.Background(), mockEmptyUser.Email)
@@ -87,7 +88,7 @@ func TestCreateOneUser(t *testing.T) {
 
 	mockUser := &userdomain.User{
 		ID:           primitive.NewObjectID(),
-		Username:     "test",
+		Username:     "unit_test",
 		PasswordHash: "123",
 		Email:        "admin@admin.com",
 		Phone:        "0329245971",
@@ -99,13 +100,13 @@ func TestCreateOneUser(t *testing.T) {
 	mockUser.PasswordHash, _ = password.HashPassword(mockUser.PasswordHash)
 
 	t.Run("success", func(t *testing.T) {
-		ur := NewUserRepository(database, individual)
+		ur := user_repository.NewUserRepository(database, individual)
 		err := ur.Create(context.Background(), mockUser)
 		assert.Nil(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
-		ur := NewUserRepository(database, individual)
+		ur := user_repository.NewUserRepository(database, individual)
 
 		// Trying to insert an empty user, expecting an error
 		err := ur.Create(context.Background(), mockEmptyUser)
@@ -120,13 +121,13 @@ func TestUpdateUser(t *testing.T) {
 	user := &userdomain.User{
 		Email: "admin@admin.com",
 	}
-	ur := NewUserRepository(database, individual)
+	ur := user_repository.NewUserRepository(database, individual)
 	userData, err := ur.GetByEmail(context.Background(), user.Email)
 	assert.Nil(t, err)
 
 	mockUser := &userdomain.UpdateUser{
 		ID:        userData.ID,
-		Username:  "test",
+		Username:  "unit_test",
 		AvatarURL: "",
 		UpdatedAt: time.Now(),
 	}
@@ -159,7 +160,7 @@ func TestUpsertOneUser(t *testing.T) {
 
 	mockUser := &userdomain.User{
 		ID:           primitive.NewObjectID(),
-		Username:     "test",
+		Username:     "unit_test",
 		PasswordHash: "123",
 		Email:        "admin@admin.com",
 		Phone:        "0329245971",
@@ -175,13 +176,13 @@ func TestUpsertOneUser(t *testing.T) {
 	mockUser.PasswordHash, _ = password.HashPassword(mockUser.PasswordHash)
 
 	t.Run("success", func(t *testing.T) {
-		ur := NewUserRepository(database, individual)
+		ur := user_repository.NewUserRepository(database, individual)
 		_, err := ur.UpsertOne(context.Background(), mockUser.Email, mockUser)
 		assert.Nil(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
-		ur := NewUserRepository(database, individual)
+		ur := user_repository.NewUserRepository(database, individual)
 
 		// Trying to insert an empty user, expecting an error
 		_, err := ur.UpsertOne(context.Background(), mockEmptyUser.Email, mockEmptyUser)
@@ -189,7 +190,7 @@ func TestUpsertOneUser(t *testing.T) {
 	})
 
 	t.Run("error", func(t *testing.T) {
-		ur := NewUserRepository(database, individual)
+		ur := user_repository.NewUserRepository(database, individual)
 
 		// Trying to insert an empty user, expecting an error
 		_, err := ur.UpsertOne(context.Background(), mockEmptyDataUser.Email, mockEmptyDataUser)
@@ -204,7 +205,7 @@ func TestUpdatePasswordUser(t *testing.T) {
 	user := &userdomain.User{
 		Email: "admin@admin.com",
 	}
-	ur := NewUserRepository(database, individual)
+	ur := user_repository.NewUserRepository(database, individual)
 	userData, err := ur.GetByEmail(context.Background(), user.Email)
 	assert.Nil(t, err)
 
@@ -243,7 +244,7 @@ func TestUpdateVerifiedUser(t *testing.T) {
 	user := &userdomain.User{
 		Email: "admin@admin.com",
 	}
-	ur := NewUserRepository(database, individual)
+	ur := user_repository.NewUserRepository(database, individual)
 	userData, err := ur.GetByEmail(context.Background(), user.Email)
 	assert.Nil(t, err)
 
@@ -274,7 +275,7 @@ func TestUpdateVerifiedForChangePasswordUser(t *testing.T) {
 	user := &userdomain.User{
 		Email: "admin@admin.com",
 	}
-	ur := NewUserRepository(database, individual)
+	ur := user_repository.NewUserRepository(database, individual)
 	userData, err := ur.GetByEmail(context.Background(), user.Email)
 	assert.Nil(t, err)
 
@@ -305,7 +306,7 @@ func TestDeleteUser(t *testing.T) {
 	user := &userdomain.User{
 		Email: "admin@admin.com",
 	}
-	ur := NewUserRepository(database, individual)
+	ur := user_repository.NewUserRepository(database, individual)
 	userData, err := ur.GetByEmail(context.Background(), user.Email)
 	assert.Nil(t, err)
 
@@ -333,7 +334,7 @@ func TestImageURLUser(t *testing.T) {
 	user := &userdomain.User{
 		Email: "admin@admin.com",
 	}
-	ur := NewUserRepository(database, individual)
+	ur := user_repository.NewUserRepository(database, individual)
 	userData, _ := ur.GetByEmail(context.Background(), user.Email)
 
 	mockUser := &userdomain.User{
