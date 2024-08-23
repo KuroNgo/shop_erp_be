@@ -11,8 +11,8 @@ import (
 
 var role = roledomain.Role{
 	ID:          primitive.NewObjectID(),
-	Title:       "admin",
-	Description: "admin have a role base in this system",
+	Title:       "Admin",
+	Description: "The admin role has full access and control over the system.",
 	CreatedAt:   time.Now(),
 	UpdatedAt:   time.Now(),
 }

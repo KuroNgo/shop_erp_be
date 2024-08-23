@@ -1,4 +1,4 @@
-package usecase
+package role_usecase
 
 import (
 	"context"
