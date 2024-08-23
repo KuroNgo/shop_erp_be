@@ -1,5 +1,18 @@
 basePath: /api/v1
 definitions:
+  departments_domain.Department:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
   role_domain.Role:
     properties:
       createdAt:
@@ -60,6 +73,35 @@ info:
   title: Shop E-commerce ERP
   version: "1.0"
 paths:
+  /api/all/departments:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the department's information
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/departments_domain.Department'
+            type: array
+        "400":
+          description: 'status: fail, message: detailed error message'
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: 'status: fail, message: You are not logged in!'
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - CookieAuth: []
+      summary: Get Department Information
+      tags:
+      - Department
   /api/all/roles:
     get:
       consumes:
@@ -87,6 +129,60 @@ paths:
       summary: Get Role Information
       tags:
       - Role
+  /api/one/departments/_id:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the department's information name
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/departments_domain.Department'
+        "400":
+          description: 'status: fail, message: detailed error message'
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: 'status: fail, message: You are not logged in!'
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - CookieAuth: []
+      summary: Get Department Information By ID
+      tags:
+      - Department
+  /api/one/departments/name:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the department's information name
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/departments_domain.Department'
+        "400":
+          description: 'status: fail, message: detailed error message'
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: 'status: fail, message: You are not logged in!'
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - CookieAuth: []
+      summary: Get Department Information By Name
+      tags:
+      - Department
   /api/one/roles/_id:
     get:
       consumes:
@@ -186,6 +282,75 @@ paths:
       summary: Logout user
       tags:
       - User
+  /api/v1/departments/create:
+    post:
+      consumes:
+      - application/json
+      description: Create the department's information
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: 'status: fail, message: detailed error message'
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: 'status: fail, message: You are not logged in!'
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - CookieAuth: []
+      summary: Create Department Information
+      tags:
+      - Department
+  /api/v1/departments/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes the department's information
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: 'status: fail, message: detailed error message'
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: 'status: fail, message: You are not logged in!'
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - CookieAuth: []
+      summary: Delete Department Information
+      tags:
+      - Department
+  /api/v1/departments/update:
+    patch:
+      consumes:
+      - application/json
+      description: Updates the department's information
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: 'status: fail, message: detailed error message'
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: 'status: fail, message: You are not logged in!'
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - CookieAuth: []
+      summary: Update Department Information
+      tags:
+      - Department
   /api/v1/roles/create:
     post:
       consumes:

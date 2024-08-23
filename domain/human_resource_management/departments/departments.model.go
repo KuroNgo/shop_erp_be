@@ -5,6 +5,10 @@ import (
 	"time"
 )
 
+const (
+	CollectionDepartment = "department"
+)
+
 // Department struct represents a department within the company.
 type Department struct {
 	ID          primitive.ObjectID `bson:"_id,omitempty"`
