@@ -21,7 +21,7 @@ func SalaryRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Data
 
 	router := group.Group("/salaries")
 	router.GET("/get/_id", salary.GetOneSalaryByID)
-	router.GET("/get/title", salary.GetOneSalaryByTitle)
+	router.GET("/get/title", salary.GetOneSalaryByRole)
 	router.GET("/get/all", salary.GetAllSalary)
 	router.POST("/create", salary.CreateOneSalary)
 	router.PUT("/update", salary.UpdateOneSalary)
