@@ -1,18 +1,5 @@
 basePath: /api/v1
 definitions:
-  departments_domain.Department:
-    properties:
-      createdAt:
-        type: string
-      description:
-        type: string
-      id:
-        type: string
-      name:
-        type: string
-      updatedAt:
-        type: string
-    type: object
   role_domain.Role:
     properties:
       createdAt:
@@ -56,37 +43,6 @@ definitions:
         example: "12345"
         type: string
     type: object
-  user_domain.User:
-    properties:
-      asset_url:
-        type: string
-      avatar_url:
-        type: string
-      created_at:
-        type: string
-      email:
-        type: string
-      id:
-        type: string
-      password_hash:
-        description: Hash of the password
-        type: string
-      phone:
-        type: string
-      provider:
-        type: string
-      role:
-        description: 'Example: "Admin", "Manager", "Employee"'
-        type: string
-      updated_at:
-        type: string
-      username:
-        type: string
-      verification_code:
-        type: string
-      verify:
-        type: boolean
-    type: object
 host: localhost:8080
 info:
   contact:
@@ -103,17 +59,7 @@ paths:
       description: Create the department's information
       produces:
       - application/json
-      responses:
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       security:
       - CookieAuth: []
       summary: Create Department Information
@@ -126,17 +72,7 @@ paths:
       description: Deletes the department's information
       produces:
       - application/json
-      responses:
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       security:
       - CookieAuth: []
       summary: Delete Department Information
@@ -149,23 +85,7 @@ paths:
       description: Retrieves the department's information
       produces:
       - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/departments_domain.Department'
-            type: array
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       security:
       - CookieAuth: []
       summary: Get Department Information
@@ -178,21 +98,7 @@ paths:
       description: Retrieves the department's information name
       produces:
       - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/departments_domain.Department'
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       security:
       - CookieAuth: []
       summary: Get Department Information By ID
@@ -205,21 +111,7 @@ paths:
       description: Retrieves the department's information name
       produces:
       - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/departments_domain.Department'
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       security:
       - CookieAuth: []
       summary: Get Department Information By Name
@@ -232,17 +124,7 @@ paths:
       description: Updates the department's information
       produces:
       - application/json
-      responses:
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       security:
       - CookieAuth: []
       summary: Update Department Information
@@ -262,12 +144,7 @@ paths:
           $ref: '#/definitions/role_domain.Role'
       produces:
       - application/json
-      responses:
-        "201":
-          description: 'status: success, message: created a new role'
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       security:
       - ApiKeyAuth: []
       summary: Create role
@@ -280,17 +157,7 @@ paths:
       description: Deletes the role's information
       produces:
       - application/json
-      responses:
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       security:
       - CookieAuth: []
       summary: Delete Role Information
@@ -303,21 +170,7 @@ paths:
       description: Retrieves the role's information
       produces:
       - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/role_domain.Role'
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       security:
       - CookieAuth: []
       summary: Get Role Information
@@ -330,21 +183,7 @@ paths:
       description: Retrieves the role's information name
       produces:
       - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/role_domain.Role'
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       security:
       - CookieAuth: []
       summary: Get Role Information By Name
@@ -357,21 +196,7 @@ paths:
       description: Retrieves the role's information name
       produces:
       - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/role_domain.Role'
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       security:
       - CookieAuth: []
       summary: Get Role Information By Name
@@ -384,17 +209,7 @@ paths:
       description: Updates the role's information
       produces:
       - application/json
-      responses:
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       security:
       - CookieAuth: []
       summary: Update Role Information
@@ -414,12 +229,7 @@ paths:
           $ref: '#/definitions/salary_domain.Salary'
       produces:
       - application/json
-      responses:
-        "201":
-          description: 'status: success, message: created a new role'
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       security:
       - ApiKeyAuth: []
       summary: Create salary
@@ -432,17 +242,7 @@ paths:
       description: Deletes the salary's information
       produces:
       - application/json
-      responses:
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       security:
       - CookieAuth: []
       summary: Delete Salary Information
@@ -455,21 +255,7 @@ paths:
       description: Retrieves the salary's information
       produces:
       - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/salary_domain.Salary'
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       security:
       - CookieAuth: []
       summary: Get Salary Information
@@ -482,21 +268,7 @@ paths:
       description: Retrieves the salary's information id
       produces:
       - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/salary_domain.Salary'
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       security:
       - CookieAuth: []
       summary: Get Salary Information By ID
@@ -509,21 +281,7 @@ paths:
       description: Retrieves the salary's information role
       produces:
       - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/salary_domain.Salary'
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       security:
       - CookieAuth: []
       summary: Get Salary Information By Role
@@ -536,17 +294,7 @@ paths:
       description: Updates the salary's information
       produces:
       - application/json
-      responses:
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       security:
       - CookieAuth: []
       summary: Update Salary Information
@@ -559,17 +307,7 @@ paths:
       description: Deletes the user's information
       produces:
       - application/json
-      responses:
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       security:
       - CookieAuth: []
       summary: Delete User Information
@@ -583,21 +321,7 @@ paths:
         in cookies.
       produces:
       - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/user_domain.User'
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       security:
       - CookieAuth: []
       summary: Get User Information
@@ -610,13 +334,7 @@ paths:
       description: Logout the current user
       produces:
       - application/json
-      responses:
-        "200":
-          description: 'status: success'
-        "400":
-          description: 'status: fail, message: detailed error message'
-        "401":
-          description: 'status: fail, message: You are not login!'
+      responses: {}
       summary: Logout user
       tags:
       - User
@@ -628,22 +346,7 @@ paths:
         in cookies.
       produces:
       - application/json
-      responses:
-        "200":
-          description: 'status: success'
-          schema:
-            additionalProperties: true
-            type: object
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "403":
-          description: 'status: fail, message: could not refresh access token'
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       security:
       - CookieAuth: []
       summary: Refresh Access Token
@@ -663,12 +366,7 @@ paths:
           $ref: '#/definitions/user_domain.SignIn'
       produces:
       - application/json
-      responses:
-        "201":
-          description: 'status: success'
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       security:
       - ApiKeyAuth: []
       summary: Login user
@@ -718,17 +416,7 @@ paths:
         type: string
       produces:
       - application/json
-      responses:
-        "201":
-          description: 'status: success'
-          schema:
-            additionalProperties: true
-            type: object
-        "400":
-          description: 'status: error'
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       security:
       - ApiKeyAuth: []
       summary: Register user
@@ -741,17 +429,7 @@ paths:
       description: Updates the user's first name, last name, and username
       produces:
       - application/json
-      responses:
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
+      responses: {}
       security:
       - CookieAuth: []
       summary: Update User Information

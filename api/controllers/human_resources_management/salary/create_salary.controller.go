@@ -13,7 +13,6 @@ import (
 // @Accept json
 // @Produce json
 // @Param Role body salary_domain.Salary true "Salary data"
-// @Success 201 {object} map[string]interface{} "status: success, message: created a new role"
 // @Security ApiKeyAuth
 // @Router /api/v1/salaries/create [post]
 func (s *SalaryController) CreateOneSalary(ctx *gin.Context) {

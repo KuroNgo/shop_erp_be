@@ -19,6 +19,6 @@ type Role struct {
 }
 
 type Input struct {
-	Title       string `bson:"title"`
-	Description string `bson:"description"`
+	Title       string `bson:"title" example:"Admin"`
+	Description string `bson:"description" example:"The admin role has full access and control over the system."`
 }

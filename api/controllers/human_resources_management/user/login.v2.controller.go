@@ -50,7 +50,6 @@ func (auth *UserController) GoogleLoginWithUser(c *gin.Context) {
 		Username:  fullName,
 		AvatarURL: avatarURL,
 		Provider:  "google",
-		Role:      "user",
 		Verified:  verifiedEmail,
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),

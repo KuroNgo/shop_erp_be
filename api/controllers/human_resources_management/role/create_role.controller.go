@@ -15,7 +15,6 @@ import (
 // @Accept json
 // @Produce json
 // @Param Role body role_domain.Role true "Role data"
-// @Success 201 {object} map[string]interface{} "status: success, message: created a new role"
 // @Security ApiKeyAuth
 // @Router /api/v1/roles/create [post]
 func (r *RoleController) CreateOneRole(ctx *gin.Context) {

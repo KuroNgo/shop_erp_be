@@ -36,22 +36,7 @@ const docTemplate = `{
                     "Department"
                 ],
                 "summary": "Create Department Information",
-                "responses": {
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/departments/delete": {
@@ -72,22 +57,7 @@ const docTemplate = `{
                     "Department"
                 ],
                 "summary": "Delete Department Information",
-                "responses": {
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/departments/get/all": {
@@ -108,31 +78,7 @@ const docTemplate = `{
                     "Department"
                 ],
                 "summary": "Get Department Information",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/departments_domain.Department"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/departments/get/one/_id": {
@@ -153,28 +99,7 @@ const docTemplate = `{
                     "Department"
                 ],
                 "summary": "Get Department Information By ID",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/departments_domain.Department"
-                        }
-                    },
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/departments/get/one/name": {
@@ -195,28 +120,7 @@ const docTemplate = `{
                     "Department"
                 ],
                 "summary": "Get Department Information By Name",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/departments_domain.Department"
-                        }
-                    },
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/departments/update": {
@@ -237,22 +141,7 @@ const docTemplate = `{
                     "Department"
                 ],
                 "summary": "Update Department Information",
-                "responses": {
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/roles/create": {
@@ -284,15 +173,7 @@ const docTemplate = `{
                         }
                     }
                 ],
-                "responses": {
-                    "201": {
-                        "description": "status: success, message: created a new role",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/roles/delete": {
@@ -313,22 +194,7 @@ const docTemplate = `{
                     "Role"
                 ],
                 "summary": "Delete Role Information",
-                "responses": {
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/roles/get/all": {
@@ -349,28 +215,7 @@ const docTemplate = `{
                     "Role"
                 ],
                 "summary": "Get Role Information",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/role_domain.Role"
-                        }
-                    },
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/roles/get/one/_id": {
@@ -391,28 +236,7 @@ const docTemplate = `{
                     "Role"
                 ],
                 "summary": "Get Role Information By Name",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/role_domain.Role"
-                        }
-                    },
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/roles/get/one/title": {
@@ -433,28 +257,7 @@ const docTemplate = `{
                     "Role"
                 ],
                 "summary": "Get Role Information By Name",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/role_domain.Role"
-                        }
-                    },
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/roles/update": {
@@ -475,22 +278,7 @@ const docTemplate = `{
                     "Role"
                 ],
                 "summary": "Update Role Information",
-                "responses": {
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/salaries/create": {
@@ -522,15 +310,7 @@ const docTemplate = `{
                         }
                     }
                 ],
-                "responses": {
-                    "201": {
-                        "description": "status: success, message: created a new role",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/salaries/delete": {
@@ -551,22 +331,7 @@ const docTemplate = `{
                     "Salary"
                 ],
                 "summary": "Delete Salary Information",
-                "responses": {
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/salaries/get/all": {
@@ -587,28 +352,7 @@ const docTemplate = `{
                     "Salary"
                 ],
                 "summary": "Get Salary Information",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/salary_domain.Salary"
-                        }
-                    },
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/salaries/get/one/_id": {
@@ -629,28 +373,7 @@ const docTemplate = `{
                     "Salary"
                 ],
                 "summary": "Get Salary Information By ID",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/salary_domain.Salary"
-                        }
-                    },
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/salaries/get/one/role": {
@@ -671,28 +394,7 @@ const docTemplate = `{
                     "Salary"
                 ],
                 "summary": "Get Salary Information By Role",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/salary_domain.Salary"
-                        }
-                    },
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/salaries/update": {
@@ -713,22 +415,7 @@ const docTemplate = `{
                     "Salary"
                 ],
                 "summary": "Update Salary Information",
-                "responses": {
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/users/delete": {
@@ -749,22 +436,7 @@ const docTemplate = `{
                     "User"
                 ],
                 "summary": "Delete User Information",
-                "responses": {
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/users/get/info": {
@@ -785,28 +457,7 @@ const docTemplate = `{
                     "User"
                 ],
                 "summary": "Get User Information",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/user_domain.User"
-                        }
-                    },
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/users/get/logout": {
@@ -822,17 +473,7 @@ const docTemplate = `{
                     "User"
                 ],
                 "summary": "Logout user",
-                "responses": {
-                    "200": {
-                        "description": "status: success"
-                    },
-                    "400": {
-                        "description": "status: fail, message: detailed error message"
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not login!"
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/users/get/refresh": {
@@ -853,29 +494,7 @@ const docTemplate = `{
                     "User"
                 ],
                 "summary": "Refresh Access Token",
-                "responses": {
-                    "200": {
-                        "description": "status: success",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "403": {
-                        "description": "status: fail, message: could not refresh access token",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/users/login": {
@@ -907,15 +526,7 @@ const docTemplate = `{
                         }
                     }
                 ],
-                "responses": {
-                    "201": {
-                        "description": "status: success",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/users/register": {
@@ -986,22 +597,7 @@ const docTemplate = `{
                         "required": true
                     }
                 ],
-                "responses": {
-                    "201": {
-                        "description": "status: success",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "400": {
-                        "description": "status: error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/users/update": {
@@ -1022,46 +618,11 @@ const docTemplate = `{
                     "User"
                 ],
                 "summary": "Update User Information",
-                "responses": {
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
+                "responses": {}
             }
         }
     },
     "definitions": {
-        "departments_domain.Department": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
-                }
-            }
-        },
         "role_domain.Role": {
             "type": "object",
             "properties": {
@@ -1124,52 +685,6 @@ const docTemplate = `{
                 "password": {
                     "type": "string",
                     "example": "12345"
-                }
-            }
-        },
-        "user_domain.User": {
-            "type": "object",
-            "properties": {
-                "asset_url": {
-                    "type": "string"
-                },
-                "avatar_url": {
-                    "type": "string"
-                },
-                "created_at": {
-                    "type": "string"
-                },
-                "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "password_hash": {
-                    "description": "Hash of the password",
-                    "type": "string"
-                },
-                "phone": {
-                    "type": "string"
-                },
-                "provider": {
-                    "type": "string"
-                },
-                "role": {
-                    "description": "Example: \"Admin\", \"Manager\", \"Employee\"",
-                    "type": "string"
-                },
-                "updated_at": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                },
-                "verification_code": {
-                    "type": "string"
-                },
-                "verify": {
-                    "type": "boolean"
                 }
             }
         }

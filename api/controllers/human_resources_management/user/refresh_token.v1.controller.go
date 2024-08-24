@@ -13,9 +13,6 @@ import (
 // @Tags User
 // @Accept  json
 // @Produce  json
-// @Success 200 {object} map[string]interface{} "status: success"
-// @Failure 400 {object} map[string]interface{} "status: fail, message: detailed error message"
-// @Failure 403 {object} map[string]interface{} "status: fail, message: could not refresh access token"
 // @Router /api/v1/users/get/refresh [get]
 // @Security CookieAuth
 func (u *UserController) RefreshToken(ctx *gin.Context) {

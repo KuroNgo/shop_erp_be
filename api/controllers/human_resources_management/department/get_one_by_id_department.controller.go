@@ -11,9 +11,6 @@ import (
 // @Tags Department
 // @Accept  json
 // @Produce  json
-// @Success 200 {object} departments_domain.Department
-// @Failure 400 {object} map[string]interface{} "status: fail, message: detailed error message"
-// @Failure 401 {object} map[string]interface{} "status: fail, message: You are not logged in!"
 // @Router /api/v1/departments/get/one/_id [get]
 // @Security CookieAuth
 func (d *DepartmentController) FetchOneDepartmentByID(ctx *gin.Context) {

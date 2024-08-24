@@ -12,9 +12,6 @@ import (
 // @Tags User
 // @Accept json
 // @Produce json
-// @@Success 200 {object} "status: success, message: delete user success"
-// @Failure 400 {object} map[string]interface{} "status: fail, message: detailed error message"
-// @Failure 401 {object} map[string]interface{} "status: fail, message: You are not logged in!"
 // @Router /api/v1/users/delete [delete]
 // @Security CookieAuth
 func (u *UserController) DeleteCurrentUser(c *gin.Context) {

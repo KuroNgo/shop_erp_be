@@ -14,9 +14,6 @@ import (
 // @Tags Department
 // @Accept json
 // @Produce json
-// @@Success 200 {object} "status: success, message:update department success"
-// @Failure 400 {object} map[string]interface{} "status: fail, message: detailed error message"
-// @Failure 401 {object} map[string]interface{} "status: fail, message: You are not logged in!"
 // @Router /api/v1/departments/create [post]
 // @Security CookieAuth
 func (d *DepartmentController) CreateOneDepartment(ctx *gin.Context) {

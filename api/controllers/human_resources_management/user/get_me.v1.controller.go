@@ -13,9 +13,6 @@ import (
 // @Tags User
 // @Accept  json
 // @Produce  json
-// @Success 200 {object} user_domain.User
-// @Failure 400 {object} map[string]interface{} "status: fail, message: detailed error message"
-// @Failure 401 {object} map[string]interface{} "status: fail, message: You are not logged in!"
 // @Router /api/v1/users/get/info [get]
 // @Security CookieAuth
 func (u *UserController) GetMe(ctx *gin.Context) {

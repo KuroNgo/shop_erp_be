@@ -14,7 +14,6 @@ import (
 // @Accept json
 // @Produce json
 // @Param LoginUserRequestDto body user_domain.SignIn true "User data"
-// @Success 201 {object} map[string]interface{} "status: success"
 // @Security ApiKeyAuth
 // @Router /api/v1/users/login [post]
 func (l *UserController) LoginUser(ctx *gin.Context) {

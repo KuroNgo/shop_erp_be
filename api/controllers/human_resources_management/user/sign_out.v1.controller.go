@@ -12,9 +12,6 @@ import (
 // @Tags User
 // @Accept  json
 // @Produce  json
-// @Success 200 "status: success"
-// @Failure 400 "status: fail, message: detailed error message"
-// @Failure 401 "status: fail, message: You are not login!"
 // @Router /api/v1/users/get/logout [get]
 func (u *UserController) LogoutUser(ctx *gin.Context) {
 	currentUser, exists := ctx.Get("currentUser")

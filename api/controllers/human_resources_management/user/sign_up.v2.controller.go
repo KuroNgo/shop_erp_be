@@ -26,8 +26,6 @@ import (
 // @Param avatarUrl formData string true "Avatar URL of the user" example("http://example.com/avatar.jpg")
 // @Param file formData file true "Image file to upload"
 // @Param phone formData string true "Phone number of the user" example("+1234567890")
-// @Success 201 {object} map[string]interface{} "status: success"
-// @Failure 400 {object} map[string]interface{} "status: error"
 // @Security ApiKeyAuth
 // @Router /api/v1/users/register [post]
 func (u *UserController) SignUp(ctx *gin.Context) {
@@ -78,8 +76,6 @@ func (u *UserController) SignUp(ctx *gin.Context) {
 			PasswordHash: hashedPassword,
 			Verified:     false,
 			Provider:     "fe-it",
-			Role:         "user",
-			Phone:        phoneForm,
 			CreatedAt:    time.Now(),
 			UpdatedAt:    time.Now(),
 		}
