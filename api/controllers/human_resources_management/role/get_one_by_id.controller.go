@@ -14,7 +14,7 @@ import (
 // @Success 200 {object} role_domain.Role
 // @Failure 400 {object} map[string]interface{} "status: fail, message: detailed error message"
 // @Failure 401 {object} map[string]interface{} "status: fail, message: You are not logged in!"
-// @Router /api/v1/roles/one/_id [get]
+// @Router /api/v1/roles/get/one/_id [get]
 // @Security CookieAuth
 func (r *RoleController) GetOneRoleByID(ctx *gin.Context) {
 	id := ctx.Param("_id")

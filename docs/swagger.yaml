@@ -96,35 +96,6 @@ info:
   title: Shop E-commerce ERP
   version: "1.0"
 paths:
-  /api/v1/departments/all:
-    get:
-      consumes:
-      - application/json
-      description: Retrieves the department's information
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/departments_domain.Department'
-            type: array
-        "400":
-          description: 'status: fail, message: detailed error message'
-          schema:
-            additionalProperties: true
-            type: object
-        "401":
-          description: 'status: fail, message: You are not logged in!'
-          schema:
-            additionalProperties: true
-            type: object
-      security:
-      - CookieAuth: []
-      summary: Get Department Information
-      tags:
-      - Department
   /api/v1/departments/create:
     post:
       consumes:
@@ -171,7 +142,36 @@ paths:
       summary: Delete Department Information
       tags:
       - Department
-  /api/v1/departments/one/_id:
+  /api/v1/departments/get/all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the department's information
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/departments_domain.Department'
+            type: array
+        "400":
+          description: 'status: fail, message: detailed error message'
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: 'status: fail, message: You are not logged in!'
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - CookieAuth: []
+      summary: Get Department Information
+      tags:
+      - Department
+  /api/v1/departments/get/one/_id:
     get:
       consumes:
       - application/json
@@ -198,7 +198,7 @@ paths:
       summary: Get Department Information By ID
       tags:
       - Department
-  /api/v1/departments/one/name:
+  /api/v1/departments/get/one/name:
     get:
       consumes:
       - application/json
@@ -248,7 +248,32 @@ paths:
       summary: Update Department Information
       tags:
       - Department
-  /api/v1/roles/all:
+  /api/v1/roles/create:
+    post:
+      consumes:
+      - application/json
+      description: Create new role
+      parameters:
+      - description: Role data
+        in: body
+        name: Role
+        required: true
+        schema:
+          $ref: '#/definitions/role_domain.Role'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 'status: success, message: created a new role'
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Create role
+      tags:
+      - Role
+  /api/v1/roles/get/all:
     get:
       consumes:
       - application/json
@@ -275,32 +300,7 @@ paths:
       summary: Get Role Information
       tags:
       - Role
-  /api/v1/roles/create:
-    post:
-      consumes:
-      - application/json
-      description: Create new role
-      parameters:
-      - description: Role data
-        in: body
-        name: Role
-        required: true
-        schema:
-          $ref: '#/definitions/role_domain.Role'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: 'status: success, message: created a new role'
-          schema:
-            additionalProperties: true
-            type: object
-      security:
-      - ApiKeyAuth: []
-      summary: Create role
-      tags:
-      - Role
-  /api/v1/roles/one/_id:
+  /api/v1/roles/get/one/_id:
     get:
       consumes:
       - application/json
@@ -327,7 +327,7 @@ paths:
       summary: Get Role Information By Name
       tags:
       - Role
-  /api/v1/roles/one/title:
+  /api/v1/roles/get/one/title:
     get:
       consumes:
       - application/json
@@ -377,7 +377,32 @@ paths:
       summary: Update Role Information
       tags:
       - Role
-  /api/v1/salaries/all:
+  /api/v1/salaries/create:
+    post:
+      consumes:
+      - application/json
+      description: Create new salary
+      parameters:
+      - description: Salary data
+        in: body
+        name: Role
+        required: true
+        schema:
+          $ref: '#/definitions/salary_domain.Salary'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 'status: success, message: created a new role'
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Create salary
+      tags:
+      - Salary
+  /api/v1/salaries/get/all:
     get:
       consumes:
       - application/json
@@ -404,32 +429,7 @@ paths:
       summary: Get Salary Information
       tags:
       - Salary
-  /api/v1/salaries/create:
-    post:
-      consumes:
-      - application/json
-      description: Create new salary
-      parameters:
-      - description: Salary data
-        in: body
-        name: Role
-        required: true
-        schema:
-          $ref: '#/definitions/salary_domain.Salary'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: 'status: success, message: created a new role'
-          schema:
-            additionalProperties: true
-            type: object
-      security:
-      - ApiKeyAuth: []
-      summary: Create salary
-      tags:
-      - Salary
-  /api/v1/salaries/one/_id:
+  /api/v1/salaries/get/one/_id:
     get:
       consumes:
       - application/json
@@ -456,7 +456,7 @@ paths:
       summary: Get Salary Information By ID
       tags:
       - Salary
-  /api/v1/salaries/one/role:
+  /api/v1/salaries/get/one/role:
     get:
       consumes:
       - application/json
@@ -534,6 +534,23 @@ paths:
       summary: Get User Information
       tags:
       - User
+  /api/v1/users/get/logout:
+    get:
+      consumes:
+      - application/json
+      description: Logout the current user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'status: success'
+        "400":
+          description: 'status: fail, message: detailed error message'
+        "401":
+          description: 'status: fail, message: You are not login!'
+      summary: Logout user
+      tags:
+      - User
   /api/v1/users/get/refresh:
     get:
       consumes:
@@ -586,23 +603,6 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Login user
-      tags:
-      - User
-  /api/v1/users/logout:
-    get:
-      consumes:
-      - application/json
-      description: Logout the current user
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 'status: success'
-        "400":
-          description: 'status: fail, message: detailed error message'
-        "401":
-          description: 'status: fail, message: You are not login!'
-      summary: Logout user
       tags:
       - User
   /api/v1/users/register:

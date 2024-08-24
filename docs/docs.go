@@ -18,51 +18,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/departments/all": {
-            "get": {
-                "security": [
-                    {
-                        "CookieAuth": []
-                    }
-                ],
-                "description": "Retrieves the department's information",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Department"
-                ],
-                "summary": "Get Department Information",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/departments_domain.Department"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "status: fail, message: detailed error message",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not logged in!",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/departments/create": {
             "post": {
                 "security": [
@@ -135,7 +90,52 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/departments/one/_id": {
+        "/api/v1/departments/get/all": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the department's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Department"
+                ],
+                "summary": "Get Department Information",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/departments_domain.Department"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "status: fail, message: detailed error message",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "status: fail, message: You are not logged in!",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/departments/get/one/_id": {
             "get": {
                 "security": [
                     {
@@ -177,7 +177,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/departments/one/name": {
+        "/api/v1/departments/get/one/name": {
             "get": {
                 "security": [
                     {
@@ -255,7 +255,47 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/roles/all": {
+        "/api/v1/roles/create": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create new role",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Create role",
+                "parameters": [
+                    {
+                        "description": "Role data",
+                        "name": "Role",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/role_domain.Role"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "status: success, message: created a new role",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/roles/get/all": {
             "get": {
                 "security": [
                     {
@@ -297,47 +337,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/roles/create": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Create new role",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Role"
-                ],
-                "summary": "Create role",
-                "parameters": [
-                    {
-                        "description": "Role data",
-                        "name": "Role",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/role_domain.Role"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "status: success, message: created a new role",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/roles/one/_id": {
+        "/api/v1/roles/get/one/_id": {
             "get": {
                 "security": [
                     {
@@ -379,7 +379,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/roles/one/title": {
+        "/api/v1/roles/get/one/title": {
             "get": {
                 "security": [
                     {
@@ -457,7 +457,47 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/salaries/all": {
+        "/api/v1/salaries/create": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create new salary",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Salary"
+                ],
+                "summary": "Create salary",
+                "parameters": [
+                    {
+                        "description": "Salary data",
+                        "name": "Role",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/salary_domain.Salary"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "status: success, message: created a new role",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/salaries/get/all": {
             "get": {
                 "security": [
                     {
@@ -499,47 +539,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/salaries/create": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Create new salary",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Salary"
-                ],
-                "summary": "Create salary",
-                "parameters": [
-                    {
-                        "description": "Salary data",
-                        "name": "Role",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/salary_domain.Salary"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "status: success, message: created a new role",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/salaries/one/_id": {
+        "/api/v1/salaries/get/one/_id": {
             "get": {
                 "security": [
                     {
@@ -581,7 +581,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/salaries/one/role": {
+        "/api/v1/salaries/get/one/role": {
             "get": {
                 "security": [
                     {
@@ -701,6 +701,32 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/users/get/logout": {
+            "get": {
+                "description": "Logout the current user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Logout user",
+                "responses": {
+                    "200": {
+                        "description": "status: success"
+                    },
+                    "400": {
+                        "description": "status: fail, message: detailed error message"
+                    },
+                    "401": {
+                        "description": "status: fail, message: You are not login!"
+                    }
+                }
+            }
+        },
         "/api/v1/users/get/refresh": {
             "get": {
                 "security": [
@@ -780,32 +806,6 @@ const docTemplate = `{
                             "type": "object",
                             "additionalProperties": true
                         }
-                    }
-                }
-            }
-        },
-        "/api/v1/users/logout": {
-            "get": {
-                "description": "Logout the current user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Logout user",
-                "responses": {
-                    "200": {
-                        "description": "status: success"
-                    },
-                    "400": {
-                        "description": "status: fail, message: detailed error message"
-                    },
-                    "401": {
-                        "description": "status: fail, message: You are not login!"
                     }
                 }
             }

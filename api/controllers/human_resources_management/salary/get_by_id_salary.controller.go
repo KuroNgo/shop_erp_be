@@ -14,7 +14,7 @@ import (
 // @Success 200 {object} salary_domain.Salary
 // @Failure 400 {object} map[string]interface{} "status: fail, message: detailed error message"
 // @Failure 401 {object} map[string]interface{} "status: fail, message: You are not logged in!"
-// @Router /api/v1/salaries/one/_id [get]
+// @Router /api/v1/salaries/get/one/_id [get]
 // @Security CookieAuth
 func (s *SalaryController) GetOneSalaryByID(ctx *gin.Context) {
 	id := ctx.Param("_id")
