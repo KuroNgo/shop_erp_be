@@ -14,7 +14,7 @@ import (
 // @Success 200 {object} []departments_domain.Department
 // @Failure 400 {object} map[string]interface{} "status: fail, message: detailed error message"
 // @Failure 401 {object} map[string]interface{} "status: fail, message: You are not logged in!"
-// @Router /api/v1/all/departments [get]
+// @Router /api/v1/departments/all [get]
 // @Security CookieAuth
 func (d *DepartmentController) FetchAllDepartment(ctx *gin.Context) {
 	data, err := d.DepartmentUseCase.GetAll(ctx)

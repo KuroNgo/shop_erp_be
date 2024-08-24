@@ -14,7 +14,7 @@ import (
 // @Success 200 {object} salary_domain.Salary
 // @Failure 400 {object} map[string]interface{} "status: fail, message: detailed error message"
 // @Failure 401 {object} map[string]interface{} "status: fail, message: You are not logged in!"
-// @Router /api/v1/all/salaries [get]
+// @Router /api/v1/salaries/all [get]
 // @Security CookieAuth
 func (s *SalaryController) GetAllSalary(ctx *gin.Context) {
 	data, err := s.SalaryUseCase.GetAll(ctx)
