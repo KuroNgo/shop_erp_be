@@ -289,6 +289,42 @@
                 }
             }
         },
+        "/api/v1/roles/delete": {
+            "delete": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Deletes the role's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Delete Role Information",
+                "responses": {
+                    "400": {
+                        "description": "status: fail, message: detailed error message",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "status: fail, message: You are not logged in!",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/roles/get/all": {
             "get": {
                 "security": [
@@ -491,6 +527,42 @@
                 }
             }
         },
+        "/api/v1/salaries/delete": {
+            "delete": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Deletes the salary's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Salary"
+                ],
+                "summary": "Delete Salary Information",
+                "responses": {
+                    "400": {
+                        "description": "status: fail, message: detailed error message",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "status: fail, message: You are not logged in!",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/salaries/get/all": {
             "get": {
                 "security": [
@@ -635,6 +707,42 @@
                     "Salary"
                 ],
                 "summary": "Update Salary Information",
+                "responses": {
+                    "400": {
+                        "description": "status: fail, message: detailed error message",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "status: fail, message: You are not logged in!",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users/delete": {
+            "delete": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Deletes the user's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Delete User Information",
                 "responses": {
                     "400": {
                         "description": "status: fail, message: detailed error message",

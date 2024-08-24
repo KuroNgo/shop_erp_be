@@ -273,6 +273,29 @@ paths:
       summary: Create role
       tags:
       - Role
+  /api/v1/roles/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes the role's information
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: 'status: fail, message: detailed error message'
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: 'status: fail, message: You are not logged in!'
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - CookieAuth: []
+      summary: Delete Role Information
+      tags:
+      - Role
   /api/v1/roles/get/all:
     get:
       consumes:
@@ -402,6 +425,29 @@ paths:
       summary: Create salary
       tags:
       - Salary
+  /api/v1/salaries/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes the salary's information
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: 'status: fail, message: detailed error message'
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: 'status: fail, message: You are not logged in!'
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - CookieAuth: []
+      summary: Delete Salary Information
+      tags:
+      - Salary
   /api/v1/salaries/get/all:
     get:
       consumes:
@@ -506,6 +552,29 @@ paths:
       summary: Update Salary Information
       tags:
       - Salary
+  /api/v1/users/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes the user's information
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: 'status: fail, message: detailed error message'
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: 'status: fail, message: You are not logged in!'
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - CookieAuth: []
+      summary: Delete User Information
+      tags:
+      - User
   /api/v1/users/get/info:
     get:
       consumes:

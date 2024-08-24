@@ -25,6 +25,6 @@ func SalaryRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Data
 	router.GET("/get/all", salary.GetAllSalary)
 	router.POST("/create", salary.CreateOneSalary)
 	router.PUT("/update", salary.UpdateOneSalary)
-	router.DELETE("/delete", salary.DeleteOneRole)
+	router.DELETE("/delete", salary.DeleteOneSalary)
 
 }
