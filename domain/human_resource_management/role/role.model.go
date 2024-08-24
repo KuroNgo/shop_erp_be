@@ -9,7 +9,7 @@ const (
 	CollectionRole = "role"
 )
 
-// Role struct represents a role or job position.
+// Role struct represents a role or job role.
 type Role struct {
 	ID          primitive.ObjectID `bson:"_id,omitempty"`
 	Title       string             `bson:"title"`

@@ -10,6 +10,7 @@ import (
 	"shop_erp_mono/bootstrap"
 	department_repo "shop_erp_mono/repository/human_resource_management/department/data_seeder"
 	role_repo "shop_erp_mono/repository/human_resource_management/role/data_seeder"
+	salary_repo "shop_erp_mono/repository/human_resource_management/salary/data_seeder"
 	user_repo "shop_erp_mono/repository/human_resource_management/user/data_seeder"
 	"time"
 )
@@ -117,6 +118,11 @@ func Migrations(ctx context.Context, client *mongo_driven.Client) error {
 	}
 
 	err = department_repo.SeedDepartment(ctx, client)
+	if err != nil {
+		return err
+	}
+
+	err = salary_repo.SeedSalary(ctx, client)
 	if err != nil {
 		return err
 	}

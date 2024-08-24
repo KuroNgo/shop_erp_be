@@ -18,15 +18,15 @@ var role = roledomain.Role{
 }
 
 func SeedRole(ctx context.Context, client *mongo.Client) error {
-	collectionUser := client.Database("shopERP").Collection("role")
+	collectionRole := client.Database("shopERP").Collection("role")
 
-	count, err := collectionUser.CountDocuments(ctx, bson.M{})
+	count, err := collectionRole.CountDocuments(ctx, bson.M{})
 	if err != nil {
 		return err
 	}
 
 	if count == 0 {
-		_, err = collectionUser.InsertOne(ctx, role)
+		_, err = collectionRole.InsertOne(ctx, role)
 		if err != nil {
 			return err
 		}
