@@ -23,12 +23,12 @@ type Salary struct {
 }
 
 type Input struct {
-	Role         string  `bson:"role" json:"role"`
-	BaseSalary   float64 `bson:"base_salary" json:"base_salary"`
-	UnitCurrency string  `bson:"unit_currency" json:"unit_currency"`
-	Bonus        float64 `bson:"bonus" json:"bonus"`
-	Deductions   float64 `bson:"deductions" json:"deductions"`
-	NetSalary    float64 `bson:"net_salary" json:"net_salary"`
+	Role         string  `bson:"role" json:"role" exmaple:"Admin"`
+	BaseSalary   float64 `bson:"base_salary" json:"base_salary" exmaple:"1500"`
+	UnitCurrency string  `bson:"unit_currency" json:"unit_currency" exmaple:"USD"`
+	Bonus        float64 `bson:"bonus" json:"bonus" exmaple:"200"`
+	Deductions   float64 `bson:"deductions" json:"deductions" exmaple:"100"`
+	NetSalary    float64 `bson:"net_salary" json:"net_salary" exmaple:"1600"`
 }
 
 type Output struct {

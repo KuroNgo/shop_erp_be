@@ -105,6 +105,48 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/all/salaries": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the salary's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Salary"
+                ],
+                "summary": "Get Salary Information",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/salary_domain.Salary"
+                        }
+                    },
+                    "400": {
+                        "description": "status: fail, message: detailed error message",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "status: fail, message: You are not logged in!",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/departments/create": {
             "post": {
                 "security": [
@@ -381,6 +423,90 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/one/salaries/_id": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the salary's information id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Salary"
+                ],
+                "summary": "Get Salary Information By ID",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/salary_domain.Salary"
+                        }
+                    },
+                    "400": {
+                        "description": "status: fail, message: detailed error message",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "status: fail, message: You are not logged in!",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/one/salaries/role": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the salary's information role",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Salary"
+                ],
+                "summary": "Get Salary Information By Role",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/salary_domain.Salary"
+                        }
+                    },
+                    "400": {
+                        "description": "status: fail, message: detailed error message",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "status: fail, message: You are not logged in!",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/roles/create": {
             "post": {
                 "security": [
@@ -439,6 +565,82 @@ const docTemplate = `{
                     "Role"
                 ],
                 "summary": "Update Role Information",
+                "responses": {
+                    "400": {
+                        "description": "status: fail, message: detailed error message",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "status: fail, message: You are not logged in!",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/salaries/create": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create new salary",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Salary"
+                ],
+                "summary": "Create salary",
+                "parameters": [
+                    {
+                        "description": "Salary data",
+                        "name": "Role",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/salary_domain.Salary"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "status: success, message: created a new role",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/salaries/update": {
+            "patch": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Updates the salary's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Salary"
+                ],
+                "summary": "Update Salary Information",
                 "responses": {
                     "400": {
                         "description": "status: fail, message: detailed error message",
@@ -768,6 +970,38 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "salary_domain.Salary": {
+            "type": "object",
+            "properties": {
+                "base_salary": {
+                    "type": "number"
+                },
+                "bonus": {
+                    "type": "number"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "deductions": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "net_salary": {
+                    "type": "number"
+                },
+                "role_id": {
+                    "type": "string"
+                },
+                "unit_currency": {
+                    "type": "string"
+                },
+                "updated_at": {
                     "type": "string"
                 }
             }

@@ -7,6 +7,7 @@ import (
 	"shop_erp_mono/api/middlewares"
 	departmentroute "shop_erp_mono/api/routers/human_resources_management/department"
 	roleroute "shop_erp_mono/api/routers/human_resources_management/role"
+	salaryroute "shop_erp_mono/api/routers/human_resources_management/salary"
 	userroute "shop_erp_mono/api/routers/human_resources_management/user"
 	"shop_erp_mono/bootstrap"
 	"time"
@@ -31,4 +32,5 @@ func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, g
 	userroute.UserRouter(env, timeout, db, publicRouter)
 	roleroute.RoleRouter(env, timeout, db, publicRouter)
 	departmentroute.DepartmentRouter(env, timeout, db, publicRouter)
+	salaryroute.SalaryRouter(env, timeout, db, publicRouter)
 }
