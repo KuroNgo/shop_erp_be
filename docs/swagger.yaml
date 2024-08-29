@@ -14,6 +14,20 @@ definitions:
         description: 'Example values: "Present", "Leave", "Sick"'
         type: string
     type: object
+  benefits_domain.Input:
+    properties:
+      amount:
+        type: number
+      benefit_type:
+        description: 'Example: "Health Insurance", "Social Insurance", "Meal Allowance"'
+        type: string
+      employee_email:
+        type: string
+      end_date:
+        type: string
+      start_date:
+        type: string
+    type: object
   employees_domain.Input:
     properties:
       address:
@@ -205,6 +219,114 @@ paths:
       summary: Get Attendance Information By ID
       tags:
       - Attendance
+  /api/v1/benefits/{_id}:
+    delete:
+      description: Deletes the benefit's information by ID
+      parameters:
+      - description: Benefit ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Delete Benefit Information
+      tags:
+      - Benefit
+    patch:
+      description: Updates the benefit's information
+      parameters:
+      - description: Benefit ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      - description: Benefit data
+        in: body
+        name: attendance
+        required: true
+        schema:
+          $ref: '#/definitions/benefits_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Update Benefit Information
+      tags:
+      - Benefit
+  /api/v1/benefits/create:
+    post:
+      consumes:
+      - application/json
+      description: Create the benefit's information
+      parameters:
+      - description: Benefit data
+        in: body
+        name: Benefit
+        required: true
+        schema:
+          $ref: '#/definitions/benefits_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Create Benefit Information
+      tags:
+      - Benefit
+  /api/v1/benefits/get/all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the benefit's information
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get Benefit Information
+      tags:
+      - Benefit
+  /api/v1/benefits/get/one/_id:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the benefit's information name
+      parameters:
+      - description: Benefit ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get Benefit Information By ID
+      tags:
+      - Benefit
+  /api/v1/benefits/get/one/email:
+    get:
+      description: Retrieves the benefit's information name
+      parameters:
+      - description: Benefit ID
+        in: path
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get Benefit Information By ID
+      tags:
+      - Benefit
   /api/v1/departments/create:
     post:
       consumes:

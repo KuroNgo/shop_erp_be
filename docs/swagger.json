@@ -183,6 +183,177 @@
                 "responses": {}
             }
         },
+        "/api/v1/benefits/create": {
+            "post": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Create the benefit's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Benefit"
+                ],
+                "summary": "Create Benefit Information",
+                "parameters": [
+                    {
+                        "description": "Benefit data",
+                        "name": "Benefit",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/benefits_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/benefits/get/all": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the benefit's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Benefit"
+                ],
+                "summary": "Get Benefit Information",
+                "responses": {}
+            }
+        },
+        "/api/v1/benefits/get/one/_id": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the benefit's information name",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Benefit"
+                ],
+                "summary": "Get Benefit Information By ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Benefit ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/benefits/get/one/email": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the benefit's information name",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Benefit"
+                ],
+                "summary": "Get Benefit Information By ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Benefit ID",
+                        "name": "email",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/benefits/{_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Deletes the benefit's information by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Benefit"
+                ],
+                "summary": "Delete Benefit Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Benefit ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            },
+            "patch": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Updates the benefit's information",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Benefit"
+                ],
+                "summary": "Update Benefit Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Benefit ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Benefit data",
+                        "name": "attendance",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/benefits_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/api/v1/departments/create": {
             "post": {
                 "security": [
@@ -975,6 +1146,27 @@
                 },
                 "status": {
                     "description": "Example values: \"Present\", \"Leave\", \"Sick\"",
+                    "type": "string"
+                }
+            }
+        },
+        "benefits_domain.Input": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "benefit_type": {
+                    "description": "Example: \"Health Insurance\", \"Social Insurance\", \"Meal Allowance\"",
+                    "type": "string"
+                },
+                "employee_email": {
+                    "type": "string"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "start_date": {
                     "type": "string"
                 }
             }

@@ -6,6 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"shop_erp_mono/api/middlewares"
 	attendanceroute "shop_erp_mono/api/routers/human_resources_management/attendance"
+	benefit_route "shop_erp_mono/api/routers/human_resources_management/benefit"
 	departmentroute "shop_erp_mono/api/routers/human_resources_management/department"
 	employee_route "shop_erp_mono/api/routers/human_resources_management/employee"
 	roleroute "shop_erp_mono/api/routers/human_resources_management/role"
@@ -37,4 +38,5 @@ func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, g
 	salaryroute.SalaryRouter(env, timeout, db, publicRouter)
 	attendanceroute.AttendanceRouter(env, timeout, db, publicRouter)
 	employee_route.EmployeeRouter(env, timeout, db, publicRouter)
+	benefit_route.BenefitRouter(env, timeout, db, publicRouter)
 }
