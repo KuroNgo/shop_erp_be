@@ -17,3 +17,17 @@ type Contract struct {
 	CreatedAt    time.Time          `bson:"created_at" json:"created_at"`
 	UpdatedAt    time.Time          `bson:"updated_at" json:"updated_at"`
 }
+
+type Input struct {
+	Employee     string    `bson:"employee" json:"employee"`
+	ContractType string    `bson:"contract_type" json:"contract_type"` // Example: "Full-Time", "Part-Time", "Temporary"
+	StartDate    time.Time `bson:"start_date" json:"start_date"`
+	EndDate      time.Time `bson:"end_date,omitempty" json:"end_date,omitempty"`
+	Salary       float64   `bson:"salary" json:"salary"`
+	Status       string    `bson:"status" json:"status"` // Example: "Active", "Expired"
+}
+
+type Output struct {
+	Contract Contract `bson:"contract" json:"contract"`
+	Employee string   `bson:"employee" json:"employee"`
+}

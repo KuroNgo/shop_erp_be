@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	roledomain "shop_erp_mono/domain/human_resource_management/role"
-	"time"
 )
 
 // UpdateRole updates the role's information
@@ -25,13 +24,9 @@ func (r *RoleController) UpdateRole(ctx *gin.Context) {
 		return
 	}
 
-	roleData := &roledomain.Role{
-		Title:       role.Title,
-		Description: role.Description,
-		UpdatedAt:   time.Now(),
-	}
+	roleID := ctx.Param("_id")
 
-	if err := r.RoleUseCase.UpdateOneRole(ctx, roleData); err != nil {
+	if err := r.RoleUseCase.UpdateOneRole(ctx, roleID, &role); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
 			"message": err.Error(),

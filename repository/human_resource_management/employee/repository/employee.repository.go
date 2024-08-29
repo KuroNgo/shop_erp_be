@@ -114,11 +114,16 @@ func (e employeeRepository) DeleteOne(ctx context.Context, id string) error {
 	return nil
 }
 
-func (e employeeRepository) UpdateOne(ctx context.Context, employee *employeesdomain.Input) error {
+func (e employeeRepository) UpdateOne(ctx context.Context, id string, employee *employeesdomain.Input) error {
 	collectionEmployee := e.database.Collection(e.collectionEmployee)
 	collectionDepartment := e.database.Collection(e.collectionDepartment)
 	collectionRole := e.database.Collection(e.collectionRole)
 	collectionSalary := e.database.Collection(e.collectionSalary)
+
+	employeeID, _ := primitive.ObjectIDFromHex(id)
+	if employeeID == primitive.NilObjectID {
+		return errors.New("id do not nil")
+	}
 
 	if err := validate.IsNilEmployee(employee); err != nil {
 		return err
@@ -143,7 +148,7 @@ func (e employeeRepository) UpdateOne(ctx context.Context, employee *employeesdo
 	}
 
 	employeeData := employeesdomain.Employee{
-		ID:           primitive.NewObjectID(),
+		ID:           employeeID,
 		FirstName:    employee.FirstName,
 		LastName:     employee.LastName,
 		Gender:       employee.Gender,
@@ -370,7 +375,13 @@ func (e employeeRepository) GetAll(ctx context.Context) ([]employeesdomain.Outpu
 	if err != nil {
 		return nil, err
 	}
-	defer cursor.Close(ctx)
+	defer func(cursor *mongo.Cursor, ctx context.Context) {
+		err = cursor.Close(ctx)
+		if err != nil {
+			errCh <- err
+			return
+		}
+	}(cursor, ctx)
 
 	var employees []employeesdomain.Output
 	employees = make([]employeesdomain.Output, 0, cursor.RemainingBatchLength())

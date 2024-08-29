@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	departmentsdomain "shop_erp_mono/domain/human_resource_management/departments"
 	departmentvalidate "shop_erp_mono/repository/human_resource_management/department/validate"
+	"time"
 )
 
 type departmentRepository struct {
@@ -19,11 +20,19 @@ func NewDepartmentRepository(db *mongo.Database, collectionDepartment string) de
 	return &departmentRepository{database: db, collectionDepartment: collectionDepartment}
 }
 
-func (d departmentRepository) CreateOne(ctx context.Context, department *departmentsdomain.Department) error {
+func (d departmentRepository) CreateOne(ctx context.Context, input *departmentsdomain.Input) error {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
-	if err := departmentvalidate.IsNilDepartment(department); err != nil {
+	if err := departmentvalidate.IsNilDepartment(input); err != nil {
 		return err
+	}
+
+	department := departmentsdomain.Department{
+		ID:          primitive.NewObjectID(),
+		Name:        input.Name,
+		Description: input.Description,
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
 	}
 
 	_, err := collectionDepartment.InsertOne(ctx, department)
@@ -52,18 +61,23 @@ func (d departmentRepository) DeleteOne(ctx context.Context, id string) error {
 	return nil
 }
 
-func (d departmentRepository) UpdateOne(ctx context.Context, department *departmentsdomain.Department) error {
+func (d departmentRepository) UpdateOne(ctx context.Context, id string, input *departmentsdomain.Input) error {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
-	if err := departmentvalidate.IsNilDepartment(department); err != nil {
+	if err := departmentvalidate.IsNilDepartment(input); err != nil {
 		return err
 	}
 
-	filter := bson.M{"_id": department.ID}
+	departmentID, _ := primitive.ObjectIDFromHex(id)
+	if departmentID == primitive.NilObjectID {
+		return errors.New("id do not nil")
+	}
+
+	filter := bson.M{"_id": departmentID}
 	update := bson.M{"$set": bson.M{
-		"name":        department.Name,
-		"description": department.Description,
-		"updated_at":  department.UpdatedAt,
+		"name":        input.Name,
+		"description": input.Description,
+		"updated_at":  time.Now(),
 	}}
 
 	_, err := collectionDepartment.UpdateOne(ctx, filter, update)
@@ -74,32 +88,39 @@ func (d departmentRepository) UpdateOne(ctx context.Context, department *departm
 	return nil
 }
 
-func (d departmentRepository) GetOneByID(ctx context.Context, id string) (departmentsdomain.Department, error) {
+func (d departmentRepository) GetOneByID(ctx context.Context, id string) (departmentsdomain.Output, error) {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
 	departmentID, _ := primitive.ObjectIDFromHex(id)
 	filter := bson.M{"_id": departmentID}
 	var department departmentsdomain.Department
 	if err := collectionDepartment.FindOne(ctx, filter).Decode(&department); err != nil {
-		return departmentsdomain.Department{}, err
+		return departmentsdomain.Output{}, err
 	}
 
-	return department, nil
+	output := departmentsdomain.Output{
+		Department: department,
+	}
+
+	return output, nil
 }
 
-func (d departmentRepository) GetOneByName(ctx context.Context, name string) (departmentsdomain.Department, error) {
+func (d departmentRepository) GetOneByName(ctx context.Context, name string) (departmentsdomain.Output, error) {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
 	filter := bson.M{"name": name}
 	var department departmentsdomain.Department
 	if err := collectionDepartment.FindOne(ctx, filter).Decode(&department); err != nil {
-		return departmentsdomain.Department{}, err
+		return departmentsdomain.Output{}, err
 	}
 
-	return department, nil
+	output := departmentsdomain.Output{
+		Department: department,
+	}
+	return output, nil
 }
 
-func (d departmentRepository) GetAll(ctx context.Context) ([]departmentsdomain.Department, error) {
+func (d departmentRepository) GetAll(ctx context.Context) ([]departmentsdomain.Output, error) {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
 	filter := bson.M{}
@@ -114,15 +135,18 @@ func (d departmentRepository) GetAll(ctx context.Context) ([]departmentsdomain.D
 		}
 	}(cursor, ctx)
 
-	var departments []departmentsdomain.Department
-	departments = make([]departmentsdomain.Department, 0, cursor.RemainingBatchLength())
+	var departments []departmentsdomain.Output
+	departments = make([]departmentsdomain.Output, 0, cursor.RemainingBatchLength())
 	for cursor.Next(ctx) {
 		var department departmentsdomain.Department
 		if err = cursor.Decode(&department); err != nil {
 			return nil, err
 		}
 
-		departments = append(departments, department)
+		output := departmentsdomain.Output{
+			Department: department,
+		}
+		departments = append(departments, output)
 	}
 
 	return departments, nil

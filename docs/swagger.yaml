@@ -1,16 +1,61 @@
 basePath: /api/v1
 definitions:
-  role_domain.Role:
+  attendance_domain.Input:
     properties:
-      createdAt:
+      check_in_time:
         type: string
+      check_out_time:
+        type: string
+      date:
+        type: string
+      employee:
+        type: string
+      status:
+        description: 'Example values: "Present", "Leave", "Sick"'
+        type: string
+    type: object
+  employees_domain.Input:
+    properties:
+      address:
+        example: Bình Thuận
+        type: string
+      avatarURL:
+        type: string
+      dateOfBirth:
+        example: 01/01/2002
+        type: string
+      dayOfWork:
+        example: 30/8/2024
+        type: string
+      department:
+        example: marketing
+        type: string
+      email:
+        example: hoaiphong01012002@gmail.com
+        type: string
+      firstName:
+        example: Ngô
+        type: string
+      gender:
+        example: Nam
+        type: string
+      lastName:
+        example: Hoài Phong
+        type: string
+      phone:
+        example: "0329245971"
+        type: string
+      role:
+        example: developer
+        type: string
+    type: object
+  role_domain.Input:
+    properties:
       description:
-        type: string
-      id:
+        example: The admin role has full access and control over the system.
         type: string
       title:
-        type: string
-      updatedAt:
+        example: Admin
         type: string
     type: object
   salary_domain.Salary:
@@ -52,6 +97,114 @@ info:
   title: Shop E-commerce ERP
   version: "1.0"
 paths:
+  /api/v1/attendances/{_id}:
+    delete:
+      description: Deletes the attendance's information by ID
+      parameters:
+      - description: Attendance ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Delete Attendance Information
+      tags:
+      - Attendance
+    patch:
+      description: Updates the attendance's information
+      parameters:
+      - description: Attendance ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      - description: Attendance data
+        in: body
+        name: attendance
+        required: true
+        schema:
+          $ref: '#/definitions/attendance_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Update Attendance Information
+      tags:
+      - Attendance
+  /api/v1/attendances/create:
+    post:
+      consumes:
+      - application/json
+      description: Create the attendance's information
+      parameters:
+      - description: Attendance data
+        in: body
+        name: LoginUserRequestDto
+        required: true
+        schema:
+          $ref: '#/definitions/attendance_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Create Attendance Information
+      tags:
+      - Attendance
+  /api/v1/attendances/get/all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the attendance's information
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get Attendance Information
+      tags:
+      - Attendance
+  /api/v1/attendances/get/one/_id:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the attendance's information name
+      parameters:
+      - description: Attendance ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get Attendance Information By ID
+      tags:
+      - Attendance
+  /api/v1/attendances/get/one/email:
+    get:
+      description: Retrieves the attendance's information name
+      parameters:
+      - description: Attendance ID
+        in: path
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get Attendance Information By ID
+      tags:
+      - Attendance
   /api/v1/departments/create:
     post:
       consumes:
@@ -130,6 +283,113 @@ paths:
       summary: Update Department Information
       tags:
       - Department
+  /api/v1/employees/create:
+    post:
+      consumes:
+      - application/json
+      description: Create the employee's information
+      parameters:
+      - description: Employee data
+        in: body
+        name: attendance
+        required: true
+        schema:
+          $ref: '#/definitions/employees_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Create Employee Information
+      tags:
+      - Employee
+  /api/v1/employees/delete:
+    delete:
+      description: Deletes the employee's information
+      parameters:
+      - description: Employee ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Delete Employee Information
+      tags:
+      - Employee
+  /api/v1/employees/get/_id:
+    get:
+      description: Retrieves the employee's information
+      parameters:
+      - description: Employee ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get Employee Information
+      tags:
+      - Employee
+  /api/v1/employees/get/all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the employee's information
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get Employee Information
+      tags:
+      - Employee
+  /api/v1/employees/get/name:
+    get:
+      description: Retrieves the employee's information
+      parameters:
+      - description: Employee
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get Employee Information
+      tags:
+      - Employee
+  /api/v1/employees/update:
+    put:
+      description: Create the employee's information
+      parameters:
+      - description: Employee ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      - description: Employee data
+        in: body
+        name: attendance
+        required: true
+        schema:
+          $ref: '#/definitions/employees_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Create Employee Information
+      tags:
+      - Employee
   /api/v1/roles/create:
     post:
       consumes:
@@ -141,7 +401,7 @@ paths:
         name: Role
         required: true
         schema:
-          $ref: '#/definitions/role_domain.Role'
+          $ref: '#/definitions/role_domain.Input'
       produces:
       - application/json
       responses: {}

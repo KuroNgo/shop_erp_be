@@ -95,12 +95,12 @@ func (u userRepository) GetByID(ctx context.Context, id string) (*userdomain.Use
 
 	userID, _ := primitive.ObjectIDFromHex(id)
 	filter := bson.M{"_id": userID}
-	var user *userdomain.User
+	var user userdomain.User
 	if err := collectionUser.FindOne(ctx, filter).Decode(&user); err != nil {
 		return nil, errors.New(err.Error() + "error in the finding user into the database")
 	}
 
-	return user, nil
+	return &user, nil
 }
 
 func (u userRepository) GetByVerificationCode(ctx context.Context, verificationCode string) (*userdomain.User, error) {
@@ -152,13 +152,7 @@ func (u userRepository) Create(ctx context.Context, user *userdomain.User) error
 		return err
 	}
 
-	filter := bson.M{"email": user.Email}
-	count, err := collectionUser.CountDocuments(ctx, filter)
-	if count > 0 {
-		return err
-	}
-
-	_, err = collectionUser.InsertOne(ctx, user)
+	_, err := collectionUser.InsertOne(ctx, user)
 	if err != nil {
 		return errors.New(err.Error() + "error in the inserting user into the database ")
 	}

@@ -5,7 +5,7 @@ import (
 	departmentsdomain "shop_erp_mono/domain/human_resource_management/departments"
 )
 
-func IsNilDepartment(department *departmentsdomain.Department) error {
+func IsNilDepartment(department *departmentsdomain.Input) error {
 	if department.Name == "" {
 		return errors.New("the department's information do not null")
 	}

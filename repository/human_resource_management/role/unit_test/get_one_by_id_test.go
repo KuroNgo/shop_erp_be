@@ -24,7 +24,7 @@ func TestGetByID(t *testing.T) {
 	mockPositionNil := &roledomain.Role{}
 
 	t.Run("success", func(t *testing.T) {
-		_, err = ro.GetByIDRole(context.Background(), position.ID.Hex())
+		_, err = ro.GetByIDRole(context.Background(), position.Role.ID.Hex())
 		assert.Nil(t, err)
 	})
 

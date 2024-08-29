@@ -16,8 +16,21 @@ type Attendance struct {
 	Date         time.Time          `bson:"date" json:"date"`
 	CheckInTime  time.Time          `bson:"check_in_time" json:"check_in_time"`
 	CheckOutTime time.Time          `bson:"check_out_time" json:"check_out_time"`
-	HoursWorked  float64            `bson:"hours_worked" json:"hours_worked"`
+	HoursWorked  int8               `bson:"hours_worked" json:"hours_worked"`
 	Status       string             `bson:"status" json:"status"` // Example values: "Present", "Leave", "Sick"
 	CreatedAt    time.Time          `bson:"created_at" json:"created_at"`
 	UpdatedAt    time.Time          `bson:"updated_at" json:"updated_at"`
+}
+
+type Input struct {
+	EmailEmployee string    `bson:"employee" json:"employee"`
+	Date          time.Time `bson:"date" json:"date"`
+	CheckInTime   time.Time `bson:"check_in_time" json:"check_in_time"`
+	CheckOutTime  time.Time `bson:"check_out_time" json:"check_out_time"`
+	Status        string    `bson:"status" json:"status"` // Example values: "Present", "Leave", "Sick"
+}
+
+type Output struct {
+	Attendance Attendance `bson:"attendance" json:"attendance"`
+	Employee   string     `bson:"employee" json:"employee"`
 }

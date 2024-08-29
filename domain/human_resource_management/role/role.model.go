@@ -22,3 +22,8 @@ type Input struct {
 	Title       string `bson:"title" example:"Admin"`
 	Description string `bson:"description" example:"The admin role has full access and control over the system."`
 }
+
+// Output struct represents a role or job role.
+type Output struct {
+	Role Role `bson:"role"`
+}

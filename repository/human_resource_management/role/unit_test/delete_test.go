@@ -25,7 +25,7 @@ func TestDeleteOneRole(t *testing.T) {
 
 	t.Run("success", func(t *testing.T) {
 		ur := role_repository.NewRoleRepository(database, role)
-		err = ur.DeleteOneRole(context.Background(), position.ID.Hex())
+		err = ur.DeleteOneRole(context.Background(), position.Role.ID.Hex())
 		assert.Nil(t, err)
 	})
 

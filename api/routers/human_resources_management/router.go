@@ -5,7 +5,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 	"shop_erp_mono/api/middlewares"
+	attendanceroute "shop_erp_mono/api/routers/human_resources_management/attendance"
 	departmentroute "shop_erp_mono/api/routers/human_resources_management/department"
+	employee_route "shop_erp_mono/api/routers/human_resources_management/employee"
 	roleroute "shop_erp_mono/api/routers/human_resources_management/role"
 	salaryroute "shop_erp_mono/api/routers/human_resources_management/salary"
 	userroute "shop_erp_mono/api/routers/human_resources_management/user"
@@ -33,4 +35,6 @@ func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, g
 	roleroute.RoleRouter(env, timeout, db, publicRouter)
 	departmentroute.DepartmentRouter(env, timeout, db, publicRouter)
 	salaryroute.SalaryRouter(env, timeout, db, publicRouter)
+	attendanceroute.AttendanceRouter(env, timeout, db, publicRouter)
+	employee_route.EmployeeRouter(env, timeout, db, publicRouter)
 }

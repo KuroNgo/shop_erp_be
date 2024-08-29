@@ -15,11 +15,11 @@ func NewRoleUseCase(contextTimeout time.Duration, roleRepository roledomain.IRol
 	return &roleUseCase{contextTimeout: contextTimeout, roleRepository: roleRepository}
 }
 
-func (r roleUseCase) CreateOneRole(ctx context.Context, role *roledomain.Role) error {
+func (r roleUseCase) CreateOneRole(ctx context.Context, input *roledomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
 
-	err := r.roleRepository.CreateOneRole(ctx, role)
+	err := r.roleRepository.CreateOneRole(ctx, input)
 	if err != nil {
 		return err
 	}
@@ -27,31 +27,31 @@ func (r roleUseCase) CreateOneRole(ctx context.Context, role *roledomain.Role) e
 	return nil
 }
 
-func (r roleUseCase) GetByTitleRole(ctx context.Context, title string) (roledomain.Role, error) {
+func (r roleUseCase) GetByTitleRole(ctx context.Context, title string) (roledomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
 
 	data, err := r.roleRepository.GetByTitleRole(ctx, title)
 	if err != nil {
-		return roledomain.Role{}, err
+		return roledomain.Output{}, err
 	}
 
 	return data, nil
 }
 
-func (r roleUseCase) GetByIDRole(ctx context.Context, id string) (roledomain.Role, error) {
+func (r roleUseCase) GetByIDRole(ctx context.Context, id string) (roledomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
 
 	data, err := r.roleRepository.GetByIDRole(ctx, id)
 	if err != nil {
-		return roledomain.Role{}, err
+		return roledomain.Output{}, err
 	}
 
 	return data, nil
 }
 
-func (r roleUseCase) GetAllRole(ctx context.Context) ([]roledomain.Role, error) {
+func (r roleUseCase) GetAllRole(ctx context.Context) ([]roledomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
 
@@ -63,11 +63,11 @@ func (r roleUseCase) GetAllRole(ctx context.Context) ([]roledomain.Role, error) 
 	return data, nil
 }
 
-func (r roleUseCase) UpdateOneRole(ctx context.Context, role *roledomain.Role) error {
+func (r roleUseCase) UpdateOneRole(ctx context.Context, id string, input *roledomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
 
-	err := r.roleRepository.UpdateOneRole(ctx, role)
+	err := r.roleRepository.UpdateOneRole(ctx, id, input)
 	if err != nil {
 		return err
 	}

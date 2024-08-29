@@ -18,7 +18,6 @@ var user = userdomain.User{
 	Phone:        "0329245971",
 	Verified:     true,
 	Provider:     "app",
-	Role:         "employee",
 	CreatedAt:    time.Now(),
 	UpdatedAt:    time.Now(),
 }

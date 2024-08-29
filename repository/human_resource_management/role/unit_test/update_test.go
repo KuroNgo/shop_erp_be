@@ -3,11 +3,11 @@ package unit_test
 import (
 	"context"
 	"github.com/stretchr/testify/assert"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	roledomain "shop_erp_mono/domain/human_resource_management/role"
 	"shop_erp_mono/infrastructor"
 	role_repository "shop_erp_mono/repository/human_resource_management/role/repository"
 	"testing"
-	"time"
 )
 
 func TestUpdateOneRole(t *testing.T) {
@@ -23,18 +23,16 @@ func TestUpdateOneRole(t *testing.T) {
 		assert.Error(t, err)
 	}
 
-	mockRole := &roledomain.Role{
-		ID:          position.ID,
+	mockRole := &roledomain.Input{
 		Title:       "admin",
 		Description: "abc",
-		CreatedAt:   time.Now(),
-		UpdatedAt:   time.Now(),
 	}
-	mockEmptyRole := &roledomain.Role{}
+	mockEmptyRole := &roledomain.Input{}
+	nilID := primitive.NilObjectID
 
 	t.Run("success", func(t *testing.T) {
 		ur := role_repository.NewRoleRepository(database, role)
-		err = ur.UpdateOneRole(context.Background(), mockRole)
+		err = ur.UpdateOneRole(context.Background(), position.Role.ID.Hex(), mockRole)
 		assert.Nil(t, err)
 	})
 
@@ -42,7 +40,7 @@ func TestUpdateOneRole(t *testing.T) {
 		ur := role_repository.NewRoleRepository(database, role)
 
 		// Trying to insert an empty user, expecting an error
-		err = ur.UpdateOneRole(context.Background(), mockEmptyRole)
+		err = ur.UpdateOneRole(context.Background(), nilID.Hex(), mockEmptyRole)
 		assert.Error(t, err)
 	})
 }

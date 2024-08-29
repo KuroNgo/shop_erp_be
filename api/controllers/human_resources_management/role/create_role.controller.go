@@ -2,10 +2,8 @@ package role_controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"net/http"
 	roledomain "shop_erp_mono/domain/human_resource_management/role"
-	"time"
 )
 
 // CreateOneRole Create a new role
@@ -14,12 +12,12 @@ import (
 // @Tags Role
 // @Accept json
 // @Produce json
-// @Param Role body role_domain.Role true "Role data"
+// @Param Role body role_domain.Input true "Role data"
 // @Security ApiKeyAuth
 // @Router /api/v1/roles/create [post]
 func (r *RoleController) CreateOneRole(ctx *gin.Context) {
-	var role roledomain.Input
-	if err := ctx.ShouldBindJSON(&role); err != nil {
+	var input roledomain.Input
+	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
 			"message": err.Error(),
@@ -27,15 +25,7 @@ func (r *RoleController) CreateOneRole(ctx *gin.Context) {
 		return
 	}
 
-	roleData := &roledomain.Role{
-		ID:          primitive.NewObjectID(),
-		Title:       role.Title,
-		Description: role.Description,
-		CreatedAt:   time.Now(),
-		UpdatedAt:   time.Now(),
-	}
-
-	if err := r.RoleUseCase.CreateOneRole(ctx, roleData); err != nil {
+	if err := r.RoleUseCase.CreateOneRole(ctx, &input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
 			"message": err.Error(),

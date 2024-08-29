@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	roledomain "shop_erp_mono/domain/human_resource_management/role"
 	"shop_erp_mono/repository/human_resource_management/role/validate"
+	"time"
 )
 
 type roleRepository struct {
@@ -19,20 +20,20 @@ func NewRoleRepository(db *mongo.Database, collectionRole string) roledomain.IRo
 	return &roleRepository{database: db, collectionRole: collectionRole}
 }
 
-func (r roleRepository) CreateOneRole(ctx context.Context, role *roledomain.Role) error {
+func (r roleRepository) CreateOneRole(ctx context.Context, input *roledomain.Input) error {
 	collectionRole := r.database.Collection(r.collectionRole)
 
-	err := validate.IsNilTitle(role.Title)
+	err := validate.IsNilTitle(input.Title)
 	if err != nil {
 		return err
 	}
 
-	err = validate.IsNilDescription(role.Description)
+	err = validate.IsNilDescription(input.Description)
 	if err != nil {
 		return err
 	}
 
-	_, err = collectionRole.InsertOne(ctx, role)
+	_, err = collectionRole.InsertOne(ctx, input)
 	if err != nil {
 		return err
 	}
@@ -40,36 +41,42 @@ func (r roleRepository) CreateOneRole(ctx context.Context, role *roledomain.Role
 	return nil
 }
 
-func (r roleRepository) GetByTitleRole(ctx context.Context, title string) (roledomain.Role, error) {
+func (r roleRepository) GetByTitleRole(ctx context.Context, title string) (roledomain.Output, error) {
 	collectionRole := r.database.Collection(r.collectionRole)
 
 	filter := bson.M{"title": title}
 	var role roledomain.Role
 	if err := collectionRole.FindOne(ctx, filter).Decode(&role); err != nil {
-		return roledomain.Role{}, err
+		return roledomain.Output{}, err
 	}
 
-	return role, nil
+	output := roledomain.Output{
+		Role: role,
+	}
+	return output, nil
 }
 
-func (r roleRepository) GetByIDRole(ctx context.Context, id string) (roledomain.Role, error) {
+func (r roleRepository) GetByIDRole(ctx context.Context, id string) (roledomain.Output, error) {
 	collectionRole := r.database.Collection(r.collectionRole)
 
 	roleID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return roledomain.Role{}, err
+		return roledomain.Output{}, err
 	}
 
 	filter := bson.M{"_id": roleID}
 	var role roledomain.Role
 	if err := collectionRole.FindOne(ctx, filter).Decode(&role); err != nil {
-		return roledomain.Role{}, err
+		return roledomain.Output{}, err
 	}
 
-	return role, nil
+	output := roledomain.Output{
+		Role: role,
+	}
+	return output, nil
 }
 
-func (r roleRepository) GetAllRole(ctx context.Context) ([]roledomain.Role, error) {
+func (r roleRepository) GetAllRole(ctx context.Context) ([]roledomain.Output, error) {
 	collectionRole := r.database.Collection(r.collectionRole)
 
 	filter := bson.M{}
@@ -84,36 +91,44 @@ func (r roleRepository) GetAllRole(ctx context.Context) ([]roledomain.Role, erro
 		}
 	}(cursor, ctx)
 
-	var roles []roledomain.Role
-	roles = make([]roledomain.Role, 0, cursor.RemainingBatchLength())
+	var roles []roledomain.Output
+	roles = make([]roledomain.Output, 0, cursor.RemainingBatchLength())
 	for cursor.Next(ctx) {
 		var role roledomain.Role
 		if err = cursor.Decode(&role); err != nil {
 			return nil, err
 		}
 
-		roles = append(roles, role)
+		output := roledomain.Output{
+			Role: role,
+		}
+		roles = append(roles, output)
 	}
 
 	return roles, nil
 }
 
-func (r roleRepository) UpdateOneRole(ctx context.Context, role *roledomain.Role) error {
+func (r roleRepository) UpdateOneRole(ctx context.Context, id string, input *roledomain.Input) error {
 	collectionRole := r.database.Collection(r.collectionRole)
 
-	if err := validate.IsNilTitle(role.Title); err != nil {
+	if err := validate.IsNilTitle(input.Title); err != nil {
 		return err
 	}
 
-	if err := validate.IsNilDescription(role.Description); err != nil {
+	if err := validate.IsNilDescription(input.Description); err != nil {
 		return err
 	}
 
-	filter := bson.M{"_id": role.ID}
+	roleID, _ := primitive.ObjectIDFromHex(id)
+	if roleID == primitive.NilObjectID {
+		return errors.New("id do not nil")
+	}
+
+	filter := bson.M{"_id": roleID}
 	update := bson.M{"$set": bson.M{
-		"title":       role.Title,
-		"description": role.Description,
-		"updated_at":  role.UpdatedAt,
+		"title":       input.Title,
+		"description": input.Description,
+		"updated_at":  time.Now(),
 	}}
 	_, err := collectionRole.UpdateOne(ctx, filter, update)
 	if err != nil {

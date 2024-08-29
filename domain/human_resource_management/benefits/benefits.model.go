@@ -20,3 +20,16 @@ type Benefit struct {
 	CreatedAt   time.Time          `bson:"created_at" json:"created_at"`
 	UpdatedAt   time.Time          `bson:"updated_at" json:"updated_at"`
 }
+
+type Input struct {
+	EmployeeEmail string    `bson:"employee_email" json:"employee_email"`
+	BenefitType   string    `bson:"benefit_type" json:"benefit_type"` // Example: "Health Insurance", "Social Insurance", "Meal Allowance"
+	Amount        float64   `bson:"amount" json:"amount"`
+	StartDate     time.Time `bson:"start_date" json:"start_date"`
+	EndDate       time.Time `bson:"end_date,omitempty" json:"end_date,omitempty"`
+}
+
+type Output struct {
+	Benefit  Benefit `bson:"benefit" json:"benefit"`
+	Employee string  `bson:"employee" json:"employee"`
+}

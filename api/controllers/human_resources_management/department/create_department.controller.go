@@ -2,10 +2,8 @@ package department_controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"net/http"
 	departmentsdomain "shop_erp_mono/domain/human_resource_management/departments"
-	"time"
 )
 
 // CreateOneDepartment create the department's information
@@ -26,15 +24,7 @@ func (d *DepartmentController) CreateOneDepartment(ctx *gin.Context) {
 		return
 	}
 
-	department := departmentsdomain.Department{
-		ID:          primitive.NewObjectID(),
-		Name:        input.Name,
-		Description: input.Description,
-		CreatedAt:   time.Now(),
-		UpdatedAt:   time.Now(),
-	}
-
-	err := d.DepartmentUseCase.CreateOne(ctx, &department)
+	err := d.DepartmentUseCase.CreateOne(ctx, &input)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

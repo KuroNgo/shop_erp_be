@@ -22,3 +22,8 @@ type Input struct {
 	Name        string `bson:"name"`
 	Description string `bson:"description"`
 }
+
+// Output struct represents a department within the company.
+type Output struct {
+	Department Department `bson:"department" json:"department"`
+}
