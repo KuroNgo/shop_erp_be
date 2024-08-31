@@ -10,6 +10,7 @@ import (
 	contractroute "shop_erp_mono/api/routers/human_resources_management/contract"
 	departmentroute "shop_erp_mono/api/routers/human_resources_management/department"
 	employeeroute "shop_erp_mono/api/routers/human_resources_management/employee"
+	leave_request_route "shop_erp_mono/api/routers/human_resources_management/leave_request"
 	roleroute "shop_erp_mono/api/routers/human_resources_management/role"
 	salaryroute "shop_erp_mono/api/routers/human_resources_management/salary"
 	userroute "shop_erp_mono/api/routers/human_resources_management/user"
@@ -41,4 +42,5 @@ func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, g
 	employeeroute.EmployeeRouter(env, timeout, db, publicRouter)
 	benefitroute.BenefitRouter(env, timeout, db, publicRouter)
 	contractroute.ContractRouter(env, timeout, db, publicRouter)
+	leave_request_route.LeaveRequestRouter(env, timeout, db, publicRouter)
 }

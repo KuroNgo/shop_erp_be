@@ -28,6 +28,23 @@ definitions:
       start_date:
         type: string
     type: object
+  contracts_domain.Input:
+    properties:
+      contract_type:
+        description: 'Example: "Full-Time", "Part-Time", "Temporary"'
+        type: string
+      employee:
+        type: string
+      end_date:
+        type: string
+      salary:
+        type: number
+      start_date:
+        type: string
+      status:
+        description: 'Example: "Active", "Expired"'
+        type: string
+    type: object
   employees_domain.Input:
     properties:
       address:
@@ -61,6 +78,21 @@ definitions:
         type: string
       role:
         example: developer
+        type: string
+    type: object
+  leave_request_domain.Input:
+    properties:
+      employee:
+        type: string
+      end_date:
+        type: string
+      leave_type:
+        description: 'Example: "Sick Leave", "Annual Leave", "Unpaid Leave"'
+        type: string
+      start_date:
+        type: string
+      status:
+        description: 'Example: "Approved", "Pending", "Rejected"'
         type: string
     type: object
   role_domain.Input:
@@ -327,6 +359,115 @@ paths:
       summary: Get Benefit Information By ID
       tags:
       - Benefit
+  /api/v1/contracts/create:
+    post:
+      consumes:
+      - application/json
+      description: Create the contract's information
+      parameters:
+      - description: Contract data
+        in: body
+        name: Contract
+        required: true
+        schema:
+          $ref: '#/definitions/contracts_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Create Contract Information
+      tags:
+      - Contract
+  /api/v1/contracts/delete/{_id}:
+    delete:
+      description: Deletes the contract's information by ID
+      parameters:
+      - description: Contract ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Delete Contract Information
+      tags:
+      - Contract
+  /api/v1/contracts/get/{_id}:
+    get:
+      description: Deletes the contract's information by ID
+      parameters:
+      - description: Contract ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get Contract Information
+      tags:
+      - Contract
+  /api/v1/contracts/get/{email}:
+    get:
+      description: Get one the contract's information by ID
+      parameters:
+      - description: Contract ID
+        in: path
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get one Contract Information
+      tags:
+      - Contract
+  /api/v1/contracts/get/all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the contract's information
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get Contract Information
+      tags:
+      - Contract
+  /api/v1/contracts/update:
+    put:
+      consumes:
+      - application/json
+      description: Update the contract's information
+      parameters:
+      - description: Contract data
+        in: body
+        name: Contract
+        required: true
+        schema:
+          $ref: '#/definitions/contracts_domain.Input'
+      - description: Contract ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Update Contract Information
+      tags:
+      - Contract
   /api/v1/departments/create:
     post:
       consumes:
@@ -512,6 +653,97 @@ paths:
       summary: Create Employee Information
       tags:
       - Employee
+  /api/v1/leave_requests/create:
+    post:
+      consumes:
+      - application/json
+      description: Create the leave request's information
+      parameters:
+      - description: Leave Request data
+        in: body
+        name: LeaveRequest
+        required: true
+        schema:
+          $ref: '#/definitions/leave_request_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Create Leave Request Information
+      tags:
+      - Leave Request
+  /api/v1/leave_requests/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete the leave request's information
+      parameters:
+      - description: Leave Request ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Delete Leave Request Information
+      tags:
+      - Leave Request
+  /api/v1/leave_requests/get/all:
+    get:
+      consumes:
+      - application/json
+      description: Get all the leave request's information
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get all Leave Request Information
+      tags:
+      - Leave Request
+  /api/v1/leave_requests/get/email:
+    get:
+      consumes:
+      - application/json
+      description: Get one by email the leave request's information
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get one by email Leave Request Information
+      tags:
+      - Leave Request
+  /api/v1/leave_requests/get/id:
+    get:
+      consumes:
+      - application/json
+      description: Get one by email the leave request's information
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get one by id Leave Request Information
+      tags:
+      - Leave Request
+  /api/v1/leave_requests/update:
+    put:
+      consumes:
+      - application/json
+      description: Updates the leave request's information
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Update Leave Request Information
+      tags:
+      - Leave Request
   /api/v1/roles/create:
     post:
       consumes:

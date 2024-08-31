@@ -360,6 +360,179 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/api/v1/contracts/create": {
+            "post": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Create the contract's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Contract"
+                ],
+                "summary": "Create Contract Information",
+                "parameters": [
+                    {
+                        "description": "Contract data",
+                        "name": "Contract",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contracts_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/contracts/delete/{_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Deletes the contract's information by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Contract"
+                ],
+                "summary": "Delete Contract Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Contract ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/contracts/get/all": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the contract's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Contract"
+                ],
+                "summary": "Get Contract Information",
+                "responses": {}
+            }
+        },
+        "/api/v1/contracts/get/{_id}": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Deletes the contract's information by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Contract"
+                ],
+                "summary": "Get Contract Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Contract ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/contracts/get/{email}": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Get one the contract's information by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Contract"
+                ],
+                "summary": "Get one Contract Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Contract ID",
+                        "name": "email",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/contracts/update": {
+            "put": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Update the contract's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Contract"
+                ],
+                "summary": "Update Contract Information",
+                "parameters": [
+                    {
+                        "description": "Contract data",
+                        "name": "Contract",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/contracts_domain.Input"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Contract ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/api/v1/departments/create": {
             "post": {
                 "security": [
@@ -653,6 +826,152 @@ const docTemplate = `{
                         }
                     }
                 ],
+                "responses": {}
+            }
+        },
+        "/api/v1/leave_requests/create": {
+            "post": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Create the leave request's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Leave Request"
+                ],
+                "summary": "Create Leave Request Information",
+                "parameters": [
+                    {
+                        "description": "Leave Request data",
+                        "name": "LeaveRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/leave_request_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/leave_requests/delete": {
+            "delete": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Delete the leave request's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Leave Request"
+                ],
+                "summary": "Delete Leave Request Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Leave Request ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/leave_requests/get/all": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Get all the leave request's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Leave Request"
+                ],
+                "summary": "Get all Leave Request Information",
+                "responses": {}
+            }
+        },
+        "/api/v1/leave_requests/get/email": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Get one by email the leave request's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Leave Request"
+                ],
+                "summary": "Get one by email Leave Request Information",
+                "responses": {}
+            }
+        },
+        "/api/v1/leave_requests/get/id": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Get one by email the leave request's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Leave Request"
+                ],
+                "summary": "Get one by id Leave Request Information",
+                "responses": {}
+            }
+        },
+        "/api/v1/leave_requests/update": {
+            "put": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Updates the leave request's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Leave Request"
+                ],
+                "summary": "Update Leave Request Information",
                 "responses": {}
             }
         },
@@ -1177,6 +1496,31 @@ const docTemplate = `{
                 }
             }
         },
+        "contracts_domain.Input": {
+            "type": "object",
+            "properties": {
+                "contract_type": {
+                    "description": "Example: \"Full-Time\", \"Part-Time\", \"Temporary\"",
+                    "type": "string"
+                },
+                "employee": {
+                    "type": "string"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "salary": {
+                    "type": "number"
+                },
+                "start_date": {
+                    "type": "string"
+                },
+                "status": {
+                    "description": "Example: \"Active\", \"Expired\"",
+                    "type": "string"
+                }
+            }
+        },
         "employees_domain.Input": {
             "type": "object",
             "properties": {
@@ -1222,6 +1566,28 @@ const docTemplate = `{
                 "role": {
                     "type": "string",
                     "example": "developer"
+                }
+            }
+        },
+        "leave_request_domain.Input": {
+            "type": "object",
+            "properties": {
+                "employee": {
+                    "type": "string"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "leave_type": {
+                    "description": "Example: \"Sick Leave\", \"Annual Leave\", \"Unpaid Leave\"",
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                },
+                "status": {
+                    "description": "Example: \"Approved\", \"Pending\", \"Rejected\"",
+                    "type": "string"
                 }
             }
         },

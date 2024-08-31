@@ -5,12 +5,12 @@ import (
 	"net/http"
 )
 
-// FetchOneByEmailContract delete the contract's information
-// @Summary Delete Contract Information
-// @Description Deletes the contract's information by ID
+// FetchOneByEmailContract Get one the contract's information
+// @Summary Get one Contract Information
+// @Description Get one the contract's information by ID
 // @Tags Contract
 // @Produce json
-// @Param _id path string true "Contract ID"
+// @Param email path string true "Contract ID"
 // @Router /api/v1/contracts/get/{email} [get]
 // @Security CookieAuth
 func (c *ContractController) FetchOneByEmailContract(ctx *gin.Context) {
