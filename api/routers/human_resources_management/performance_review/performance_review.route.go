@@ -19,7 +19,7 @@ func PerformanceReviewRouter(env *bootstrap.Database, timeout time.Duration, db 
 		Database:                 env,
 	}
 
-	router := group.Group("/departments")
+	router := group.Group("/performance_reviews")
 	router.GET("/get/_id", performanceReview.GetOneByIDPerformanceReview)
 	router.GET("/get/email", performanceReview.GetOneByEmailPerformanceReview)
 	router.GET("/get/all", performanceReview.GetAllPerformanceReview)

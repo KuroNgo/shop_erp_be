@@ -2,6 +2,7 @@ package employee_usecase
 
 import (
 	"context"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
 	"time"
 )
@@ -31,7 +32,12 @@ func (e employeeUseCase) DeleteOne(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
 
-	err := e.employeeRepository.DeleteOne(ctx, id)
+	employeeID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+
+	err = e.employeeRepository.DeleteOne(ctx, employeeID)
 	if err != nil {
 		return err
 	}
@@ -43,7 +49,12 @@ func (e employeeUseCase) UpdateOne(ctx context.Context, id string, employee *emp
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
 
-	err := e.employeeRepository.UpdateOne(ctx, id, employee)
+	employeeID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+
+	err = e.employeeRepository.UpdateOne(ctx, employeeID, employee)
 	if err != nil {
 		return err
 	}
@@ -55,24 +66,35 @@ func (e employeeUseCase) GetOneByID(ctx context.Context, id string) (employeesdo
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
 
-	data, err := e.employeeRepository.GetOneByID(ctx, id)
+	employeeID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return employeesdomain.Output{}, err
 	}
 
-	return data, nil
+	data, err := e.employeeRepository.GetOneByID(ctx, employeeID)
+	if err != nil {
+		return employeesdomain.Output{}, err
+	}
+
+	output := employeesdomain.Output{
+		Employee: data,
+	}
+	return output, nil
 }
 
-func (e employeeUseCase) GetOneByName(ctx context.Context, name string) (employeesdomain.Output, error) {
+func (e employeeUseCase) GetOneByEmail(ctx context.Context, name string) (employeesdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
 
-	data, err := e.employeeRepository.GetOneByName(ctx, name)
+	data, err := e.employeeRepository.GetOneByEmail(ctx, name)
 	if err != nil {
 		return employeesdomain.Output{}, err
 	}
 
-	return data, nil
+	output := employeesdomain.Output{
+		Employee: data,
+	}
+	return output, nil
 }
 
 func (e employeeUseCase) GetAll(ctx context.Context) ([]employeesdomain.Output, error) {

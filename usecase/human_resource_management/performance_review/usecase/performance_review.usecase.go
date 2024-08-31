@@ -11,6 +11,10 @@ type performanceReviewUseCase struct {
 	performanceReviewRepository performancereviewdomain.IPerformanceReviewRepository
 }
 
+func NewPerformanceReviewUseCase(contextTimeout time.Duration, performanceReviewRepository performancereviewdomain.IPerformanceReviewRepository) performancereviewdomain.IPerformanceReviewUseCase {
+	return &performanceReviewUseCase{contextTimeout: contextTimeout, performanceReviewRepository: performanceReviewRepository}
+}
+
 func (p performanceReviewUseCase) CreateOne(ctx context.Context, input *performancereviewdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
@@ -45,8 +49,4 @@ func (p performanceReviewUseCase) GetAll(ctx context.Context) ([]performancerevi
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 	return p.performanceReviewRepository.GetAll(ctx)
-}
-
-func NewPerformanceReviewUseCase(contextTimeout time.Duration, performanceReviewRepository performancereviewdomain.IPerformanceReviewRepository) performancereviewdomain.IPerformanceReviewUseCase {
-	return &performanceReviewUseCase{contextTimeout: contextTimeout, performanceReviewRepository: performanceReviewRepository}
 }

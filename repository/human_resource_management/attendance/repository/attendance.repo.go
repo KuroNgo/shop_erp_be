@@ -7,47 +7,19 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	attendancedomain "shop_erp_mono/domain/human_resource_management/attendance"
-	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
-	"shop_erp_mono/repository/human_resource_management/attendance/validate"
-	"time"
 )
 
 type attendanceRepository struct {
 	database             *mongo.Database
 	collectionAttendance string
-	collectionEmployee   string
 }
 
-func NewAttendanceRepository(db *mongo.Database, collectionAttendance string, collectionEmployee string) attendancedomain.IAttendanceRepository {
-	return &attendanceRepository{database: db, collectionAttendance: collectionAttendance, collectionEmployee: collectionEmployee}
+func NewAttendanceRepository(db *mongo.Database, collectionAttendance string) attendancedomain.IAttendanceRepository {
+	return &attendanceRepository{database: db, collectionAttendance: collectionAttendance}
 }
 
-func (a attendanceRepository) CreateOne(ctx context.Context, input *attendancedomain.Input) error {
+func (a attendanceRepository) CreateOne(ctx context.Context, attendance *attendancedomain.Attendance) error {
 	collectionAttendance := a.database.Collection(a.collectionAttendance)
-	collectionEmployee := a.database.Collection(a.collectionEmployee)
-
-	if err := validate.IsNilAttendance(input); err != nil {
-		return err
-	}
-
-	filterEmployee := bson.M{"email": input.EmailEmployee}
-	var employee employeesdomain.Employee
-	if err := collectionEmployee.FindOne(ctx, filterEmployee).Decode(&employee); err != nil {
-		return err
-	}
-
-	hoursWorked := input.CheckOutTime.Sub(input.CheckInTime)
-
-	attendance := attendancedomain.Attendance{
-		ID:           primitive.NewObjectID(),
-		EmployeeID:   employee.ID,
-		Date:         input.Date,
-		CheckInTime:  input.CheckInTime,
-		CheckOutTime: input.CheckOutTime,
-		HoursWorked:  int8(hoursWorked.Hours()),
-		CreatedAt:    time.Now(),
-		UpdatedAt:    time.Now(),
-	}
 
 	_, err := collectionAttendance.InsertOne(ctx, attendance)
 	if err != nil {
@@ -57,15 +29,15 @@ func (a attendanceRepository) CreateOne(ctx context.Context, input *attendancedo
 	return nil
 }
 
-func (a attendanceRepository) DeleteOne(ctx context.Context, id string) error {
+func (a attendanceRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
 	collectionAttendance := a.database.Collection(a.collectionAttendance)
 
-	attendanceID, _ := primitive.ObjectIDFromHex(id)
-	if attendanceID == primitive.NilObjectID {
+	if id == primitive.NilObjectID {
 		return errors.New("error the id do not nil")
 	}
+	filter := bson.M{"_id": id}
 
-	_, err := collectionAttendance.DeleteOne(ctx, attendanceID)
+	_, err := collectionAttendance.DeleteOne(ctx, filter)
 	if err != nil {
 		return err
 	}
@@ -73,36 +45,14 @@ func (a attendanceRepository) DeleteOne(ctx context.Context, id string) error {
 	return nil
 }
 
-func (a attendanceRepository) UpdateOne(ctx context.Context, id string, input *attendancedomain.Input) error {
+func (a attendanceRepository) UpdateOne(ctx context.Context, attendance *attendancedomain.Attendance) error {
 	collectionAttendance := a.database.Collection(a.collectionAttendance)
-	collectionEmployee := a.database.Collection(a.collectionEmployee)
 
-	if err := validate.IsNilAttendance(input); err != nil {
-		return err
+	if attendance.ID == primitive.NilObjectID {
+		return errors.New("error the id do not nil")
 	}
-
-	attendanceID, _ := primitive.ObjectIDFromHex(id)
-	if attendanceID == primitive.NilObjectID {
-		return errors.New("the id do not nil")
-	}
-
-	filterEmployee := bson.M{"email": input.EmailEmployee}
-	var employee employeesdomain.Employee
-	if err := collectionEmployee.FindOne(ctx, filterEmployee).Decode(&employee); err != nil {
-		return err
-	}
-
-	hoursWorked := input.CheckOutTime.Sub(input.CheckInTime)
-
-	filter := bson.M{"_id": attendanceID}
-	update := bson.M{"$set": bson.M{
-		"employee_id":    employee,
-		"date":           input.Date,
-		"check_in_time":  input.CheckInTime,
-		"check_out_time": input.CheckOutTime,
-		"hours_worked":   int8(hoursWorked.Hours()),
-		"status":         input.Status,
-	}}
+	filter := bson.M{"_id": attendance.ID}
+	update := bson.M{"$set": attendance}
 
 	_, err := collectionAttendance.UpdateOne(ctx, filter, update)
 	if err != nil {
@@ -112,70 +62,39 @@ func (a attendanceRepository) UpdateOne(ctx context.Context, id string, input *a
 	return nil
 }
 
-func (a attendanceRepository) GetOneByID(ctx context.Context, id string) (attendancedomain.Output, error) {
+func (a attendanceRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (attendancedomain.Attendance, error) {
 	collectionAttendance := a.database.Collection(a.collectionAttendance)
-	collectionEmployee := a.database.Collection(a.collectionEmployee)
 
-	attendanceID, _ := primitive.ObjectIDFromHex(id)
-	if attendanceID == primitive.NilObjectID {
-		return attendancedomain.Output{}, errors.New("the id do not nil")
+	if id == primitive.NilObjectID {
+		return attendancedomain.Attendance{}, errors.New("the attendance ID do not null")
 	}
+	filter := bson.M{"_id": id}
 
-	filter := bson.M{"_id": attendanceID}
 	var attendance attendancedomain.Attendance
 	if err := collectionAttendance.FindOne(ctx, filter).Decode(&attendance); err != nil {
-		return attendancedomain.Output{}, err
+		return attendancedomain.Attendance{}, err
 	}
 
-	filterEmployee := bson.M{"_id": attendance.EmployeeID}
-	var employee employeesdomain.Employee
-	if err := collectionEmployee.FindOne(ctx, filterEmployee).Decode(&employee); err != nil {
-		return attendancedomain.Output{}, err
-	}
-
-	employeeFullName := employee.FirstName + employee.LastName
-
-	output := attendancedomain.Output{
-		Attendance: attendance,
-		Employee:   employeeFullName,
-	}
-
-	return output, nil
+	return attendance, nil
 }
 
-func (a attendanceRepository) GetOneByEmail(ctx context.Context, email string) (attendancedomain.Output, error) {
+func (a attendanceRepository) GetOneByEmployeeID(ctx context.Context, idEmployee primitive.ObjectID) (attendancedomain.Attendance, error) {
 	collectionAttendance := a.database.Collection(a.collectionAttendance)
-	collectionEmployee := a.database.Collection(a.collectionEmployee)
 
-	if err := validate.IsNilEmailEmployee(email); err != nil {
-		return attendancedomain.Output{}, err
+	if idEmployee == primitive.NilObjectID {
+		return attendancedomain.Attendance{}, errors.New("the employee ID do not null")
 	}
-
-	filterEmployee := bson.M{"email": email}
-	var employee employeesdomain.Employee
-	if err := collectionEmployee.FindOne(ctx, filterEmployee).Decode(&employee); err != nil {
-		return attendancedomain.Output{}, err
-	}
-
-	filter := bson.M{"employee_id": employee.ID}
+	filter := bson.M{"employee_id": idEmployee}
 	var attendance attendancedomain.Attendance
 	if err := collectionAttendance.FindOne(ctx, filter).Decode(&attendance); err != nil {
-		return attendancedomain.Output{}, err
+		return attendancedomain.Attendance{}, err
 	}
 
-	employeeFullName := employee.FirstName + employee.LastName
-
-	output := attendancedomain.Output{
-		Attendance: attendance,
-		Employee:   employeeFullName,
-	}
-
-	return output, nil
+	return attendance, nil
 }
 
-func (a attendanceRepository) GetAll(ctx context.Context) ([]attendancedomain.Output, error) {
+func (a attendanceRepository) GetAll(ctx context.Context) ([]attendancedomain.Attendance, error) {
 	collectionAttendance := a.database.Collection(a.collectionAttendance)
-	collectionEmployee := a.database.Collection(a.collectionEmployee)
 
 	filter := bson.M{}
 	cursor, err := collectionAttendance.Find(ctx, filter)
@@ -189,27 +108,15 @@ func (a attendanceRepository) GetAll(ctx context.Context) ([]attendancedomain.Ou
 		}
 	}(cursor, ctx)
 
-	var attendances []attendancedomain.Output
-	attendances = make([]attendancedomain.Output, 0, cursor.RemainingBatchLength())
+	var attendances []attendancedomain.Attendance
+	attendances = make([]attendancedomain.Attendance, 0, cursor.RemainingBatchLength())
 	for cursor.Next(ctx) {
 		var attendance attendancedomain.Attendance
 		if err = cursor.Decode(&attendance); err != nil {
 			return nil, err
 		}
 
-		var employee employeesdomain.Employee
-		filterEmployee := bson.M{"_id": attendance.EmployeeID}
-		if err = collectionEmployee.FindOne(ctx, filterEmployee).Decode(&employee); err != nil {
-			return nil, err
-		}
-
-		employeeFullName := employee.FirstName + employee.LastName
-		output := attendancedomain.Output{
-			Attendance: attendance,
-			Employee:   employeeFullName,
-		}
-
-		attendances = append(attendances, output)
+		attendances = append(attendances, attendance)
 	}
 
 	return attendances, nil

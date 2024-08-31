@@ -2,6 +2,7 @@ package attendance_domain
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	employees_domain "shop_erp_mono/domain/human_resource_management/employees"
 	"time"
 )
 
@@ -31,6 +32,6 @@ type Input struct {
 }
 
 type Output struct {
-	Attendance Attendance `bson:"attendance" json:"attendance"`
-	Employee   string     `bson:"employee" json:"employee"`
+	Attendance Attendance                `bson:"attendance" json:"attendance"`
+	Employee   employees_domain.Employee `bson:"employee" json:"employee"`
 }

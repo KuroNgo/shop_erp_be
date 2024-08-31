@@ -23,8 +23,8 @@ type employeeRepository struct {
 	collectionSalary     string
 }
 
-func NewEmployeeRepository(db *mongo.Database, collectionEmployee string, collectionDepartment string, collectionRole string, collectionSalary string) employeesdomain.IEmployeeRepository {
-	return &employeeRepository{database: db, collectionEmployee: collectionEmployee, collectionDepartment: collectionDepartment, collectionRole: collectionRole, collectionSalary: collectionSalary}
+func NewEmployeeRepository(db *mongo.Database, collectionEmployee string) employeesdomain.IEmployeeRepository {
+	return &employeeRepository{database: db, collectionEmployee: collectionEmployee}
 }
 
 var (
@@ -89,24 +89,20 @@ func (e employeeRepository) CreateOne(ctx context.Context, employee *employeesdo
 	return nil
 }
 
-func (e employeeRepository) DeleteOne(ctx context.Context, id string) error {
+func (e employeeRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
 	collectionEmployee := e.database.Collection(e.collectionEmployee)
 
-	employeeID, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return errors.New("invalid employee ID format")
-	}
-	if employeeID == primitive.NilObjectID {
+	if id == primitive.NilObjectID {
 		return errors.New("employee ID cannot be null")
 	}
 
-	filter := bson.M{"_id": employeeID}
+	filter := bson.M{"_id": id}
 
 	// Sử dụng defer để đảm bảo mutex luôn được mở khóa
 	mutex.Lock()
 	defer mutex.Unlock()
 
-	_, err = collectionEmployee.DeleteOne(ctx, filter)
+	_, err := collectionEmployee.DeleteOne(ctx, filter)
 	if err != nil {
 		return err
 	}
@@ -114,14 +110,13 @@ func (e employeeRepository) DeleteOne(ctx context.Context, id string) error {
 	return nil
 }
 
-func (e employeeRepository) UpdateOne(ctx context.Context, id string, employee *employeesdomain.Input) error {
+func (e employeeRepository) UpdateOne(ctx context.Context, id primitive.ObjectID, employee *employeesdomain.Input) error {
 	collectionEmployee := e.database.Collection(e.collectionEmployee)
 	collectionDepartment := e.database.Collection(e.collectionDepartment)
 	collectionRole := e.database.Collection(e.collectionRole)
 	collectionSalary := e.database.Collection(e.collectionSalary)
 
-	employeeID, _ := primitive.ObjectIDFromHex(id)
-	if employeeID == primitive.NilObjectID {
+	if id == primitive.NilObjectID {
 		return errors.New("id do not nil")
 	}
 
@@ -148,7 +143,7 @@ func (e employeeRepository) UpdateOne(ctx context.Context, id string, employee *
 	}
 
 	employeeData := employeesdomain.Employee{
-		ID:           employeeID,
+		ID:           id,
 		FirstName:    employee.FirstName,
 		LastName:     employee.LastName,
 		Gender:       employee.Gender,
@@ -191,7 +186,7 @@ func (e employeeRepository) UpdateOne(ctx context.Context, id string, employee *
 	return nil
 }
 
-func (e employeeRepository) GetOneByID(ctx context.Context, id string) (employeesdomain.Output, error) {
+func (e employeeRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (employeesdomain.Employee, error) {
 	errCh := make(chan error, 1) // Chỉ cần một lỗi duy nhất
 	departmentCh := make(chan departments_domain.Department, 1)
 	roleCh := make(chan roledomain.Role, 1)
@@ -203,15 +198,11 @@ func (e employeeRepository) GetOneByID(ctx context.Context, id string) (employee
 	collectionSalary := e.database.Collection(e.collectionSalary)
 
 	// Chuyển đổi ID và kiểm tra lỗi
-	employeeID, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return employeesdomain.Output{}, errors.New("invalid employee ID format")
-	}
 
 	var employee employeesdomain.Employee
-	filter := bson.M{"_id": employeeID}
+	filter := bson.M{"_id": id}
 	if err := collectionEmployee.FindOne(ctx, filter).Decode(&employee); err != nil {
-		return employeesdomain.Output{}, errors.New("error finding employee's information in the database")
+		return employeesdomain.Employee{}, errors.New("error finding employee's information in the database")
 	}
 
 	wg.Add(3)
@@ -263,22 +254,22 @@ func (e employeeRepository) GetOneByID(ctx context.Context, id string) (employee
 
 	// Lắng nghe kênh lỗi trước tiên
 	select {
-	case err = <-errCh:
-		return employeesdomain.Output{}, err
+	case err := <-errCh:
+		return employeesdomain.Employee{}, err
 	default:
-		// Đảm bảo nhận đủ dữ liệu từ tất cả các kênh
-		department := <-departmentCh
-		role := <-roleCh
-		salary := <-salaryCh
+		//// Đảm bảo nhận đủ dữ liệu từ tất cả các kênh
+		//department := <-departmentCh
+		//role := <-roleCh
+		//salary := <-salaryCh
+		//
+		//employeeOutput := employeesdomain.Output{
+		//	Employee:     employee,
+		//	DepartmentID: department.Name,
+		//	RoleID:       role.Title,
+		//	Salary:       salary,
+		//}
 
-		employeeOutput := employeesdomain.Output{
-			Employee:     employee,
-			DepartmentID: department.Name,
-			RoleID:       role.Title,
-			Salary:       salary,
-		}
-
-		return employeeOutput, nil
+		return employee, nil
 	}
 }
 
@@ -357,6 +348,19 @@ func (e employeeRepository) GetOneByName(ctx context.Context, name string) (empl
 
 		return employeeOutput, nil
 	}
+}
+
+func (e employeeRepository) GetOneByEmail(ctx context.Context, email string) (employeesdomain.Employee, error) {
+	collectionEmployee := e.database.Collection(e.collectionEmployee)
+
+	filter := bson.M{"email": email}
+	var employee employeesdomain.Employee
+	err := collectionEmployee.FindOne(ctx, filter).Decode(&employee)
+	if err != nil {
+		return employeesdomain.Employee{}, err
+	}
+
+	return employee, nil
 }
 
 func (e employeeRepository) GetAll(ctx context.Context) ([]employeesdomain.Output, error) {
