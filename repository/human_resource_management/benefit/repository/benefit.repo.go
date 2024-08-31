@@ -8,6 +8,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	benefitsdomain "shop_erp_mono/domain/human_resource_management/benefits"
 	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
+	"shop_erp_mono/repository/human_resource_management/benefit/validate"
+	"time"
 )
 
 type benefitRepository struct {
@@ -22,8 +24,30 @@ func NewBenefitRepository(db *mongo.Database, collectionBenefit string, collecti
 
 func (b benefitRepository) CreateOne(ctx context.Context, input *benefitsdomain.Input) error {
 	collectionBenefit := b.database.Collection(b.collectionBenefit)
+	collectionEmployee := b.database.Collection(b.collectionEmployee)
 
-	_, err := collectionBenefit.InsertOne(ctx, input)
+	if err := validate.IsNilBenefit(input); err != nil {
+		return err
+	}
+
+	var employee employeesdomain.Employee
+	filterEmployee := bson.M{"email": input.EmployeeEmail}
+	if err := collectionEmployee.FindOne(ctx, filterEmployee).Decode(&employee); err != nil {
+		return err
+	}
+
+	benefit := benefitsdomain.Benefit{
+		ID:          primitive.NewObjectID(),
+		EmployeeID:  employee.ID,
+		BenefitType: input.BenefitType,
+		Amount:      input.Amount,
+		StartDate:   input.StartDate,
+		EndDate:     input.EndDate,
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+	}
+
+	_, err := collectionBenefit.InsertOne(ctx, benefit)
 	if err != nil {
 		return errors.New(err.Error() + "error the inserting benefit's information into database")
 	}

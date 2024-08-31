@@ -33,7 +33,7 @@ func main() {
 	_gin := gin.Default()
 
 	routers.SetUp(env, timeout, db, _gin)
-	fmt.Println("Địa chỉ server web của mình: http://localhost:8080")
+	fmt.Println("Location Server Web of us: http://localhost:8080")
 	err := _gin.Run(env.ServerAddress)
 	if err != nil {
 		return
