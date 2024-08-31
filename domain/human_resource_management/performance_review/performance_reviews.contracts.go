@@ -7,8 +7,8 @@ type IPerformanceReviewRepository interface {
 	DeleteOne(ctx context.Context, id string) error
 	UpdateOne(ctx context.Context, input *Input) error
 	GetOneByID(ctx context.Context, id string) (Output, error)
-	GetOneByName(ctx context.Context, name string) (Output, error)
-	GetAllByEmployeeID(ctx context.Context, employeeID string) ([]Output, error)
+	GetOneByEmailEmployee(ctx context.Context, name string) (Output, error)
+	GetAll(ctx context.Context) ([]Output, error)
 }
 
 type IPerformanceReviewUseCase interface {
@@ -16,6 +16,6 @@ type IPerformanceReviewUseCase interface {
 	DeleteOne(ctx context.Context, id string) error
 	UpdateOne(ctx context.Context, input *Input) error
 	GetOneByID(ctx context.Context, id string) (Output, error)
-	GetOneByName(ctx context.Context, name string) (Output, error)
-	GetAllByEmployeeID(ctx context.Context, employeeID string) ([]Output, error)
+	GetOneByEmailEmployee(ctx context.Context, name string) (Output, error)
+	GetAll(ctx context.Context) ([]Output, error)
 }
