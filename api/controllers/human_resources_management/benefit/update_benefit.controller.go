@@ -3,7 +3,7 @@ package benefit_controller
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	benefits_domain "shop_erp_mono/domain/human_resource_management/benefits"
+	benefitsdomain "shop_erp_mono/domain/human_resource_management/benefits"
 )
 
 // UpdateOneBenefit updates the benefit's information
@@ -16,7 +16,7 @@ import (
 // @Router /api/v1/benefits/{_id} [patch]
 // @Security CookieAuth
 func (b *BenefitController) UpdateOneBenefit(ctx *gin.Context) {
-	var input benefits_domain.Input
+	var input benefitsdomain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",

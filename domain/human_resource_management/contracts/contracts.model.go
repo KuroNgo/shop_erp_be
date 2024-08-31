@@ -5,6 +5,10 @@ import (
 	"time"
 )
 
+const (
+	CollectionContract = "contract"
+)
+
 // Contract represents an employment contract of an employee.
 type Contract struct {
 	ID           primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
