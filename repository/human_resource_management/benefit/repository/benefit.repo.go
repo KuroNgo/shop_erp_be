@@ -11,13 +11,12 @@ import (
 )
 
 type benefitRepository struct {
-	database           *mongo.Database
-	collectionBenefit  string
-	collectionEmployee string
+	database          *mongo.Database
+	collectionBenefit string
 }
 
-func NewBenefitRepository(db *mongo.Database, collectionBenefit string, collectionEmployee string) benefitsdomain.IBenefitRepository {
-	return &benefitRepository{database: db, collectionBenefit: collectionBenefit, collectionEmployee: collectionEmployee}
+func NewBenefitRepository(db *mongo.Database, collectionBenefit string) benefitsdomain.IBenefitRepository {
+	return &benefitRepository{database: db, collectionBenefit: collectionBenefit}
 }
 
 func (b benefitRepository) CreateOne(ctx context.Context, benefit *benefitsdomain.Benefit) error {

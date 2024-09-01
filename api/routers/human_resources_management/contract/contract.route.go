@@ -8,14 +8,16 @@ import (
 	contractsdomain "shop_erp_mono/domain/human_resource_management/contracts"
 	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
 	contractrepository "shop_erp_mono/repository/human_resource_management/contracts/repository"
+	employeerepository "shop_erp_mono/repository/human_resource_management/employee/repository"
 	contractusecase "shop_erp_mono/usecase/human_resource_management/contract/usecase"
 	"time"
 )
 
 func ContractRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
-	co := contractrepository.NewContractRepository(db, contractsdomain.CollectionContract, employeesdomain.CollectionEmployee)
+	co := contractrepository.NewContractRepository(db, contractsdomain.CollectionContract)
+	em := employeerepository.NewEmployeeRepository(db, employeesdomain.CollectionEmployee)
 	contract := &contractcontroller.ContractController{
-		ContractUseCase: contractusecase.NewContractUseCase(timeout, co),
+		ContractUseCase: contractusecase.NewContractUseCase(timeout, co, em),
 		Database:        env,
 	}
 
