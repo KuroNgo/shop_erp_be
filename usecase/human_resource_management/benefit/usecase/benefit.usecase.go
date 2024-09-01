@@ -2,36 +2,57 @@ package benefit_usecase
 
 import (
 	"context"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	benefitsdomain "shop_erp_mono/domain/human_resource_management/benefits"
+	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
+	"shop_erp_mono/repository/human_resource_management/benefit/validate"
 	"time"
 )
 
 type benefitUseCase struct {
-	contextTimeout    time.Duration
-	benefitRepository benefitsdomain.IBenefitRepository
+	contextTimeout     time.Duration
+	benefitRepository  benefitsdomain.IBenefitRepository
+	employeeRepository employeesdomain.IEmployeeRepository
 }
 
-func NewBenefitUseCase(contextTimeout time.Duration, benefitRepository benefitsdomain.IBenefitRepository) benefitsdomain.IBenefitUseCase {
-	return &benefitUseCase{contextTimeout: contextTimeout, benefitRepository: benefitRepository}
+func NewBenefitUseCase(contextTimeout time.Duration, benefitRepository benefitsdomain.IBenefitRepository, employeeRepository employeesdomain.IEmployeeRepository) benefitsdomain.IBenefitUseCase {
+	return &benefitUseCase{contextTimeout: contextTimeout, benefitRepository: benefitRepository, employeeRepository: employeeRepository}
 }
 
 func (b benefitUseCase) CreateOne(ctx context.Context, input *benefitsdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
-	err := b.benefitRepository.CreateOne(ctx, input)
+	if err := validate.IsNilBenefit(input); err != nil {
+		return err
+	}
+
+	employeeData, err := b.employeeRepository.GetOneByEmail(ctx, input.EmployeeEmail)
 	if err != nil {
 		return err
 	}
 
-	return nil
+	benefit := benefitsdomain.Benefit{
+		ID:          primitive.NewObjectID(),
+		EmployeeID:  employeeData.ID,
+		BenefitType: input.BenefitType,
+		Amount:      input.Amount,
+		StartDate:   input.StartDate,
+		EndDate:     input.EndDate,
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+	}
+
+	return b.benefitRepository.CreateOne(ctx, &benefit)
 }
 
 func (b benefitUseCase) DeleteOne(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
-	err := b.benefitRepository.DeleteOne(ctx, id)
+	benefitID, _ := primitive.ObjectIDFromHex(id)
+
+	err := b.benefitRepository.DeleteOne(ctx, benefitID)
 	if err != nil {
 		return err
 	}
@@ -43,46 +64,99 @@ func (b benefitUseCase) UpdateOne(ctx context.Context, id string, input *benefit
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
-	err := b.benefitRepository.UpdateOne(ctx, id, input)
+	benefitID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return err
 	}
 
-	return nil
+	employeeData, err := b.employeeRepository.GetOneByEmail(ctx, input.EmployeeEmail)
+	if err != nil {
+		return err
+	}
+
+	benefit := benefitsdomain.Benefit{
+		EmployeeID:  employeeData.ID,
+		BenefitType: input.BenefitType,
+		Amount:      input.Amount,
+		StartDate:   input.StartDate,
+		EndDate:     input.EndDate,
+	}
+
+	return b.benefitRepository.UpdateOne(ctx, benefitID, &benefit)
 }
 
 func (b benefitUseCase) GetOneByID(ctx context.Context, id string) (benefitsdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
-	data, err := b.benefitRepository.GetOneByID(ctx, id)
+	benefitID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return benefitsdomain.Output{}, err
 	}
 
-	return data, nil
+	benefitData, err := b.benefitRepository.GetOneByID(ctx, benefitID)
+	if err != nil {
+		return benefitsdomain.Output{}, err
+	}
+
+	employeeData, err := b.employeeRepository.GetOneByID(ctx, benefitData.EmployeeID)
+	if err != nil {
+		return benefitsdomain.Output{}, err
+	}
+
+	output := benefitsdomain.Output{
+		Benefit:  benefitData,
+		Employee: employeeData,
+	}
+
+	return output, nil
 }
 
 func (b benefitUseCase) GetOneByEmail(ctx context.Context, email string) (benefitsdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
-	data, err := b.benefitRepository.GetOneByEmail(ctx, email)
+	employeeData, err := b.employeeRepository.GetOneByEmail(ctx, email)
 	if err != nil {
 		return benefitsdomain.Output{}, err
 	}
 
-	return data, nil
+	benefitData, err := b.benefitRepository.GetOneByEmployeeID(ctx, employeeData.ID)
+	if err != nil {
+		return benefitsdomain.Output{}, err
+	}
+
+	output := benefitsdomain.Output{
+		Benefit:  benefitData,
+		Employee: employeeData,
+	}
+
+	return output, nil
 }
 
 func (b benefitUseCase) GetAll(ctx context.Context) ([]benefitsdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
-	data, err := b.benefitRepository.GetAll(ctx)
+	benefitData, err := b.benefitRepository.GetAll(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	return data, nil
+	var outputs []benefitsdomain.Output
+	outputs = make([]benefitsdomain.Output, 0, len(benefitData))
+	for _, benefit := range benefitData {
+		employeeData, err := b.employeeRepository.GetOneByID(ctx, benefit.EmployeeID)
+		if err != nil {
+			return nil, err
+		}
+
+		output := benefitsdomain.Output{
+			Benefit:  benefit,
+			Employee: employeeData,
+		}
+
+		outputs = append(outputs, output)
+	}
+	return outputs, nil
 }

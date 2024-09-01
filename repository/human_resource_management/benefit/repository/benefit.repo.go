@@ -7,8 +7,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	benefitsdomain "shop_erp_mono/domain/human_resource_management/benefits"
-	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
-	"shop_erp_mono/repository/human_resource_management/benefit/validate"
 	"time"
 )
 
@@ -22,30 +20,8 @@ func NewBenefitRepository(db *mongo.Database, collectionBenefit string, collecti
 	return &benefitRepository{database: db, collectionBenefit: collectionBenefit, collectionEmployee: collectionEmployee}
 }
 
-func (b benefitRepository) CreateOne(ctx context.Context, input *benefitsdomain.Input) error {
+func (b benefitRepository) CreateOne(ctx context.Context, benefit *benefitsdomain.Benefit) error {
 	collectionBenefit := b.database.Collection(b.collectionBenefit)
-	collectionEmployee := b.database.Collection(b.collectionEmployee)
-
-	if err := validate.IsNilBenefit(input); err != nil {
-		return err
-	}
-
-	var employee employeesdomain.Employee
-	filterEmployee := bson.M{"email": input.EmployeeEmail}
-	if err := collectionEmployee.FindOne(ctx, filterEmployee).Decode(&employee); err != nil {
-		return err
-	}
-
-	benefit := benefitsdomain.Benefit{
-		ID:          primitive.NewObjectID(),
-		EmployeeID:  employee.ID,
-		BenefitType: input.BenefitType,
-		Amount:      input.Amount,
-		StartDate:   input.StartDate,
-		EndDate:     input.EndDate,
-		CreatedAt:   time.Now(),
-		UpdatedAt:   time.Now(),
-	}
 
 	_, err := collectionBenefit.InsertOne(ctx, benefit)
 	if err != nil {
@@ -55,15 +31,14 @@ func (b benefitRepository) CreateOne(ctx context.Context, input *benefitsdomain.
 	return nil
 }
 
-func (b benefitRepository) DeleteOne(ctx context.Context, id string) error {
+func (b benefitRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
 	collectionBenefit := b.database.Collection(b.collectionBenefit)
 
-	benefitID, _ := primitive.ObjectIDFromHex(id)
-	if benefitID == primitive.NilObjectID {
+	if id == primitive.NilObjectID {
 		return errors.New("id do not null")
 	}
 
-	filter := bson.M{"_id": benefitID}
+	filter := bson.M{"_id": id}
 
 	_, err := collectionBenefit.DeleteOne(ctx, filter)
 	if err != nil {
@@ -73,28 +48,21 @@ func (b benefitRepository) DeleteOne(ctx context.Context, id string) error {
 	return nil
 }
 
-func (b benefitRepository) UpdateOne(ctx context.Context, id string, input *benefitsdomain.Input) error {
+func (b benefitRepository) UpdateOne(ctx context.Context, id primitive.ObjectID, benefit *benefitsdomain.Benefit) error {
 	collectionBenefit := b.database.Collection(b.collectionBenefit)
-	collectionEmployee := b.database.Collection(b.collectionEmployee)
 
-	benefitID, _ := primitive.ObjectIDFromHex(id)
-	if benefitID == primitive.NilObjectID {
+	if id == primitive.NilObjectID {
 		return errors.New("id do not null")
 	}
 
-	var employee employeesdomain.Employee
-	filterEmployee := bson.M{"email": input.EmployeeEmail}
-	if err := collectionEmployee.FindOne(ctx, filterEmployee).Decode(&employee); err != nil {
-		return err
-	}
-
-	filter := bson.M{"_id": benefitID}
+	filter := bson.M{"_id": id}
 	update := bson.M{"$set": bson.M{
-		"employee_id":  employee.ID,
-		"benefit_type": input.BenefitType,
-		"amount":       input.Amount,
-		"start_date":   input.StartDate,
-		"end_date":     input.EndDate,
+		"employee_id":  benefit.EmployeeID,
+		"benefit_type": benefit.BenefitType,
+		"amount":       benefit.Amount,
+		"start_date":   benefit.StartDate,
+		"end_date":     benefit.EndDate,
+		"updated_at":   time.Now(),
 	}}
 
 	_, err := collectionBenefit.UpdateOne(ctx, filter, update)
@@ -105,62 +73,36 @@ func (b benefitRepository) UpdateOne(ctx context.Context, id string, input *bene
 	return nil
 }
 
-func (b benefitRepository) GetOneByID(ctx context.Context, id string) (benefitsdomain.Output, error) {
+func (b benefitRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (benefitsdomain.Benefit, error) {
 	collectionBenefit := b.database.Collection(b.collectionBenefit)
-	collectionEmployee := b.database.Collection(b.collectionEmployee)
 
-	benefitID, _ := primitive.ObjectIDFromHex(id)
-	if benefitID == primitive.NilObjectID {
-		return benefitsdomain.Output{}, errors.New("id do not nil")
+	if id == primitive.NilObjectID {
+		return benefitsdomain.Benefit{}, errors.New("id do not nil")
 	}
 
 	var benefit benefitsdomain.Benefit
-	filter := bson.M{"_id": benefitID}
+	filter := bson.M{"_id": id}
 	if err := collectionBenefit.FindOne(ctx, filter).Decode(&benefit); err != nil {
-		return benefitsdomain.Output{}, err
+		return benefitsdomain.Benefit{}, err
 	}
 
-	var employee employeesdomain.Employee
-	filterEmployee := bson.M{"_id": benefit.EmployeeID}
-	if err := collectionEmployee.FindOne(ctx, filterEmployee).Decode(&employee); err != nil {
-		return benefitsdomain.Output{}, err
-	}
-
-	output := benefitsdomain.Output{
-		Benefit:  benefit,
-		Employee: employee.Email,
-	}
-
-	return output, nil
+	return benefit, nil
 }
 
-func (b benefitRepository) GetOneByEmail(ctx context.Context, email string) (benefitsdomain.Output, error) {
+func (b benefitRepository) GetOneByEmployeeID(ctx context.Context, employeeID primitive.ObjectID) (benefitsdomain.Benefit, error) {
 	collectionBenefit := b.database.Collection(b.collectionBenefit)
-	collectionEmployee := b.database.Collection(b.collectionEmployee)
-
-	var employee employeesdomain.Employee
-	filterEmployee := bson.M{"email": email}
-	if err := collectionEmployee.FindOne(ctx, filterEmployee).Decode(&employee); err != nil {
-		return benefitsdomain.Output{}, err
-	}
 
 	var benefit benefitsdomain.Benefit
-	filter := bson.M{"employee_id": employee.ID}
+	filter := bson.M{"employee_id": employeeID}
 	if err := collectionBenefit.FindOne(ctx, filter).Decode(&benefit); err != nil {
-		return benefitsdomain.Output{}, err
+		return benefitsdomain.Benefit{}, err
 	}
 
-	output := benefitsdomain.Output{
-		Benefit:  benefit,
-		Employee: employee.Email,
-	}
-
-	return output, nil
+	return benefit, nil
 }
 
-func (b benefitRepository) GetAll(ctx context.Context) ([]benefitsdomain.Output, error) {
+func (b benefitRepository) GetAll(ctx context.Context) ([]benefitsdomain.Benefit, error) {
 	collectionBenefit := b.database.Collection(b.collectionBenefit)
-	collectionEmployee := b.database.Collection(b.collectionEmployee)
 
 	filter := bson.M{}
 	cursor, err := collectionBenefit.Find(ctx, filter)
@@ -174,26 +116,15 @@ func (b benefitRepository) GetAll(ctx context.Context) ([]benefitsdomain.Output,
 		}
 	}(cursor, ctx)
 
-	var benefits []benefitsdomain.Output
-	benefits = make([]benefitsdomain.Output, 0, cursor.RemainingBatchLength())
+	var benefits []benefitsdomain.Benefit
+	benefits = make([]benefitsdomain.Benefit, 0, cursor.RemainingBatchLength())
 	for cursor.Next(ctx) {
 		var benefit benefitsdomain.Benefit
 		if err = cursor.Decode(&benefit); err != nil {
 			return nil, err
 		}
 
-		var employee employeesdomain.Employee
-		filterEmployee := bson.M{"_id": benefit.EmployeeID}
-		if err := collectionEmployee.FindOne(ctx, filterEmployee).Decode(&employee); err != nil {
-			return nil, err
-		}
-
-		output := benefitsdomain.Output{
-			Benefit:  benefit,
-			Employee: employee.Email,
-		}
-
-		benefits = append(benefits, output)
+		benefits = append(benefits, benefit)
 	}
 
 	return benefits, nil
