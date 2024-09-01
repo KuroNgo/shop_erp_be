@@ -7,7 +7,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	departmentsdomain "shop_erp_mono/domain/human_resource_management/departments"
-	departmentvalidate "shop_erp_mono/repository/human_resource_management/department/validate"
 	"time"
 )
 
@@ -20,20 +19,8 @@ func NewDepartmentRepository(db *mongo.Database, collectionDepartment string) de
 	return &departmentRepository{database: db, collectionDepartment: collectionDepartment}
 }
 
-func (d departmentRepository) CreateOne(ctx context.Context, input *departmentsdomain.Input) error {
+func (d departmentRepository) CreateOne(ctx context.Context, department *departmentsdomain.Department) error {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
-
-	if err := departmentvalidate.IsNilDepartment(input); err != nil {
-		return err
-	}
-
-	department := departmentsdomain.Department{
-		ID:          primitive.NewObjectID(),
-		Name:        input.Name,
-		Description: input.Description,
-		CreatedAt:   time.Now(),
-		UpdatedAt:   time.Now(),
-	}
 
 	_, err := collectionDepartment.InsertOne(ctx, department)
 	if err != nil {
@@ -43,16 +30,14 @@ func (d departmentRepository) CreateOne(ctx context.Context, input *departmentsd
 	return nil
 }
 
-func (d departmentRepository) DeleteOne(ctx context.Context, id string) error {
+func (d departmentRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
-	departmentID, _ := primitive.ObjectIDFromHex(id)
-
-	if departmentID == primitive.NilObjectID {
+	if id == primitive.NilObjectID {
 		return errors.New("error in the department's ID with delete in database, this is do not nil")
 	}
 
-	filter := bson.M{"_id": departmentID}
+	filter := bson.M{"_id": id}
 	_, err := collectionDepartment.DeleteOne(ctx, filter)
 	if err != nil {
 		return err
@@ -61,22 +46,17 @@ func (d departmentRepository) DeleteOne(ctx context.Context, id string) error {
 	return nil
 }
 
-func (d departmentRepository) UpdateOne(ctx context.Context, id string, input *departmentsdomain.Input) error {
+func (d departmentRepository) UpdateOne(ctx context.Context, id primitive.ObjectID, department *departmentsdomain.Department) error {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
-	if err := departmentvalidate.IsNilDepartment(input); err != nil {
-		return err
-	}
-
-	departmentID, _ := primitive.ObjectIDFromHex(id)
-	if departmentID == primitive.NilObjectID {
+	if id == primitive.NilObjectID {
 		return errors.New("id do not nil")
 	}
 
-	filter := bson.M{"_id": departmentID}
+	filter := bson.M{"_id": id}
 	update := bson.M{"$set": bson.M{
-		"name":        input.Name,
-		"description": input.Description,
+		"name":        department.Name,
+		"description": department.Description,
 		"updated_at":  time.Now(),
 	}}
 
@@ -88,39 +68,31 @@ func (d departmentRepository) UpdateOne(ctx context.Context, id string, input *d
 	return nil
 }
 
-func (d departmentRepository) GetOneByID(ctx context.Context, id string) (departmentsdomain.Output, error) {
+func (d departmentRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (departmentsdomain.Department, error) {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
-	departmentID, _ := primitive.ObjectIDFromHex(id)
-	filter := bson.M{"_id": departmentID}
+	filter := bson.M{"_id": id}
 	var department departmentsdomain.Department
 	if err := collectionDepartment.FindOne(ctx, filter).Decode(&department); err != nil {
-		return departmentsdomain.Output{}, err
+		return departmentsdomain.Department{}, err
 	}
 
-	output := departmentsdomain.Output{
-		Department: department,
-	}
-
-	return output, nil
+	return department, nil
 }
 
-func (d departmentRepository) GetOneByName(ctx context.Context, name string) (departmentsdomain.Output, error) {
+func (d departmentRepository) GetOneByName(ctx context.Context, name string) (departmentsdomain.Department, error) {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
 	filter := bson.M{"name": name}
 	var department departmentsdomain.Department
 	if err := collectionDepartment.FindOne(ctx, filter).Decode(&department); err != nil {
-		return departmentsdomain.Output{}, err
+		return departmentsdomain.Department{}, err
 	}
 
-	output := departmentsdomain.Output{
-		Department: department,
-	}
-	return output, nil
+	return department, nil
 }
 
-func (d departmentRepository) GetAll(ctx context.Context) ([]departmentsdomain.Output, error) {
+func (d departmentRepository) GetAll(ctx context.Context) ([]departmentsdomain.Department, error) {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
 	filter := bson.M{}
@@ -135,18 +107,15 @@ func (d departmentRepository) GetAll(ctx context.Context) ([]departmentsdomain.O
 		}
 	}(cursor, ctx)
 
-	var departments []departmentsdomain.Output
-	departments = make([]departmentsdomain.Output, 0, cursor.RemainingBatchLength())
+	var departments []departmentsdomain.Department
+	departments = make([]departmentsdomain.Department, 0, cursor.RemainingBatchLength())
 	for cursor.Next(ctx) {
 		var department departmentsdomain.Department
 		if err = cursor.Decode(&department); err != nil {
 			return nil, err
 		}
 
-		output := departmentsdomain.Output{
-			Department: department,
-		}
-		departments = append(departments, output)
+		departments = append(departments, department)
 	}
 
 	return departments, nil

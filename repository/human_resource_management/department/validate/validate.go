@@ -1,4 +1,4 @@
-package department_validate
+package validate
 
 import (
 	"errors"
