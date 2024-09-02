@@ -2,6 +2,7 @@ package leave_request_domain
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	employees_domain "shop_erp_mono/domain/human_resource_management/employees"
 	"time"
 )
 
@@ -30,6 +31,6 @@ type Input struct {
 }
 
 type Output struct {
-	LeaveRequest LeaveRequest `bson:"leave_request"`
-	NameEmployee string       `bson:"name_employee"`
+	LeaveRequest LeaveRequest              `bson:"leave_request"`
+	Employee     employees_domain.Employee `bson:"name_employee"`
 }

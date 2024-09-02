@@ -3,6 +3,7 @@ package validate
 import (
 	"errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	roledomain "shop_erp_mono/domain/human_resource_management/role"
 )
 
 func IsNilTitle(title string) error {
@@ -28,6 +29,18 @@ func IsNilID(id string) error {
 	}
 
 	if data == primitive.NilObjectID {
+		return errors.New("the role's information do not nil")
+	}
+
+	return nil
+}
+
+func IsNilRole(input *roledomain.Input) error {
+	if input.Title == "" {
+		return errors.New("the role's information do not nil")
+	}
+
+	if input.Description == "" {
 		return errors.New("the role's information do not nil")
 	}
 

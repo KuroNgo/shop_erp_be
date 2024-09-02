@@ -16,7 +16,7 @@ import (
 func (s *SalaryController) GetOneSalaryByRole(ctx *gin.Context) {
 	role := ctx.Param("role")
 
-	data, err := s.SalaryUseCase.GetOneByRole(ctx, role)
+	data, err := s.SalaryUseCase.GetOneByRoleTitle(ctx, role)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",

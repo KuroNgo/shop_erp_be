@@ -2,6 +2,7 @@ package salary_domain
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	roledomain "shop_erp_mono/domain/human_resource_management/role"
 	"time"
 )
 
@@ -32,6 +33,6 @@ type Input struct {
 }
 
 type Output struct {
-	Salary Salary `bson:"salary" json:"salary"`
-	Role   string `bson:"role" json:"role"`
+	Salary Salary          `bson:"salary" json:"salary"`
+	Role   roledomain.Role `bson:"role" json:"role"`
 }

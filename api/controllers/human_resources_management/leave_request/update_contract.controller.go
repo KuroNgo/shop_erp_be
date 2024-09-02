@@ -24,7 +24,9 @@ func (l *LeaveRequestController) UpdateOneLeaveRequest(ctx *gin.Context) {
 		return
 	}
 
-	err := l.LeaveRequestUseCase.UpdateOne(ctx, &input)
+	_id := ctx.Param("_id")
+
+	err := l.LeaveRequestUseCase.UpdateOne(ctx, _id, &input)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

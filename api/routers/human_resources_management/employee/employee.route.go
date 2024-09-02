@@ -5,16 +5,25 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	employeecontroller "shop_erp_mono/api/controllers/human_resources_management/employee"
 	"shop_erp_mono/bootstrap"
+	departmentsdomain "shop_erp_mono/domain/human_resource_management/departments"
 	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
-	employee_repository "shop_erp_mono/repository/human_resource_management/employee/repository"
-	employee_usecase "shop_erp_mono/usecase/human_resource_management/employee/usecase"
+	roledomain "shop_erp_mono/domain/human_resource_management/role"
+	salarydomain "shop_erp_mono/domain/human_resource_management/salary"
+	departmentrepository "shop_erp_mono/repository/human_resource_management/department/repository"
+	employeerepository "shop_erp_mono/repository/human_resource_management/employee/repository"
+	rolerepository "shop_erp_mono/repository/human_resource_management/role/repository"
+	salaryrepository "shop_erp_mono/repository/human_resource_management/salary/repository"
+	employeeusecase "shop_erp_mono/usecase/human_resource_management/employee/usecase"
 	"time"
 )
 
 func EmployeeRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
-	em := employee_repository.NewEmployeeRepository(db, employeesdomain.CollectionEmployee)
+	em := employeerepository.NewEmployeeRepository(db, employeesdomain.CollectionEmployee)
+	de := departmentrepository.NewDepartmentRepository(db, departmentsdomain.CollectionDepartment)
+	sa := salaryrepository.NewSalaryRepository(db, salarydomain.CollectionSalary)
+	ro := rolerepository.NewRoleRepository(db, roledomain.CollectionRole)
 	employee := &employeecontroller.EmployeeController{
-		EmployeeUseCase: employee_usecase.NewEmployeeUseCase(timeout, em),
+		EmployeeUseCase: employeeusecase.NewEmployeeUseCase(timeout, em, de, sa, ro),
 		Database:        env,
 	}
 

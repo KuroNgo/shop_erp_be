@@ -24,7 +24,9 @@ func (s *SalaryController) UpdateOneSalary(ctx *gin.Context) {
 		return
 	}
 
-	if err := s.SalaryUseCase.UpdateOne(ctx, &salary); err != nil {
+	_id := ctx.Param("_id")
+
+	if err := s.SalaryUseCase.UpdateOne(ctx, _id, &salary); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
 			"message": err.Error(),

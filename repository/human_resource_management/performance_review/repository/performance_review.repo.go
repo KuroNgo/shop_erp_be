@@ -9,7 +9,10 @@ import (
 type performanceReviewRepository struct {
 	database                    *mongo.Database
 	collectionPerformanceReview string
-	collectionEmployee          string
+}
+
+func NewPerformanceReviewRepository(db *mongo.Database, collectionPerformanceReview string) performancereviewdomain.IPerformanceReviewRepository {
+	return &performanceReviewRepository{database: db, collectionPerformanceReview: collectionPerformanceReview}
 }
 
 func (p performanceReviewRepository) CreateOne(ctx context.Context, input *performancereviewdomain.Input) error {
@@ -40,8 +43,4 @@ func (p performanceReviewRepository) GetOneByEmailEmployee(ctx context.Context, 
 func (p performanceReviewRepository) GetAll(ctx context.Context) ([]performancereviewdomain.Output, error) {
 	//TODO implement me
 	panic("implement me")
-}
-
-func NewPerformanceReviewRepository(db *mongo.Database, collectionPerformanceReview string, collectionEmployee string) performancereviewdomain.IPerformanceReviewRepository {
-	return &performanceReviewRepository{database: db, collectionPerformanceReview: collectionPerformanceReview, collectionEmployee: collectionEmployee}
 }

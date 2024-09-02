@@ -3,29 +3,72 @@ package employee_usecase
 import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	departmentsdomain "shop_erp_mono/domain/human_resource_management/departments"
 	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
+	roledomain "shop_erp_mono/domain/human_resource_management/role"
+	salarydomain "shop_erp_mono/domain/human_resource_management/salary"
+	"shop_erp_mono/repository/human_resource_management/employee/validate"
 	"time"
 )
 
 type employeeUseCase struct {
-	employeeRepository employeesdomain.IEmployeeRepository
-	contextTimeout     time.Duration
+	contextTimeout       time.Duration
+	employeeRepository   employeesdomain.IEmployeeRepository
+	departmentRepository departmentsdomain.IDepartmentRepository
+	salaryRepository     salarydomain.ISalaryRepository
+	roleRepository       roledomain.IRoleRepository
 }
 
-func NewEmployeeUseCase(contextTimout time.Duration, employeeRepository employeesdomain.IEmployeeRepository) employeesdomain.IEmployeeUseCase {
-	return &employeeUseCase{contextTimeout: contextTimout, employeeRepository: employeeRepository}
+func NewEmployeeUseCase(contextTimout time.Duration, employeeRepository employeesdomain.IEmployeeRepository,
+	departmentRepository departmentsdomain.IDepartmentRepository, salaryRepository salarydomain.ISalaryRepository,
+	roleRepository roledomain.IRoleRepository) employeesdomain.IEmployeeUseCase {
+	return &employeeUseCase{contextTimeout: contextTimout, employeeRepository: employeeRepository,
+		departmentRepository: departmentRepository, salaryRepository: salaryRepository, roleRepository: roleRepository}
 }
 
-func (e employeeUseCase) CreateOne(ctx context.Context, employee *employeesdomain.Input) error {
+func (e employeeUseCase) CreateOne(ctx context.Context, input *employeesdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
 
-	err := e.employeeRepository.CreateOne(ctx, employee)
+	if err := validate.IsNilEmployee(input); err != nil {
+		return err
+	}
+
+	departmentData, err := e.departmentRepository.GetOneByName(ctx, input.Department)
 	if err != nil {
 		return err
 	}
 
-	return nil
+	roleData, err := e.roleRepository.GetByTitleRole(ctx, input.Role)
+	if err != nil {
+		return err
+	}
+
+	salaryData, err := e.salaryRepository.GetOneByRoleID(ctx, roleData.ID)
+	if err != nil {
+		return err
+	}
+
+	employeeData := &employeesdomain.Employee{
+		ID:           primitive.NewObjectID(),
+		FirstName:    input.FirstName,
+		LastName:     input.LastName,
+		Gender:       input.Gender,
+		Email:        input.Email,
+		Phone:        input.Phone,
+		Address:      input.Address,
+		AvatarURL:    input.AvatarURL,
+		DateOfBirth:  input.DateOfBirth,
+		DayOfWork:    input.DayOfWork,
+		DepartmentID: departmentData.ID,
+		SalaryID:     salaryData.ID,
+		RoleID:       roleData.ID,
+		IsActive:     true,
+		CreatedAt:    time.Now(),
+		UpdatedAt:    time.Now(),
+	}
+
+	return e.employeeRepository.CreateOne(ctx, employeeData)
 }
 
 func (e employeeUseCase) DeleteOne(ctx context.Context, id string) error {
@@ -37,15 +80,10 @@ func (e employeeUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
-	err = e.employeeRepository.DeleteOne(ctx, employeeID)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return e.employeeRepository.DeleteOne(ctx, employeeID)
 }
 
-func (e employeeUseCase) UpdateOne(ctx context.Context, id string, employee *employeesdomain.Input) error {
+func (e employeeUseCase) UpdateOne(ctx context.Context, id string, input *employeesdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
 
@@ -54,12 +92,38 @@ func (e employeeUseCase) UpdateOne(ctx context.Context, id string, employee *emp
 		return err
 	}
 
-	err = e.employeeRepository.UpdateOne(ctx, employeeID, employee)
+	departmentData, err := e.departmentRepository.GetOneByName(ctx, input.Department)
 	if err != nil {
 		return err
 	}
 
-	return nil
+	roleData, err := e.roleRepository.GetByTitleRole(ctx, input.Role)
+	if err != nil {
+		return err
+	}
+
+	salaryData, err := e.salaryRepository.GetOneByRoleID(ctx, roleData.ID)
+	if err != nil {
+		return err
+	}
+
+	employee := &employeesdomain.Employee{
+		FirstName:    input.FirstName,
+		LastName:     input.LastName,
+		Gender:       input.Gender,
+		Email:        input.Email,
+		Phone:        input.Phone,
+		Address:      input.Address,
+		AvatarURL:    input.AvatarURL,
+		DateOfBirth:  input.DateOfBirth,
+		DayOfWork:    input.DayOfWork,
+		DepartmentID: departmentData.ID,
+		RoleID:       roleData.ID,
+		SalaryID:     salaryData.ID,
+		UpdatedAt:    time.Now(),
+	}
+
+	return e.employeeRepository.UpdateOne(ctx, employeeID, employee)
 }
 
 func (e employeeUseCase) GetOneByID(ctx context.Context, id string) (employeesdomain.Output, error) {
@@ -71,13 +135,13 @@ func (e employeeUseCase) GetOneByID(ctx context.Context, id string) (employeesdo
 		return employeesdomain.Output{}, err
 	}
 
-	data, err := e.employeeRepository.GetOneByID(ctx, employeeID)
+	employeeData, err := e.employeeRepository.GetOneByID(ctx, employeeID)
 	if err != nil {
 		return employeesdomain.Output{}, err
 	}
 
 	output := employeesdomain.Output{
-		Employee: data,
+		Employee: employeeData,
 	}
 	return output, nil
 }
@@ -86,13 +150,13 @@ func (e employeeUseCase) GetOneByEmail(ctx context.Context, name string) (employ
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
 
-	data, err := e.employeeRepository.GetOneByEmail(ctx, name)
+	employeeData, err := e.employeeRepository.GetOneByEmail(ctx, name)
 	if err != nil {
 		return employeesdomain.Output{}, err
 	}
 
 	output := employeesdomain.Output{
-		Employee: data,
+		Employee: employeeData,
 	}
 	return output, nil
 }
@@ -101,10 +165,20 @@ func (e employeeUseCase) GetAll(ctx context.Context) ([]employeesdomain.Output, 
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
 
-	data, err := e.employeeRepository.GetAll(ctx)
+	employeeData, err := e.employeeRepository.GetAll(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	return data, nil
+	var outputs []employeesdomain.Output
+	outputs = make([]employeesdomain.Output, 0, len(employeeData))
+	for _, employee := range employeeData {
+		output := employeesdomain.Output{
+			Employee: employee,
+		}
+
+		outputs = append(outputs, output)
+	}
+
+	return outputs, nil
 }

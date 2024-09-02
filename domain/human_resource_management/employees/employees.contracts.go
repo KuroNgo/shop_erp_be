@@ -6,12 +6,12 @@ import (
 )
 
 type IEmployeeRepository interface {
-	CreateOne(ctx context.Context, employee *Input) error
+	CreateOne(ctx context.Context, employee *Employee) error
 	DeleteOne(ctx context.Context, id primitive.ObjectID) error
-	UpdateOne(ctx context.Context, id primitive.ObjectID, employee *Input) error
+	UpdateOne(ctx context.Context, id primitive.ObjectID, employee *Employee) error
 	GetOneByID(ctx context.Context, id primitive.ObjectID) (Employee, error)
 	GetOneByEmail(ctx context.Context, email string) (Employee, error)
-	GetAll(ctx context.Context) ([]Output, error)
+	GetAll(ctx context.Context) ([]Employee, error)
 }
 
 type IEmployeeUseCase interface {

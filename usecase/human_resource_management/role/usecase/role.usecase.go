@@ -2,7 +2,9 @@ package role_usecase
 
 import (
 	"context"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	roledomain "shop_erp_mono/domain/human_resource_management/role"
+	"shop_erp_mono/repository/human_resource_management/role/validate"
 	"time"
 )
 
@@ -19,70 +21,111 @@ func (r roleUseCase) CreateOneRole(ctx context.Context, input *roledomain.Input)
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
 
-	err := r.roleRepository.CreateOneRole(ctx, input)
-	if err != nil {
+	if err := validate.IsNilRole(input); err != nil {
 		return err
 	}
 
-	return nil
+	role := &roledomain.Role{
+		ID:          primitive.NewObjectID(),
+		Title:       input.Title,
+		Description: input.Description,
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+	}
+
+	return r.roleRepository.CreateOneRole(ctx, role)
 }
 
 func (r roleUseCase) GetByTitleRole(ctx context.Context, title string) (roledomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
 
-	data, err := r.roleRepository.GetByTitleRole(ctx, title)
+	roleData, err := r.roleRepository.GetByTitleRole(ctx, title)
 	if err != nil {
 		return roledomain.Output{}, err
 	}
 
-	return data, nil
+	output := roledomain.Output{
+		Role: roleData,
+	}
+
+	return output, nil
 }
 
 func (r roleUseCase) GetByIDRole(ctx context.Context, id string) (roledomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
 
-	data, err := r.roleRepository.GetByIDRole(ctx, id)
+	roleID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return roledomain.Output{}, err
 	}
 
-	return data, nil
+	roleData, err := r.roleRepository.GetByIDRole(ctx, roleID)
+	if err != nil {
+		return roledomain.Output{}, err
+	}
+
+	output := roledomain.Output{
+		Role: roleData,
+	}
+	return output, nil
 }
 
 func (r roleUseCase) GetAllRole(ctx context.Context) ([]roledomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
 
-	data, err := r.roleRepository.GetAllRole(ctx)
+	roleData, err := r.roleRepository.GetAllRole(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	return data, nil
+	var outputs []roledomain.Output
+	outputs = make([]roledomain.Output, 0, len(roleData))
+	for _, role := range roleData {
+		output := roledomain.Output{
+			Role: role,
+		}
+
+		outputs = append(outputs, output)
+	}
+
+	return outputs, nil
 }
 
 func (r roleUseCase) UpdateOneRole(ctx context.Context, id string, input *roledomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
 
-	err := r.roleRepository.UpdateOneRole(ctx, id, input)
+	roleID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return err
 	}
 
-	return nil
+	if err = validate.IsNilRole(input); err != nil {
+		return err
+	}
+
+	role := &roledomain.Role{
+		ID:          primitive.NewObjectID(),
+		Title:       input.Title,
+		Description: input.Description,
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+	}
+
+	return r.roleRepository.UpdateOneRole(ctx, roleID, role)
 }
 
 func (r roleUseCase) DeleteOneRole(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
 
-	err := r.roleRepository.DeleteOneRole(ctx, id)
+	roleID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return err
 	}
 
-	return nil
+	return r.roleRepository.DeleteOneRole(ctx, roleID)
 }
