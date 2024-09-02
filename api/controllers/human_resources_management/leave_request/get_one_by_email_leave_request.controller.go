@@ -11,6 +11,7 @@ import (
 // @Tags Leave Request
 // @Accept json
 // @Produce json
+// @Param email path string true "Employee ID"
 // @Router /api/v1/leave_requests/get/email [get]
 // @Security CookieAuth
 func (l *LeaveRequestController) FetchOneByEmailLeaveRequest(ctx *gin.Context) {

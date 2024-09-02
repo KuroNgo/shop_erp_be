@@ -11,7 +11,7 @@ import (
 // @Tags Benefit
 // @Produce  json
 // @Param email path string true "Benefit ID"
-// @Router /api/v1/benefits/get/one/email [get]
+// @Router /api/v1/benefits/get/email [get]
 // @Security CookieAuth
 func (b *BenefitController) FetchOneBenefitByEmail(ctx *gin.Context) {
 	email := ctx.Param("email")

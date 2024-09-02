@@ -13,7 +13,7 @@ import (
 // @Produce json
 // @Param _id path string true "Benefit ID"
 // @Param attendance body benefits_domain.Input true "Benefit data"
-// @Router /api/v1/benefits/{_id} [patch]
+// @Router /api/v1/benefits/_id [patch]
 // @Security CookieAuth
 func (b *BenefitController) UpdateOneBenefit(ctx *gin.Context) {
 	var input benefitsdomain.Input

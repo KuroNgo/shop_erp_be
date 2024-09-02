@@ -11,7 +11,7 @@ import (
 // @Tags Contract
 // @Produce json
 // @Param email path string true "Contract ID"
-// @Router /api/v1/contracts/get/{email} [get]
+// @Router /api/v1/contracts/get/email [get]
 // @Security CookieAuth
 func (c *ContractController) FetchOneByEmailContract(ctx *gin.Context) {
 	id := ctx.Param("email")

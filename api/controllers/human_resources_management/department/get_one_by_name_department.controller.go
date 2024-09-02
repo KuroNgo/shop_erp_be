@@ -11,7 +11,8 @@ import (
 // @Tags Department
 // @Accept  json
 // @Produce  json
-// @Router /api/v1/departments/get/one/name [get]
+// @Param name path string true "Contract ID"
+// @Router /api/v1/departments/get/name [get]
 // @Security CookieAuth
 func (d *DepartmentController) FetchOneDepartmentByName(ctx *gin.Context) {
 	departmentName := ctx.Param("name")

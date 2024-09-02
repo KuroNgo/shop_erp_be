@@ -13,7 +13,7 @@ import (
 // @Produce json
 // @Param _id path string true "Attendance ID"
 // @Param attendance body attendance_domain.Input true "Attendance data"
-// @Router /api/v1/attendances/{_id} [patch]
+// @Router /api/v1/attendances/_id [patch]
 // @Security CookieAuth
 func (a *AttendanceController) UpdateOneAttendance(ctx *gin.Context) {
 	var input attendancedomain.Input

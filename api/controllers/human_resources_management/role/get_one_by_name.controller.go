@@ -11,7 +11,8 @@ import (
 // @Tags Role
 // @Accept  json
 // @Produce  json
-// @Router /api/v1/roles/get/one/title [get]
+// @Param title path string true "Employee ID"
+// @Router /api/v1/roles/get/title [get]
 // @Security CookieAuth
 func (r *RoleController) GetOneRoleByTitle(ctx *gin.Context) {
 	title := ctx.Param("title")

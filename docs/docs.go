@@ -18,117 +18,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/attendances/create": {
-            "post": {
-                "security": [
-                    {
-                        "CookieAuth": []
-                    }
-                ],
-                "description": "Create the attendance's information",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Attendance"
-                ],
-                "summary": "Create Attendance Information",
-                "parameters": [
-                    {
-                        "description": "Attendance data",
-                        "name": "LoginUserRequestDto",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/attendance_domain.Input"
-                        }
-                    }
-                ],
-                "responses": {}
-            }
-        },
-        "/api/v1/attendances/get/all": {
-            "get": {
-                "security": [
-                    {
-                        "CookieAuth": []
-                    }
-                ],
-                "description": "Retrieves the attendance's information",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Attendance"
-                ],
-                "summary": "Get Attendance Information",
-                "responses": {}
-            }
-        },
-        "/api/v1/attendances/get/one/_id": {
-            "get": {
-                "security": [
-                    {
-                        "CookieAuth": []
-                    }
-                ],
-                "description": "Retrieves the attendance's information name",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Attendance"
-                ],
-                "summary": "Get Attendance Information By ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Attendance ID",
-                        "name": "_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {}
-            }
-        },
-        "/api/v1/attendances/get/one/email": {
-            "get": {
-                "security": [
-                    {
-                        "CookieAuth": []
-                    }
-                ],
-                "description": "Retrieves the attendance's information name",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Attendance"
-                ],
-                "summary": "Get Attendance Information By ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Attendance ID",
-                        "name": "email",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {}
-            }
-        },
-        "/api/v1/attendances/{_id}": {
+        "/api/v1/attendances/_id": {
             "delete": {
                 "security": [
                     {
@@ -189,14 +79,14 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/api/v1/benefits/create": {
+        "/api/v1/attendances/create": {
             "post": {
                 "security": [
                     {
                         "CookieAuth": []
                     }
                 ],
-                "description": "Create the benefit's information",
+                "description": "Create the attendance's information",
                 "consumes": [
                     "application/json"
                 ],
@@ -204,31 +94,31 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Benefit"
+                    "Attendance"
                 ],
-                "summary": "Create Benefit Information",
+                "summary": "Create Attendance Information",
                 "parameters": [
                     {
-                        "description": "Benefit data",
-                        "name": "Benefit",
+                        "description": "Attendance data",
+                        "name": "LoginUserRequestDto",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/benefits_domain.Input"
+                            "$ref": "#/definitions/attendance_domain.Input"
                         }
                     }
                 ],
                 "responses": {}
             }
         },
-        "/api/v1/benefits/get/all": {
+        "/api/v1/attendances/get/_id": {
             "get": {
                 "security": [
                     {
                         "CookieAuth": []
                     }
                 ],
-                "description": "Retrieves the benefit's information",
+                "description": "Retrieves the attendance's information name",
                 "consumes": [
                     "application/json"
                 ],
@@ -236,34 +126,13 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Benefit"
+                    "Attendance"
                 ],
-                "summary": "Get Benefit Information",
-                "responses": {}
-            }
-        },
-        "/api/v1/benefits/get/one/_id": {
-            "get": {
-                "security": [
-                    {
-                        "CookieAuth": []
-                    }
-                ],
-                "description": "Retrieves the benefit's information name",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Benefit"
-                ],
-                "summary": "Get Benefit Information By ID",
+                "summary": "Get Attendance Information By ID",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Benefit ID",
+                        "description": "Attendance ID",
                         "name": "_id",
                         "in": "path",
                         "required": true
@@ -272,25 +141,46 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/api/v1/benefits/get/one/email": {
+        "/api/v1/attendances/get/all": {
             "get": {
                 "security": [
                     {
                         "CookieAuth": []
                     }
                 ],
-                "description": "Retrieves the benefit's information name",
+                "description": "Retrieves the attendance's information",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Benefit"
+                    "Attendance"
                 ],
-                "summary": "Get Benefit Information By ID",
+                "summary": "Get Attendance Information",
+                "responses": {}
+            }
+        },
+        "/api/v1/attendances/get/email": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the attendance's information name",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Attendance"
+                ],
+                "summary": "Get Attendance Information By ID",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Benefit ID",
+                        "description": "Attendance ID",
                         "name": "email",
                         "in": "path",
                         "required": true
@@ -299,7 +189,7 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/api/v1/benefits/{_id}": {
+        "/api/v1/benefits/_id": {
             "delete": {
                 "security": [
                     {
@@ -360,6 +250,116 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/api/v1/benefits/create": {
+            "post": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Create the benefit's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Benefit"
+                ],
+                "summary": "Create Benefit Information",
+                "parameters": [
+                    {
+                        "description": "Benefit data",
+                        "name": "Benefit",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/benefits_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/benefits/get/_id": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the benefit's information name",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Benefit"
+                ],
+                "summary": "Get Benefit Information By ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Benefit ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/benefits/get/all": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the benefit's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Benefit"
+                ],
+                "summary": "Get Benefit Information",
+                "responses": {}
+            }
+        },
+        "/api/v1/benefits/get/email": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the benefit's information name",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Benefit"
+                ],
+                "summary": "Get Benefit Information By ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Benefit ID",
+                        "name": "email",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/api/v1/contracts/create": {
             "post": {
                 "security": [
@@ -392,7 +392,7 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/api/v1/contracts/delete/{_id}": {
+        "/api/v1/contracts/delete/_id": {
             "delete": {
                 "security": [
                     {
@@ -407,6 +407,33 @@ const docTemplate = `{
                     "Contract"
                 ],
                 "summary": "Delete Contract Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Contract ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/contracts/get/_id": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Deletes the contract's information by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Contract"
+                ],
+                "summary": "Get Contract Information",
                 "parameters": [
                     {
                         "type": "string",
@@ -440,34 +467,7 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/api/v1/contracts/get/{_id}": {
-            "get": {
-                "security": [
-                    {
-                        "CookieAuth": []
-                    }
-                ],
-                "description": "Deletes the contract's information by ID",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Contract"
-                ],
-                "summary": "Get Contract Information",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Contract ID",
-                        "name": "_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {}
-            }
-        },
-        "/api/v1/contracts/get/{email}": {
+        "/api/v1/contracts/get/email": {
             "get": {
                 "security": [
                     {
@@ -575,6 +575,36 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/api/v1/departments/get/_id": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the department's information name",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Department"
+                ],
+                "summary": "Get Department Information By ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Contract ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/api/v1/departments/get/all": {
             "get": {
                 "security": [
@@ -596,28 +626,7 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/api/v1/departments/get/one/_id": {
-            "get": {
-                "security": [
-                    {
-                        "CookieAuth": []
-                    }
-                ],
-                "description": "Retrieves the department's information name",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Department"
-                ],
-                "summary": "Get Department Information By ID",
-                "responses": {}
-            }
-        },
-        "/api/v1/departments/get/one/name": {
+        "/api/v1/departments/get/name": {
             "get": {
                 "security": [
                     {
@@ -635,6 +644,15 @@ const docTemplate = `{
                     "Department"
                 ],
                 "summary": "Get Department Information By Name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Contract ID",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {}
             }
         },
@@ -891,6 +909,36 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/api/v1/leave_requests/get/_id": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Get one by email the leave request's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Leave Request"
+                ],
+                "summary": "Get one by id Leave Request Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Employee ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/api/v1/leave_requests/get/all": {
             "get": {
                 "security": [
@@ -930,27 +978,15 @@ const docTemplate = `{
                     "Leave Request"
                 ],
                 "summary": "Get one by email Leave Request Information",
-                "responses": {}
-            }
-        },
-        "/api/v1/leave_requests/get/id": {
-            "get": {
-                "security": [
+                "parameters": [
                     {
-                        "CookieAuth": []
+                        "type": "string",
+                        "description": "Employee ID",
+                        "name": "email",
+                        "in": "path",
+                        "required": true
                     }
                 ],
-                "description": "Get one by email the leave request's information",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Leave Request"
-                ],
-                "summary": "Get one by id Leave Request Information",
                 "responses": {}
             }
         },
@@ -972,6 +1008,181 @@ const docTemplate = `{
                     "Leave Request"
                 ],
                 "summary": "Update Leave Request Information",
+                "responses": {}
+            }
+        },
+        "/api/v1/performance_reviews/create": {
+            "post": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Create the performance review's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Performance Review"
+                ],
+                "summary": "Create Performance Review Information",
+                "parameters": [
+                    {
+                        "description": "Performance Review data",
+                        "name": "PerformanceReview",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/performance_review_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/performance_reviews/delete": {
+            "delete": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Delete the performance review's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Performance Review"
+                ],
+                "summary": "Delete Performance Review Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Performance Review  ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/performance_reviews/get/_id": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Get the performance review's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Performance Review"
+                ],
+                "summary": "Get Performance Review Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Performance Review  ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/performance_reviews/get/all": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Get all the performance review's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Performance Review"
+                ],
+                "summary": "Get all Performance Review Information",
+                "responses": {}
+            }
+        },
+        "/api/v1/performance_reviews/get/email": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Get the performance review's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Performance Review"
+                ],
+                "summary": "Get Performance Review Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Performance Review  ID",
+                        "name": "email",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/performance_reviews/update": {
+            "post": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Update the performance review's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Performance Review"
+                ],
+                "summary": "Update Performance Review Information",
+                "parameters": [
+                    {
+                        "description": "Performance Review data",
+                        "name": "PerformanceReview",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/performance_review_domain.Input"
+                        }
+                    }
+                ],
                 "responses": {}
             }
         },
@@ -1028,6 +1239,36 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/api/v1/roles/get/_id": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the role's information name",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Get Role Information By Name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Employee ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/api/v1/roles/get/all": {
             "get": {
                 "security": [
@@ -1049,7 +1290,7 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/api/v1/roles/get/one/_id": {
+        "/api/v1/roles/get/title": {
             "get": {
                 "security": [
                     {
@@ -1067,27 +1308,15 @@ const docTemplate = `{
                     "Role"
                 ],
                 "summary": "Get Role Information By Name",
-                "responses": {}
-            }
-        },
-        "/api/v1/roles/get/one/title": {
-            "get": {
-                "security": [
+                "parameters": [
                     {
-                        "CookieAuth": []
+                        "type": "string",
+                        "description": "Employee ID",
+                        "name": "title",
+                        "in": "path",
+                        "required": true
                     }
                 ],
-                "description": "Retrieves the role's information name",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Role"
-                ],
-                "summary": "Get Role Information By Name",
                 "responses": {}
             }
         },
@@ -1165,6 +1394,36 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/api/v1/salaries/get/_id": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the salary's information id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Salary"
+                ],
+                "summary": "Get Salary Information By ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Employee ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/api/v1/salaries/get/all": {
             "get": {
                 "security": [
@@ -1186,28 +1445,7 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/api/v1/salaries/get/one/_id": {
-            "get": {
-                "security": [
-                    {
-                        "CookieAuth": []
-                    }
-                ],
-                "description": "Retrieves the salary's information id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Salary"
-                ],
-                "summary": "Get Salary Information By ID",
-                "responses": {}
-            }
-        },
-        "/api/v1/salaries/get/one/role": {
+        "/api/v1/salaries/get/role": {
             "get": {
                 "security": [
                     {
@@ -1225,6 +1463,15 @@ const docTemplate = `{
                     "Salary"
                 ],
                 "summary": "Get Salary Information By Role",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Employee ID",
+                        "name": "role",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {}
             }
         },
@@ -1587,6 +1834,26 @@ const docTemplate = `{
                 },
                 "status": {
                     "description": "Example: \"Approved\", \"Pending\", \"Rejected\"",
+                    "type": "string"
+                }
+            }
+        },
+        "performance_review_domain.Input": {
+            "type": "object",
+            "properties": {
+                "comments": {
+                    "type": "string"
+                },
+                "employee_id": {
+                    "type": "string"
+                },
+                "performance_score": {
+                    "type": "integer"
+                },
+                "review_date": {
+                    "type": "string"
+                },
+                "reviewer_id": {
                     "type": "string"
                 }
             }

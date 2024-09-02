@@ -11,7 +11,8 @@ import (
 // @Tags Role
 // @Accept  json
 // @Produce  json
-// @Router /api/v1/roles/get/one/_id [get]
+// @Param _id path string true "Employee ID"
+// @Router /api/v1/roles/get/_id [get]
 // @Security CookieAuth
 func (r *RoleController) GetOneRoleByID(ctx *gin.Context) {
 	id := ctx.Param("_id")

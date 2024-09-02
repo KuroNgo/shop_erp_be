@@ -11,7 +11,7 @@ import (
 // @Tags Benefit
 // @Produce json
 // @Param _id path string true "Benefit ID"
-// @Router /api/v1/benefits/{_id} [delete]
+// @Router /api/v1/benefits/_id [delete]
 // @Security CookieAuth
 func (b *BenefitController) DeleteOneBenefit(ctx *gin.Context) {
 	attendanceID := ctx.Param("_id")

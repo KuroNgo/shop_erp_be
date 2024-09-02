@@ -11,7 +11,8 @@ import (
 // @Tags Salary
 // @Accept  json
 // @Produce  json
-// @Router /api/v1/salaries/get/one/role [get]
+// @Param role path string true "Employee ID"
+// @Router /api/v1/salaries/get/role [get]
 // @Security CookieAuth
 func (s *SalaryController) GetOneSalaryByRole(ctx *gin.Context) {
 	role := ctx.Param("role")

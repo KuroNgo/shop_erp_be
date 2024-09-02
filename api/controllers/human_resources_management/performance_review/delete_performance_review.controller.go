@@ -5,6 +5,15 @@ import (
 	"net/http"
 )
 
+// DeleteOnePerformanceReview delete the performance review's information
+// @Summary Delete Performance Review Information
+// @Description Delete the performance review's information
+// @Tags Performance Review
+// @Accept json
+// @Produce json
+// @Param _id path string true "Performance Review  ID"
+// @Router /api/v1/performance_reviews/delete [delete]
+// @Security CookieAuth
 func (p *PerformanceReviewController) DeleteOnePerformanceReview(ctx *gin.Context) {
 	id := ctx.Param("_id")
 

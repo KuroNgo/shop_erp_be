@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"mime/multipart"
 	"net/http"
-	user_domain "shop_erp_mono/domain/human_resource_management/user"
+	userdomain "shop_erp_mono/domain/human_resource_management/user"
 	"shop_erp_mono/pkg/helper"
 	"time"
 )
@@ -42,7 +42,7 @@ func (u *UserController) UpdateUser(ctx *gin.Context) {
 
 	file, err := ctx.FormFile("file")
 	if err != nil {
-		userResponse := user_domain.UpdateUser{
+		userResponse := userdomain.UpdateUser{
 			ID:        user.ID,
 			Username:  fullName,
 			UpdatedAt: time.Now(),
@@ -86,7 +86,7 @@ func (u *UserController) UpdateUser(ctx *gin.Context) {
 	}(f)
 
 	resultString, err := json.Marshal(user)
-	userResponse := user_domain.UpdateUser{
+	userResponse := userdomain.UpdateUser{
 		ID:        user.ID,
 		Username:  fullName,
 		UpdatedAt: time.Now(),

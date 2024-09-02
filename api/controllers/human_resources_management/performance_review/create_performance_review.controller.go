@@ -6,6 +6,15 @@ import (
 	performancereviewdomain "shop_erp_mono/domain/human_resource_management/performance_review"
 )
 
+// CreateOnePerformanceReview create the performance review's information
+// @Summary Create Performance Review Information
+// @Description Create the performance review's information
+// @Tags Performance Review
+// @Accept json
+// @Produce json
+// @Param PerformanceReview body performance_review_domain.Input true "Performance Review data"
+// @Router /api/v1/performance_reviews/create [post]
+// @Security CookieAuth
 func (p *PerformanceReviewController) CreateOnePerformanceReview(ctx *gin.Context) {
 	var input performancereviewdomain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {

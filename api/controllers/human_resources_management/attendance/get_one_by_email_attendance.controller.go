@@ -11,7 +11,7 @@ import (
 // @Tags Attendance
 // @Produce  json
 // @Param email path string true "Attendance ID"
-// @Router /api/v1/attendances/get/one/email [get]
+// @Router /api/v1/attendances/get/email [get]
 // @Security CookieAuth
 func (a *AttendanceController) FetchOneAttendanceByEmail(ctx *gin.Context) {
 	email := ctx.Param("email")

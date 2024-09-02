@@ -11,7 +11,7 @@ import (
 // @Tags Attendance
 // @Produce json
 // @Param _id path string true "Attendance ID"
-// @Router /api/v1/attendances/{_id} [delete]
+// @Router /api/v1/attendances/_id [delete]
 // @Security CookieAuth
 func (a *AttendanceController) DeleteOneAttendance(ctx *gin.Context) {
 	attendanceID := ctx.Param("_id")

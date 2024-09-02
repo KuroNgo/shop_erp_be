@@ -12,7 +12,7 @@ import (
 // @Accept  json
 // @Produce  json
 // @Param _id path string true "Attendance ID"
-// @Router /api/v1/attendances/get/one/_id [get]
+// @Router /api/v1/attendances/get/_id [get]
 // @Security CookieAuth
 func (a *AttendanceController) FetchOneAttendanceByID(ctx *gin.Context) {
 	attendanceID := ctx.Param("_id")

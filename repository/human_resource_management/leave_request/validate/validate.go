@@ -15,7 +15,7 @@ func IsNilLeaveRequest(input *leave_request_domain.Input) error {
 	}
 
 	if input.Status == "" {
-		return errors.New("Status do not nil")
+		return errors.New("status do not nil")
 	}
 
 	if input.StartDate.IsZero() {

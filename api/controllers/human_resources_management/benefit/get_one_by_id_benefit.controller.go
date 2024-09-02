@@ -12,7 +12,7 @@ import (
 // @Accept  json
 // @Produce  json
 // @Param _id path string true "Benefit ID"
-// @Router /api/v1/benefits/get/one/_id [get]
+// @Router /api/v1/benefits/get/_id [get]
 // @Security CookieAuth
 func (b *BenefitController) FetchOneBenefitByID(ctx *gin.Context) {
 	attendanceID := ctx.Param("_id")
