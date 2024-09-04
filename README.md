@@ -60,3 +60,6 @@ We can run this Go Backend Clean Architecture project with or without Docker. He
 #### Generate mock code for the database
     mockery --dir=mongo --output=mongo/mocks --outpkg=mocks --all
 - Whenever you make changes in the interfaces of these use-cases, repositories, or databases, you need to run the corresponding command to regenerate the mock code for testing.
+
+
+## FIX User API

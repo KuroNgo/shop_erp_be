@@ -1,1 +1,41 @@
 package sale_orders
+
+import (
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"time"
+)
+
+type SalesOrder struct {
+	ID              primitive.ObjectID `bson:"_id,omitempty"`
+	OrderNumber     string             `bson:"order_number"`
+	CustomerID      primitive.ObjectID `bson:"customer_id"`
+	OrderDate       time.Time          `bson:"order_date"`
+	ShippingAddress string             `bson:"shipping_address"`
+	TotalAmount     float64            `bson:"total_amount"`
+	Status          string             `bson:"status"`
+	CreatedAt       time.Time          `bson:"created_at"`
+	UpdatedAt       time.Time          `bson:"updated_at"`
+}
+
+type Input struct {
+	OrderNumber     string    `bson:"order_number"`
+	CustomerEmail   string    `bson:"customer_email"`
+	OrderDate       time.Time `bson:"order_date"`
+	ShippingAddress string    `bson:"shipping_address"`
+	TotalAmount     float64   `bson:"total_amount"`
+	Status          string    `bson:"status"`
+	CreatedAt       time.Time `bson:"created_at"`
+	UpdatedAt       time.Time `bson:"updated_at"`
+}
+
+type SalesOrderResponse struct {
+	ID              primitive.ObjectID `bson:"_id,omitempty"`
+	OrderNumber     string             `bson:"order_number"`
+	CustomerID      primitive.ObjectID `bson:"customer_id"`
+	OrderDate       time.Time          `bson:"order_date"`
+	ShippingAddress string             `bson:"shipping_address"`
+	TotalAmount     float64            `bson:"total_amount"`
+	Status          string             `bson:"status"`
+	CreatedAt       time.Time          `bson:"created_at"`
+	UpdatedAt       time.Time          `bson:"updated_at"`
+}

@@ -18,6 +18,156 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/accounts/create": {
+            "post": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Update the account's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Update Account Information",
+                "parameters": [
+                    {
+                        "description": "Account data",
+                        "name": "Account",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/account_domain.Input"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Attendance ID",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/accounts/delete": {
+            "delete": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Delete the account's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Delete Account Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Account ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/accounts/get/_id": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Get the account's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Get Account Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Attendance ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/accounts/get/all": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Get the account's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Get Account Information",
+                "responses": {}
+            }
+        },
+        "/api/v1/accounts/get/name": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Get the account's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Get Account Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Attendance ID",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/api/v1/attendances/_id": {
             "delete": {
                 "security": [
@@ -1537,170 +1687,26 @@ const docTemplate = `{
                 "summary": "Get User Information",
                 "responses": {}
             }
-        },
-        "/api/v1/users/get/logout": {
-            "get": {
-                "description": "Logout the current user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Logout user",
-                "responses": {}
-            }
-        },
-        "/api/v1/users/get/refresh": {
-            "get": {
-                "security": [
-                    {
-                        "CookieAuth": []
-                    }
-                ],
-                "description": "Refresh the user's access token using a valid refresh token stored in cookies.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Refresh Access Token",
-                "responses": {}
-            }
-        },
-        "/api/v1/users/login": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Login user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Login user",
-                "parameters": [
-                    {
-                        "description": "User data",
-                        "name": "LoginUserRequestDto",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/user_domain.SignIn"
-                        }
-                    }
-                ],
-                "responses": {}
-            }
-        },
-        "/api/v1/users/register": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Register a new user with form data",
-                "consumes": [
-                    "application/x-www-form-urlencoded",
-                    "multipart/form-data"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Register user",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "example": "\"john.doe@example.com\"",
-                        "description": "Email of the user",
-                        "name": "email",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "example": "\"securepassword123\"",
-                        "description": "Password of the user",
-                        "name": "password",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "example": "\"John Doe\"",
-                        "description": "Full name of the user",
-                        "name": "fullName",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "example": "\"http://example.com/avatar.jpg\"",
-                        "description": "Avatar URL of the user",
-                        "name": "avatarUrl",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "file",
-                        "description": "Image file to upload",
-                        "name": "file",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "example": "\"+1234567890\"",
-                        "description": "Phone number of the user",
-                        "name": "phone",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {}
-            }
-        },
-        "/api/v1/users/update": {
-            "patch": {
-                "security": [
-                    {
-                        "CookieAuth": []
-                    }
-                ],
-                "description": "Updates the user's first name, last name, and username",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Update User Information",
-                "responses": {}
-            }
         }
     },
     "definitions": {
+        "account_domain.Input": {
+            "type": "object",
+            "properties": {
+                "account_name": {
+                    "type": "string"
+                },
+                "account_number": {
+                    "type": "string"
+                },
+                "account_type": {
+                    "type": "string"
+                },
+                "balance": {
+                    "type": "number"
+                }
+            }
+        },
         "attendance_domain.Input": {
             "type": "object",
             "properties": {
@@ -1900,19 +1906,6 @@ const docTemplate = `{
                 },
                 "updated_at": {
                     "type": "string"
-                }
-            }
-        },
-        "user_domain.SignIn": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "example": "admin@admin.com"
-                },
-                "password": {
-                    "type": "string",
-                    "example": "12345"
                 }
             }
         }

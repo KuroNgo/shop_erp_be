@@ -18,3 +18,14 @@ type Accounts struct {
 	CreatedAt     time.Time          `bson:"created_at" json:"created_at"`
 	UpdatedAt     time.Time          `bson:"updated_at" json:"updated_at"`
 }
+
+type Input struct {
+	AccountName   string  `bson:"account_name" json:"account_name"`
+	AccountNumber string  `bson:"account_number" json:"account_number"`
+	Balance       float64 `bson:"balance" json:"balance"`
+	AccountType   string  `bson:"account_type" json:"account_type"`
+}
+
+type AccountResponse struct {
+	Accounts Accounts `bson:"accounts" json:"accounts"`
+}

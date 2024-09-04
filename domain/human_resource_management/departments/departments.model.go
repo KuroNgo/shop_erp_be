@@ -2,6 +2,7 @@ package departments_domain
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	employees_domain "shop_erp_mono/domain/human_resource_management/employees"
 	"time"
 )
 
@@ -12,6 +13,7 @@ const (
 // Department struct represents a department within the company.
 type Department struct {
 	ID          primitive.ObjectID `bson:"_id,omitempty"`
+	ManagerID   primitive.ObjectID `bson:"manager_id"`
 	Name        string             `bson:"name"`
 	Description string             `bson:"description"`
 	CreatedAt   time.Time          `bson:"created_at"`
@@ -25,5 +27,6 @@ type Input struct {
 
 // Output struct represents a department within the company.
 type Output struct {
-	Department Department `bson:"department" json:"department"`
+	Department Department                `bson:"department" json:"department"`
+	Manager    employees_domain.Employee `bson:"manager" json:"manager"`
 }

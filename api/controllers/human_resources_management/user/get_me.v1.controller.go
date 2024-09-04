@@ -1,10 +1,8 @@
 package user_controller
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"shop_erp_mono/pkg/token"
 )
 
 // GetMe retrieves the user information based on the access token.
@@ -16,6 +14,7 @@ import (
 // @Router /api/v1/users/get/info [get]
 // @Security CookieAuth
 func (u *UserController) GetMe(ctx *gin.Context) {
+	// Lấy cookie access_token từ request
 	cookie, err := ctx.Cookie("access_token")
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
@@ -25,16 +24,8 @@ func (u *UserController) GetMe(ctx *gin.Context) {
 		return
 	}
 
-	sub, err := token.ValidateToken(cookie, u.Database.AccessTokenPublicKey)
-	if err != nil {
-		ctx.JSON(http.StatusForbidden, gin.H{
-			"status":  "fail",
-			"message": "Failed to validate token: " + err.Error(),
-		})
-		return
-	}
-
-	result, err := u.UserUseCase.GetByID(ctx, fmt.Sprint(sub))
+	// Gọi use case để xử lý logic nghiệp vụ
+	result, err := u.UserUseCase.GetByID(ctx, cookie)
 	if err != nil {
 		ctx.JSON(http.StatusForbidden, gin.H{
 			"status":  "fail",
@@ -43,6 +34,7 @@ func (u *UserController) GetMe(ctx *gin.Context) {
 		return
 	}
 
+	// Trả về phản hồi thành công
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": "success",
 		"user":   result,

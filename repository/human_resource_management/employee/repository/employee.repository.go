@@ -27,12 +27,14 @@ var (
 func (e employeeRepository) CreateOne(ctx context.Context, employee *employeesdomain.Employee) error {
 	collectionEmployee := e.database.Collection(e.collectionEmployee)
 
+	// Sử dụng defer để đảm bảo mutex luôn được mở khóa
 	mutex.Lock()
+	defer mutex.Unlock()
+
 	_, err := collectionEmployee.InsertOne(ctx, employee)
 	if err != nil {
 		return err
 	}
-	mutex.Unlock()
 
 	return nil
 }
@@ -79,12 +81,14 @@ func (e employeeRepository) UpdateOne(ctx context.Context, id primitive.ObjectID
 		"is_active":     employee.IsActive,
 	}}
 
+	// Sử dụng defer để đảm bảo mutex luôn được mở khóa
 	mutex.Lock()
+	defer mutex.Unlock()
+
 	_, err := collectionEmployee.UpdateOne(ctx, filter, update)
 	if err != nil {
 		return errors.New(err.Error() + "error in the updating role's information into database ")
 	}
-	mutex.Unlock()
 
 	return nil
 }

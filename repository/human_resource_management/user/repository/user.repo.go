@@ -8,8 +8,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	userdomain "shop_erp_mono/domain/human_resource_management/user"
-	"shop_erp_mono/pkg/password"
-	uservalidate "shop_erp_mono/repository/human_resource_management/user/validate"
 	"sync"
 	"time"
 )
@@ -28,19 +26,17 @@ var (
 	mu sync.Mutex
 )
 
-func (u userRepository) FetchMany(ctx context.Context) (userdomain.Response, error) {
+func (u userRepository) FetchMany(ctx context.Context) ([]userdomain.User, error) {
 	collectionUser := u.database.Collection(u.collectionUser)
 
-	errCh := make(chan error)
 	filter := bson.M{}
 	cursor, err := collectionUser.Find(ctx, filter)
 	if err != nil {
-		return userdomain.Response{}, errors.New(err.Error() + "error in the finding user into the database")
+		return nil, errors.New(err.Error() + "error in the finding user into the database")
 	}
 	defer func(cursor *mongo.Cursor, ctx context.Context) {
 		err = cursor.Close(ctx)
 		if err != nil {
-			errCh <- err
 			return
 		}
 	}(cursor, ctx)
@@ -50,107 +46,53 @@ func (u userRepository) FetchMany(ctx context.Context) (userdomain.Response, err
 	for cursor.Next(ctx) {
 		var user userdomain.User
 		if err = cursor.Decode(&user); err != nil {
-			return userdomain.Response{}, err
+			return nil, err
 		}
 
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			users = append(users, user)
-		}()
-	}
-	wg.Wait()
-
-	response := userdomain.Response{
-		User: users,
+		users = append(users, user)
 	}
 
-	select {
-	case err = <-errCh:
-		return userdomain.Response{}, err
-	default:
-		return response, nil
-	}
+	return users, nil
 }
 
-func (u userRepository) GetByEmail(ctx context.Context, email string) (*userdomain.User, error) {
+func (u userRepository) GetByEmail(ctx context.Context, email string) (userdomain.User, error) {
 	collectionUser := u.database.Collection(u.collectionUser)
-
-	err := uservalidate.IsNilEmail(email)
-	if err != nil {
-		return nil, err
-	}
 
 	filter := bson.M{"email": email}
-	var user *userdomain.User
-	if err = collectionUser.FindOne(ctx, filter).Decode(&user); err != nil {
-		return nil, errors.New(err.Error() + "error in the finding user into the database")
-	}
-
-	return user, nil
-}
-
-func (u userRepository) GetByID(ctx context.Context, id string) (*userdomain.User, error) {
-	collectionUser := u.database.Collection(u.collectionUser)
-
-	userID, _ := primitive.ObjectIDFromHex(id)
-	filter := bson.M{"_id": userID}
 	var user userdomain.User
 	if err := collectionUser.FindOne(ctx, filter).Decode(&user); err != nil {
-		return nil, errors.New(err.Error() + "error in the finding user into the database")
+		return userdomain.User{}, errors.New(err.Error() + "error in the finding user into the database")
 	}
 
-	return &user, nil
+	return user, nil
 }
 
-func (u userRepository) GetByVerificationCode(ctx context.Context, verificationCode string) (*userdomain.User, error) {
+func (u userRepository) GetByID(ctx context.Context, id primitive.ObjectID) (userdomain.User, error) {
 	collectionUser := u.database.Collection(u.collectionUser)
 
-	filter := bson.M{"verification_code": verificationCode}
-	var user *userdomain.User
+	filter := bson.M{"_id": id}
+	var user userdomain.User
 	if err := collectionUser.FindOne(ctx, filter).Decode(&user); err != nil {
-		return nil, errors.New(err.Error() + "error in the finding user's data into database")
+		return userdomain.User{}, errors.New(err.Error() + "error in the finding user into the database")
 	}
 
 	return user, nil
 }
 
-func (u userRepository) CheckVerify(ctx context.Context, verificationCode string) bool {
+func (u userRepository) GetByVerificationCode(ctx context.Context, verificationCode string) (userdomain.User, error) {
 	collectionUser := u.database.Collection(u.collectionUser)
 
 	filter := bson.M{"verification_code": verificationCode}
-	count, err := collectionUser.CountDocuments(ctx, filter)
-	if err != nil {
-		return false
-	}
-
-	if count > 0 {
-		return true
-	}
-
-	return false
-}
-
-func (u userRepository) Login(ctx context.Context, request userdomain.SignIn) (*userdomain.User, error) {
-	user, err := u.GetByEmail(ctx, request.Email)
-	if err != nil {
-		return nil, err
-	}
-
-	err = password.VerifyPassword(user.PasswordHash, request.Password)
-	if err != nil {
-		return nil, err
+	var user userdomain.User
+	if err := collectionUser.FindOne(ctx, filter).Decode(&user); err != nil {
+		return userdomain.User{}, errors.New(err.Error() + "error in the finding user's data into database")
 	}
 
 	return user, nil
 }
 
-func (u userRepository) Create(ctx context.Context, user *userdomain.User) error {
+func (u userRepository) CreateOne(ctx context.Context, user *userdomain.User) error {
 	collectionUser := u.database.Collection(u.collectionUser)
-
-	if err := uservalidate.IsInvalidUser(user); err != nil {
-		return err
-	}
 
 	_, err := collectionUser.InsertOne(ctx, user)
 	if err != nil {
@@ -160,17 +102,8 @@ func (u userRepository) Create(ctx context.Context, user *userdomain.User) error
 	return nil
 }
 
-func (u userRepository) Update(ctx context.Context, user *userdomain.UpdateUser) error {
+func (u userRepository) UpdateOne(ctx context.Context, user *userdomain.User) error {
 	collectionUser := u.database.Collection(u.collectionUser)
-
-	userData := userdomain.User{
-		Username:  user.Username,
-		UpdatedAt: time.Now(),
-	}
-
-	if err := uservalidate.IsNilUsername(&userData); err != nil {
-		return err
-	}
 
 	filter := bson.M{"_id": user.ID}
 	update := bson.M{"$set": user}
@@ -186,15 +119,10 @@ func (u userRepository) Update(ctx context.Context, user *userdomain.UpdateUser)
 func (u userRepository) UpdatePassword(ctx context.Context, user *userdomain.User) error {
 	collectionUser := u.database.Collection(u.collectionUser)
 
-	err := uservalidate.IsNilPasswordHash(user)
-	if err != nil {
-		return err
-	}
-
 	filter := bson.M{"_id": user.ID}
 	update := bson.M{"$set": bson.M{"password_hash": user.PasswordHash}}
 
-	_, err = collectionUser.UpdateOne(ctx, filter, update)
+	_, err := collectionUser.UpdateOne(ctx, filter, update)
 	if err != nil {
 		return errors.New(err.Error() + "error in the updating user into database")
 	}
@@ -203,45 +131,24 @@ func (u userRepository) UpdatePassword(ctx context.Context, user *userdomain.Use
 
 }
 
-func (u userRepository) UpdateVerify(ctx context.Context, user *userdomain.User) (*mongo.UpdateResult, error) {
+func (u userRepository) UpdateVerify(ctx context.Context, user *userdomain.User) error {
 	collectionUser := u.database.Collection(u.collectionUser)
 
 	filter := bson.M{"_id": user.ID}
 	update := bson.M{"$set": bson.M{"verify": user.Verified}}
 
-	updateResult, err := collectionUser.UpdateOne(ctx, filter, update)
+	_, err := collectionUser.UpdateOne(ctx, filter, update)
 	if err != nil {
-		return nil, errors.New(err.Error() + "error in the updating user's data into database")
+		return errors.New(err.Error() + "error in the updating user's data into database")
 	}
 
-	return updateResult, nil
+	return nil
 }
 
-func (u userRepository) UpdateVerifyForChangePassword(ctx context.Context, user *userdomain.User) (*mongo.UpdateResult, error) {
+func (u userRepository) UpsertOne(ctx context.Context, user *userdomain.User) error {
 	collectionUser := u.database.Collection(u.collectionUser)
 
-	filter := bson.D{{Key: "_id", Value: user.ID}}
-	update := bson.D{{Key: "$set", Value: bson.M{
-		"verify":     user.Verified,
-		"updated_at": user.UpdatedAt,
-	}}}
-
-	data, err := collectionUser.UpdateOne(ctx, filter, update)
-	if err != nil {
-		return nil, err
-	}
-	return data, nil
-}
-
-func (u userRepository) UpsertOne(ctx context.Context, email string, user *userdomain.User) (*userdomain.User, error) {
-	collectionUser := u.database.Collection(u.collectionUser)
-
-	err := uservalidate.IsNilUsername(user)
-	if err != nil {
-		return nil, err
-	}
-
-	filter := bson.M{"email": email}
+	filter := bson.M{"email": user.Email}
 	update := bson.M{"$set": bson.M{
 		"username":   user.Username,
 		"updated_at": time.Now(),
@@ -250,27 +157,7 @@ func (u userRepository) UpsertOne(ctx context.Context, email string, user *userd
 	}}
 
 	opts := options.Update().SetUpsert(true)
-	_, err = collectionUser.UpdateOne(ctx, filter, update, opts)
-	if err != nil {
-		return nil, errors.New(err.Error() + "error in the updating user's data into database")
-	}
-
-	return user, nil
-}
-
-func (u userRepository) UpdateImage(ctx context.Context, userID string, imageURL string) error {
-	collectionUser := u.database.Collection(u.collectionUser)
-
-	err := uservalidate.IsNilImage(imageURL)
-	if err != nil {
-		return err
-	}
-
-	idUser, _ := primitive.ObjectIDFromHex(userID)
-	filter := bson.M{"_id": idUser}
-	update := bson.M{"$set": bson.M{"avatar_url": imageURL}}
-
-	_, err = collectionUser.UpdateOne(ctx, filter, update)
+	_, err := collectionUser.UpdateOne(ctx, filter, update, opts)
 	if err != nil {
 		return errors.New(err.Error() + "error in the updating user's data into database")
 	}
@@ -278,11 +165,24 @@ func (u userRepository) UpdateImage(ctx context.Context, userID string, imageURL
 	return nil
 }
 
-func (u userRepository) DeleteOne(ctx context.Context, userID string) error {
+func (u userRepository) UpdateImage(ctx context.Context, user *userdomain.User) error {
 	collectionUser := u.database.Collection(u.collectionUser)
 
-	idUser, _ := primitive.ObjectIDFromHex(userID)
-	filter := bson.M{"_id": idUser}
+	filter := bson.M{"_id": user.ID}
+	update := bson.M{"$set": bson.M{"avatar_url": user.AvatarURL}}
+
+	_, err := collectionUser.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return errors.New(err.Error() + "error in the updating user's data into database")
+	}
+
+	return nil
+}
+
+func (u userRepository) DeleteOne(ctx context.Context, userID primitive.ObjectID) error {
+	collectionUser := u.database.Collection(u.collectionUser)
+
+	filter := bson.M{"_id": userID}
 
 	_, err := collectionUser.DeleteOne(ctx, filter)
 	if err != nil {
@@ -290,15 +190,4 @@ func (u userRepository) DeleteOne(ctx context.Context, userID string) error {
 	}
 
 	return nil
-}
-
-func (u userRepository) UniqueVerificationCode(ctx context.Context, verificationCode string) bool {
-	collectionUser := u.database.Collection(u.collectionUser)
-
-	filter := bson.M{"verification_code": verificationCode}
-	count, err := collectionUser.CountDocuments(ctx, filter)
-	if err != nil || count > 0 {
-		return false
-	}
-	return true
 }

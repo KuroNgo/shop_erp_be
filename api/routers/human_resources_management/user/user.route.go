@@ -14,22 +14,23 @@ import (
 
 func UserRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
 	ur := userrepository.NewUserRepository(db, userdomain.CollectionUser)
+
 	user := &usercontroller.UserController{
-		UserUseCase: userusecase.NewUserUseCase(timeout, ur),
+		UserUseCase: userusecase.NewUserUseCase(env, timeout, ur),
 		Database:    env,
 	}
 
 	router := group.Group("/users")
-	router.POST("/login", middlewares.RateLimiter(), user.LoginUser)
-	router.GET("/google/callback", user.GoogleLoginWithUser)
-	router.POST("/signup", user.SignUp)
-	router.PATCH("/update", middlewares.DeserializeUser(), user.UpdateUser)
-	router.PATCH("/verify", user.VerificationCode)
-	router.PATCH("/verify/password", user.VerificationCodeForChangePassword)
-	router.PATCH("/password/forget", user.ChangePassword)
-	router.POST("/forget", user.ForgetPasswordInUser)
+	//router.POST("/login", middlewares.RateLimiter(), user.LoginUser)
+	//router.GET("/google/callback", user.GoogleLoginWithUser)
+	//router.POST("/signup", user.SignUp)
+	//router.PATCH("/update", middlewares.DeserializeUser(), user.UpdateUser)
+	//router.PATCH("/verify", user.VerificationCode)
+	//router.PATCH("/verify/password", user.VerificationCodeForChangePassword)
+	//router.PATCH("/password/forget", user.ChangePassword)
+	//router.POST("/forget", user.ForgetPasswordInUser)
 	router.GET("/get/info", user.GetMe)
-	router.GET("/get/refresh", user.RefreshToken)
+	//router.GET("/get/refresh", user.RefreshToken)
 	router.DELETE("/current/delete", middlewares.DeserializeUser(), user.DeleteCurrentUser)
-	router.GET("/logout", middlewares.DeserializeUser(), user.LogoutUser)
+	//router.GET("/logout", middlewares.DeserializeUser(), user.LogoutUser)
 }

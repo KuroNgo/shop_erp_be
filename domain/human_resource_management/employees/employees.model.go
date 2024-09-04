@@ -2,7 +2,6 @@ package employees_domain
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	departments_domain "shop_erp_mono/domain/human_resource_management/departments"
 	roledomain "shop_erp_mono/domain/human_resource_management/role"
 	salarydomain "shop_erp_mono/domain/human_resource_management/salary"
 	"time"
@@ -47,8 +46,8 @@ type Input struct {
 }
 
 type Output struct {
-	Employee   Employee                      `bson:"employee"`
-	Department departments_domain.Department `bson:"department"`
-	RoleID     roledomain.Role               `bson:"role"`
-	Salary     salarydomain.Salary           `bson:"salary"`
+	Employee       Employee            `bson:"employee"`
+	DepartmentName string              `bson:"department"`
+	RoleID         roledomain.Role     `bson:"role"`
+	Salary         salarydomain.Salary `bson:"salary"`
 }

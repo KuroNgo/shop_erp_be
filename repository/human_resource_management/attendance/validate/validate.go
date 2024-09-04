@@ -11,10 +11,3 @@ func IsNilAttendance(input *attendancedomain.Input) error {
 	}
 	return nil
 }
-
-func IsNilEmailEmployee(email string) error {
-	if email == "" {
-		return errors.New("the name do not null")
-	}
-	return nil
-}

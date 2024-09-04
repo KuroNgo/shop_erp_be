@@ -1,4 +1,4 @@
-package user_validate
+package validate
 
 import (
 	"errors"
@@ -37,5 +37,23 @@ func IsNilImage(avatarUrl string) error {
 	if avatarUrl == "" {
 		return errors.New("the user's information cannot be empty")
 	}
+	return nil
+}
+
+func IsNilUser(input *userdomain.Input) error {
+	if input.AvatarURL == "" {
+		return errors.New("the user's information cannot be empty")
+	}
+
+	if input.PasswordHash == "" {
+		return errors.New("the user's information cannot be empty")
+	}
+	if input.Email == "" {
+		return errors.New("the user's information cannot be empty")
+	}
+	if input.Username == "" {
+		return errors.New("the user's information cannot be empty")
+	}
+
 	return nil
 }

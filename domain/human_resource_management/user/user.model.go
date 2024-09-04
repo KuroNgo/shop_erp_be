@@ -26,61 +26,22 @@ type User struct {
 	UpdatedAt        time.Time          `bson:"updated_at" json:"updated_at"`
 }
 
-type Response struct {
-	User []User `bson:"user" json:"user"`
-}
-
-type SignUp struct {
+type Input struct {
+	ID           string `bson:"_id" json:"id,omitempty"`
 	Username     string `bson:"username" json:"username"`
 	PasswordHash string `bson:"password_hash" json:"password_hash"` // Hash of the password
 	Email        string `bson:"email" json:"email"`
-	AvatarURL    string `json:"avatar_url"  bson:"avatar_url"`
 	Phone        string `json:"phone" bson:"phone"`
+	AssetURL     string `bson:"asset_url"  json:"asset_url"`
+	AvatarURL    string `bson:"avatar_url"  json:"avatar_url"`
 }
 
-type SignIn struct {
-	Email    string `json:"email" bson:"email" example:"admin@admin.com"`
-	Password string `bson:"password"  json:"password" example:"12345"`
+type Output struct {
+	User User `bson:"user" json:"user"`
 }
 
-type UpdateUser struct {
-	ID        primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
-	Username  string             `bson:"username" json:"username"`
-	AvatarURL string             `json:"avatar_url"  bson:"avatar_url"`
-	UpdatedAt time.Time          `bson:"updated_at" json:"updated_at"`
-}
-
-type VerificationCode struct {
-	VerificationCode string `json:"verification_code" bson:"verification_code"`
-}
-
-type ForgetPassword struct {
-	Email string `json:"email" bson:"email"`
-}
-
-type ChangePassword struct {
-	Password        string `json:"password" bson:"password"`
-	PasswordCompare string `json:"password_compare" bson:"password_compare"`
-}
-
-type Input struct {
-	FullName   string `bson:"full_name"  json:"full_name"`
-	Email      string `bson:"email"  json:"email"`
-	Password   string `bson:"password"  json:"password"`
-	AvatarURL  string `bson:"avatar_url"  json:"avatar_url"`
-	Specialize string `bson:"specialize"  json:"specialize"`
-	Phone      string `bson:"phone"   json:"phone"`
-}
-
-type UserInput struct {
-	ID        primitive.ObjectID `bson:"_id"  json:"_id"`
-	FullName  string             `bson:"full_name"  json:"full_name"`
-	Email     string             `bson:"email"  json:"email"`
-	Role      string             `bson:"role" json:"role"`
-	AvatarURL string             `bson:"avatar_url"  json:"avatar_url"`
-	Phone     string             `bson:"phone"   json:"phone"`
-	Verified  bool               `bson:"verify"   json:"verify"`
-	Provider  string             `bson:"provider" json:"provider"`
-	CreatedAt time.Time          `bson:"created_at" json:"created_at"`
-	UpdatedAt time.Time          `bson:"updated_at" json:"updated_at"`
+type OutputLogin struct {
+	RefreshToken string `bson:"refresh_token"`
+	AccessToken  string `bson:"access_token"`
+	IsLogged     bool   `bson:"is_logged"`
 }

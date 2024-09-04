@@ -1,5 +1,16 @@
 basePath: /api/v1
 definitions:
+  account_domain.Input:
+    properties:
+      account_name:
+        type: string
+      account_number:
+        type: string
+      account_type:
+        type: string
+      balance:
+        type: number
+    type: object
   attendance_domain.Input:
     properties:
       check_in_time:
@@ -138,15 +149,6 @@ definitions:
       updated_at:
         type: string
     type: object
-  user_domain.SignIn:
-    properties:
-      email:
-        example: admin@admin.com
-        type: string
-      password:
-        example: "12345"
-        type: string
-    type: object
 host: localhost:8080
 info:
   contact:
@@ -156,6 +158,101 @@ info:
   title: Shop E-commerce ERP
   version: "1.0"
 paths:
+  /api/v1/accounts/create:
+    post:
+      consumes:
+      - application/json
+      description: Update the account's information
+      parameters:
+      - description: Account data
+        in: body
+        name: Account
+        required: true
+        schema:
+          $ref: '#/definitions/account_domain.Input'
+      - description: Attendance ID
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Update Account Information
+      tags:
+      - Account
+  /api/v1/accounts/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete the account's information
+      parameters:
+      - description: Account ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Delete Account Information
+      tags:
+      - Account
+  /api/v1/accounts/get/_id:
+    get:
+      consumes:
+      - application/json
+      description: Get the account's information
+      parameters:
+      - description: Attendance ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get Account Information
+      tags:
+      - Account
+  /api/v1/accounts/get/all:
+    get:
+      consumes:
+      - application/json
+      description: Get the account's information
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get Account Information
+      tags:
+      - Account
+  /api/v1/accounts/get/name:
+    get:
+      consumes:
+      - application/json
+      description: Get the account's information
+      parameters:
+      - description: Attendance ID
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get Account Information
+      tags:
+      - Account
   /api/v1/attendances/_id:
     delete:
       description: Deletes the attendance's information by ID
@@ -1110,114 +1207,6 @@ paths:
       security:
       - CookieAuth: []
       summary: Get User Information
-      tags:
-      - User
-  /api/v1/users/get/logout:
-    get:
-      consumes:
-      - application/json
-      description: Logout the current user
-      produces:
-      - application/json
-      responses: {}
-      summary: Logout user
-      tags:
-      - User
-  /api/v1/users/get/refresh:
-    get:
-      consumes:
-      - application/json
-      description: Refresh the user's access token using a valid refresh token stored
-        in cookies.
-      produces:
-      - application/json
-      responses: {}
-      security:
-      - CookieAuth: []
-      summary: Refresh Access Token
-      tags:
-      - User
-  /api/v1/users/login:
-    post:
-      consumes:
-      - application/json
-      description: Login user
-      parameters:
-      - description: User data
-        in: body
-        name: LoginUserRequestDto
-        required: true
-        schema:
-          $ref: '#/definitions/user_domain.SignIn'
-      produces:
-      - application/json
-      responses: {}
-      security:
-      - ApiKeyAuth: []
-      summary: Login user
-      tags:
-      - User
-  /api/v1/users/register:
-    post:
-      consumes:
-      - application/x-www-form-urlencoded
-      - multipart/form-data
-      description: Register a new user with form data
-      parameters:
-      - description: Email of the user
-        example: '"john.doe@example.com"'
-        in: formData
-        name: email
-        required: true
-        type: string
-      - description: Password of the user
-        example: '"securepassword123"'
-        in: formData
-        name: password
-        required: true
-        type: string
-      - description: Full name of the user
-        example: '"John Doe"'
-        in: formData
-        name: fullName
-        required: true
-        type: string
-      - description: Avatar URL of the user
-        example: '"http://example.com/avatar.jpg"'
-        in: formData
-        name: avatarUrl
-        required: true
-        type: string
-      - description: Image file to upload
-        in: formData
-        name: file
-        required: true
-        type: file
-      - description: Phone number of the user
-        example: '"+1234567890"'
-        in: formData
-        name: phone
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses: {}
-      security:
-      - ApiKeyAuth: []
-      summary: Register user
-      tags:
-      - User
-  /api/v1/users/update:
-    patch:
-      consumes:
-      - application/json
-      description: Updates the user's first name, last name, and username
-      produces:
-      - application/json
-      responses: {}
-      security:
-      - CookieAuth: []
-      summary: Update User Information
       tags:
       - User
 swagger: "2.0"
