@@ -1250,3 +1250,30 @@ paths:
       tags:
       - User
 swagger: "2.0"
+tags:
+- description: represents the attendance information of an employee.
+  name: Attendance
+- description: represents the benefits an employee receives.
+  name: Benefit
+- description: represents an employment contract of an employee.
+  name: Contract
+- description: struct represents a department within the company.
+  name: Department
+- description: struct represents an employee in the HR system.
+  name: Employee
+- description: represents a leave request by an employee.
+  name: Leave Request
+- description: represents performance evaluations of an employee.
+  name: Performance Review
+- description: struct represents a role or job role.
+  name: Role
+- description: represents the salary information of an employee.
+  name: Salary
+- description: represents a user in the system.
+  name: User
+- description: Stores information about financial accounts like bank accounts or cash
+    wallets, tracking balance and account type.
+  name: Account
+- description: Manages financial transactions for accounts, tracking income and expenses,
+    amounts, and transaction dates.
+  name: Budget

@@ -10,6 +10,8 @@ import (
 // @Summary Create Attendance Information
 // @Description Create the attendance's information
 // @Tags Attendance
+// @tag.name Attendance
+// @tag.description Attendance represents the attendance information of an employee.
 // @Accept json
 // @Produce json
 // @Param LoginUserRequestDto body attendance_domain.Input true "Attendance data"

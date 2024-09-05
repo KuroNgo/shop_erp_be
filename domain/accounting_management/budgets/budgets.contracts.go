@@ -18,10 +18,10 @@ type IBudgetRepository interface {
 }
 
 type IBudgetUseCase interface {
-	CreateBudget(ctx context.Context, input *Input) (BudgetResponse, error)                         // Tạo ngân sách từ đầu vào của người dùng
+	CreateBudget(ctx context.Context, input *Input) error                                           // Tạo ngân sách từ đầu vào của người dùng
 	GetBudget(ctx context.Context, id string) (BudgetResponse, error)                               // Lấy thông tin ngân sách theo ID
 	GetBudgetByName(ctx context.Context, name string) (BudgetResponse, error)                       // Lấy ngân sách theo tên
-	UpdateBudget(ctx context.Context, id string, input *Input) (BudgetResponse, error)              // Cập nhật ngân sách từ đầu vào
+	UpdateBudget(ctx context.Context, id string, input *Input) error                                // Cập nhật ngân sách từ đầu vào
 	DeleteBudget(ctx context.Context, id string) error                                              // Xóa ngân sách theo ID
 	ListBudgets(ctx context.Context) ([]BudgetResponse, error)                                      // Lấy danh sách tất cả ngân sách
 	GetBudgetsByDateRange(ctx context.Context, startDate, endDate string) ([]BudgetResponse, error) // Lấy ngân sách theo khoảng thời gian

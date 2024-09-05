@@ -6,6 +6,8 @@ Hệ thống quản lý tài chính bao gồm các mô hình để quản lý t�
 ## Các Bảng và Mô Hình Dữ Liệu
 
 ### 1. Accounts (Tài khoản tài chính)
+Stores information about financial accounts like bank accounts or cash wallets, tracking balance and account type.
+
 | Trường           | Loại Dữ Liệu | Mô Tả                                |
 |------------------|--------------|--------------------------------------|
 | `id`             | `ObjectID`   | Khóa chính                           |
@@ -17,6 +19,8 @@ Hệ thống quản lý tài chính bao gồm các mô hình để quản lý t�
 | `updated_at`     | `time.Time`  | Thời gian cập nhật                   |
 
 ### 2. Transactions (Giao dịch tài chính)
+Manages financial transactions for accounts, tracking income and expenses, amounts, and transaction dates.
+
 | Trường             | Loại Dữ Liệu | Mô Tả                                                  |
 |--------------------|--------------|--------------------------------------------------------|
 | `id`               | `ObjectID`   | Khóa chính                                             |
@@ -30,6 +34,8 @@ Hệ thống quản lý tài chính bao gồm các mô hình để quản lý t�
 | `updated_at`       | `time.Time`  | Thời gian cập nhật                                     |
 
 ### 3. TransactionCategories (Danh mục giao dịch)
+Categorizes transactions into types like income or expenses for better organization.
+
 | Trường           | Loại Dữ Liệu  | Mô Tả                                   |
 |------------------|---------------|-----------------------------------------|
 | `id`             | `ObjectID`    | Khóa chính                              |
@@ -37,6 +43,8 @@ Hệ thống quản lý tài chính bao gồm các mô hình để quản lý t�
 | `category_type`  | `string`      | Loại danh mục (thu nhập, chi tiêu)      |
 
 ### 4. Invoices (Hóa đơn)
+Tracks issued invoices, including amounts, due dates, and payment status.
+
 | Trường           | Loại Dữ Liệu | Mô Tả                                                |
 |------------------|--------------|------------------------------------------------------|
 | `id`             | `ObjectID`   | Khóa chính                                           |
@@ -50,6 +58,8 @@ Hệ thống quản lý tài chính bao gồm các mô hình để quản lý t�
 | `updated_at`     | `time.Time`  | Thời gian cập nhật                                   |
 
 ### 5. Budgets (Ngân sách)
+Manages budgets by setting limits for specific categories over a time period.
+
 | Trường        | Loại Dữ Liệu | Mô Tả                                                  |
 |---------------|--------------|--------------------------------------------------------|
 | `id`          | `ObjectID`   | Khóa chính                                             |
@@ -62,6 +72,8 @@ Hệ thống quản lý tài chính bao gồm các mô hình để quản lý t�
 | `updated_at`  | `time.Time`  | Thời gian cập nhật                                     |
 
 ### 6. Payments (Thanh toán)
+Records payments made towards invoices, linking them to accounts and payment methods.
+
 | Trường           | Loại Dữ Liệu | Mô Tả                                           |
 |------------------|--------------|-------------------------------------------------|
 | `id`             | `ObjectID`   | Khóa chính                                      |
@@ -74,6 +86,8 @@ Hệ thống quản lý tài chính bao gồm các mô hình để quản lý t�
 | `updated_at`     | `time.Time`  | Thời gian cập nhật                              |
 
 ### 7. FinancialReports (Báo cáo tài chính)
+Generates financial reports over a specified date range for analysis and tracking.
+
 | Trường         | Loại Dữ Liệu  | Mô Tả                                           |
 |----------------|---------------|-------------------------------------------------|
 | `id`           | `ObjectID`    | Khóa chính                                      |
@@ -84,6 +98,8 @@ Hệ thống quản lý tài chính bao gồm các mô hình để quản lý t�
 | `data`         | `interface{}` | Dữ liệu báo cáo (có thể lưu trữ dưới dạng JSON) |
 
 ### 8. Taxes (Thuế)
+Defines tax types and rates applicable to invoices, transactions, or other financial elements.
+
 | Trường          | Loại Dữ Liệu | Mô Tả                                           |
 |-----------------|--------------|-------------------------------------------------|
 | `id`            | `ObjectID`   | Khóa chính                                      |

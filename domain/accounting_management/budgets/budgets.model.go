@@ -21,11 +21,11 @@ type Budget struct {
 }
 
 type Input struct {
-	BudgetName string             `bson:"budget_name" json:"budgetName"`
-	Amount     int32              `bson:"amount" json:"amount"`
-	StartDate  time.Time          `bson:"start_date" json:"startDate"`
-	EndDate    time.Time          `bson:"end_date" json:"endDate"`
-	CategoryID primitive.ObjectID `bson:"category_id" json:"categoryID"`
+	BudgetName string    `bson:"budget_name" json:"budget_name"`
+	Amount     int32     `bson:"amount" json:"amount"`
+	StartDate  time.Time `bson:"start_date" json:"start_date"`
+	EndDate    time.Time `bson:"end_date" json:"end_date"`
+	Category   string    `bson:"category" json:"category"`
 }
 
 // BudgetResponse represents the response structure for a budget
