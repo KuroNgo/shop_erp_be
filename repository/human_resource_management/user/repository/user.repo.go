@@ -53,6 +53,11 @@ func (r userRepository) FetchMany(ctx context.Context) ([]userdomain.User, error
 		users = append(users, user)
 	}
 
+	// Check for any errors encountered during iteration
+	if err = cursor.Err(); err != nil {
+		return nil, err
+	}
+
 	return users, nil
 }
 

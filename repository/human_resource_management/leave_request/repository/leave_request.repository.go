@@ -118,5 +118,10 @@ func (l leaveRequestRepository) GetAll(ctx context.Context) ([]leaverequestdomai
 		leaveRequests = append(leaveRequests, leaveRequest)
 	}
 
+	// Check for any errors encountered during iteration
+	if err = cursor.Err(); err != nil {
+		return nil, err
+	}
+
 	return leaveRequests, nil
 }

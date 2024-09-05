@@ -115,8 +115,43 @@ func (b budgetRepository) ListBudgets(ctx context.Context) ([]budgetsdomain.Budg
 }
 
 func (b budgetRepository) GetBudgetsByDateRange(ctx context.Context, startDate, endDate time.Time) ([]budgetsdomain.Budget, error) {
-	//TODO implement me
-	panic("implement me")
+	collectionBudget := b.database.Collection(b.collectionBudget)
+
+	filter := bson.M{
+		"start_date": bson.M{
+			"$gte": startDate,
+		},
+		"end_date": bson.M{
+			"$lte": endDate,
+		},
+	}
+
+	cursor, err := collectionBudget.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		if err = cursor.Close(ctx); err != nil {
+			return
+		}
+	}()
+
+	var budgets []budgetsdomain.Budget
+	budgets = make([]budgetsdomain.Budget, 0, cursor.RemainingBatchLength())
+	for cursor.Next(ctx) {
+		var budget budgetsdomain.Budget
+		if err = cursor.Decode(&budget); err != nil {
+			return nil, err
+		}
+		budgets = append(budgets, budget)
+	}
+
+	// Check for any errors encountered during iteration
+	if err = cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return budgets, nil
 }
 
 func (b budgetRepository) GetTotalBudgetAmount(ctx context.Context) (float64, error) {

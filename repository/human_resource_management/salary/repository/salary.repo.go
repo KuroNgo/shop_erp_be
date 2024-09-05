@@ -124,5 +124,10 @@ func (s salaryRepository) GetAll(ctx context.Context) ([]salarydomain.Salary, er
 		salaries = append(salaries, salary)
 	}
 
+	// Check for any errors encountered during iteration
+	if err = cursor.Err(); err != nil {
+		return nil, err
+	}
+
 	return salaries, nil
 }

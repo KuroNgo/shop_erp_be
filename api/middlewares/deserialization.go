@@ -24,11 +24,10 @@ func DeserializeUser() gin.HandlerFunc {
 		}
 
 		if accessToken == "" {
-			ctx.JSON(http.StatusUnauthorized, gin.H{
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"status":  "fail",
 				"message": "You are not logged in",
 			})
-			ctx.Abort() // Dừng xử lý các handler tiếp theo
 			return
 		}
 

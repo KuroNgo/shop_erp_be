@@ -160,5 +160,10 @@ func (e employeeRepository) GetAll(ctx context.Context) ([]employeesdomain.Emplo
 		return nil, cursor.Err()
 	}
 
+	// Check for any errors encountered during iteration
+	if err = cursor.Err(); err != nil {
+		return nil, err
+	}
+
 	return employees, nil
 }

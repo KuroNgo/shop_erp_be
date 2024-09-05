@@ -113,5 +113,10 @@ func (p performanceReviewRepository) GetAll(ctx context.Context) ([]performancer
 		performanceReviews = append(performanceReviews, performanceReview)
 	}
 
+	// Check for any errors encountered during iteration
+	if err = cursor.Err(); err != nil {
+		return nil, err
+	}
+
 	return performanceReviews, nil
 }

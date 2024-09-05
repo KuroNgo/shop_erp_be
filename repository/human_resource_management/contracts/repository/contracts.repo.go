@@ -120,5 +120,10 @@ func (c contractRepository) GetAll(ctx context.Context) ([]contractsdomain.Contr
 		contracts = append(contracts, contract)
 	}
 
+	// Check for any errors encountered during iteration
+	if err = cursor.Err(); err != nil {
+		return nil, err
+	}
+
 	return contracts, nil
 }

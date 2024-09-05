@@ -80,6 +80,11 @@ func (r roleRepository) GetAllRole(ctx context.Context) ([]roledomain.Role, erro
 		roles = append(roles, role)
 	}
 
+	// Check for any errors encountered during iteration
+	if err = cursor.Err(); err != nil {
+		return nil, err
+	}
+
 	return roles, nil
 }
 

@@ -111,6 +111,11 @@ func (a accountRepository) ListAccounts(ctx context.Context) ([]accountdomain.Ac
 		accounts = append(accounts, account)
 	}
 
+	// Check for any errors encountered during iteration
+	if err = cursor.Err(); err != nil {
+		return nil, err
+	}
+
 	return accounts, nil
 }
 

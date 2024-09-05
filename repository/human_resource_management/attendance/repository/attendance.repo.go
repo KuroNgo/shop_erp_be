@@ -119,5 +119,10 @@ func (a attendanceRepository) GetAll(ctx context.Context) ([]attendancedomain.At
 		attendances = append(attendances, attendance)
 	}
 
+	// Check for any errors encountered during iteration
+	if err = cursor.Err(); err != nil {
+		return nil, err
+	}
+
 	return attendances, nil
 }

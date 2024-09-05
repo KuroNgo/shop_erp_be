@@ -123,5 +123,10 @@ func (d departmentRepository) GetAll(ctx context.Context) ([]departmentsdomain.D
 		departments = append(departments, department)
 	}
 
+	// Check for any errors encountered during iteration
+	if err = cursor.Err(); err != nil {
+		return nil, err
+	}
+
 	return departments, nil
 }

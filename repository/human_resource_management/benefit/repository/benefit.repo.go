@@ -126,5 +126,9 @@ func (b benefitRepository) GetAll(ctx context.Context) ([]benefitsdomain.Benefit
 		benefits = append(benefits, benefit)
 	}
 
+	// Check for any errors encountered during iteration
+	if err = cursor.Err(); err != nil {
+		return nil, err
+	}
 	return benefits, nil
 }
