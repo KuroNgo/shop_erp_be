@@ -23,12 +23,12 @@ func TestGetOneByID(t *testing.T) {
 	mockDepartmentNil := departmentsdomain.Department{}
 
 	t.Run("success", func(t *testing.T) {
-		_, err = ur.GetOneByID(context.Background(), departmentData.ID.Hex())
+		_, err = ur.GetOneByID(context.Background(), departmentData.ID)
 		assert.Nil(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
-		_, err = ur.GetOneByID(context.Background(), mockDepartmentNil.ID.Hex())
+		_, err = ur.GetOneByID(context.Background(), mockDepartmentNil.ID)
 		assert.Error(t, err)
 	})
 }

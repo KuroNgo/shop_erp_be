@@ -7,6 +7,7 @@ import (
 	"mime/multipart"
 	"shop_erp_mono/bootstrap"
 	userdomain "shop_erp_mono/domain/human_resource_management/user"
+	"shop_erp_mono/pkg/password"
 	"shop_erp_mono/pkg/token"
 	"time"
 )
@@ -26,9 +27,37 @@ func (u userUseCase) SignUp(ctx context.Context, input *userdomain.Input) error 
 	panic("implement me")
 }
 
-func (u userUseCase) LoginUser(ctx context.Context, signIn *userdomain.Input) (userdomain.OutputLogin, error) {
-	//TODO implement me
-	panic("implement me")
+func (u userUseCase) LoginUser(ctx context.Context, signIn *userdomain.SignIn) (userdomain.OutputLogin, error) {
+	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
+	defer cancel()
+
+	userData, err := u.userRepository.GetByEmail(ctx, signIn.Email)
+	if err != nil || userData.Verified == false {
+		return userdomain.OutputLogin{}, err
+	}
+
+	err = password.VerifyPassword(userData.PasswordHash, signIn.Password)
+	if err != nil {
+		return userdomain.OutputLogin{}, err
+	}
+
+	accessToken, err := token.CreateToken(u.database.AccessTokenExpiresIn, userData.ID, u.database.AccessTokenPrivateKey)
+	if err != nil {
+		return userdomain.OutputLogin{}, err
+	}
+
+	refreshToken, err := token.CreateToken(u.database.RefreshTokenExpiresIn, userData.ID, u.database.RefreshTokenPrivateKey)
+	if err != nil {
+		return userdomain.OutputLogin{}, err
+	}
+
+	response := userdomain.OutputLogin{
+		AccessToken:  accessToken,
+		RefreshToken: refreshToken,
+		IsLogged:     "1",
+	}
+
+	return response, nil
 }
 
 func (u userUseCase) UpdateOne(ctx context.Context, userID string, input *userdomain.Input, file *multipart.FileHeader) error {
@@ -113,26 +142,46 @@ func (u userUseCase) GetByEmail(ctx context.Context, email string) (userdomain.O
 	panic("implement me")
 }
 
-func (u userUseCase) GetByID(ctx context.Context, id string) (userdomain.Output, error) {
+func (u userUseCase) GetByIDForCheckCookie(ctx context.Context, idUser string) (*userdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
 
-	sub, err := token.ValidateToken(id, u.database.AccessTokenPublicKey)
+	sub, err := token.ValidateToken(idUser, u.database.AccessTokenPublicKey)
 	if err != nil {
-		return userdomain.Output{}, err
+		return nil, err
 	}
 
-	idUser, err := primitive.ObjectIDFromHex(fmt.Sprint(sub))
+	userID, err := primitive.ObjectIDFromHex(fmt.Sprint(sub))
 	if err != nil {
-		return userdomain.Output{}, err
+		return nil, err
+	}
+	userData, err := u.userRepository.GetByID(ctx, userID)
+	if err != nil {
+		return nil, err
 	}
 
-	userData, err := u.userRepository.GetByID(ctx, idUser)
-	if err != nil {
-		return userdomain.Output{}, err
+	output := &userdomain.Output{
+		User: userData,
 	}
 
-	output := userdomain.Output{
+	return output, nil
+}
+
+func (u userUseCase) GetByID(ctx context.Context, id string) (*userdomain.Output, error) {
+	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
+	defer cancel()
+
+	userID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	userData, err := u.userRepository.GetByID(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	output := &userdomain.Output{
 		User: userData,
 	}
 

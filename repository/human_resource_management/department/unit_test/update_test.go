@@ -22,13 +22,13 @@ func TestUpdateOneDepartment(t *testing.T) {
 
 	mockNilDepartment := departmentsdomain.Department{}
 	t.Run("success", func(t *testing.T) {
-		err = ur.UpdateOne(context.Background(), &departmentData)
+		err = ur.UpdateOne(context.Background(), departmentData.ID, &departmentData)
 		assert.Nil(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
 		// Trying to insert an empty user, expecting an error
-		err = ur.UpdateOne(context.Background(), &mockNilDepartment)
+		err = ur.UpdateOne(context.Background(), mockNilDepartment.ID, &mockNilDepartment)
 		assert.Error(t, err)
 	})
 }

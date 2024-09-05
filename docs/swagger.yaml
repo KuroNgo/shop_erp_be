@@ -149,6 +149,15 @@ definitions:
       updated_at:
         type: string
     type: object
+  user_domain.SignIn:
+    properties:
+      email:
+        example: admin@admin.com
+        type: string
+      password_hash:
+        example: "12345"
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -1207,6 +1216,37 @@ paths:
       security:
       - CookieAuth: []
       summary: Get User Information
+      tags:
+      - User
+  /api/v1/users/login:
+    post:
+      consumes:
+      - application/json
+      description: Login user
+      parameters:
+      - description: User data
+        in: body
+        name: LoginUser
+        required: true
+        schema:
+          $ref: '#/definitions/user_domain.SignIn'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Login user
+      tags:
+      - User
+  /api/v1/users/logout:
+    get:
+      consumes:
+      - application/json
+      description: Logout the current user
+      produces:
+      - application/json
+      responses: {}
+      summary: Logout user
       tags:
       - User
 swagger: "2.0"

@@ -1687,6 +1687,54 @@ const docTemplate = `{
                 "summary": "Get User Information",
                 "responses": {}
             }
+        },
+        "/api/v1/users/login": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Login user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Login user",
+                "parameters": [
+                    {
+                        "description": "User data",
+                        "name": "LoginUser",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user_domain.SignIn"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/users/logout": {
+            "get": {
+                "description": "Logout the current user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Logout user",
+                "responses": {}
+            }
         }
     },
     "definitions": {
@@ -1906,6 +1954,19 @@ const docTemplate = `{
                 },
                 "updated_at": {
                     "type": "string"
+                }
+            }
+        },
+        "user_domain.SignIn": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "admin@admin.com"
+                },
+                "password_hash": {
+                    "type": "string",
+                    "example": "12345"
                 }
             }
         }

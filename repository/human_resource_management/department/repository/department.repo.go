@@ -7,6 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	departmentsdomain "shop_erp_mono/domain/human_resource_management/departments"
+	"shop_erp_mono/repository/human_resource_management/department/validate"
 	"time"
 )
 
@@ -21,6 +22,10 @@ func NewDepartmentRepository(db *mongo.Database, collectionDepartment string) de
 
 func (d departmentRepository) CreateOne(ctx context.Context, department *departmentsdomain.Department) error {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
+
+	if err := validate.IsNilDepartment2(department); err != nil {
+		return err
+	}
 
 	_, err := collectionDepartment.InsertOne(ctx, department)
 	if err != nil {

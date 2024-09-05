@@ -36,6 +36,11 @@ type Input struct {
 	AvatarURL    string `bson:"avatar_url"  json:"avatar_url"`
 }
 
+type SignIn struct {
+	Email    string `bson:"email" json:"email" example:"admin@admin.com" `
+	Password string `bson:"password_hash" json:"password_hash" example:"12345"`
+}
+
 type Output struct {
 	User User `bson:"user" json:"user"`
 }
@@ -43,5 +48,5 @@ type Output struct {
 type OutputLogin struct {
 	RefreshToken string `bson:"refresh_token"`
 	AccessToken  string `bson:"access_token"`
-	IsLogged     bool   `bson:"is_logged"`
+	IsLogged     string `bson:"is_logged"`
 }

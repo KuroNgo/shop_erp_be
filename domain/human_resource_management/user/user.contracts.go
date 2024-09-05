@@ -22,7 +22,7 @@ type IUserRepository interface {
 
 type IUserUseCase interface {
 	SignUp(ctx context.Context, input *Input) error
-	LoginUser(ctx context.Context, signIn *Input) (OutputLogin, error)
+	LoginUser(ctx context.Context, signIn *SignIn) (OutputLogin, error)
 	UpdateOne(ctx context.Context, userID string, input *Input, file *multipart.FileHeader) error
 	UpdatePassword(ctx context.Context, input *Input) error
 	UpdateVerify(ctx context.Context, input *Input) error
@@ -32,6 +32,7 @@ type IUserUseCase interface {
 	DeleteOne(ctx context.Context, idUser string) error
 	FetchMany(ctx context.Context) ([]Output, error)
 	GetByEmail(ctx context.Context, email string) (Output, error)
-	GetByID(ctx context.Context, idUser string) (Output, error)
+	GetByIDForCheckCookie(ctx context.Context, idUser string) (*Output, error)
+	GetByID(ctx context.Context, idUser string) (*Output, error)
 	GetByVerificationCode(ctx context.Context, verificationCode string) (Output, error)
 }

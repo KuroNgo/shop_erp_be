@@ -28,6 +28,7 @@ func DeserializeUser() gin.HandlerFunc {
 				"status":  "fail",
 				"message": "You are not logged in",
 			})
+			ctx.Abort() // Dừng xử lý các handler tiếp theo
 			return
 		}
 
@@ -37,7 +38,7 @@ func DeserializeUser() gin.HandlerFunc {
 		sub, err := token.ValidateToken(accessToken, env.AccessTokenPublicKey)
 		if err != nil {
 			fmt.Println("The err is: ", err)
-			ctx.JSON(http.StatusUnauthorized, gin.H{
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"status":  "fail",
 				"message": err.Error(),
 			})
@@ -45,6 +46,6 @@ func DeserializeUser() gin.HandlerFunc {
 		}
 
 		ctx.Set("currentUser", sub)
-		ctx.Next()
+		ctx.Next() // Cho phép tiếp tục các handler khác nếu không có lỗi
 	}
 }

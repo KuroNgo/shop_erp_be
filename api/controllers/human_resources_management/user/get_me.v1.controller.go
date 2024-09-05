@@ -25,7 +25,7 @@ func (u *UserController) GetMe(ctx *gin.Context) {
 	}
 
 	// Gọi use case để xử lý logic nghiệp vụ
-	result, err := u.UserUseCase.GetByID(ctx, cookie)
+	result, err := u.UserUseCase.GetByIDForCheckCookie(ctx, cookie)
 	if err != nil {
 		ctx.JSON(http.StatusForbidden, gin.H{
 			"status":  "fail",

@@ -129,3 +129,23 @@ func (a accountUseCase) ListAccounts(ctx context.Context) ([]accountdomain.Accou
 
 	return responses, nil
 }
+
+func (a accountUseCase) GetAccountsByDateRange(ctx context.Context, startDate, endDate string) ([]accountdomain.AccountResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (a accountUseCase) GetTotalAccountBalance(ctx context.Context) (float64, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (a accountUseCase) DeactivateAccount(ctx context.Context, id string) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (a accountUseCase) ReactivateAccount(ctx context.Context, id string) error {
+	//TODO implement me
+	panic("implement me")
+}

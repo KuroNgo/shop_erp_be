@@ -11,9 +11,7 @@ import (
 )
 
 func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, gin *gin.Engine) {
-	SwaggerRouter := gin.Group("")
-
-	swaggerroute.SwaggerRouter(env, timeout, db, SwaggerRouter)
+	swaggerroute.SwaggerRouter(env, timeout, db, gin.Group(""))
 	human_resources_management.SetUp(env, timeout, db, gin)
 	accounting_management.SetUp(env, timeout, db, gin)
 }

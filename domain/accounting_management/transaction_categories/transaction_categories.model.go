@@ -11,3 +11,8 @@ type TransactionCategories struct {
 	CategoryName string             `bson:"category_name" json:"categoryName"`
 	CategoryType string             `bson:"category_type" json:"categoryType"`
 }
+
+type Input struct {
+	CategoryName string `bson:"category_name" json:"categoryName"`
+	CategoryType string `bson:"category_type" json:"categoryType"`
+}

@@ -3,21 +3,33 @@ package unit_test
 import (
 	"context"
 	"github.com/stretchr/testify/assert"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	departmentsdomain "shop_erp_mono/domain/human_resource_management/departments"
 	"shop_erp_mono/infrastructor"
 	departmentrepository "shop_erp_mono/repository/human_resource_management/department/repository"
 	"testing"
+	"time"
 )
 
 func TestCreateOneDepartment(t *testing.T) {
 	client, database := infrastructor.SetupTestDatabase(t)
 	defer infrastructor.TearDownTestDatabase(client, t)
 
-	mockDepartment := &departmentsdomain.Input{
+	mockDepartment := &departmentsdomain.Department{
+		ID:          primitive.NewObjectID(),
 		Name:        "marketing",
 		Description: "abc",
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
 	}
-	mockEmptyDepartment := &departmentsdomain.Input{}
+
+	mockEmptyDepartment := &departmentsdomain.Department{
+		ID:          primitive.NewObjectID(),
+		Name:        "", // Name is empty
+		Description: "", // Description is empty
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
+	}
 
 	t.Run("success", func(t *testing.T) {
 		ur := departmentrepository.NewDepartmentRepository(database, Department)
@@ -25,11 +37,9 @@ func TestCreateOneDepartment(t *testing.T) {
 		assert.Nil(t, err)
 	})
 
-	t.Run("error", func(t *testing.T) {
+	t.Run("error with empty fields", func(t *testing.T) {
 		ur := departmentrepository.NewDepartmentRepository(database, Department)
-		// Trying to insert an empty user, expecting an error
 		err := ur.CreateOne(context.Background(), mockEmptyDepartment)
 		assert.Error(t, err)
 	})
-
 }
