@@ -14,7 +14,7 @@ func TestCreateOneEmployee(t *testing.T) {
 	client, database := infrastructor.SetupTestDatabase(t)
 	defer infrastructor.TearDownTestDatabase(client, t)
 
-	mockEmployee := &employeesdomain.Input{
+	mockEmployee := &employeesdomain.Employee{
 		FirstName:   "Ngô",
 		LastName:    "Hoài Phong",
 		Gender:      "Nam",
@@ -24,19 +24,17 @@ func TestCreateOneEmployee(t *testing.T) {
 		AvatarURL:   "https://example.com/avatar.jpg",
 		DateOfBirth: time.Date(2002, 1, 1, 0, 0, 0, 0, time.UTC),
 		DayOfWork:   time.Date(2024, 8, 30, 0, 0, 0, 0, time.UTC),
-		Department:  "marketing",
-		Role:        "admin",
 	}
-	mockEmptyEmployee := &employeesdomain.Input{}
+	mockEmptyEmployee := &employeesdomain.Employee{}
 
 	t.Run("success", func(t *testing.T) {
-		ur := employeerepository.NewEmployeeRepository(database, staff, department, role, salary)
+		ur := employeerepository.NewEmployeeRepository(database, staff)
 		err := ur.CreateOne(context.Background(), mockEmployee)
 		assert.Nil(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
-		ur := employeerepository.NewEmployeeRepository(database, staff, department, role, salary)
+		ur := employeerepository.NewEmployeeRepository(database, staff)
 		// Trying to insert an empty user, expecting an error
 		err := ur.CreateOne(context.Background(), mockEmptyEmployee)
 		assert.Error(t, err)

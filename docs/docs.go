@@ -25,7 +25,7 @@ const docTemplate = `{
                         "CookieAuth": []
                     }
                 ],
-                "description": "Update the account's information",
+                "description": "Create the account's information",
                 "consumes": [
                     "application/json"
                 ],
@@ -35,7 +35,7 @@ const docTemplate = `{
                 "tags": [
                     "Account"
                 ],
-                "summary": "Update Account Information",
+                "summary": "Create Account Information",
                 "parameters": [
                     {
                         "description": "Account data",
@@ -45,13 +45,6 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/account_domain.Input"
                         }
-                    },
-                    {
-                        "type": "string",
-                        "description": "Attendance ID",
-                        "name": "name",
-                        "in": "path",
-                        "required": true
                     }
                 ],
                 "responses": {}
@@ -168,33 +161,47 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/api/v1/attendances/_id": {
-            "delete": {
+        "/api/v1/accounts/update": {
+            "put": {
                 "security": [
                     {
                         "CookieAuth": []
                     }
                 ],
-                "description": "Deletes the attendance's information by ID",
+                "description": "Update the account's information",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Attendance"
+                    "Account"
                 ],
-                "summary": "Delete Attendance Information",
+                "summary": "Update Account Information",
                 "parameters": [
+                    {
+                        "description": "Account data",
+                        "name": "Account",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/account_domain.Input"
+                        }
+                    },
                     {
                         "type": "string",
                         "description": "Attendance ID",
-                        "name": "_id",
+                        "name": "name",
                         "in": "path",
                         "required": true
                     }
                 ],
                 "responses": {}
-            },
-            "patch": {
+            }
+        },
+        "/api/v1/attendances/_id": {
+            "put": {
                 "security": [
                     {
                         "CookieAuth": []
@@ -227,6 +234,31 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {}
+            },
+            "delete": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Deletes the attendance's information by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Attendance"
+                ],
+                "summary": "Delete Attendance Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Attendance ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
             }
         },
         "/api/v1/attendances/create": {
@@ -250,7 +282,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "Attendance data",
-                        "name": "LoginUserRequestDto",
+                        "name": "CreateOneAttendance",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -340,32 +372,7 @@ const docTemplate = `{
             }
         },
         "/api/v1/benefits/_id": {
-            "delete": {
-                "security": [
-                    {
-                        "CookieAuth": []
-                    }
-                ],
-                "description": "Deletes the benefit's information by ID",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Benefit"
-                ],
-                "summary": "Delete Benefit Information",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Benefit ID",
-                        "name": "_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {}
-            },
-            "patch": {
+            "put": {
                 "security": [
                     {
                         "CookieAuth": []
@@ -395,6 +402,31 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/benefits_domain.Input"
                         }
+                    }
+                ],
+                "responses": {}
+            },
+            "delete": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Deletes the benefit's information by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Benefit"
+                ],
+                "summary": "Delete Benefit Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Benefit ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {}
@@ -505,6 +537,188 @@ const docTemplate = `{
                         "name": "email",
                         "in": "path",
                         "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/budgets/create": {
+            "post": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Create the budget's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Budget"
+                ],
+                "summary": "Create Budget Information",
+                "parameters": [
+                    {
+                        "description": "Budget data",
+                        "name": "Budget",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/budgets_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/budgets/delete": {
+            "delete": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Delete the budget's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Budget"
+                ],
+                "summary": "Delete Budget Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Budget ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/budgets/get/_id": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Get by id the budget's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Budget"
+                ],
+                "summary": "Get by id Budget Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Budget ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/budgets/get/all": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Get the budget's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Budget"
+                ],
+                "summary": "Get Budget Information",
+                "responses": {}
+            }
+        },
+        "/api/v1/budgets/get/name": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Get by name the budget's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Budget"
+                ],
+                "summary": "Get by name Budget Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Budget name",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/budgets/update": {
+            "put": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Get by name the budget's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Budget"
+                ],
+                "summary": "Get by name Budget Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Budget name",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Budget data",
+                        "name": "Budget",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/budgets_domain.Input"
+                        }
                     }
                 ],
                 "responses": {}
@@ -701,6 +915,17 @@ const docTemplate = `{
                     "Department"
                 ],
                 "summary": "Create Department Information",
+                "parameters": [
+                    {
+                        "description": "Department data",
+                        "name": "Department",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/departments_domain.Input"
+                        }
+                    }
+                ],
                 "responses": {}
             }
         },
@@ -807,7 +1032,7 @@ const docTemplate = `{
             }
         },
         "/api/v1/departments/update": {
-            "patch": {
+            "put": {
                 "security": [
                     {
                         "CookieAuth": []
@@ -1305,7 +1530,7 @@ const docTemplate = `{
             }
         },
         "/api/v1/performance_reviews/update": {
-            "post": {
+            "put": {
                 "security": [
                     {
                         "CookieAuth": []
@@ -1471,7 +1696,7 @@ const docTemplate = `{
             }
         },
         "/api/v1/roles/update": {
-            "patch": {
+            "put": {
                 "security": [
                     {
                         "CookieAuth": []
@@ -1512,7 +1737,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "description": "Salary data",
-                        "name": "Role",
+                        "name": "Salary",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -1626,7 +1851,7 @@ const docTemplate = `{
             }
         },
         "/api/v1/salaries/update": {
-            "patch": {
+            "put": {
                 "security": [
                     {
                         "CookieAuth": []
@@ -1797,6 +2022,26 @@ const docTemplate = `{
                 }
             }
         },
+        "budgets_domain.Input": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "budget_name": {
+                    "type": "string"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "end_date": {
+                    "type": "string"
+                },
+                "start_date": {
+                    "type": "string"
+                }
+            }
+        },
         "contracts_domain.Input": {
             "type": "object",
             "properties": {
@@ -1819,6 +2064,23 @@ const docTemplate = `{
                 "status": {
                     "description": "Example: \"Active\", \"Expired\"",
                     "type": "string"
+                }
+            }
+        },
+        "departments_domain.Input": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "example": "Responsible for managing employee relations, recruitment, and company culture."
+                },
+                "managerEmail": {
+                    "type": "string",
+                    "example": "admin@admin.com"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Human Resources"
                 }
             }
         },

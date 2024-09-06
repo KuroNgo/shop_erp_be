@@ -12,7 +12,7 @@ import (
 // @Tags Salary
 // @Accept json
 // @Produce json
-// @Param Role body salary_domain.Salary true "Salary data"
+// @Param Salary body salary_domain.Salary true "Salary data"
 // @Security ApiKeyAuth
 // @Router /api/v1/salaries/create [post]
 func (s *SalaryController) CreateOneSalary(ctx *gin.Context) {

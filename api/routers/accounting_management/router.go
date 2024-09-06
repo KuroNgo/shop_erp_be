@@ -6,6 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"shop_erp_mono/api/middlewares"
 	account_route "shop_erp_mono/api/routers/accounting_management/account"
+	budget_route "shop_erp_mono/api/routers/accounting_management/budget"
 	"shop_erp_mono/bootstrap"
 	"time"
 )
@@ -24,4 +25,5 @@ func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, g
 
 	// All Public APIs
 	account_route.AccountRouter(env, timeout, db, publicRouter)
+	budget_route.BudgetRouter(env, timeout, db, publicRouter)
 }

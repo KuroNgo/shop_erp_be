@@ -12,7 +12,7 @@ import (
 // @Tags Department
 // @Accept json
 // @Produce json
-// @Router /api/v1/departments/update [patch]
+// @Router /api/v1/departments/update [put]
 // @Security CookieAuth
 func (d *DepartmentController) UpdateOneDepartment(ctx *gin.Context) {
 	var input departmentsdomain.Input

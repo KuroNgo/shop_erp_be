@@ -10,11 +10,9 @@ import (
 // @Summary Create Attendance Information
 // @Description Create the attendance's information
 // @Tags Attendance
-// @tag.name Attendance
-// @tag.description Attendance represents the attendance information of an employee.
 // @Accept json
 // @Produce json
-// @Param LoginUserRequestDto body attendance_domain.Input true "Attendance data"
+// @Param CreateOneAttendance body attendance_domain.Input true "Attendance data"
 // @Router /api/v1/attendances/create [post]
 // @Security CookieAuth
 func (a *AttendanceController) CreateOneAttendance(ctx *gin.Context) {

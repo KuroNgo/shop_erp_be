@@ -12,6 +12,7 @@ import (
 // @Tags Department
 // @Accept json
 // @Produce json
+// @Param Department body departments_domain.Input true "Department data"
 // @Router /api/v1/departments/create [post]
 // @Security CookieAuth
 func (d *DepartmentController) CreateOneDepartment(ctx *gin.Context) {

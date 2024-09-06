@@ -9,30 +9,24 @@ import (
 	"testing"
 )
 
-func TestGetOneByName(t *testing.T) {
+func TestGetOneByID(t *testing.T) {
 	client, database := infrastructor.SetupTestDatabase(t)
 	defer infrastructor.TearDownTestDatabase(client, t)
 
-	ur := employeerepository.NewEmployeeRepository(database, staff, department, role, salary)
-	employeeName := "Hoài Phong"
-	employeeData, err := ur.GetOneByName(context.Background(), employeeName)
+	ur := employeerepository.NewEmployeeRepository(database, staff)
+	email := "admin@admin.com"
+	employeeData, err := ur.GetOneByEmail(context.Background(), email)
 	if err != nil {
 		t.Fatalf("error setting up test data: %v", err)
 	}
 
 	t.Run("success", func(t *testing.T) {
-		_, err = ur.GetOneByID(context.Background(), employeeData.Employee.ID.Hex())
+		_, err = ur.GetOneByID(context.Background(), employeeData.ID)
 		assert.Nil(t, err)
 	})
 
-	t.Run("invalid ID format", func(t *testing.T) {
-		_, err := ur.GetOneByID(context.Background(), "invalidID")
-		assert.Error(t, err)
-		assert.Equal(t, "invalid employee ID format", err.Error())
-	})
-
 	t.Run("non-existing ID", func(t *testing.T) {
-		nonExistingID := primitive.NewObjectID().Hex()
+		nonExistingID := primitive.NewObjectID()
 		_, err := ur.GetOneByID(context.Background(), nonExistingID)
 		assert.Error(t, err)
 		assert.Equal(t, "error finding employee's information in the database", err.Error())

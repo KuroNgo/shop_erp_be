@@ -2,7 +2,7 @@ package benefits_domain
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	employees_domain "shop_erp_mono/domain/human_resource_management/employees"
+	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
 	"time"
 )
 
@@ -31,6 +31,6 @@ type Input struct {
 }
 
 type Output struct {
-	Benefit  Benefit                   `bson:"benefit" json:"benefit"`
-	Employee employees_domain.Employee `bson:"employee" json:"employee"`
+	Benefit  Benefit                  `bson:"benefit" json:"benefit"`
+	Employee employeesdomain.Employee `bson:"employee" json:"employee"`
 }

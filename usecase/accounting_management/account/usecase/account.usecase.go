@@ -2,6 +2,7 @@ package account_usecase
 
 import (
 	"context"
+	"fmt"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	accountdomain "shop_erp_mono/domain/accounting_management/account"
 	"shop_erp_mono/repository/accounting_management/account/validate"
@@ -131,8 +132,36 @@ func (a accountUseCase) ListAccounts(ctx context.Context) ([]accountdomain.Accou
 }
 
 func (a accountUseCase) GetAccountsByDateRange(ctx context.Context, startDate, endDate string) ([]accountdomain.AccountResponse, error) {
-	//TODO implement me
-	panic("implement me")
+	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
+	defer cancel()
+
+	layout := "2006-01-02"
+
+	start, err := time.Parse(layout, startDate)
+	if err != nil {
+		return nil, fmt.Errorf("invalid start date format: %v", err)
+	}
+
+	end, err := time.Parse(layout, endDate)
+	if err != nil {
+		return nil, fmt.Errorf("invalid end date format: %v", err)
+	}
+
+	accountData, err := a.accountRepository.GetAccountsByDateRange(ctx, start, end)
+	if err != nil {
+		return nil, err
+	}
+
+	var responses []accountdomain.AccountResponse
+	responses = make([]accountdomain.AccountResponse, 0, len(accountData))
+	for _, account := range accountData {
+		response := accountdomain.AccountResponse{
+			Accounts: account,
+		}
+		responses = append(responses, response)
+	}
+
+	return responses, nil
 }
 
 func (a accountUseCase) GetTotalAccountBalance(ctx context.Context) (float64, error) {

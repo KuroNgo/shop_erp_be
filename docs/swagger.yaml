@@ -39,6 +39,19 @@ definitions:
       start_date:
         type: string
     type: object
+  budgets_domain.Input:
+    properties:
+      amount:
+        type: integer
+      budget_name:
+        type: string
+      category:
+        type: string
+      end_date:
+        type: string
+      start_date:
+        type: string
+    type: object
   contracts_domain.Input:
     properties:
       contract_type:
@@ -54,6 +67,19 @@ definitions:
         type: string
       status:
         description: 'Example: "Active", "Expired"'
+        type: string
+    type: object
+  departments_domain.Input:
+    properties:
+      description:
+        example: Responsible for managing employee relations, recruitment, and company
+          culture.
+        type: string
+      managerEmail:
+        example: admin@admin.com
+        type: string
+      name:
+        example: Human Resources
         type: string
     type: object
   employees_domain.Input:
@@ -171,7 +197,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Update the account's information
+      description: Create the account's information
       parameters:
       - description: Account data
         in: body
@@ -179,17 +205,12 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/account_domain.Input'
-      - description: Attendance ID
-        in: path
-        name: name
-        required: true
-        type: string
       produces:
       - application/json
       responses: {}
       security:
       - CookieAuth: []
-      summary: Update Account Information
+      summary: Create Account Information
       tags:
       - Account
   /api/v1/accounts/delete:
@@ -262,6 +283,31 @@ paths:
       summary: Get Account Information
       tags:
       - Account
+  /api/v1/accounts/update:
+    put:
+      consumes:
+      - application/json
+      description: Update the account's information
+      parameters:
+      - description: Account data
+        in: body
+        name: Account
+        required: true
+        schema:
+          $ref: '#/definitions/account_domain.Input'
+      - description: Attendance ID
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Update Account Information
+      tags:
+      - Account
   /api/v1/attendances/_id:
     delete:
       description: Deletes the attendance's information by ID
@@ -279,7 +325,7 @@ paths:
       summary: Delete Attendance Information
       tags:
       - Attendance
-    patch:
+    put:
       description: Updates the attendance's information
       parameters:
       - description: Attendance ID
@@ -309,7 +355,7 @@ paths:
       parameters:
       - description: Attendance data
         in: body
-        name: LoginUserRequestDto
+        name: CreateOneAttendance
         required: true
         schema:
           $ref: '#/definitions/attendance_domain.Input'
@@ -387,7 +433,7 @@ paths:
       summary: Delete Benefit Information
       tags:
       - Benefit
-    patch:
+    put:
       description: Updates the benefit's information
       parameters:
       - description: Benefit ID
@@ -478,6 +524,121 @@ paths:
       summary: Get Benefit Information By ID
       tags:
       - Benefit
+  /api/v1/budgets/create:
+    post:
+      consumes:
+      - application/json
+      description: Create the budget's information
+      parameters:
+      - description: Budget data
+        in: body
+        name: Budget
+        required: true
+        schema:
+          $ref: '#/definitions/budgets_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Create Budget Information
+      tags:
+      - Budget
+  /api/v1/budgets/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete the budget's information
+      parameters:
+      - description: Budget ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Delete Budget Information
+      tags:
+      - Budget
+  /api/v1/budgets/get/_id:
+    get:
+      consumes:
+      - application/json
+      description: Get by id the budget's information
+      parameters:
+      - description: Budget ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get by id Budget Information
+      tags:
+      - Budget
+  /api/v1/budgets/get/all:
+    get:
+      consumes:
+      - application/json
+      description: Get the budget's information
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get Budget Information
+      tags:
+      - Budget
+  /api/v1/budgets/get/name:
+    get:
+      consumes:
+      - application/json
+      description: Get by name the budget's information
+      parameters:
+      - description: Budget name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get by name Budget Information
+      tags:
+      - Budget
+  /api/v1/budgets/update:
+    put:
+      consumes:
+      - application/json
+      description: Get by name the budget's information
+      parameters:
+      - description: Budget name
+        in: path
+        name: name
+        required: true
+        type: string
+      - description: Budget data
+        in: body
+        name: Budget
+        required: true
+        schema:
+          $ref: '#/definitions/budgets_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get by name Budget Information
+      tags:
+      - Budget
   /api/v1/contracts/create:
     post:
       consumes:
@@ -592,6 +753,13 @@ paths:
       consumes:
       - application/json
       description: Create the department's information
+      parameters:
+      - description: Department data
+        in: body
+        name: Department
+        required: true
+        schema:
+          $ref: '#/definitions/departments_domain.Input'
       produces:
       - application/json
       responses: {}
@@ -665,7 +833,7 @@ paths:
       tags:
       - Department
   /api/v1/departments/update:
-    patch:
+    put:
       consumes:
       - application/json
       description: Updates the department's information
@@ -978,7 +1146,7 @@ paths:
       tags:
       - Performance Review
   /api/v1/performance_reviews/update:
-    post:
+    put:
       consumes:
       - application/json
       description: Update the performance review's information
@@ -1082,7 +1250,7 @@ paths:
       tags:
       - Role
   /api/v1/roles/update:
-    patch:
+    put:
       consumes:
       - application/json
       description: Updates the role's information
@@ -1102,7 +1270,7 @@ paths:
       parameters:
       - description: Salary data
         in: body
-        name: Role
+        name: Salary
         required: true
         schema:
           $ref: '#/definitions/salary_domain.Salary'
@@ -1179,7 +1347,7 @@ paths:
       tags:
       - Salary
   /api/v1/salaries/update:
-    patch:
+    put:
       consumes:
       - application/json
       description: Updates the salary's information

@@ -12,7 +12,7 @@ import (
 // @Tags Salary
 // @Accept json
 // @Produce json
-// @Router /api/v1/salaries/update [patch]
+// @Router /api/v1/salaries/update [put]
 // @Security CookieAuth
 func (s *SalaryController) UpdateOneSalary(ctx *gin.Context) {
 	var salary salarydomain.Input

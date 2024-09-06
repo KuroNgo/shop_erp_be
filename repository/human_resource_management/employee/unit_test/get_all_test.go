@@ -13,7 +13,7 @@ func TestGetAll(t *testing.T) {
 	defer infrastructor.TearDownTestDatabase(client, t)
 
 	t.Run("success", func(t *testing.T) {
-		ur := employeerepository.NewEmployeeRepository(database, staff, department, role, salary)
+		ur := employeerepository.NewEmployeeRepository(database, staff)
 
 		_, err := ur.GetAll(context.Background())
 		assert.Nil(t, err)

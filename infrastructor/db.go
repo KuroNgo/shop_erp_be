@@ -8,10 +8,10 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 	"log"
 	"shop_erp_mono/bootstrap"
-	department_repo "shop_erp_mono/repository/human_resource_management/department/data_seeder"
-	role_repo "shop_erp_mono/repository/human_resource_management/role/data_seeder"
-	salary_repo "shop_erp_mono/repository/human_resource_management/salary/data_seeder"
-	user_repo "shop_erp_mono/repository/human_resource_management/user/data_seeder"
+	employeerepo "shop_erp_mono/repository/human_resource_management/employee/data_seeder"
+	rolerepo "shop_erp_mono/repository/human_resource_management/role/data_seeder"
+	salaryrepo "shop_erp_mono/repository/human_resource_management/salary/data_seeder"
+	userrepo "shop_erp_mono/repository/human_resource_management/user/data_seeder"
 	"time"
 )
 
@@ -107,22 +107,22 @@ func CloseMongoDBConnection(client *mongo_driven.Client) {
 
 func Migrations(ctx context.Context, client *mongo_driven.Client) error {
 	// migration
-	err := user_repo.SeedUser(ctx, client)
+	err := userrepo.SeedUser(ctx, client)
 	if err != nil {
 		return nil
 	}
 
-	err = role_repo.SeedRole(ctx, client)
+	err = rolerepo.SeedRole(ctx, client)
 	if err != nil {
 		return err
 	}
 
-	err = department_repo.SeedDepartment(ctx, client)
+	err = salaryrepo.SeedSalary(ctx, client)
 	if err != nil {
 		return err
 	}
 
-	err = salary_repo.SeedSalary(ctx, client)
+	err = employeerepo.SeedEmployee(ctx, client)
 	if err != nil {
 		return err
 	}

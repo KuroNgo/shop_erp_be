@@ -21,8 +21,9 @@ type Department struct {
 }
 
 type Input struct {
-	Name        string `bson:"name"`
-	Description string `bson:"description"`
+	Name         string `bson:"name" example:"Human Resources"`
+	Description  string `bson:"description" example:"Responsible for managing employee relations, recruitment, and company culture."`
+	ManagerEmail string `bson:"manager_email" example:"admin@admin.com"`
 }
 
 // Output struct represents a department within the company.

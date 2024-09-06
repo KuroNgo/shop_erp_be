@@ -6,7 +6,7 @@ package user_controller
 // @Tags User
 // @Accept json
 // @Produce json
-// @Router /api/v1/users/update [patch]
+// @Router /api/v1/users/update [put]
 // @Security CookieAuth
 //func (u *UserController) UpdateUser(ctx *gin.Context) {
 //	currentUser, exists := ctx.Get("currentUser")

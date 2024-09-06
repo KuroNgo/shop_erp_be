@@ -4,6 +4,7 @@ import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	departmentsdomain "shop_erp_mono/domain/human_resource_management/departments"
+	employees_domain "shop_erp_mono/domain/human_resource_management/employees"
 	"shop_erp_mono/repository/human_resource_management/department/validate"
 	"time"
 )
@@ -11,10 +12,12 @@ import (
 type departmentUseCase struct {
 	contextTimeout       time.Duration
 	departmentRepository departmentsdomain.IDepartmentRepository
+	employeeRepository   employees_domain.IEmployeeRepository
 }
 
-func NewDepartmentUseCase(contextTimeout time.Duration, departmentRepository departmentsdomain.IDepartmentRepository) departmentsdomain.IDepartmentUseCase {
-	return &departmentUseCase{contextTimeout: contextTimeout, departmentRepository: departmentRepository}
+func NewDepartmentUseCase(contextTimeout time.Duration, departmentRepository departmentsdomain.IDepartmentRepository,
+	employeeRepository employees_domain.IEmployeeRepository) departmentsdomain.IDepartmentUseCase {
+	return &departmentUseCase{contextTimeout: contextTimeout, departmentRepository: departmentRepository, employeeRepository: employeeRepository}
 }
 
 func (d departmentUseCase) CreateOne(ctx context.Context, input *departmentsdomain.Input) error {
@@ -24,8 +27,14 @@ func (d departmentUseCase) CreateOne(ctx context.Context, input *departmentsdoma
 		return err
 	}
 
+	managerData, err := d.employeeRepository.GetOneByEmail(ctx, input.ManagerEmail)
+	if err != nil {
+		return err
+	}
+
 	department := &departmentsdomain.Department{
 		ID:          primitive.NewObjectID(),
+		ManagerID:   managerData.ID,
 		Name:        input.Name,
 		Description: input.Description,
 		CreatedAt:   time.Now(),
@@ -114,8 +123,14 @@ func (d departmentUseCase) GetAll(ctx context.Context) ([]departmentsdomain.Outp
 	var outputs []departmentsdomain.Output
 	outputs = make([]departmentsdomain.Output, 0, len(departmentsData))
 	for _, departmentData := range departmentsData {
+		managerData, err := d.employeeRepository.GetOneByID(ctx, departmentData.ManagerID)
+		if err != nil {
+			return nil, err
+		}
+
 		output := departmentsdomain.Output{
 			Department: departmentData,
+			Manager:    managerData,
 		}
 
 		outputs = append(outputs, output)

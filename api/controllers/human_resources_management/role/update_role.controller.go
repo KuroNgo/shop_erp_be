@@ -12,7 +12,7 @@ import (
 // @Tags Role
 // @Accept json
 // @Produce json
-// @Router /api/v1/roles/update [patch]
+// @Router /api/v1/roles/update [put]
 // @Security CookieAuth
 func (r *RoleController) UpdateRole(ctx *gin.Context) {
 	var role roledomain.Input

@@ -14,7 +14,7 @@ import (
 // @Produce json
 // @Param Account body account_domain.Input true "Account data"
 // @Param name path string true "Attendance ID"
-// @Router /api/v1/accounts/create [post]
+// @Router /api/v1/accounts/update [put]
 // @Security CookieAuth
 func (a *AccountController) UpdateAccount(ctx *gin.Context) {
 	var input accountdomain.Input
