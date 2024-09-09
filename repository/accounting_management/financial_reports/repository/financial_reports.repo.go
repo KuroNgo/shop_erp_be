@@ -17,42 +17,42 @@ func NewFinancialRepository(database *mongo.Database, collectionFinancial string
 	return &financialRepository{database: database, collectionFinancial: collectionFinancial}
 }
 
-func (f financialRepository) CreateOne(ctx context.Context, financialReport *financialreportsdomain.FinancialReports) error {
+func (f *financialRepository) CreateOne(ctx context.Context, financialReport *financialreportsdomain.FinancialReports) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (f financialRepository) GetFinancialReportsByID(ctx context.Context, id primitive.ObjectID) (financialreportsdomain.FinancialReports, error) {
+func (f *financialRepository) GetFinancialReportsByID(ctx context.Context, id primitive.ObjectID) (financialreportsdomain.FinancialReports, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (f financialRepository) GetFinancialReportsByName(ctx context.Context, name string) (financialreportsdomain.FinancialReports, error) {
+func (f *financialRepository) GetFinancialReportsByName(ctx context.Context, name string) (financialreportsdomain.FinancialReports, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (f financialRepository) UpdateOne(ctx context.Context, financialReport *financialreportsdomain.FinancialReports) error {
+func (f *financialRepository) UpdateOne(ctx context.Context, financialReport *financialreportsdomain.FinancialReports) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (f financialRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
+func (f *financialRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (f financialRepository) ListFinancialReports(ctx context.Context) ([]financialreportsdomain.FinancialReports, error) {
+func (f *financialRepository) ListFinancialReports(ctx context.Context) ([]financialreportsdomain.FinancialReports, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (f financialRepository) GetFinancialReportsByDateRange(ctx context.Context, startDate, endDate time.Time) ([]financialreportsdomain.FinancialReports, error) {
+func (f *financialRepository) GetFinancialReportsByDateRange(ctx context.Context, startDate, endDate time.Time) ([]financialreportsdomain.FinancialReports, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (f financialRepository) ArchiveFinancialReport(ctx context.Context, id primitive.ObjectID) error {
+func (f *financialRepository) ArchiveFinancialReport(ctx context.Context, id primitive.ObjectID) error {
 	//TODO implement me
 	panic("implement me")
 }

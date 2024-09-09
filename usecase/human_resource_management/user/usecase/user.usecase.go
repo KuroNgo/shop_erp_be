@@ -22,12 +22,12 @@ func NewUserUseCase(database *bootstrap.Database, contextTimeout time.Duration, 
 	return &userUseCase{database: database, contextTimeout: contextTimeout, userRepository: userRepository}
 }
 
-func (u userUseCase) SignUp(ctx context.Context, input *userdomain.Input) error {
+func (u *userUseCase) SignUp(ctx context.Context, input *userdomain.Input) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (u userUseCase) LoginUser(ctx context.Context, signIn *userdomain.SignIn) (userdomain.OutputLogin, error) {
+func (u *userUseCase) LoginUser(ctx context.Context, signIn *userdomain.SignIn) (userdomain.OutputLogin, error) {
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
 
@@ -60,7 +60,7 @@ func (u userUseCase) LoginUser(ctx context.Context, signIn *userdomain.SignIn) (
 	return response, nil
 }
 
-func (u userUseCase) UpdateOne(ctx context.Context, userID string, input *userdomain.Input, file *multipart.FileHeader) error {
+func (u *userUseCase) UpdateOne(ctx context.Context, userID string, input *userdomain.Input, file *multipart.FileHeader) error {
 	//ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	//defer cancel()
 	//
@@ -78,32 +78,32 @@ func (u userUseCase) UpdateOne(ctx context.Context, userID string, input *userdo
 	panic("implement me")
 }
 
-func (u userUseCase) UpdatePassword(ctx context.Context, input *userdomain.Input) error {
+func (u *userUseCase) UpdatePassword(ctx context.Context, input *userdomain.Input) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (u userUseCase) UpdateVerify(ctx context.Context, input *userdomain.Input) error {
+func (u *userUseCase) UpdateVerify(ctx context.Context, input *userdomain.Input) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (u userUseCase) UpdateVerifyForChangePassword(ctx context.Context, input *userdomain.Input) error {
+func (u *userUseCase) UpdateVerifyForChangePassword(ctx context.Context, input *userdomain.Input) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (u userUseCase) UpsertOne(ctx context.Context, email string, input *userdomain.Input) error {
+func (u *userUseCase) UpsertOne(ctx context.Context, email string, input *userdomain.Input) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (u userUseCase) UpdateImage(ctx context.Context, input *userdomain.Input) error {
+func (u *userUseCase) UpdateImage(ctx context.Context, input *userdomain.Input) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (u userUseCase) DeleteOne(ctx context.Context, idUser string) error {
+func (u *userUseCase) DeleteOne(ctx context.Context, idUser string) error {
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
 
@@ -115,7 +115,7 @@ func (u userUseCase) DeleteOne(ctx context.Context, idUser string) error {
 	return u.userRepository.DeleteOne(ctx, userID)
 }
 
-func (u userUseCase) FetchMany(ctx context.Context) ([]userdomain.Output, error) {
+func (u *userUseCase) FetchMany(ctx context.Context) ([]userdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
 
@@ -137,12 +137,12 @@ func (u userUseCase) FetchMany(ctx context.Context) ([]userdomain.Output, error)
 	return outputs, nil
 }
 
-func (u userUseCase) GetByEmail(ctx context.Context, email string) (userdomain.Output, error) {
+func (u *userUseCase) GetByEmail(ctx context.Context, email string) (userdomain.Output, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (u userUseCase) GetByIDForCheckCookie(ctx context.Context, idUser string) (*userdomain.Output, error) {
+func (u *userUseCase) GetByIDForCheckCookie(ctx context.Context, idUser string) (*userdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
 
@@ -167,7 +167,7 @@ func (u userUseCase) GetByIDForCheckCookie(ctx context.Context, idUser string) (
 	return output, nil
 }
 
-func (u userUseCase) GetByID(ctx context.Context, id string) (*userdomain.Output, error) {
+func (u *userUseCase) GetByID(ctx context.Context, id string) (*userdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
 
@@ -188,7 +188,7 @@ func (u userUseCase) GetByID(ctx context.Context, id string) (*userdomain.Output
 	return output, nil
 }
 
-func (u userUseCase) GetByVerificationCode(ctx context.Context, verificationCode string) (userdomain.Output, error) {
+func (u *userUseCase) GetByVerificationCode(ctx context.Context, verificationCode string) (userdomain.Output, error) {
 	//TODO implement me
 	panic("implement me")
 }

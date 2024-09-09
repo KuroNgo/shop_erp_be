@@ -20,7 +20,7 @@ func NewDepartmentRepository(db *mongo.Database, collectionDepartment string) de
 	return &departmentRepository{database: db, collectionDepartment: collectionDepartment}
 }
 
-func (d departmentRepository) CreateOne(ctx context.Context, department *departmentsdomain.Department) error {
+func (d *departmentRepository) CreateOne(ctx context.Context, department *departmentsdomain.Department) error {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
 	if err := validate.IsNilDepartment2(department); err != nil {
@@ -35,7 +35,7 @@ func (d departmentRepository) CreateOne(ctx context.Context, department *departm
 	return nil
 }
 
-func (d departmentRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
+func (d *departmentRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
 	if id == primitive.NilObjectID {
@@ -51,7 +51,7 @@ func (d departmentRepository) DeleteOne(ctx context.Context, id primitive.Object
 	return nil
 }
 
-func (d departmentRepository) UpdateOne(ctx context.Context, id primitive.ObjectID, department *departmentsdomain.Department) error {
+func (d *departmentRepository) UpdateOne(ctx context.Context, id primitive.ObjectID, department *departmentsdomain.Department) error {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
 	if id == primitive.NilObjectID {
@@ -73,7 +73,7 @@ func (d departmentRepository) UpdateOne(ctx context.Context, id primitive.Object
 	return nil
 }
 
-func (d departmentRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (departmentsdomain.Department, error) {
+func (d *departmentRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (departmentsdomain.Department, error) {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
 	filter := bson.M{"_id": id}
@@ -85,7 +85,7 @@ func (d departmentRepository) GetOneByID(ctx context.Context, id primitive.Objec
 	return department, nil
 }
 
-func (d departmentRepository) GetOneByName(ctx context.Context, name string) (departmentsdomain.Department, error) {
+func (d *departmentRepository) GetOneByName(ctx context.Context, name string) (departmentsdomain.Department, error) {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
 	filter := bson.M{"name": name}
@@ -97,7 +97,7 @@ func (d departmentRepository) GetOneByName(ctx context.Context, name string) (de
 	return department, nil
 }
 
-func (d departmentRepository) GetAll(ctx context.Context) ([]departmentsdomain.Department, error) {
+func (d *departmentRepository) GetAll(ctx context.Context) ([]departmentsdomain.Department, error) {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
 	filter := bson.M{}

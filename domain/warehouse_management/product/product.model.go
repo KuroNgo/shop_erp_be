@@ -2,6 +2,7 @@ package product_domain
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	category_domain "shop_erp_mono/domain/sales_and_distribution_management/product_category"
 	"time"
 )
 
@@ -28,11 +29,11 @@ type Input struct {
 }
 
 type ProductResponse struct {
-	ID          primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
-	ProductName string             `bson:"product_name" json:"product_name"`
-	Description string             `bson:"description" json:"description"`
-	Price       float64            `bson:"price" json:"price"`
-	CategoryID  primitive.ObjectID `bson:"category_id" json:"category_id"`
-	CreatedAt   time.Time          `bson:"created_at" json:"created_at"`
-	UpdatedAt   time.Time          `bson:"updated_at" json:"updated_at"`
+	ID          primitive.ObjectID       `bson:"_id,omitempty" json:"id,omitempty"`
+	Category    category_domain.Category `bson:"category" json:"category"`
+	ProductName string                   `bson:"product_name" json:"product_name"`
+	Description string                   `bson:"description" json:"description"`
+	Price       float64                  `bson:"price" json:"price"`
+	CreatedAt   time.Time                `bson:"created_at" json:"created_at"`
+	UpdatedAt   time.Time                `bson:"updated_at" json:"updated_at"`
 }

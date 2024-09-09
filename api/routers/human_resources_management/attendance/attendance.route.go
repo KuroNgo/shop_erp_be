@@ -6,7 +6,7 @@ import (
 	attendancecontroller "shop_erp_mono/api/controllers/human_resources_management/attendance"
 	"shop_erp_mono/bootstrap"
 	attendancedomain "shop_erp_mono/domain/human_resource_management/attendance"
-	employees_domain "shop_erp_mono/domain/human_resource_management/employees"
+	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
 	attendancerepository "shop_erp_mono/repository/human_resource_management/attendance/repository"
 	employeerepository "shop_erp_mono/repository/human_resource_management/employee/repository"
 	attendanceusecase "shop_erp_mono/usecase/human_resource_management/attendence/usecase"
@@ -15,7 +15,7 @@ import (
 
 func AttendanceRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
 	at := attendancerepository.NewAttendanceRepository(db, attendancedomain.CollectionAttendance)
-	em := employeerepository.NewEmployeeRepository(db, employees_domain.CollectionEmployee)
+	em := employeerepository.NewEmployeeRepository(db, employeesdomain.CollectionEmployee)
 
 	attendance := &attendancecontroller.AttendanceController{
 		AttendanceUseCase: attendanceusecase.NewAttendanceUseCase(timeout, at, em),

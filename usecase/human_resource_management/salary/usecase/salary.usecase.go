@@ -19,7 +19,7 @@ func NewSalaryUseCase(contextTimout time.Duration, salaryRepository salarydomain
 	return &salaryUseCase{contextTimeout: contextTimout, salaryRepository: salaryRepository, roleRepository: roleRepository}
 }
 
-func (s salaryUseCase) CreateOne(ctx context.Context, input *salarydomain.Input) error {
+func (s *salaryUseCase) CreateOne(ctx context.Context, input *salarydomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
@@ -47,7 +47,7 @@ func (s salaryUseCase) CreateOne(ctx context.Context, input *salarydomain.Input)
 	return s.salaryRepository.CreateOne(ctx, salaryData)
 }
 
-func (s salaryUseCase) DeleteOne(ctx context.Context, id string) error {
+func (s *salaryUseCase) DeleteOne(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
@@ -59,7 +59,7 @@ func (s salaryUseCase) DeleteOne(ctx context.Context, id string) error {
 	return s.salaryRepository.DeleteOne(ctx, salaryID)
 }
 
-func (s salaryUseCase) UpdateOne(ctx context.Context, id string, input *salarydomain.Input) error {
+func (s *salaryUseCase) UpdateOne(ctx context.Context, id string, input *salarydomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
@@ -91,7 +91,7 @@ func (s salaryUseCase) UpdateOne(ctx context.Context, id string, input *salarydo
 	return s.salaryRepository.UpdateOne(ctx, salaryID, salaryData)
 }
 
-func (s salaryUseCase) GetOneByID(ctx context.Context, id string) (salarydomain.Output, error) {
+func (s *salaryUseCase) GetOneByID(ctx context.Context, id string) (salarydomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
@@ -118,7 +118,7 @@ func (s salaryUseCase) GetOneByID(ctx context.Context, id string) (salarydomain.
 	return output, nil
 }
 
-func (s salaryUseCase) GetOneByRoleTitle(ctx context.Context, roleTitle string) (salarydomain.Output, error) {
+func (s *salaryUseCase) GetOneByRoleTitle(ctx context.Context, roleTitle string) (salarydomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
@@ -140,7 +140,7 @@ func (s salaryUseCase) GetOneByRoleTitle(ctx context.Context, roleTitle string) 
 	return output, nil
 }
 
-func (s salaryUseCase) GetAll(ctx context.Context) ([]salarydomain.Output, error) {
+func (s *salaryUseCase) GetAll(ctx context.Context) ([]salarydomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 

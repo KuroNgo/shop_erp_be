@@ -1,1 +1,1 @@
-package supplier
+package supplier_domain

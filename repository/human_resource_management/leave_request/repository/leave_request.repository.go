@@ -18,7 +18,7 @@ func NewLeaveRequestRepository(db *mongo.Database, collectionLeaveRequest string
 	return &leaveRequestRepository{database: db, collectionLeaveRequest: collectionLeaveRequest}
 }
 
-func (l leaveRequestRepository) CreateOne(ctx context.Context, leaveRequest *leaverequestdomain.LeaveRequest) error {
+func (l *leaveRequestRepository) CreateOne(ctx context.Context, leaveRequest *leaverequestdomain.LeaveRequest) error {
 	collectionLeaveRequest := l.database.Collection(l.collectionLeaveRequest)
 
 	_, err := collectionLeaveRequest.InsertOne(ctx, leaveRequest)
@@ -29,7 +29,7 @@ func (l leaveRequestRepository) CreateOne(ctx context.Context, leaveRequest *lea
 	return nil
 }
 
-func (l leaveRequestRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
+func (l *leaveRequestRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
 	collectionLeaveRequest := l.database.Collection(l.collectionLeaveRequest)
 
 	if id == primitive.NilObjectID {
@@ -45,7 +45,7 @@ func (l leaveRequestRepository) DeleteOne(ctx context.Context, id primitive.Obje
 	return nil
 }
 
-func (l leaveRequestRepository) UpdateOne(ctx context.Context, id primitive.ObjectID, leaveRequest *leaverequestdomain.LeaveRequest) error {
+func (l *leaveRequestRepository) UpdateOne(ctx context.Context, id primitive.ObjectID, leaveRequest *leaverequestdomain.LeaveRequest) error {
 	collectionLeaveRequest := l.database.Collection(l.collectionLeaveRequest)
 
 	filter := bson.M{"_id": id}
@@ -64,7 +64,7 @@ func (l leaveRequestRepository) UpdateOne(ctx context.Context, id primitive.Obje
 	return nil
 }
 
-func (l leaveRequestRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (leaverequestdomain.LeaveRequest, error) {
+func (l *leaveRequestRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (leaverequestdomain.LeaveRequest, error) {
 	collectionLeaveRequest := l.database.Collection(l.collectionLeaveRequest)
 
 	if id == primitive.NilObjectID {
@@ -80,7 +80,7 @@ func (l leaveRequestRepository) GetOneByID(ctx context.Context, id primitive.Obj
 	return leaveRequest, nil
 }
 
-func (l leaveRequestRepository) GetOneByEmployeeID(ctx context.Context, employeeID primitive.ObjectID) (leaverequestdomain.LeaveRequest, error) {
+func (l *leaveRequestRepository) GetOneByEmployeeID(ctx context.Context, employeeID primitive.ObjectID) (leaverequestdomain.LeaveRequest, error) {
 	collectionLeaveRequest := l.database.Collection(l.collectionLeaveRequest)
 
 	var leaveRequest leaverequestdomain.LeaveRequest
@@ -92,7 +92,7 @@ func (l leaveRequestRepository) GetOneByEmployeeID(ctx context.Context, employee
 	return leaveRequest, nil
 }
 
-func (l leaveRequestRepository) GetAll(ctx context.Context) ([]leaverequestdomain.LeaveRequest, error) {
+func (l *leaveRequestRepository) GetAll(ctx context.Context) ([]leaverequestdomain.LeaveRequest, error) {
 	collectionLeaveRequest := l.database.Collection(l.collectionLeaveRequest)
 
 	filter := bson.M{}

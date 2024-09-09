@@ -20,7 +20,7 @@ func NewPerformanceReviewUseCase(contextTimeout time.Duration, performanceReview
 	return &performanceReviewUseCase{contextTimeout: contextTimeout, performanceReviewRepository: performanceReviewRepository, employeeRepository: employeeRepository}
 }
 
-func (p performanceReviewUseCase) CreateOne(ctx context.Context, input *performancereviewdomain.Input) error {
+func (p *performanceReviewUseCase) CreateOne(ctx context.Context, input *performancereviewdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
@@ -51,7 +51,7 @@ func (p performanceReviewUseCase) CreateOne(ctx context.Context, input *performa
 	return p.performanceReviewRepository.CreateOne(ctx, performanceReview)
 }
 
-func (p performanceReviewUseCase) DeleteOne(ctx context.Context, id string) error {
+func (p *performanceReviewUseCase) DeleteOne(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
@@ -63,7 +63,7 @@ func (p performanceReviewUseCase) DeleteOne(ctx context.Context, id string) erro
 	return p.performanceReviewRepository.DeleteOne(ctx, performanceReviewID)
 }
 
-func (p performanceReviewUseCase) UpdateOne(ctx context.Context, id string, input *performancereviewdomain.Input) error {
+func (p *performanceReviewUseCase) UpdateOne(ctx context.Context, id string, input *performancereviewdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
@@ -94,7 +94,7 @@ func (p performanceReviewUseCase) UpdateOne(ctx context.Context, id string, inpu
 	return p.performanceReviewRepository.UpdateOne(ctx, performanceReviewID, performanceReview)
 }
 
-func (p performanceReviewUseCase) GetOneByID(ctx context.Context, id string) (performancereviewdomain.Output, error) {
+func (p *performanceReviewUseCase) GetOneByID(ctx context.Context, id string) (performancereviewdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
@@ -127,7 +127,7 @@ func (p performanceReviewUseCase) GetOneByID(ctx context.Context, id string) (pe
 	return output, nil
 }
 
-func (p performanceReviewUseCase) GetOneByEmailEmployee(ctx context.Context, email string) (performancereviewdomain.Output, error) {
+func (p *performanceReviewUseCase) GetOneByEmailEmployee(ctx context.Context, email string) (performancereviewdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
@@ -155,7 +155,7 @@ func (p performanceReviewUseCase) GetOneByEmailEmployee(ctx context.Context, ema
 	return output, nil
 }
 
-func (p performanceReviewUseCase) GetAll(ctx context.Context) ([]performancereviewdomain.Output, error) {
+func (p *performanceReviewUseCase) GetAll(ctx context.Context) ([]performancereviewdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 

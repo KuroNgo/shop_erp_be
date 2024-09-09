@@ -1,2 +1,1 @@
-package purchase_order
-
+package purchase_order_domain

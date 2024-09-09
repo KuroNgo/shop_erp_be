@@ -18,7 +18,7 @@ func NewPerformanceReviewRepository(db *mongo.Database, collectionPerformanceRev
 	return &performanceReviewRepository{database: db, collectionPerformanceReview: collectionPerformanceReview}
 }
 
-func (p performanceReviewRepository) CreateOne(ctx context.Context, performanceReview *performancereviewdomain.PerformanceReview) error {
+func (p *performanceReviewRepository) CreateOne(ctx context.Context, performanceReview *performancereviewdomain.PerformanceReview) error {
 	collectionPerformanceReview := p.database.Collection(p.collectionPerformanceReview)
 
 	_, err := collectionPerformanceReview.InsertOne(ctx, performanceReview)
@@ -29,7 +29,7 @@ func (p performanceReviewRepository) CreateOne(ctx context.Context, performanceR
 	return nil
 }
 
-func (p performanceReviewRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
+func (p *performanceReviewRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
 	collectionPerformanceReview := p.database.Collection(p.collectionPerformanceReview)
 
 	filter := bson.M{"_id": id}
@@ -62,7 +62,7 @@ func (p performanceReviewRepository) UpdateOne(ctx context.Context, id primitive
 	return nil
 }
 
-func (p performanceReviewRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (performancereviewdomain.PerformanceReview, error) {
+func (p *performanceReviewRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (performancereviewdomain.PerformanceReview, error) {
 	collectionPerformanceReview := p.database.Collection(p.collectionPerformanceReview)
 
 	var performanceReview performancereviewdomain.PerformanceReview
@@ -74,7 +74,7 @@ func (p performanceReviewRepository) GetOneByID(ctx context.Context, id primitiv
 	return performanceReview, nil
 }
 
-func (p performanceReviewRepository) GetOneByEmployeeID(ctx context.Context, employeeID primitive.ObjectID) (performancereviewdomain.PerformanceReview, error) {
+func (p *performanceReviewRepository) GetOneByEmployeeID(ctx context.Context, employeeID primitive.ObjectID) (performancereviewdomain.PerformanceReview, error) {
 	collectionPerformanceReview := p.database.Collection(p.collectionPerformanceReview)
 
 	var performanceReview performancereviewdomain.PerformanceReview
@@ -86,7 +86,7 @@ func (p performanceReviewRepository) GetOneByEmployeeID(ctx context.Context, emp
 	return performanceReview, nil
 }
 
-func (p performanceReviewRepository) GetAll(ctx context.Context) ([]performancereviewdomain.PerformanceReview, error) {
+func (p *performanceReviewRepository) GetAll(ctx context.Context) ([]performancereviewdomain.PerformanceReview, error) {
 	collectionPerformanceReview := p.database.Collection(p.collectionPerformanceReview)
 
 	filter := bson.M{}

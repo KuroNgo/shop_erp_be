@@ -18,7 +18,7 @@ func NewBudgetRepository(database *mongo.Database, collectionBudget string) budg
 	return &budgetRepository{database: database, collectionBudget: collectionBudget}
 }
 
-func (b budgetRepository) CreateBudget(ctx context.Context, budget *budgetsdomain.Budget) error {
+func (b *budgetRepository) CreateBudget(ctx context.Context, budget *budgetsdomain.Budget) error {
 	collectionBudget := b.database.Collection(b.collectionBudget)
 
 	_, err := collectionBudget.InsertOne(ctx, budget)
@@ -28,7 +28,7 @@ func (b budgetRepository) CreateBudget(ctx context.Context, budget *budgetsdomai
 	return nil
 }
 
-func (b budgetRepository) GetBudgetByID(ctx context.Context, id primitive.ObjectID) (budgetsdomain.Budget, error) {
+func (b *budgetRepository) GetBudgetByID(ctx context.Context, id primitive.ObjectID) (budgetsdomain.Budget, error) {
 	collectionBudget := b.database.Collection(b.collectionBudget)
 
 	filter := bson.M{"_id": id}
@@ -40,7 +40,7 @@ func (b budgetRepository) GetBudgetByID(ctx context.Context, id primitive.Object
 	return budget, nil
 }
 
-func (b budgetRepository) GetBudgetByName(ctx context.Context, name string) (budgetsdomain.Budget, error) {
+func (b *budgetRepository) GetBudgetByName(ctx context.Context, name string) (budgetsdomain.Budget, error) {
 	collectionBudget := b.database.Collection(b.collectionBudget)
 
 	filter := bson.M{"name": name}
@@ -52,7 +52,7 @@ func (b budgetRepository) GetBudgetByName(ctx context.Context, name string) (bud
 	return budget, nil
 }
 
-func (b budgetRepository) UpdateBudget(ctx context.Context, budget *budgetsdomain.Budget) error {
+func (b *budgetRepository) UpdateBudget(ctx context.Context, budget *budgetsdomain.Budget) error {
 	collectionBudget := b.database.Collection(b.collectionBudget)
 
 	filter := bson.M{"_id": budget.ID}
@@ -73,7 +73,7 @@ func (b budgetRepository) UpdateBudget(ctx context.Context, budget *budgetsdomai
 	return nil
 }
 
-func (b budgetRepository) DeleteBudget(ctx context.Context, id primitive.ObjectID) error {
+func (b *budgetRepository) DeleteBudget(ctx context.Context, id primitive.ObjectID) error {
 	collectionBudget := b.database.Collection(b.collectionBudget)
 
 	filter := bson.M{"_id": id}
@@ -85,7 +85,7 @@ func (b budgetRepository) DeleteBudget(ctx context.Context, id primitive.ObjectI
 	return nil
 }
 
-func (b budgetRepository) ListBudgets(ctx context.Context) ([]budgetsdomain.Budget, error) {
+func (b *budgetRepository) ListBudgets(ctx context.Context) ([]budgetsdomain.Budget, error) {
 	collectionBudget := b.database.Collection(b.collectionBudget)
 
 	filter := bson.M{}
@@ -114,7 +114,7 @@ func (b budgetRepository) ListBudgets(ctx context.Context) ([]budgetsdomain.Budg
 	return budgets, nil
 }
 
-func (b budgetRepository) GetBudgetsByDateRange(ctx context.Context, startDate, endDate time.Time) ([]budgetsdomain.Budget, error) {
+func (b *budgetRepository) GetBudgetsByDateRange(ctx context.Context, startDate, endDate time.Time) ([]budgetsdomain.Budget, error) {
 	collectionBudget := b.database.Collection(b.collectionBudget)
 
 	filter := bson.M{
@@ -154,7 +154,7 @@ func (b budgetRepository) GetBudgetsByDateRange(ctx context.Context, startDate, 
 	return budgets, nil
 }
 
-func (b budgetRepository) GetTotalBudgetAmount(ctx context.Context) (float64, error) {
+func (b *budgetRepository) GetTotalBudgetAmount(ctx context.Context) (float64, error) {
 	//TODO implement me
 	panic("implement me")
 }

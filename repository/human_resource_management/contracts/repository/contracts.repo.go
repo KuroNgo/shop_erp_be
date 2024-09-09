@@ -18,7 +18,7 @@ func NewContractRepository(db *mongo.Database, collectionContract string) contra
 	return &contractRepository{database: db, collectionContract: collectionContract}
 }
 
-func (c contractRepository) CreateOne(ctx context.Context, contract *contractsdomain.Contract) error {
+func (c *contractRepository) CreateOne(ctx context.Context, contract *contractsdomain.Contract) error {
 	collectionContract := c.database.Collection(c.collectionContract)
 
 	_, err := collectionContract.InsertOne(ctx, contract)
@@ -29,7 +29,7 @@ func (c contractRepository) CreateOne(ctx context.Context, contract *contractsdo
 	return nil
 }
 
-func (c contractRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
+func (c *contractRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
 	collectionContract := c.database.Collection(c.collectionContract)
 
 	if id == primitive.NilObjectID {
@@ -45,7 +45,7 @@ func (c contractRepository) DeleteOne(ctx context.Context, id primitive.ObjectID
 	return nil
 }
 
-func (c contractRepository) UpdateOne(ctx context.Context, id primitive.ObjectID, contract *contractsdomain.Contract) error {
+func (c *contractRepository) UpdateOne(ctx context.Context, id primitive.ObjectID, contract *contractsdomain.Contract) error {
 	collectionContract := c.database.Collection(c.collectionContract)
 
 	if id == primitive.NilObjectID {
@@ -70,7 +70,7 @@ func (c contractRepository) UpdateOne(ctx context.Context, id primitive.ObjectID
 	return nil
 }
 
-func (c contractRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (contractsdomain.Contract, error) {
+func (c *contractRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (contractsdomain.Contract, error) {
 	collectionContract := c.database.Collection(c.collectionContract)
 
 	var contract contractsdomain.Contract
@@ -82,7 +82,7 @@ func (c contractRepository) GetOneByID(ctx context.Context, id primitive.ObjectI
 	return contract, nil
 }
 
-func (c contractRepository) GetOneByEmployeeID(ctx context.Context, employeeID primitive.ObjectID) (contractsdomain.Contract, error) {
+func (c *contractRepository) GetOneByEmployeeID(ctx context.Context, employeeID primitive.ObjectID) (contractsdomain.Contract, error) {
 	collectionContract := c.database.Collection(c.collectionContract)
 
 	var contract contractsdomain.Contract
@@ -94,7 +94,7 @@ func (c contractRepository) GetOneByEmployeeID(ctx context.Context, employeeID p
 	return contract, nil
 }
 
-func (c contractRepository) GetAll(ctx context.Context) ([]contractsdomain.Contract, error) {
+func (c *contractRepository) GetAll(ctx context.Context) ([]contractsdomain.Contract, error) {
 	collectionContract := c.database.Collection(c.collectionContract)
 
 	filter := bson.M{}

@@ -19,7 +19,7 @@ func NewRoleRepository(db *mongo.Database, collectionRole string) roledomain.IRo
 	return &roleRepository{database: db, collectionRole: collectionRole}
 }
 
-func (r roleRepository) CreateOneRole(ctx context.Context, role *roledomain.Role) error {
+func (r *roleRepository) CreateOneRole(ctx context.Context, role *roledomain.Role) error {
 	collectionRole := r.database.Collection(r.collectionRole)
 
 	_, err := collectionRole.InsertOne(ctx, role)
@@ -30,7 +30,7 @@ func (r roleRepository) CreateOneRole(ctx context.Context, role *roledomain.Role
 	return nil
 }
 
-func (r roleRepository) GetByTitleRole(ctx context.Context, title string) (roledomain.Role, error) {
+func (r *roleRepository) GetByTitleRole(ctx context.Context, title string) (roledomain.Role, error) {
 	collectionRole := r.database.Collection(r.collectionRole)
 
 	filter := bson.M{"title": title}
@@ -42,7 +42,7 @@ func (r roleRepository) GetByTitleRole(ctx context.Context, title string) (roled
 	return role, nil
 }
 
-func (r roleRepository) GetByIDRole(ctx context.Context, id primitive.ObjectID) (roledomain.Role, error) {
+func (r *roleRepository) GetByIDRole(ctx context.Context, id primitive.ObjectID) (roledomain.Role, error) {
 	collectionRole := r.database.Collection(r.collectionRole)
 
 	filter := bson.M{"_id": id}
@@ -54,7 +54,7 @@ func (r roleRepository) GetByIDRole(ctx context.Context, id primitive.ObjectID) 
 	return role, nil
 }
 
-func (r roleRepository) GetAllRole(ctx context.Context) ([]roledomain.Role, error) {
+func (r *roleRepository) GetAllRole(ctx context.Context) ([]roledomain.Role, error) {
 	collectionRole := r.database.Collection(r.collectionRole)
 
 	filter := bson.M{}
@@ -88,7 +88,7 @@ func (r roleRepository) GetAllRole(ctx context.Context) ([]roledomain.Role, erro
 	return roles, nil
 }
 
-func (r roleRepository) UpdateOneRole(ctx context.Context, id primitive.ObjectID, role *roledomain.Role) error {
+func (r *roleRepository) UpdateOneRole(ctx context.Context, id primitive.ObjectID, role *roledomain.Role) error {
 	collectionRole := r.database.Collection(r.collectionRole)
 
 	if id == primitive.NilObjectID {
@@ -109,7 +109,7 @@ func (r roleRepository) UpdateOneRole(ctx context.Context, id primitive.ObjectID
 	return nil
 }
 
-func (r roleRepository) DeleteOneRole(ctx context.Context, id primitive.ObjectID) error {
+func (r *roleRepository) DeleteOneRole(ctx context.Context, id primitive.ObjectID) error {
 	collectionRole := r.database.Collection(r.collectionRole)
 
 	filter := bson.M{"_id": id}

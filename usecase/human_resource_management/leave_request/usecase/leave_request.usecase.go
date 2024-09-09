@@ -20,7 +20,7 @@ func NewLeaveRequestUseCase(contextTimeout time.Duration, leaveRequestRepository
 	return &leaveRequestUseCase{contextTimeout: contextTimeout, leaveRequestRepository: leaveRequestRepository, employeeRepository: employeeRepository}
 }
 
-func (l leaveRequestUseCase) CreateOne(ctx context.Context, input *leaverequestdomain.Input) error {
+func (l *leaveRequestUseCase) CreateOne(ctx context.Context, input *leaverequestdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, l.contextTimeout)
 	defer cancel()
 
@@ -47,7 +47,7 @@ func (l leaveRequestUseCase) CreateOne(ctx context.Context, input *leaverequestd
 	return l.leaveRequestRepository.CreateOne(ctx, leaveRequest)
 }
 
-func (l leaveRequestUseCase) DeleteOne(ctx context.Context, id string) error {
+func (l *leaveRequestUseCase) DeleteOne(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, l.contextTimeout)
 	defer cancel()
 
@@ -59,7 +59,7 @@ func (l leaveRequestUseCase) DeleteOne(ctx context.Context, id string) error {
 	return l.leaveRequestRepository.DeleteOne(ctx, leaveRequestID)
 }
 
-func (l leaveRequestUseCase) UpdateOne(ctx context.Context, id string, input *leaverequestdomain.Input) error {
+func (l *leaveRequestUseCase) UpdateOne(ctx context.Context, id string, input *leaverequestdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, l.contextTimeout)
 	defer cancel()
 
@@ -91,7 +91,7 @@ func (l leaveRequestUseCase) UpdateOne(ctx context.Context, id string, input *le
 	return l.leaveRequestRepository.UpdateOne(ctx, leaveRequestID, leaveRequest)
 }
 
-func (l leaveRequestUseCase) GetOneByID(ctx context.Context, id string) (leaverequestdomain.Output, error) {
+func (l *leaveRequestUseCase) GetOneByID(ctx context.Context, id string) (leaverequestdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, l.contextTimeout)
 	defer cancel()
 
@@ -118,7 +118,7 @@ func (l leaveRequestUseCase) GetOneByID(ctx context.Context, id string) (leavere
 	return output, nil
 }
 
-func (l leaveRequestUseCase) GetOneByEmailEmployee(ctx context.Context, email string) (leaverequestdomain.Output, error) {
+func (l *leaveRequestUseCase) GetOneByEmailEmployee(ctx context.Context, email string) (leaverequestdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, l.contextTimeout)
 	defer cancel()
 
@@ -140,7 +140,7 @@ func (l leaveRequestUseCase) GetOneByEmailEmployee(ctx context.Context, email st
 	return output, nil
 }
 
-func (l leaveRequestUseCase) GetAll(ctx context.Context) ([]leaverequestdomain.Output, error) {
+func (l *leaveRequestUseCase) GetAll(ctx context.Context) ([]leaverequestdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, l.contextTimeout)
 	defer cancel()
 

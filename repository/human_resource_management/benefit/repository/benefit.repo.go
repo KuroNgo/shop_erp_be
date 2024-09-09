@@ -19,7 +19,7 @@ func NewBenefitRepository(db *mongo.Database, collectionBenefit string) benefits
 	return &benefitRepository{database: db, collectionBenefit: collectionBenefit}
 }
 
-func (b benefitRepository) CreateOne(ctx context.Context, benefit *benefitsdomain.Benefit) error {
+func (b *benefitRepository) CreateOne(ctx context.Context, benefit *benefitsdomain.Benefit) error {
 	collectionBenefit := b.database.Collection(b.collectionBenefit)
 
 	_, err := collectionBenefit.InsertOne(ctx, benefit)
@@ -30,7 +30,7 @@ func (b benefitRepository) CreateOne(ctx context.Context, benefit *benefitsdomai
 	return nil
 }
 
-func (b benefitRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
+func (b *benefitRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
 	collectionBenefit := b.database.Collection(b.collectionBenefit)
 
 	if id == primitive.NilObjectID {
@@ -47,7 +47,7 @@ func (b benefitRepository) DeleteOne(ctx context.Context, id primitive.ObjectID)
 	return nil
 }
 
-func (b benefitRepository) UpdateOne(ctx context.Context, id primitive.ObjectID, benefit *benefitsdomain.Benefit) error {
+func (b *benefitRepository) UpdateOne(ctx context.Context, id primitive.ObjectID, benefit *benefitsdomain.Benefit) error {
 	collectionBenefit := b.database.Collection(b.collectionBenefit)
 
 	if id == primitive.NilObjectID {
@@ -72,7 +72,7 @@ func (b benefitRepository) UpdateOne(ctx context.Context, id primitive.ObjectID,
 	return nil
 }
 
-func (b benefitRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (benefitsdomain.Benefit, error) {
+func (b *benefitRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (benefitsdomain.Benefit, error) {
 	collectionBenefit := b.database.Collection(b.collectionBenefit)
 
 	if id == primitive.NilObjectID {
@@ -88,7 +88,7 @@ func (b benefitRepository) GetOneByID(ctx context.Context, id primitive.ObjectID
 	return benefit, nil
 }
 
-func (b benefitRepository) GetOneByEmployeeID(ctx context.Context, employeeID primitive.ObjectID) (benefitsdomain.Benefit, error) {
+func (b *benefitRepository) GetOneByEmployeeID(ctx context.Context, employeeID primitive.ObjectID) (benefitsdomain.Benefit, error) {
 	collectionBenefit := b.database.Collection(b.collectionBenefit)
 
 	var benefit benefitsdomain.Benefit
@@ -100,7 +100,7 @@ func (b benefitRepository) GetOneByEmployeeID(ctx context.Context, employeeID pr
 	return benefit, nil
 }
 
-func (b benefitRepository) GetAll(ctx context.Context) ([]benefitsdomain.Benefit, error) {
+func (b *benefitRepository) GetAll(ctx context.Context) ([]benefitsdomain.Benefit, error) {
 	collectionBenefit := b.database.Collection(b.collectionBenefit)
 
 	filter := bson.M{}

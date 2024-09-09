@@ -18,7 +18,7 @@ func NewAccountRepository(database *mongo.Database, collectionAccount string) ac
 	return &accountRepository{database: database, collectionAccount: collectionAccount}
 }
 
-func (a accountRepository) CreateAccount(ctx context.Context, account *accountdomain.Accounts) error {
+func (a *accountRepository) CreateAccount(ctx context.Context, account *accountdomain.Accounts) error {
 	collectionAccount := a.database.Collection(a.collectionAccount)
 
 	_, err := collectionAccount.InsertOne(ctx, account)
@@ -29,7 +29,7 @@ func (a accountRepository) CreateAccount(ctx context.Context, account *accountdo
 	return nil
 }
 
-func (a accountRepository) GetAccountByID(ctx context.Context, id primitive.ObjectID) (accountdomain.Accounts, error) {
+func (a *accountRepository) GetAccountByID(ctx context.Context, id primitive.ObjectID) (accountdomain.Accounts, error) {
 	collectionAccount := a.database.Collection(a.collectionAccount)
 
 	var account accountdomain.Accounts
@@ -41,7 +41,7 @@ func (a accountRepository) GetAccountByID(ctx context.Context, id primitive.Obje
 	return account, nil
 }
 
-func (a accountRepository) GetAccountByName(ctx context.Context, name string) (accountdomain.Accounts, error) {
+func (a *accountRepository) GetAccountByName(ctx context.Context, name string) (accountdomain.Accounts, error) {
 	collectionAccount := a.database.Collection(a.collectionAccount)
 
 	var account accountdomain.Accounts
@@ -53,7 +53,7 @@ func (a accountRepository) GetAccountByName(ctx context.Context, name string) (a
 	return account, nil
 }
 
-func (a accountRepository) UpdateAccount(ctx context.Context, budget *accountdomain.Accounts) error {
+func (a *accountRepository) UpdateAccount(ctx context.Context, budget *accountdomain.Accounts) error {
 	collectionAccount := a.database.Collection(a.collectionAccount)
 
 	filter := bson.M{"_id": budget.AccountID}
@@ -73,7 +73,7 @@ func (a accountRepository) UpdateAccount(ctx context.Context, budget *accountdom
 	return nil
 }
 
-func (a accountRepository) DeleteAccount(ctx context.Context, id primitive.ObjectID) error {
+func (a *accountRepository) DeleteAccount(ctx context.Context, id primitive.ObjectID) error {
 	collectionAccount := a.database.Collection(a.collectionAccount)
 
 	filter := bson.M{"_id": id}
@@ -85,7 +85,7 @@ func (a accountRepository) DeleteAccount(ctx context.Context, id primitive.Objec
 	return nil
 }
 
-func (a accountRepository) ListAccounts(ctx context.Context) ([]accountdomain.Accounts, error) {
+func (a *accountRepository) ListAccounts(ctx context.Context) ([]accountdomain.Accounts, error) {
 	collectionAccount := a.database.Collection(a.collectionAccount)
 
 	filter := bson.M{}
@@ -119,22 +119,22 @@ func (a accountRepository) ListAccounts(ctx context.Context) ([]accountdomain.Ac
 	return accounts, nil
 }
 
-func (a accountRepository) GetAccountsByDateRange(ctx context.Context, startDate, endDate time.Time) ([]accountdomain.Accounts, error) {
+func (a *accountRepository) GetAccountsByDateRange(ctx context.Context, startDate, endDate time.Time) ([]accountdomain.Accounts, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (a accountRepository) GetTotalAccountBalance(ctx context.Context) (float64, error) {
+func (a *accountRepository) GetTotalAccountBalance(ctx context.Context) (float64, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (a accountRepository) DeactivateAccount(ctx context.Context, id primitive.ObjectID) error {
+func (a *accountRepository) DeactivateAccount(ctx context.Context, id primitive.ObjectID) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (a accountRepository) ReactivateAccount(ctx context.Context, id primitive.ObjectID) error {
+func (a *accountRepository) ReactivateAccount(ctx context.Context, id primitive.ObjectID) error {
 	//TODO implement me
 	panic("implement me")
 }

@@ -19,7 +19,7 @@ func NewBenefitUseCase(contextTimeout time.Duration, benefitRepository benefitsd
 	return &benefitUseCase{contextTimeout: contextTimeout, benefitRepository: benefitRepository, employeeRepository: employeeRepository}
 }
 
-func (b benefitUseCase) CreateOne(ctx context.Context, input *benefitsdomain.Input) error {
+func (b *benefitUseCase) CreateOne(ctx context.Context, input *benefitsdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
@@ -46,7 +46,7 @@ func (b benefitUseCase) CreateOne(ctx context.Context, input *benefitsdomain.Inp
 	return b.benefitRepository.CreateOne(ctx, &benefit)
 }
 
-func (b benefitUseCase) DeleteOne(ctx context.Context, id string) error {
+func (b *benefitUseCase) DeleteOne(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
@@ -60,7 +60,7 @@ func (b benefitUseCase) DeleteOne(ctx context.Context, id string) error {
 	return nil
 }
 
-func (b benefitUseCase) UpdateOne(ctx context.Context, id string, input *benefitsdomain.Input) error {
+func (b *benefitUseCase) UpdateOne(ctx context.Context, id string, input *benefitsdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
@@ -85,7 +85,7 @@ func (b benefitUseCase) UpdateOne(ctx context.Context, id string, input *benefit
 	return b.benefitRepository.UpdateOne(ctx, benefitID, &benefit)
 }
 
-func (b benefitUseCase) GetOneByID(ctx context.Context, id string) (benefitsdomain.Output, error) {
+func (b *benefitUseCase) GetOneByID(ctx context.Context, id string) (benefitsdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
@@ -112,7 +112,7 @@ func (b benefitUseCase) GetOneByID(ctx context.Context, id string) (benefitsdoma
 	return output, nil
 }
 
-func (b benefitUseCase) GetOneByEmail(ctx context.Context, email string) (benefitsdomain.Output, error) {
+func (b *benefitUseCase) GetOneByEmail(ctx context.Context, email string) (benefitsdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
@@ -134,7 +134,7 @@ func (b benefitUseCase) GetOneByEmail(ctx context.Context, email string) (benefi
 	return output, nil
 }
 
-func (b benefitUseCase) GetAll(ctx context.Context) ([]benefitsdomain.Output, error) {
+func (b *benefitUseCase) GetAll(ctx context.Context) ([]benefitsdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 

@@ -19,7 +19,7 @@ func NewAttendanceUseCase(contextTimeout time.Duration, attendanceRepository att
 	return &attendanceUseCase{contextTimeout: contextTimeout, attendanceRepository: attendanceRepository, employeeRepository: employeeRepository}
 }
 
-func (a attendanceUseCase) CreateOne(ctx context.Context, input *attendancedomain.Input) error {
+func (a *attendanceUseCase) CreateOne(ctx context.Context, input *attendancedomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
@@ -48,7 +48,7 @@ func (a attendanceUseCase) CreateOne(ctx context.Context, input *attendancedomai
 	return a.attendanceRepository.CreateOne(ctx, &attendance)
 }
 
-func (a attendanceUseCase) DeleteOne(ctx context.Context, id string) error {
+func (a *attendanceUseCase) DeleteOne(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
@@ -60,7 +60,7 @@ func (a attendanceUseCase) DeleteOne(ctx context.Context, id string) error {
 	return a.attendanceRepository.DeleteOne(ctx, attendanceID)
 }
 
-func (a attendanceUseCase) UpdateOne(ctx context.Context, id string, input *attendancedomain.Input) error {
+func (a *attendanceUseCase) UpdateOne(ctx context.Context, id string, input *attendancedomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
@@ -92,7 +92,7 @@ func (a attendanceUseCase) UpdateOne(ctx context.Context, id string, input *atte
 	return a.attendanceRepository.UpdateOne(ctx, &attendance)
 }
 
-func (a attendanceUseCase) GetOneByID(ctx context.Context, id string) (attendancedomain.Output, error) {
+func (a *attendanceUseCase) GetOneByID(ctx context.Context, id string) (attendancedomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
@@ -119,7 +119,7 @@ func (a attendanceUseCase) GetOneByID(ctx context.Context, id string) (attendanc
 	return output, nil
 }
 
-func (a attendanceUseCase) GetOneByEmail(ctx context.Context, email string) (attendancedomain.Output, error) {
+func (a *attendanceUseCase) GetOneByEmail(ctx context.Context, email string) (attendancedomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
@@ -141,7 +141,7 @@ func (a attendanceUseCase) GetOneByEmail(ctx context.Context, email string) (att
 	return output, nil
 }
 
-func (a attendanceUseCase) GetAll(ctx context.Context) ([]attendancedomain.Output, error) {
+func (a *attendanceUseCase) GetAll(ctx context.Context) ([]attendancedomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 

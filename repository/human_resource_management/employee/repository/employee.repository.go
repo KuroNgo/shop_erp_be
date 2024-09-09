@@ -24,7 +24,7 @@ var (
 	mutex sync.Mutex
 )
 
-func (e employeeRepository) CreateOne(ctx context.Context, employee *employeesdomain.Employee) error {
+func (e *employeeRepository) CreateOne(ctx context.Context, employee *employeesdomain.Employee) error {
 	collectionEmployee := e.database.Collection(e.collectionEmployee)
 
 	// Sử dụng defer để đảm bảo mutex luôn được mở khóa
@@ -39,7 +39,7 @@ func (e employeeRepository) CreateOne(ctx context.Context, employee *employeesdo
 	return nil
 }
 
-func (e employeeRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
+func (e *employeeRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
 	collectionEmployee := e.database.Collection(e.collectionEmployee)
 
 	if id == primitive.NilObjectID {
@@ -59,7 +59,7 @@ func (e employeeRepository) DeleteOne(ctx context.Context, id primitive.ObjectID
 	return nil
 }
 
-func (e employeeRepository) UpdateOne(ctx context.Context, id primitive.ObjectID, employee *employeesdomain.Employee) error {
+func (e *employeeRepository) UpdateOne(ctx context.Context, id primitive.ObjectID, employee *employeesdomain.Employee) error {
 	collectionEmployee := e.database.Collection(e.collectionEmployee)
 
 	if id == primitive.NilObjectID {
@@ -93,7 +93,7 @@ func (e employeeRepository) UpdateOne(ctx context.Context, id primitive.ObjectID
 	return nil
 }
 
-func (e employeeRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (employeesdomain.Employee, error) {
+func (e *employeeRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (employeesdomain.Employee, error) {
 	collectionEmployee := e.database.Collection(e.collectionEmployee)
 
 	var employee employeesdomain.Employee
@@ -105,7 +105,7 @@ func (e employeeRepository) GetOneByID(ctx context.Context, id primitive.ObjectI
 	return employee, nil
 }
 
-func (e employeeRepository) GetOneByName(ctx context.Context, name string) (employeesdomain.Employee, error) {
+func (e *employeeRepository) GetOneByName(ctx context.Context, name string) (employeesdomain.Employee, error) {
 	collectionEmployee := e.database.Collection(e.collectionEmployee)
 
 	var employee employeesdomain.Employee
@@ -117,7 +117,7 @@ func (e employeeRepository) GetOneByName(ctx context.Context, name string) (empl
 	return employee, nil
 }
 
-func (e employeeRepository) GetOneByEmail(ctx context.Context, email string) (employeesdomain.Employee, error) {
+func (e *employeeRepository) GetOneByEmail(ctx context.Context, email string) (employeesdomain.Employee, error) {
 	collectionEmployee := e.database.Collection(e.collectionEmployee)
 
 	filter := bson.M{"email": email}
@@ -130,7 +130,7 @@ func (e employeeRepository) GetOneByEmail(ctx context.Context, email string) (em
 	return employee, nil
 }
 
-func (e employeeRepository) GetAll(ctx context.Context) ([]employeesdomain.Employee, error) {
+func (e *employeeRepository) GetAll(ctx context.Context) ([]employeesdomain.Employee, error) {
 	collectionEmployee := e.database.Collection(e.collectionEmployee)
 
 	filter := bson.M{}

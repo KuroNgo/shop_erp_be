@@ -20,7 +20,7 @@ func NewContractUseCase(contextTimeout time.Duration, contractRepository contrac
 	return &contractUseCase{contextTimeout: contextTimeout, contractRepository: contractRepository, employeeRepository: employeeRepository}
 }
 
-func (c contractUseCase) CreateOne(ctx context.Context, input *contractsdomain.Input) error {
+func (c *contractUseCase) CreateOne(ctx context.Context, input *contractsdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
@@ -52,7 +52,7 @@ func (c contractUseCase) CreateOne(ctx context.Context, input *contractsdomain.I
 	return c.contractRepository.CreateOne(ctx, &contract)
 }
 
-func (c contractUseCase) DeleteOne(ctx context.Context, id string) error {
+func (c *contractUseCase) DeleteOne(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
@@ -64,7 +64,7 @@ func (c contractUseCase) DeleteOne(ctx context.Context, id string) error {
 	return c.contractRepository.DeleteOne(ctx, contractID)
 }
 
-func (c contractUseCase) UpdateOne(ctx context.Context, id string, input *contractsdomain.Input) error {
+func (c *contractUseCase) UpdateOne(ctx context.Context, id string, input *contractsdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
@@ -98,7 +98,7 @@ func (c contractUseCase) UpdateOne(ctx context.Context, id string, input *contra
 	return c.contractRepository.UpdateOne(ctx, contractID, &contract)
 }
 
-func (c contractUseCase) GetOneByID(ctx context.Context, id string) (contractsdomain.Output, error) {
+func (c *contractUseCase) GetOneByID(ctx context.Context, id string) (contractsdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
@@ -129,7 +129,7 @@ func (c contractUseCase) GetOneByID(ctx context.Context, id string) (contractsdo
 	return output, nil
 }
 
-func (c contractUseCase) GetOneByEmail(ctx context.Context, email string) (contractsdomain.Output, error) {
+func (c *contractUseCase) GetOneByEmail(ctx context.Context, email string) (contractsdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
@@ -155,7 +155,7 @@ func (c contractUseCase) GetOneByEmail(ctx context.Context, email string) (contr
 	return output, nil
 }
 
-func (c contractUseCase) GetAll(ctx context.Context) ([]contractsdomain.Output, error) {
+func (c *contractUseCase) GetAll(ctx context.Context) ([]contractsdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 

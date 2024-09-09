@@ -26,7 +26,7 @@ func NewEmployeeUseCase(contextTimout time.Duration, employeeRepository employee
 		departmentRepository: departmentRepository, salaryRepository: salaryRepository, roleRepository: roleRepository}
 }
 
-func (e employeeUseCase) CreateOne(ctx context.Context, input *employeesdomain.Input) error {
+func (e *employeeUseCase) CreateOne(ctx context.Context, input *employeesdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
 
@@ -71,7 +71,7 @@ func (e employeeUseCase) CreateOne(ctx context.Context, input *employeesdomain.I
 	return e.employeeRepository.CreateOne(ctx, employeeData)
 }
 
-func (e employeeUseCase) DeleteOne(ctx context.Context, id string) error {
+func (e *employeeUseCase) DeleteOne(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
 
@@ -83,7 +83,7 @@ func (e employeeUseCase) DeleteOne(ctx context.Context, id string) error {
 	return e.employeeRepository.DeleteOne(ctx, employeeID)
 }
 
-func (e employeeUseCase) UpdateOne(ctx context.Context, id string, input *employeesdomain.Input) error {
+func (e *employeeUseCase) UpdateOne(ctx context.Context, id string, input *employeesdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
 
@@ -126,7 +126,7 @@ func (e employeeUseCase) UpdateOne(ctx context.Context, id string, input *employ
 	return e.employeeRepository.UpdateOne(ctx, employeeID, employee)
 }
 
-func (e employeeUseCase) GetOneByID(ctx context.Context, id string) (employeesdomain.Output, error) {
+func (e *employeeUseCase) GetOneByID(ctx context.Context, id string) (employeesdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
 
@@ -146,7 +146,7 @@ func (e employeeUseCase) GetOneByID(ctx context.Context, id string) (employeesdo
 	return output, nil
 }
 
-func (e employeeUseCase) GetOneByEmail(ctx context.Context, name string) (employeesdomain.Output, error) {
+func (e *employeeUseCase) GetOneByEmail(ctx context.Context, name string) (employeesdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
 
@@ -161,7 +161,7 @@ func (e employeeUseCase) GetOneByEmail(ctx context.Context, name string) (employ
 	return output, nil
 }
 
-func (e employeeUseCase) GetAll(ctx context.Context) ([]employeesdomain.Output, error) {
+func (e *employeeUseCase) GetAll(ctx context.Context) ([]employeesdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
 

@@ -20,7 +20,7 @@ func NewDepartmentUseCase(contextTimeout time.Duration, departmentRepository dep
 	return &departmentUseCase{contextTimeout: contextTimeout, departmentRepository: departmentRepository, employeeRepository: employeeRepository}
 }
 
-func (d departmentUseCase) CreateOne(ctx context.Context, input *departmentsdomain.Input) error {
+func (d *departmentUseCase) CreateOne(ctx context.Context, input *departmentsdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
 	if err := validate.IsNilDepartment(input); err != nil {
@@ -44,7 +44,7 @@ func (d departmentUseCase) CreateOne(ctx context.Context, input *departmentsdoma
 	return d.departmentRepository.CreateOne(ctx, department)
 }
 
-func (d departmentUseCase) DeleteOne(ctx context.Context, id string) error {
+func (d *departmentUseCase) DeleteOne(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
 
@@ -56,7 +56,7 @@ func (d departmentUseCase) DeleteOne(ctx context.Context, id string) error {
 	return d.departmentRepository.DeleteOne(ctx, departmentID)
 }
 
-func (d departmentUseCase) UpdateOne(ctx context.Context, id string, input *departmentsdomain.Input) error {
+func (d *departmentUseCase) UpdateOne(ctx context.Context, id string, input *departmentsdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
 
@@ -75,7 +75,7 @@ func (d departmentUseCase) UpdateOne(ctx context.Context, id string, input *depa
 	return d.departmentRepository.UpdateOne(ctx, departmentID, department)
 }
 
-func (d departmentUseCase) GetOneByID(ctx context.Context, id string) (departmentsdomain.Output, error) {
+func (d *departmentUseCase) GetOneByID(ctx context.Context, id string) (departmentsdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
 
@@ -96,7 +96,7 @@ func (d departmentUseCase) GetOneByID(ctx context.Context, id string) (departmen
 	return output, nil
 }
 
-func (d departmentUseCase) GetOneByName(ctx context.Context, name string) (departmentsdomain.Output, error) {
+func (d *departmentUseCase) GetOneByName(ctx context.Context, name string) (departmentsdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
 
@@ -111,7 +111,7 @@ func (d departmentUseCase) GetOneByName(ctx context.Context, name string) (depar
 	return output, nil
 }
 
-func (d departmentUseCase) GetAll(ctx context.Context) ([]departmentsdomain.Output, error) {
+func (d *departmentUseCase) GetAll(ctx context.Context) ([]departmentsdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
 

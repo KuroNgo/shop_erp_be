@@ -19,7 +19,7 @@ func NewSalaryRepository(db *mongo.Database, collectionSalary string) salarydoma
 	return &salaryRepository{database: db, collectionSalary: collectionSalary}
 }
 
-func (s salaryRepository) CreateOne(ctx context.Context, salary *salarydomain.Salary) error {
+func (s *salaryRepository) CreateOne(ctx context.Context, salary *salarydomain.Salary) error {
 	collectionSalary := s.database.Collection(s.collectionSalary)
 
 	filterRole := bson.M{"role_id": salary.ID}
@@ -36,7 +36,7 @@ func (s salaryRepository) CreateOne(ctx context.Context, salary *salarydomain.Sa
 	return nil
 }
 
-func (s salaryRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
+func (s *salaryRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
 	collectionSalary := s.database.Collection(s.collectionSalary)
 
 	if id == primitive.NilObjectID {
@@ -52,7 +52,7 @@ func (s salaryRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) 
 	return nil
 }
 
-func (s salaryRepository) UpdateOne(ctx context.Context, id primitive.ObjectID, salary *salarydomain.Salary) error {
+func (s *salaryRepository) UpdateOne(ctx context.Context, id primitive.ObjectID, salary *salarydomain.Salary) error {
 	collectionSalary := s.database.Collection(s.collectionSalary)
 
 	filter := bson.M{"_id": id}
@@ -74,7 +74,7 @@ func (s salaryRepository) UpdateOne(ctx context.Context, id primitive.ObjectID, 
 	return nil
 }
 
-func (s salaryRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (salarydomain.Salary, error) {
+func (s *salaryRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (salarydomain.Salary, error) {
 	collectionSalary := s.database.Collection(s.collectionSalary)
 
 	filter := bson.M{"_id": id}
@@ -86,7 +86,7 @@ func (s salaryRepository) GetOneByID(ctx context.Context, id primitive.ObjectID)
 	return salary, nil
 }
 
-func (s salaryRepository) GetOneByRoleID(ctx context.Context, roleID primitive.ObjectID) (salarydomain.Salary, error) {
+func (s *salaryRepository) GetOneByRoleID(ctx context.Context, roleID primitive.ObjectID) (salarydomain.Salary, error) {
 	collectionSalary := s.database.Collection(s.collectionSalary)
 
 	filter := bson.M{"role_id": roleID}
@@ -98,7 +98,7 @@ func (s salaryRepository) GetOneByRoleID(ctx context.Context, roleID primitive.O
 	return salary, nil
 }
 
-func (s salaryRepository) GetAll(ctx context.Context) ([]salarydomain.Salary, error) {
+func (s *salaryRepository) GetAll(ctx context.Context) ([]salarydomain.Salary, error) {
 	collectionSalary := s.database.Collection(s.collectionSalary)
 
 	filter := bson.M{}

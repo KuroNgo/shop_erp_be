@@ -18,7 +18,7 @@ func NewAccountUseCase(contextTimeout time.Duration, accountRepository accountdo
 	return &accountUseCase{contextTimeout: contextTimeout, accountRepository: accountRepository}
 }
 
-func (a accountUseCase) CreateAccount(ctx context.Context, input *accountdomain.Input) error {
+func (a *accountUseCase) CreateAccount(ctx context.Context, input *accountdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
@@ -39,7 +39,7 @@ func (a accountUseCase) CreateAccount(ctx context.Context, input *accountdomain.
 	return a.accountRepository.CreateAccount(ctx, account)
 }
 
-func (a accountUseCase) GetAccountByID(ctx context.Context, id string) (accountdomain.AccountResponse, error) {
+func (a *accountUseCase) GetAccountByID(ctx context.Context, id string) (accountdomain.AccountResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
@@ -60,7 +60,7 @@ func (a accountUseCase) GetAccountByID(ctx context.Context, id string) (accountd
 	return response, nil
 }
 
-func (a accountUseCase) GetAccountByName(ctx context.Context, name string) (accountdomain.AccountResponse, error) {
+func (a *accountUseCase) GetAccountByName(ctx context.Context, name string) (accountdomain.AccountResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
@@ -76,7 +76,7 @@ func (a accountUseCase) GetAccountByName(ctx context.Context, name string) (acco
 	return response, nil
 }
 
-func (a accountUseCase) UpdateAccount(ctx context.Context, id string, input *accountdomain.Input) error {
+func (a *accountUseCase) UpdateAccount(ctx context.Context, id string, input *accountdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
@@ -97,7 +97,7 @@ func (a accountUseCase) UpdateAccount(ctx context.Context, id string, input *acc
 	return a.accountRepository.UpdateAccount(ctx, account)
 }
 
-func (a accountUseCase) DeleteAccount(ctx context.Context, id string) error {
+func (a *accountUseCase) DeleteAccount(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
@@ -109,7 +109,7 @@ func (a accountUseCase) DeleteAccount(ctx context.Context, id string) error {
 	return a.accountRepository.DeleteAccount(ctx, accountID)
 }
 
-func (a accountUseCase) ListAccounts(ctx context.Context) ([]accountdomain.AccountResponse, error) {
+func (a *accountUseCase) ListAccounts(ctx context.Context) ([]accountdomain.AccountResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
@@ -131,7 +131,7 @@ func (a accountUseCase) ListAccounts(ctx context.Context) ([]accountdomain.Accou
 	return responses, nil
 }
 
-func (a accountUseCase) GetAccountsByDateRange(ctx context.Context, startDate, endDate string) ([]accountdomain.AccountResponse, error) {
+func (a *accountUseCase) GetAccountsByDateRange(ctx context.Context, startDate, endDate string) ([]accountdomain.AccountResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
@@ -164,17 +164,17 @@ func (a accountUseCase) GetAccountsByDateRange(ctx context.Context, startDate, e
 	return responses, nil
 }
 
-func (a accountUseCase) GetTotalAccountBalance(ctx context.Context) (float64, error) {
+func (a *accountUseCase) GetTotalAccountBalance(ctx context.Context) (float64, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (a accountUseCase) DeactivateAccount(ctx context.Context, id string) error {
+func (a *accountUseCase) DeactivateAccount(ctx context.Context, id string) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (a accountUseCase) ReactivateAccount(ctx context.Context, id string) error {
+func (a *accountUseCase) ReactivateAccount(ctx context.Context, id string) error {
 	//TODO implement me
 	panic("implement me")
 }

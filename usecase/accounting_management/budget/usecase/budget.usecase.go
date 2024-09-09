@@ -22,7 +22,7 @@ func NewBudgetUseCase(contextTimeout time.Duration, budgetRepository budgetsdoma
 	return &budgetUseCase{contextTimeout: contextTimeout, budgetRepository: budgetRepository, transactionCategoryRepository: transactionCategoryRepository}
 }
 
-func (b budgetUseCase) CreateBudget(ctx context.Context, input *budgetsdomain.Input) error {
+func (b *budgetUseCase) CreateBudget(ctx context.Context, input *budgetsdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
@@ -49,7 +49,7 @@ func (b budgetUseCase) CreateBudget(ctx context.Context, input *budgetsdomain.In
 	return b.budgetRepository.CreateBudget(ctx, budget)
 }
 
-func (b budgetUseCase) GetBudget(ctx context.Context, id string) (budgetsdomain.BudgetResponse, error) {
+func (b *budgetUseCase) GetBudget(ctx context.Context, id string) (budgetsdomain.BudgetResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
@@ -77,7 +77,7 @@ func (b budgetUseCase) GetBudget(ctx context.Context, id string) (budgetsdomain.
 	return budgetResponse, nil
 }
 
-func (b budgetUseCase) GetBudgetByName(ctx context.Context, name string) (budgetsdomain.BudgetResponse, error) {
+func (b *budgetUseCase) GetBudgetByName(ctx context.Context, name string) (budgetsdomain.BudgetResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
@@ -104,7 +104,7 @@ func (b budgetUseCase) GetBudgetByName(ctx context.Context, name string) (budget
 	return budgetResponse, nil
 }
 
-func (b budgetUseCase) UpdateBudget(ctx context.Context, id string, input *budgetsdomain.Input) error {
+func (b *budgetUseCase) UpdateBudget(ctx context.Context, id string, input *budgetsdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
@@ -136,7 +136,7 @@ func (b budgetUseCase) UpdateBudget(ctx context.Context, id string, input *budge
 	return b.budgetRepository.UpdateBudget(ctx, budget)
 }
 
-func (b budgetUseCase) DeleteBudget(ctx context.Context, id string) error {
+func (b *budgetUseCase) DeleteBudget(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
@@ -148,7 +148,7 @@ func (b budgetUseCase) DeleteBudget(ctx context.Context, id string) error {
 	return b.budgetRepository.DeleteBudget(ctx, budgetID)
 }
 
-func (b budgetUseCase) ListBudgets(ctx context.Context) ([]budgetsdomain.BudgetResponse, error) {
+func (b *budgetUseCase) ListBudgets(ctx context.Context) ([]budgetsdomain.BudgetResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
@@ -177,7 +177,7 @@ func (b budgetUseCase) ListBudgets(ctx context.Context) ([]budgetsdomain.BudgetR
 	return budgetResponses, nil
 }
 
-func (b budgetUseCase) GetBudgetsByDateRange(ctx context.Context, startDate, endDate string) ([]budgetsdomain.BudgetResponse, error) {
+func (b *budgetUseCase) GetBudgetsByDateRange(ctx context.Context, startDate, endDate string) ([]budgetsdomain.BudgetResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
@@ -221,7 +221,7 @@ func (b budgetUseCase) GetBudgetsByDateRange(ctx context.Context, startDate, end
 	return budgetResponses, nil
 }
 
-func (b budgetUseCase) GetTotalBudgetAmount(ctx context.Context) (float64, error) {
+func (b *budgetUseCase) GetTotalBudgetAmount(ctx context.Context) (float64, error) {
 	//TODO implement me
 	panic("implement me")
 }

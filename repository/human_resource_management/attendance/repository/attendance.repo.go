@@ -18,7 +18,7 @@ func NewAttendanceRepository(db *mongo.Database, collectionAttendance string) at
 	return &attendanceRepository{database: db, collectionAttendance: collectionAttendance}
 }
 
-func (a attendanceRepository) CreateOne(ctx context.Context, attendance *attendancedomain.Attendance) error {
+func (a *attendanceRepository) CreateOne(ctx context.Context, attendance *attendancedomain.Attendance) error {
 	collectionAttendance := a.database.Collection(a.collectionAttendance)
 
 	_, err := collectionAttendance.InsertOne(ctx, attendance)
@@ -29,7 +29,7 @@ func (a attendanceRepository) CreateOne(ctx context.Context, attendance *attenda
 	return nil
 }
 
-func (a attendanceRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
+func (a *attendanceRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
 	collectionAttendance := a.database.Collection(a.collectionAttendance)
 
 	if id == primitive.NilObjectID {
@@ -45,7 +45,7 @@ func (a attendanceRepository) DeleteOne(ctx context.Context, id primitive.Object
 	return nil
 }
 
-func (a attendanceRepository) UpdateOne(ctx context.Context, attendance *attendancedomain.Attendance) error {
+func (a *attendanceRepository) UpdateOne(ctx context.Context, attendance *attendancedomain.Attendance) error {
 	collectionAttendance := a.database.Collection(a.collectionAttendance)
 
 	if attendance.ID == primitive.NilObjectID {
@@ -62,7 +62,7 @@ func (a attendanceRepository) UpdateOne(ctx context.Context, attendance *attenda
 	return nil
 }
 
-func (a attendanceRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (attendancedomain.Attendance, error) {
+func (a *attendanceRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (attendancedomain.Attendance, error) {
 	collectionAttendance := a.database.Collection(a.collectionAttendance)
 
 	if id == primitive.NilObjectID {
@@ -78,7 +78,7 @@ func (a attendanceRepository) GetOneByID(ctx context.Context, id primitive.Objec
 	return attendance, nil
 }
 
-func (a attendanceRepository) GetOneByEmployeeID(ctx context.Context, idEmployee primitive.ObjectID) (attendancedomain.Attendance, error) {
+func (a *attendanceRepository) GetOneByEmployeeID(ctx context.Context, idEmployee primitive.ObjectID) (attendancedomain.Attendance, error) {
 	collectionAttendance := a.database.Collection(a.collectionAttendance)
 
 	if idEmployee == primitive.NilObjectID {
@@ -93,7 +93,7 @@ func (a attendanceRepository) GetOneByEmployeeID(ctx context.Context, idEmployee
 	return attendance, nil
 }
 
-func (a attendanceRepository) GetAll(ctx context.Context) ([]attendancedomain.Attendance, error) {
+func (a *attendanceRepository) GetAll(ctx context.Context) ([]attendancedomain.Attendance, error) {
 	collectionAttendance := a.database.Collection(a.collectionAttendance)
 
 	filter := bson.M{}
