@@ -6,6 +6,8 @@ Hệ thống quản lý nhân sự bao gồm các mô hình để quản lý th�
 ## Các Bảng và Mô Hình Dữ Liệu
 
 ### 1. Employees (Nhân viên)
+Stores personal and work-related information of employees, including their department and role within the company.
+
 | Trường          | Loại Dữ Liệu | Mô Tả                                        |
 |-----------------|--------------|----------------------------------------------|
 | `id`            | `ObjectID`   | Khóa chính                                   |
@@ -23,6 +25,8 @@ Hệ thống quản lý nhân sự bao gồm các mô hình để quản lý th�
 | `updated_at`    | `time.Time`  | Thời gian cập nhật                           |
 
 ### 2. Departments (Phòng ban)
+Holds details about company departments and the manager assigned to each department.
+
 | Trường            | Loại Dữ Liệu | Mô Tả                                                          |
 |-------------------|--------------|----------------------------------------------------------------|
 | `id`              | `ObjectID`   | Khóa chính                                                     |
@@ -32,6 +36,8 @@ Hệ thống quản lý nhân sự bao gồm các mô hình để quản lý th�
 | `updated_at`      | `time.Time`  | Thời gian cập nhật                                             |
 
 ### 3. Salaries (Lương)
+Tracks employee salaries, including bonuses, deductions, and net pay.
+
 | Trường        | Loại Dữ Liệu | Mô Tả                                              |
 |---------------|--------------|----------------------------------------------------|
 | `id`          | `ObjectID`   | Khóa chính                                         |
@@ -45,6 +51,8 @@ Hệ thống quản lý nhân sự bao gồm các mô hình để quản lý th�
 | `updated_at`  | `time.Time`  | Thời gian cập nhật                                 |
 
 ### 4. Attendance (Chấm công)
+Records daily attendance, including check-in/out times and hours worked.
+
 | Trường           | Loại Dữ Liệu | Mô Tả                                      |
 |------------------|--------------|--------------------------------------------|
 | `id`             | `ObjectID`   | Khóa chính                                 |
@@ -58,6 +66,8 @@ Hệ thống quản lý nhân sự bao gồm các mô hình để quản lý th�
 | `updated_at`     | `time.Time`  | Thời gian cập nhật                         |
 
 ### 5. LeaveRequests (Đơn xin nghỉ phép)
+Manages employee leave requests, including type of leave and approval status.
+
 | Trường        | Loại Dữ Liệu | Mô Tả                                                       |
 |---------------|--------------|-------------------------------------------------------------|
 | `id`          | `ObjectID`   | Khóa chính                                                  |
@@ -70,6 +80,8 @@ Hệ thống quản lý nhân sự bao gồm các mô hình để quản lý th�
 | `updated_at`  | `time.Time`  | Thời gian cập nhật                                          |
 
 ### 6. Contracts (Hợp đồng lao động)
+Stores details of employee contracts, including type, salary, and contract duration.
+
 | Trường          | Loại Dữ Liệu | Mô Tả                                      |
 |-----------------|--------------|--------------------------------------------|
 | `id`            | `ObjectID`   | Khóa chính                                 |
@@ -83,6 +95,8 @@ Hệ thống quản lý nhân sự bao gồm các mô hình để quản lý th�
 | `updated_at`    | `time.Time`  | Thời gian cập nhật                         |
 
 ### 7. Benefits (Phúc lợi)
+Tracks employee benefits like insurance and allowances.
+
 | Trường         | Loại Dữ Liệu | Mô Tả                                                           |
 |----------------|--------------|-----------------------------------------------------------------|
 | `id`           | `ObjectID`   | Khóa chính                                                      |
@@ -95,6 +109,8 @@ Hệ thống quản lý nhân sự bao gồm các mô hình để quản lý th�
 | `updated_at`   | `time.Time`  | Thời gian cập nhật                                              |
 
 ### 8. PerformanceReviews (Đánh giá hiệu suất)
+Logs employee performance reviews, scores, and comments from reviewers.
+
 | Trường              | Loại Dữ Liệu | Mô Tả                                          |
 |---------------------|--------------|------------------------------------------------|
 | `id`                | `ObjectID`   | Khóa chính                                     |

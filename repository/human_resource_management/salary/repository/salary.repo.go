@@ -80,6 +80,9 @@ func (s *salaryRepository) GetOneByID(ctx context.Context, id primitive.ObjectID
 	filter := bson.M{"_id": id}
 	var salary salarydomain.Salary
 	if err := collectionSalary.FindOne(ctx, filter).Decode(&salary); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return salarydomain.Salary{}, nil
+		}
 		return salarydomain.Salary{}, errors.New(err.Error() + "error in the finding salary's information into database")
 	}
 
@@ -92,6 +95,9 @@ func (s *salaryRepository) GetOneByRoleID(ctx context.Context, roleID primitive.
 	filter := bson.M{"role_id": roleID}
 	var salary salarydomain.Salary
 	if err := collectionSalary.FindOne(ctx, filter).Decode(&salary); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return salarydomain.Salary{}, nil
+		}
 		return salarydomain.Salary{}, errors.New(err.Error() + "error in the finding salary's information into database")
 	}
 

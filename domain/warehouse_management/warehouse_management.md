@@ -6,6 +6,8 @@ Hệ thống quản lý kho bao gồm các mô hình để quản lý thông tin
 ## Các Bảng và Mô Hình Dữ Liệu
 
 ### 1. Warehouses (Kho)
+This table stores information about different warehouses, including their location, capacity, and basic details. It helps manage the distribution and storage of products across different facilities.
+
 | Trường           | Loại Dữ Liệu | Mô Tả              |
 |------------------|--------------|--------------------|
 | `id`             | `ObjectID`   | Khóa chính         |
@@ -16,6 +18,8 @@ Hệ thống quản lý kho bao gồm các mô hình để quản lý thông tin
 | `updated_at`     | `time.Time`  | Thời gian cập nhật |
 
 ### 2. Products (Sản phẩm)
+Contains details of products such as name, description, price, and associated categories. It is central to managing what items are available for sale and for inventory control.
+
 | Trường         | Loại Dữ Liệu | Mô Tả                                       |
 |----------------|--------------|---------------------------------------------|
 | `id`           | `ObjectID`   | Khóa chính                                  |
@@ -27,6 +31,8 @@ Hệ thống quản lý kho bao gồm các mô hình để quản lý thông tin
 | `updated_at`   | `time.Time`  | Thời gian cập nhật                          |
 
 ### 3. Inventory (Tồn kho)
+Tracks the stock levels of products in different warehouses. It helps monitor how much stock is available and where it is located.
+
 | Trường         | Loại Dữ Liệu | Mô Tả                                       |
 |----------------|--------------|---------------------------------------------|
 | `id`           | `ObjectID`   | Khóa chính                                  |
@@ -37,6 +43,8 @@ Hệ thống quản lý kho bao gồm các mô hình để quản lý thông tin
 | `updated_at`   | `time.Time`  | Thời gian cập nhật                          |
 
 ### 4. StockMovements (Di chuyển kho)
+Records the movements of products in and out of warehouses, such as when items are received (Nhập kho) or dispatched (Xuất kho). This helps track changes in inventory levels.
+
 | Trường          | Loại Dữ Liệu | Mô Tả                                           |
 |-----------------|--------------|-------------------------------------------------|
 | `id`            | `ObjectID`   | Khóa chính                                      |
@@ -50,6 +58,8 @@ Hệ thống quản lý kho bao gồm các mô hình để quản lý thông tin
 | `updated_at`    | `time.Time`  | Thời gian cập nhật                              |
 
 ### 5. Suppliers (Nhà cung cấp)
+Stores supplier information, including contact details. This table is crucial for managing relationships with vendors and tracking where products are sourced.
+
 | Trường           | Loại Dữ Liệu | Mô Tả              |
 |------------------|--------------|--------------------|
 | `id`             | `ObjectID`   | Khóa chính         |
@@ -62,6 +72,8 @@ Hệ thống quản lý kho bao gồm các mô hình để quản lý thông tin
 | `updated_at`     | `time.Time`  | Thời gian cập nhật |
 
 ### 6. PurchaseOrders (Đơn mua hàng)
+Manages purchase orders sent to suppliers. It includes order numbers, supplier references, order dates, and status, ensuring that product orders are properly tracked.
+
 | Trường         | Loại Dữ Liệu | Mô Tả                                             |
 |----------------|--------------|---------------------------------------------------|
 | `id`           | `ObjectID`   | Khóa chính                                        |
@@ -74,6 +86,8 @@ Hệ thống quản lý kho bao gồm các mô hình để quản lý thông tin
 | `updated_at`   | `time.Time`  | Thời gian cập nhật                                |
 
 ### 7. PurchaseOrderDetails (Chi tiết đơn mua hàng)
+Provides detailed information about the individual products in each purchase order, including quantities and prices. It links the products ordered from suppliers to their respective purchase orders.
+
 | Trường              | Loại Dữ Liệu | Mô Tả                                           |
 |---------------------|--------------|-------------------------------------------------|
 | `id`                | `ObjectID`   | Khóa chính                                      |
@@ -86,6 +100,8 @@ Hệ thống quản lý kho bao gồm các mô hình để quản lý thông tin
 | `updated_at`        | `time.Time`  | Thời gian cập nhật                              |
 
 ### 8. StockAdjustments (Điều chỉnh tồn kho)
+Keeps records of stock adjustments, such as increases or decreases in inventory due to reasons like damage, returns, or reallocation. This ensures accurate stock levels are maintained.
+
 | Trường            | Loại Dữ Liệu | Mô Tả                                       |
 |-------------------|--------------|---------------------------------------------|
 | `id`              | `ObjectID`   | Khóa chính                                  |

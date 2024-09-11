@@ -99,6 +99,9 @@ func (e *employeeRepository) GetOneByID(ctx context.Context, id primitive.Object
 	var employee employeesdomain.Employee
 	filter := bson.M{"_id": id}
 	if err := collectionEmployee.FindOne(ctx, filter).Decode(&employee); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return employeesdomain.Employee{}, nil
+		}
 		return employeesdomain.Employee{}, errors.New("error finding employee's information in the database")
 	}
 
@@ -111,6 +114,9 @@ func (e *employeeRepository) GetOneByName(ctx context.Context, name string) (emp
 	var employee employeesdomain.Employee
 	filter := bson.M{"last_name": name}
 	if err := collectionEmployee.FindOne(ctx, filter).Decode(&employee); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return employeesdomain.Employee{}, nil
+		}
 		return employeesdomain.Employee{}, errors.New("error finding employee information in database")
 	}
 
@@ -124,6 +130,9 @@ func (e *employeeRepository) GetOneByEmail(ctx context.Context, email string) (e
 	var employee employeesdomain.Employee
 	err := collectionEmployee.FindOne(ctx, filter).Decode(&employee)
 	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return employeesdomain.Employee{}, nil
+		}
 		return employeesdomain.Employee{}, err
 	}
 

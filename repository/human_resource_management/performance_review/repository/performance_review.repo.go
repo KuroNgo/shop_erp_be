@@ -2,6 +2,7 @@ package performance_review_repository
 
 import (
 	"context"
+	"errors"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -41,7 +42,7 @@ func (p *performanceReviewRepository) DeleteOne(ctx context.Context, id primitiv
 	return nil
 }
 
-func (p performanceReviewRepository) UpdateOne(ctx context.Context, id primitive.ObjectID,
+func (p *performanceReviewRepository) UpdateOne(ctx context.Context, id primitive.ObjectID,
 	performanceReview *performancereviewdomain.PerformanceReview) error {
 	collectionPerformanceReview := p.database.Collection(p.collectionPerformanceReview)
 
@@ -68,6 +69,9 @@ func (p *performanceReviewRepository) GetOneByID(ctx context.Context, id primiti
 	var performanceReview performancereviewdomain.PerformanceReview
 	filter := bson.M{"_id": id}
 	if err := collectionPerformanceReview.FindOne(ctx, filter).Decode(&performanceReview); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return performancereviewdomain.PerformanceReview{}, nil
+		}
 		return performancereviewdomain.PerformanceReview{}, err
 	}
 
@@ -80,6 +84,9 @@ func (p *performanceReviewRepository) GetOneByEmployeeID(ctx context.Context, em
 	var performanceReview performancereviewdomain.PerformanceReview
 	filter := bson.M{"employee_id": employeeID}
 	if err := collectionPerformanceReview.FindOne(ctx, filter).Decode(&performanceReview); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return performancereviewdomain.PerformanceReview{}, nil
+		}
 		return performancereviewdomain.PerformanceReview{}, err
 	}
 

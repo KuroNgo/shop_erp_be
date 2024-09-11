@@ -45,9 +45,9 @@ definitions:
         type: integer
       budget_name:
         type: string
-      category:
-        type: string
       end_date:
+        type: string
+      product_category:
         type: string
       start_date:
         type: string
@@ -144,6 +144,19 @@ definitions:
         type: string
       reviewer_id:
         type: string
+    type: object
+  product_domain.Input:
+    properties:
+      description:
+        type: string
+      price:
+        type: number
+      product_category:
+        type: string
+      product_name:
+        type: string
+      quantity_in_stock:
+        type: integer
     type: object
   role_domain.Input:
     properties:
@@ -773,6 +786,12 @@ paths:
       consumes:
       - application/json
       description: Deletes the department's information
+      parameters:
+      - description: Department ID
+        in: path
+        name: _id
+        required: true
+        type: string
       produces:
       - application/json
       responses: {}
@@ -1165,6 +1184,116 @@ paths:
       summary: Update Performance Review Information
       tags:
       - Performance Review
+  /api/v1/products/create:
+    post:
+      consumes:
+      - application/json
+      description: Create new product
+      parameters:
+      - description: Product data
+        in: body
+        name: Product
+        required: true
+        schema:
+          $ref: '#/definitions/product_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Create product
+      tags:
+      - Product
+  /api/v1/products/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes the product's information
+      parameters:
+      - description: Product ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Delete Product Information
+      tags:
+      - Product
+  /api/v1/products/get/_id:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the product's information id
+      parameters:
+      - description: Product ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get Product Information By ID
+      tags:
+      - Product
+  /api/v1/products/get/all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the product's information
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get Product Information
+      tags:
+      - Product
+  /api/v1/products/get/name:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the product's information id
+      parameters:
+      - description: Product ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get Product Information By Name
+      tags:
+      - Product
+  /api/v1/products/update:
+    put:
+      consumes:
+      - application/json
+      description: Update new product
+      parameters:
+      - description: Product data
+        in: body
+        name: Product
+        required: true
+        schema:
+          $ref: '#/definitions/product_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Update product
+      tags:
+      - Product
   /api/v1/roles/create:
     post:
       consumes:
@@ -1190,6 +1319,12 @@ paths:
       consumes:
       - application/json
       description: Deletes the role's information
+      parameters:
+      - description: Role ID
+        in: path
+        name: _id
+        required: true
+        type: string
       produces:
       - application/json
       responses: {}
@@ -1287,6 +1422,12 @@ paths:
       consumes:
       - application/json
       description: Deletes the salary's information
+      parameters:
+      - description: Role ID
+        in: path
+        name: _id
+        required: true
+        type: string
       produces:
       - application/json
       responses: {}

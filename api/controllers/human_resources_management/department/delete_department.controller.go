@@ -11,6 +11,7 @@ import (
 // @Tags Department
 // @Accept json
 // @Produce json
+// @Param _id path string true "Department ID"
 // @Router /api/v1/departments/delete [delete]
 // @Security CookieAuth
 func (d *DepartmentController) DeleteOneDepartment(ctx *gin.Context) {

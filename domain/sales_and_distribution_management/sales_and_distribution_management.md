@@ -6,6 +6,8 @@ Hệ thống quản lý bán hàng và phân phối bao gồm các mô hình đ�
 ## Các Bảng và Mô Hình Dữ Liệu
 
 ### 1. Customers (Khách hàng)
+Stores information about customers, including their contact details (name, email, phone, address) and basic information for future reference and order management.
+
 | Trường          | Loại Dữ Liệu  | Mô Tả                                    |
 |-----------------|---------------|------------------------------------------|
 | `id`            | `ObjectID`    | Khóa chính                               |
@@ -20,6 +22,8 @@ Hệ thống quản lý bán hàng và phân phối bao gồm các mô hình đ�
 | `updated_at`    | `time.Time`   | Thời gian cập nhật                       |
 
 ### 2. Products (Sản phẩm)
+Contains details of the products available for sale, such as product name, description, price, and stock quantity. This helps track inventory and product offerings.
+
 | Trường              | Loại Dữ Liệu | Mô Tả                                       |
 |---------------------|--------------|---------------------------------------------|
 | `id`                | `ObjectID`   | Khóa chính                                  |
@@ -32,6 +36,8 @@ Hệ thống quản lý bán hàng và phân phối bao gồm các mô hình đ�
 | `updated_at`        | `time.Time`  | Thời gian cập nhật                          |
 
 ### 3. Categories (Danh mục sản phẩm)
+Organizes products into different categories for better product classification and easier management. It allows for filtering and categorizing similar products.
+
 | Trường          | Loại Dữ Liệu  | Mô Tả                                    |
 |-----------------|---------------|------------------------------------------|
 | `id`            | `ObjectID`    | Khóa chính                               |
@@ -41,6 +47,8 @@ Hệ thống quản lý bán hàng và phân phối bao gồm các mô hình đ�
 | `updated_at`    | `time.Time`   | Thời gian cập nhật                       |
 
 ### 4. SalesOrders (Đơn hàng)
+Tracks customer orders, including customer details, shipping information, total amount, and the status of the order (processing, shipped, or canceled).
+
 | Trường             | Loại Dữ Liệu | Mô Tả                                                  |
 |--------------------|--------------|--------------------------------------------------------|
 | `id`               | `ObjectID`   | Khóa chính                                             |
@@ -54,6 +62,8 @@ Hệ thống quản lý bán hàng và phân phối bao gồm các mô hình đ�
 | `updated_at`       | `time.Time`  | Thời gian cập nhật                                     |
 
 ### 5. OrderDetails (Chi tiết đơn hàng)
+Contains information about individual items in each order. It tracks the products, quantities, and unit prices associated with a specific order to provide more detailed order history.
+
 | Trường        | Loại Dữ Liệu | Mô Tả                                        |
 |---------------|--------------|----------------------------------------------|
 | `id`          | `ObjectID`   | Khóa chính                                   |
@@ -66,6 +76,8 @@ Hệ thống quản lý bán hàng và phân phối bao gồm các mô hình đ�
 | `updated_at`  | `time.Time`  | Thời gian cập nhật                           |
 
 ### 6. Shipping (Vận chuyển)
+Records shipment details, including the shipping method, dates, tracking information, and the status of the delivery to monitor the progress of the shipping process.
+
 | Trường               | Loại Dữ Liệu | Mô Tả                                                  |
 |----------------------|--------------|--------------------------------------------------------|
 | `id`                 | `ObjectID`   | Khóa chính                                             |
@@ -80,6 +92,8 @@ Hệ thống quản lý bán hàng và phân phối bao gồm các mô hình đ�
 | `updated_at`         | `time.Time`  | Thời gian cập nhật                                     |
 
 ### 7. Payments (Thanh toán)
+Manages payment details for orders, including the payment method, status (paid or unpaid), and amount paid, ensuring accurate financial records.
+
 | Trường           | Loại Dữ Liệu | Mô Tả                                                                         |
 |------------------|--------------|-------------------------------------------------------------------------------|
 | `id`             | `ObjectID`   | Khóa chính                                                                    |
@@ -92,6 +106,8 @@ Hệ thống quản lý bán hàng và phân phối bao gồm các mô hình đ�
 | `updated_at`     | `time.Time`  | Thời gian cập nhật                                                            |
 
 ### 8. Invoices (Hóa đơn)
+Tracks the invoices generated for each order, including payment deadlines, amounts due, and the current status (paid or unpaid). It ensures that invoicing and payments are properly managed.
+
 | Trường         | Loại Dữ Liệu | Mô Tả                                                        |
 |----------------|--------------|--------------------------------------------------------------|
 | `id`           | `ObjectID`   | Khóa chính                                                   |
@@ -105,6 +121,8 @@ Hệ thống quản lý bán hàng và phân phối bao gồm các mô hình đ�
 | `updated_at`   | `time.Time`  | Thời gian cập nhật                                           |
 
 ### 9. SalesReports (Báo cáo bán hàng)
+Generates reports on sales performance, including total sales, top-selling products, and trends over a specific period. This helps with business analysis and decision-making.
+
 | Trường                 | Loại Dữ Liệu | Mô Tả                                           |
 |------------------------|--------------|-------------------------------------------------|
 | `id`                   | `ObjectID`   | Khóa chính                                      |

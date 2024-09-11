@@ -36,6 +36,9 @@ func (r *roleRepository) GetByTitleRole(ctx context.Context, title string) (role
 	filter := bson.M{"title": title}
 	var role roledomain.Role
 	if err := collectionRole.FindOne(ctx, filter).Decode(&role); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return roledomain.Role{}, nil
+		}
 		return roledomain.Role{}, err
 	}
 
@@ -48,6 +51,9 @@ func (r *roleRepository) GetByIDRole(ctx context.Context, id primitive.ObjectID)
 	filter := bson.M{"_id": id}
 	var role roledomain.Role
 	if err := collectionRole.FindOne(ctx, filter).Decode(&role); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return roledomain.Role{}, nil
+		}
 		return roledomain.Role{}, err
 	}
 

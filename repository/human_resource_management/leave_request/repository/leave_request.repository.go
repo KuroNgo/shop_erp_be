@@ -74,6 +74,9 @@ func (l *leaveRequestRepository) GetOneByID(ctx context.Context, id primitive.Ob
 	filter := bson.M{"_id": id}
 	var leaveRequest leaverequestdomain.LeaveRequest
 	if err := collectionLeaveRequest.FindOne(ctx, filter).Decode(&leaveRequest); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return leaverequestdomain.LeaveRequest{}, nil
+		}
 		return leaverequestdomain.LeaveRequest{}, err
 	}
 
@@ -86,6 +89,9 @@ func (l *leaveRequestRepository) GetOneByEmployeeID(ctx context.Context, employe
 	var leaveRequest leaverequestdomain.LeaveRequest
 	filter := bson.M{"employee_id": employeeID}
 	if err := collectionLeaveRequest.FindOne(ctx, filter).Decode(&leaveRequest); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return leaverequestdomain.LeaveRequest{}, nil
+		}
 		return leaverequestdomain.LeaveRequest{}, err
 	}
 

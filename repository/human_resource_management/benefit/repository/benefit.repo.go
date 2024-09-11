@@ -82,6 +82,9 @@ func (b *benefitRepository) GetOneByID(ctx context.Context, id primitive.ObjectI
 	var benefit benefitsdomain.Benefit
 	filter := bson.M{"_id": id}
 	if err := collectionBenefit.FindOne(ctx, filter).Decode(&benefit); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return benefitsdomain.Benefit{}, nil
+		}
 		return benefitsdomain.Benefit{}, err
 	}
 
@@ -94,6 +97,9 @@ func (b *benefitRepository) GetOneByEmployeeID(ctx context.Context, employeeID p
 	var benefit benefitsdomain.Benefit
 	filter := bson.M{"employee_id": employeeID}
 	if err := collectionBenefit.FindOne(ctx, filter).Decode(&benefit); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return benefitsdomain.Benefit{}, nil
+		}
 		return benefitsdomain.Benefit{}, err
 	}
 

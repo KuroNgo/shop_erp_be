@@ -7,10 +7,10 @@ import (
 )
 
 type IInvoicesRepository interface {
-	CreateInvoice(ctx context.Context, invoice *Invoices) (Invoices, error)                       // Tạo một hóa đơn mới
-	GetInvoiceByID(ctx context.Context, id primitive.ObjectID) (Invoices, error)                  // Lấy thông tin hóa đơn theo ID
-	GetInvoiceByName(ctx context.Context, name string) (Invoices, error)                          // Lấy hóa đơn theo tên
-	UpdateInvoice(ctx context.Context, invoice *Invoices) (Invoices, error)                       // Cập nhật thông tin hóa đơn
+	CreateInvoice(ctx context.Context, invoice *Invoices) error                                   // Tạo một hóa đơn mới
+	GetInvoiceByID(ctx context.Context, id primitive.ObjectID) (*Invoices, error)                 // Lấy thông tin hóa đơn theo ID
+	GetInvoiceByName(ctx context.Context, name string) (*Invoices, error)                         // Lấy hóa đơn theo tên
+	UpdateInvoice(ctx context.Context, invoice *Invoices) error                                   // Cập nhật thông tin hóa đơn
 	DeleteInvoice(ctx context.Context, id primitive.ObjectID) error                               // Xóa hóa đơn theo ID
 	ListInvoices(ctx context.Context) ([]Invoices, error)                                         // Lấy danh sách tất cả hóa đơn
 	GetInvoicesByDateRange(ctx context.Context, startDate, endDate time.Time) ([]Invoices, error) // Lấy hóa đơn theo khoảng thời gian

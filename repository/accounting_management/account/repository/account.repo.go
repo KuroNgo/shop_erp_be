@@ -2,6 +2,7 @@ package account_repository
 
 import (
 	"context"
+	"errors"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -35,6 +36,9 @@ func (a *accountRepository) GetAccountByID(ctx context.Context, id primitive.Obj
 	var account accountdomain.Accounts
 	filter := bson.M{"_id": id}
 	if err := collectionAccount.FindOne(ctx, filter).Decode(&account); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return accountdomain.Accounts{}, nil
+		}
 		return accountdomain.Accounts{}, err
 	}
 
@@ -47,6 +51,9 @@ func (a *accountRepository) GetAccountByName(ctx context.Context, name string) (
 	var account accountdomain.Accounts
 	filter := bson.M{"name": name}
 	if err := collectionAccount.FindOne(ctx, filter).Decode(&account); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return accountdomain.Accounts{}, nil
+		}
 		return accountdomain.Accounts{}, err
 	}
 

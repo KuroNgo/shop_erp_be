@@ -76,6 +76,10 @@ func (c *contractRepository) GetOneByID(ctx context.Context, id primitive.Object
 	var contract contractsdomain.Contract
 	filter := bson.M{"_id": id}
 	if err := collectionContract.FindOne(ctx, filter).Decode(&contract); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return contractsdomain.Contract{}, nil
+		}
+
 		return contractsdomain.Contract{}, err
 	}
 
@@ -88,6 +92,10 @@ func (c *contractRepository) GetOneByEmployeeID(ctx context.Context, employeeID 
 	var contract contractsdomain.Contract
 	filter := bson.M{"employee_id": employeeID}
 	if err := collectionContract.FindOne(ctx, filter).Decode(&contract); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return contractsdomain.Contract{}, nil
+		}
+
 		return contractsdomain.Contract{}, err
 	}
 

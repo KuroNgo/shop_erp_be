@@ -11,6 +11,7 @@ import (
 // @Tags Role
 // @Accept json
 // @Produce json
+// @Param _id path string true "Role ID"
 // @Router /api/v1/roles/delete [delete]
 // @Security CookieAuth
 func (r *RoleController) DeleteOneRole(ctx *gin.Context) {

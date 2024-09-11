@@ -2,7 +2,7 @@ package product_order_detail
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	productsdomain "shop_erp_mono/domain/sales_and_distribution_management/products"
+	productdomain "shop_erp_mono/domain/warehouse_management/product"
 	purchaseorderdomain "shop_erp_mono/domain/warehouse_management/purchase_order"
 	"time"
 )
@@ -34,7 +34,7 @@ type Input struct {
 type PurchaseOrderDetailResponse struct {
 	ID              primitive.ObjectID                `bson:"_id,omitempty" json:"id,omitempty"`
 	PurchaseOrderID purchaseorderdomain.PurchaseOrder `bson:"purchase_order_id" json:"purchase_order_id"`
-	ProductID       productsdomain.Product            `bson:"product_id" json:"product_id"`
+	ProductID       productdomain.Product             `bson:"product_id" json:"product_id"`
 	Quantity        int                               `bson:"quantity" json:"quantity"`
 	UnitPrice       float64                           `bson:"unit_price" json:"unit_price"`
 	TotalPrice      float64                           `bson:"total_price" json:"total_price"`

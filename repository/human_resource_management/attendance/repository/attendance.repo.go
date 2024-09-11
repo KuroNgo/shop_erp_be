@@ -72,6 +72,9 @@ func (a *attendanceRepository) GetOneByID(ctx context.Context, id primitive.Obje
 
 	var attendance attendancedomain.Attendance
 	if err := collectionAttendance.FindOne(ctx, filter).Decode(&attendance); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return attendancedomain.Attendance{}, nil
+		}
 		return attendancedomain.Attendance{}, err
 	}
 
@@ -87,6 +90,9 @@ func (a *attendanceRepository) GetOneByEmployeeID(ctx context.Context, idEmploye
 	filter := bson.M{"employee_id": idEmployee}
 	var attendance attendancedomain.Attendance
 	if err := collectionAttendance.FindOne(ctx, filter).Decode(&attendance); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return attendancedomain.Attendance{}, nil
+		}
 		return attendancedomain.Attendance{}, err
 	}
 

@@ -35,11 +35,12 @@ import (
 // @tag.description represents the salary information of an employee.
 // @tag.name User
 // @tag.description represents a user in the system.
-
 // @tag.name Account
 // @tag.description Stores information about financial accounts like bank accounts or cash wallets, tracking balance and account type.
 // @tag.name Budget
 // @tag.description Manages financial transactions for accounts, tracking income and expenses, amounts, and transaction dates.
+// @tag.name Product
+// @tag.description
 
 // @host localhost:8080
 // @BasePath /api/v1

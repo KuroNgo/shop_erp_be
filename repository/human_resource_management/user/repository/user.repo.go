@@ -67,6 +67,9 @@ func (r *userRepository) GetByEmail(ctx context.Context, email string) (userdoma
 	filter := bson.M{"email": email}
 	var user userdomain.User
 	if err := collectionUser.FindOne(ctx, filter).Decode(&user); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return userdomain.User{}, nil
+		}
 		return userdomain.User{}, errors.New(err.Error() + "error in the finding user into the database")
 	}
 
@@ -79,6 +82,9 @@ func (r *userRepository) GetByID(ctx context.Context, id primitive.ObjectID) (us
 	filter := bson.M{"_id": id}
 	var user userdomain.User
 	if err := collectionUser.FindOne(ctx, filter).Decode(&user); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return userdomain.User{}, nil
+		}
 		return userdomain.User{}, errors.New(err.Error() + "error in the finding user into the database")
 	}
 
@@ -91,6 +97,9 @@ func (r *userRepository) GetByVerificationCode(ctx context.Context, verification
 	filter := bson.M{"verification_code": verificationCode}
 	var user userdomain.User
 	if err := collectionUser.FindOne(ctx, filter).Decode(&user); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return userdomain.User{}, nil
+		}
 		return userdomain.User{}, errors.New(err.Error() + "error in the finding user's data into database")
 	}
 

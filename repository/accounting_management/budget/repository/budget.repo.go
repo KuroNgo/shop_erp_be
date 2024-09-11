@@ -2,6 +2,7 @@ package budget_repository
 
 import (
 	"context"
+	"errors"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -34,6 +35,9 @@ func (b *budgetRepository) GetBudgetByID(ctx context.Context, id primitive.Objec
 	filter := bson.M{"_id": id}
 	var budget budgetsdomain.Budget
 	if err := collectionBudget.FindOne(ctx, filter).Decode(&budget); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return budgetsdomain.Budget{}, nil
+		}
 		return budgetsdomain.Budget{}, err
 	}
 
@@ -46,6 +50,9 @@ func (b *budgetRepository) GetBudgetByName(ctx context.Context, name string) (bu
 	filter := bson.M{"name": name}
 	var budget budgetsdomain.Budget
 	if err := collectionBudget.FindOne(ctx, filter).Decode(&budget); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return budgetsdomain.Budget{}, nil
+		}
 		return budgetsdomain.Budget{}, err
 	}
 
@@ -128,6 +135,9 @@ func (b *budgetRepository) GetBudgetsByDateRange(ctx context.Context, startDate,
 
 	cursor, err := collectionBudget.Find(ctx, filter)
 	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, nil
+		}
 		return nil, err
 	}
 	defer func() {

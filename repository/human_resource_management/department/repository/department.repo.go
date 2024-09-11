@@ -79,6 +79,9 @@ func (d *departmentRepository) GetOneByID(ctx context.Context, id primitive.Obje
 	filter := bson.M{"_id": id}
 	var department departmentsdomain.Department
 	if err := collectionDepartment.FindOne(ctx, filter).Decode(&department); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return departmentsdomain.Department{}, nil
+		}
 		return departmentsdomain.Department{}, err
 	}
 
@@ -91,6 +94,9 @@ func (d *departmentRepository) GetOneByName(ctx context.Context, name string) (d
 	filter := bson.M{"name": name}
 	var department departmentsdomain.Department
 	if err := collectionDepartment.FindOne(ctx, filter).Decode(&department); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return departmentsdomain.Department{}, nil
+		}
 		return departmentsdomain.Department{}, err
 	}
 

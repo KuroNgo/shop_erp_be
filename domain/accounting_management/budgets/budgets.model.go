@@ -25,7 +25,7 @@ type Input struct {
 	Amount     int32     `bson:"amount" json:"amount"`
 	StartDate  time.Time `bson:"start_date" json:"start_date"`
 	EndDate    time.Time `bson:"end_date" json:"end_date"`
-	Category   string    `bson:"category" json:"category"`
+	Category   string    `bson:"product_category" json:"product_category"`
 }
 
 // BudgetResponse represents the response structure for a budget
