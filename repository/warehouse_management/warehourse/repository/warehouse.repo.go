@@ -1,1 +1,1 @@
-package repository
+package warehouse_repository

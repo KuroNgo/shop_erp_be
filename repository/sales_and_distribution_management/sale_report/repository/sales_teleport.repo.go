@@ -1,1 +1,1 @@
-package repository
+package sales_teleport_repository

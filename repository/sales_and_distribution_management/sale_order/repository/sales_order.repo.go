@@ -1,1 +1,1 @@
-package repository
+package sales_order_repository

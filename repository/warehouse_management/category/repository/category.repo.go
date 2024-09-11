@@ -2,6 +2,7 @@ package category_repository
 
 import (
 	"context"
+	"errors"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -36,6 +37,9 @@ func (c *categoryRepository) GetByID(ctx context.Context, id primitive.ObjectID)
 	var category *category_domain.Category
 	err := categoryCollection.FindOne(ctx, filter).Decode(&category)
 	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, nil
+		}
 		return nil, err
 	}
 
@@ -49,6 +53,9 @@ func (c *categoryRepository) GetByName(ctx context.Context, name string) (*categ
 	var category *category_domain.Category
 	err := categoryCollection.FindOne(ctx, filter).Decode(&category)
 	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, nil
+		}
 		return nil, err
 	}
 

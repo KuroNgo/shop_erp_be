@@ -1,1 +1,1 @@
-package repository
+package supplier_repository

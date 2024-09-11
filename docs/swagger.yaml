@@ -52,6 +52,13 @@ definitions:
       start_date:
         type: string
     type: object
+  category_domain.Input:
+    properties:
+      category_name:
+        type: string
+      description:
+        type: string
+    type: object
   contracts_domain.Input:
     properties:
       contract_type:
@@ -652,6 +659,121 @@ paths:
       summary: Get by name Budget Information
       tags:
       - Budget
+  /api/v1/categories/create:
+    post:
+      consumes:
+      - application/json
+      description: Create new category
+      parameters:
+      - description: Category data
+        in: body
+        name: Category
+        required: true
+        schema:
+          $ref: '#/definitions/category_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Create category
+      tags:
+      - Category
+  /api/v1/categories/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete new category
+      parameters:
+      - description: Category ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Delete category
+      tags:
+      - Category
+  /api/v1/categories/get/_id:
+    get:
+      consumes:
+      - application/json
+      description: Get by id category
+      parameters:
+      - description: Category ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Get by id category
+      tags:
+      - Category
+  /api/v1/categories/get/all:
+    get:
+      consumes:
+      - application/json
+      description: Get all category
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Get all category
+      tags:
+      - Category
+  /api/v1/categories/get/name:
+    get:
+      consumes:
+      - application/json
+      description: Get by id category
+      parameters:
+      - description: Category ID
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Get by name category
+      tags:
+      - Category
+  /api/v1/categories/update:
+    put:
+      consumes:
+      - application/json
+      description: Update category
+      parameters:
+      - description: Category data
+        in: body
+        name: Category
+        required: true
+        schema:
+          $ref: '#/definitions/category_domain.Input'
+      - description: Category ID
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Update category
+      tags:
+      - Category
   /api/v1/contracts/create:
     post:
       consumes:
@@ -1586,3 +1708,4 @@ tags:
 - description: Manages financial transactions for accounts, tracking income and expenses,
     amounts, and transaction dates.
   name: Budget
+- name: Product

@@ -2,6 +2,7 @@ package product_repository
 
 import (
 	"context"
+	"errors"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -57,6 +58,9 @@ func (p *productRepository) GetProductByID(ctx context.Context, id primitive.Obj
 
 	var product *productdomain.Product
 	if err := productCollection.FindOne(ctx, filter).Decode(&product); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, nil
+		}
 		return nil, err
 	}
 
@@ -69,6 +73,9 @@ func (p *productRepository) GetProductByName(ctx context.Context, productName st
 	filter := bson.M{"name": productName}
 	var product *productdomain.Product
 	if err := productCollection.FindOne(ctx, filter).Decode(&product); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, nil
+		}
 		return nil, err
 	}
 

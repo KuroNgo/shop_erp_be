@@ -1,1 +1,1 @@
-package repository
+package stockmovement_repository

@@ -1,1 +1,1 @@
-package repository
+package shipping_repository

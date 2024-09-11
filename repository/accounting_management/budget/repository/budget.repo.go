@@ -165,6 +165,29 @@ func (b *budgetRepository) GetBudgetsByDateRange(ctx context.Context, startDate,
 }
 
 func (b *budgetRepository) GetTotalBudgetAmount(ctx context.Context) (float64, error) {
-	//TODO implement me
-	panic("implement me")
+	collectionBudget := b.database.Collection(b.collectionBudget)
+
+	filter := bson.M{}
+	cursor, err := collectionBudget.Find(ctx, filter)
+	if err != nil {
+		return 0, err
+	}
+	defer func(cursor *mongo.Cursor, ctx context.Context) {
+		err = cursor.Close(ctx)
+		if err != nil {
+			return
+		}
+	}(cursor, ctx)
+
+	var budgets float64
+	for cursor.Next(ctx) {
+		var budget budgetsdomain.Budget
+		if err = cursor.Decode(&budget); err != nil {
+			return 0, err
+		}
+
+		budgets = budgets + float64(budget.Amount)
+	}
+
+	return budgets, nil
 }

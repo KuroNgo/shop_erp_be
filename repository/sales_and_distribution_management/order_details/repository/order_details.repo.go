@@ -1,1 +1,1 @@
-package repository
+package order_detail_repository

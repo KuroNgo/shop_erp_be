@@ -19,7 +19,7 @@ func NewCategoryUseCase(contextTimeout time.Duration, categoryRepository categor
 	return &categoryUseCase{contextTimeout: contextTimeout, categoryRepository: categoryRepository, productRepository: productRepository}
 }
 
-func (c *categoryUseCase) CreateCategory(ctx context.Context, input categorydomain.Input) error {
+func (c *categoryUseCase) CreateCategory(ctx context.Context, input *categorydomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
@@ -55,7 +55,23 @@ func (c *categoryUseCase) GetByIDCategory(ctx context.Context, id string) (*cate
 	return response, nil
 }
 
-func (c *categoryUseCase) UpdateCategory(ctx context.Context, id string, input categorydomain.Input) error {
+func (c *categoryUseCase) GetByNameCategory(ctx context.Context, name string) (*categorydomain.CategoryResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
+	defer cancel()
+
+	categoryData, err := c.categoryRepository.GetByName(ctx, name)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &categorydomain.CategoryResponse{
+		Category: *categoryData,
+	}
+
+	return response, nil
+}
+
+func (c *categoryUseCase) UpdateCategory(ctx context.Context, id string, input *categorydomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 

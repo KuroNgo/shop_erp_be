@@ -2,11 +2,14 @@ package middlewares
 
 import "github.com/gin-gonic/gin"
 
+var (
+	host1 = "http://localhost:3000"
+	host2 = "http://localhost:5173"
+)
+
 func CORSPublic() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		origin := ctx.Request.Header.Get("Origin")
-		host1 := "http://localhost:3000"
-		host2 := "http://localhost:5173"
 		if origin == host1 || origin == host2 {
 			ctx.Writer.Header().Set("Access-Control-Allow-Origin", origin)
 			ctx.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
@@ -41,8 +44,6 @@ func CORSPrivate() gin.HandlerFunc {
 
 func OptionMessages(ctx *gin.Context) {
 	origin := ctx.Request.Header.Get("Origin")
-	host1 := "http://localhost:3000"
-	host2 := "http://localhost:5173"
 
 	if origin == host1 || origin == host2 {
 		ctx.Writer.Header().Set("Access-Control-Allow-Origin", origin)

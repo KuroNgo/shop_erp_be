@@ -95,7 +95,6 @@ func (c *contractRepository) GetOneByEmployeeID(ctx context.Context, employeeID 
 		if errors.Is(err, mongo.ErrNoDocuments) {
 			return contractsdomain.Contract{}, nil
 		}
-
 		return contractsdomain.Contract{}, err
 	}
 
