@@ -21,6 +21,7 @@ import (
 
 func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, gin *gin.Engine) {
 	publicRouter := gin.Group("/api/v1")
+	publicRouter2 := gin.Group("/api")
 
 	// Middleware
 	publicRouter.Use(
@@ -45,4 +46,7 @@ func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, g
 	contractroute.ContractRouter(env, timeout, db, publicRouter)
 	leaverequestroute.LeaveRequestRouter(env, timeout, db, publicRouter)
 	performancereviewroute.PerformanceReviewRouter(env, timeout, db, publicRouter)
+
+	// All Public APIs
+	userroute.UserGoogleRouter(env, timeout, db, publicRouter2)
 }

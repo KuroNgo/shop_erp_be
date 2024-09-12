@@ -37,6 +37,6 @@ func (u *UserController) GetMe(ctx *gin.Context) {
 	// Trả về phản hồi thành công
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": "success",
-		"user":   result,
+		"data":   result,
 	})
 }

@@ -10,7 +10,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	userdomain "shop_erp_mono/domain/human_resource_management/user"
 	"sync"
-	"time"
 )
 
 type userRepository struct {
@@ -192,20 +191,31 @@ func (r *userRepository) UpsertOne(ctx context.Context, user *userdomain.User) (
 	collectionUser := r.database.Collection(r.collectionUser)
 
 	filter := bson.M{"email": user.Email}
-	update := bson.M{"$set": bson.M{
-		"username":   user.Username,
-		"updated_at": time.Now(),
-	}, "$setOnInsert": bson.M{
-		"createdAt": time.Now(),
-	}}
 
-	opts := options.Update().SetUpsert(true)
-	_, err := collectionUser.UpdateOne(ctx, filter, update, opts)
-	if err != nil {
-		return nil, errors.New(err.Error() + "error in the updating user's data into database")
+	// Chuẩn bị các giá trị cập nhật
+	update := bson.D{{Key: "$set", Value: bson.M{
+		"full_name":  user.Username,
+		"email":      user.Email,
+		"avatar_url": user.AvatarURL,
+		"phone":      user.Phone,
+		"provider":   user.Provider,
+		"created_at": user.CreatedAt,
+		"updated_at": user.UpdatedAt,
+		"role":       user.Role,
+	}}}
+
+	opts := options.FindOneAndUpdate().SetUpsert(true).SetReturnDocument(options.After)
+	result := collectionUser.FindOneAndUpdate(ctx, filter, update, opts)
+
+	var updatedUser *userdomain.User
+	if err := result.Decode(&updatedUser); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, errors.New("user not found")
+		}
+		return nil, err
 	}
 
-	return user, nil
+	return updatedUser, nil
 }
 
 func (r *userRepository) UpdateImage(ctx context.Context, user *userdomain.User) error {
