@@ -266,11 +266,6 @@ func (u *userUseCase) UpdateOne(ctx context.Context, userID string, input *userd
 	return nil
 }
 
-func (u *userUseCase) UpdatePassword(ctx context.Context, id string, input *userdomain.Input) error {
-	//TODO implement me
-	panic("implement me")
-}
-
 func (u *userUseCase) UpdateVerify(ctx context.Context, id string, input *userdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
@@ -294,12 +289,95 @@ func (u *userUseCase) UpdateVerify(ctx context.Context, id string, input *userdo
 	return u.userRepository.UpdateVerify(ctx, &user)
 }
 
-func (u *userUseCase) UpdateVerifyForChangePassword(ctx context.Context, id string, input *userdomain.Input) error {
-	//TODO implement me
-	panic("implement me")
+func (u *userUseCase) UpdatePassword(ctx context.Context, id string, input *userdomain.ChangePasswordInput) error {
+	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
+	defer cancel()
+
+	if input.Password != input.PasswordCompare {
+		return errors.New("the passwords provided do not match")
+	}
+
+	user, err := u.userRepository.GetByVerificationCode(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	input.Password, err = password.HashPassword(input.Password)
+	if err != nil {
+		return err
+	}
+
+	updateUser := &userdomain.User{
+		ID:           user.ID,
+		PasswordHash: input.Password,
+		UpdatedAt:    time.Now(),
+	}
+
+	return u.userRepository.UpdatePassword(ctx, updateUser)
+}
+
+func (u *userUseCase) UpdateVerifyForChangePassword(ctx context.Context, verificationCode string) error {
+	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
+	defer cancel()
+
+	user, err := u.userRepository.GetByVerificationCode(ctx, verificationCode)
+	if err != nil {
+		return err
+	}
+
+	if user.Verified == false {
+		return errors.New("verification code check failed")
+	}
+
+	updUser := userdomain.User{
+		ID:       user.ID,
+		Verified: true,
+	}
+
+	return u.userRepository.UpdateVerify(ctx, &updUser)
+}
+
+func (u *userUseCase) ForgetPassword(ctx context.Context, email string) error {
+	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
+	defer cancel()
+
+	user, err := u.userRepository.GetByEmail(ctx, email)
+	if err != nil {
+		return err
+	}
+
+	var code string
+	code = randstr.Dec(6)
+
+	updUser := &userdomain.User{
+		ID:       user.ID,
+		Verified: true,
+	}
+
+	// Update User in Database
+	err = u.userRepository.UpdateVerify(ctx, updUser)
+	if err != nil {
+		return err
+	}
+
+	emailData := mail.EmailData{
+		Code:      code,
+		FirstName: user.Username,
+		Subject:   "Khôi phục mật khẩu",
+	}
+
+	err = mail.SendEmail(&emailData, user.Email, "forget_password.html")
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (u *userUseCase) LoginGoogle(ctx context.Context, code string) (*userdomain.Output, *userdomain.OutputLoginGoogle, error) {
+	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
+	defer cancel()
+
 	googleOauthConfig := &oauth2.Config{
 		ClientID:     u.database.GoogleClientID,
 		ClientSecret: u.database.GoogleClientSecret,

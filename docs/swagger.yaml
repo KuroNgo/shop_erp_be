@@ -195,6 +195,21 @@ definitions:
       updated_at:
         type: string
     type: object
+  user_domain.ChangePasswordInput:
+    properties:
+      password:
+        type: string
+      password_compare:
+        type: string
+    required:
+    - password
+    - password_compare
+    type: object
+  user_domain.ForgetPassword:
+    properties:
+      email:
+        type: string
+    type: object
   user_domain.SignIn:
     properties:
       email:
@@ -1642,6 +1657,24 @@ paths:
       summary: Delete User Information
       tags:
       - User
+  /api/v1/users/forget:
+    post:
+      consumes:
+      - application/json
+      description: Sends an email with a verification code for password reset
+      parameters:
+      - description: Forget password input
+        in: body
+        name: forgetInput
+        required: true
+        schema:
+          $ref: '#/definitions/user_domain.ForgetPassword'
+      produces:
+      - application/json
+      responses: {}
+      summary: User forget password
+      tags:
+      - User
   /api/v1/users/get/info:
     get:
       consumes:
@@ -1706,6 +1739,24 @@ paths:
       - application/json
       responses: {}
       summary: Logout user
+      tags:
+      - User
+  /api/v1/users/password/forget:
+    patch:
+      consumes:
+      - application/json
+      description: Allows the user to change their password after verifying the code
+      parameters:
+      - description: Change password input
+        in: body
+        name: changePasswordInput
+        required: true
+        schema:
+          $ref: '#/definitions/user_domain.ChangePasswordInput'
+      produces:
+      - application/json
+      responses: {}
+      summary: Change password
       tags:
       - User
   /api/v1/users/register:
@@ -1789,6 +1840,24 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Register user
+      tags:
+      - User
+  /api/v1/users/verify/password:
+    patch:
+      consumes:
+      - application/json
+      description: Verifies the code sent to the user's email for changing password
+      parameters:
+      - description: Verification code input
+        in: body
+        name: verificationCode
+        required: true
+        schema:
+          $ref: '#/definitions/user_domain.VerificationInput'
+      produces:
+      - application/json
+      responses: {}
+      summary: Verify code for password change
       tags:
       - User
 swagger: "2.0"

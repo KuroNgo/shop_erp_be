@@ -46,6 +46,15 @@ type VerificationInput struct {
 	VerificationCode string `json:"verification_code" binding:"required"`
 }
 
+type ChangePasswordInput struct {
+	Password        string `json:"password" binding:"required"`
+	PasswordCompare string `json:"password_compare" binding:"required"`
+}
+
+type ForgetPassword struct {
+	Email string `json:"email" bson:"email"`
+}
+
 type Output struct {
 	User User `bson:"user" json:"user"`
 }

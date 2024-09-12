@@ -2276,6 +2276,33 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/api/v1/users/forget": {
+            "post": {
+                "description": "Sends an email with a verification code for password reset",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "User forget password",
+                "parameters": [
+                    {
+                        "description": "Forget password input",
+                        "name": "forgetInput",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user_domain.ForgetPassword"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/api/v1/users/get/info": {
             "get": {
                 "security": [
@@ -2373,6 +2400,33 @@ const docTemplate = `{
                     "User"
                 ],
                 "summary": "Logout user",
+                "responses": {}
+            }
+        },
+        "/api/v1/users/password/forget": {
+            "patch": {
+                "description": "Allows the user to change their password after verifying the code",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Change password",
+                "parameters": [
+                    {
+                        "description": "Change password input",
+                        "name": "changePasswordInput",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user_domain.ChangePasswordInput"
+                        }
+                    }
+                ],
                 "responses": {}
             }
         },
@@ -2490,6 +2544,33 @@ const docTemplate = `{
                     {
                         "description": "User data",
                         "name": "User",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user_domain.VerificationInput"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/users/verify/password": {
+            "patch": {
+                "description": "Verifies the code sent to the user's email for changing password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Verify code for password change",
+                "parameters": [
+                    {
+                        "description": "Verification code input",
+                        "name": "verificationCode",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -2785,6 +2866,29 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "user_domain.ChangePasswordInput": {
+            "type": "object",
+            "required": [
+                "password",
+                "password_compare"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "password_compare": {
+                    "type": "string"
+                }
+            }
+        },
+        "user_domain.ForgetPassword": {
+            "type": "object",
+            "properties": {
+                "email": {
                     "type": "string"
                 }
             }

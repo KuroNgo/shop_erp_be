@@ -30,9 +30,7 @@ type IUserUseCase interface {
 	GetByVerificationCode(ctx context.Context, verificationCode string) (Output, error)
 
 	UpdateOne(ctx context.Context, userID string, input *Input, file *multipart.FileHeader) error
-	UpdatePassword(ctx context.Context, id string, input *Input) error
 	UpdateVerify(ctx context.Context, id string, input *Input) error
-	UpdateVerifyForChangePassword(ctx context.Context, id string, input *Input) error
 	UpdateImage(ctx context.Context, id string, input *Input) error
 
 	SignUp(ctx context.Context, file *multipart.FileHeader, input *Input) error
@@ -40,4 +38,8 @@ type IUserUseCase interface {
 	LoginGoogle(ctx context.Context, code string) (*Output, *OutputLoginGoogle, error)
 	DeleteOne(ctx context.Context, idUser string) error
 	RefreshToken(ctx context.Context, refreshToken string) (*OutputLogin, error)
+
+	ForgetPassword(ctx context.Context, email string) error
+	UpdateVerifyForChangePassword(ctx context.Context, verificationCode string) error
+	UpdatePassword(ctx context.Context, id string, input *ChangePasswordInput) error
 }
