@@ -5,9 +5,9 @@ import (
 	"net/http"
 )
 
-// GetByNameCategories Get by name category
-// @Summary Get by name category
-// @Description Get by id category
+// GetByNameCategories Get by name product_category
+// @Summary Get by name product_category
+// @Description Get by id product_category
 // @Tags Category
 // @Accept json
 // @Produce json

@@ -41,10 +41,6 @@ func IsNilImage(avatarUrl string) error {
 }
 
 func IsNilUser(input *userdomain.Input) error {
-	if input.AvatarURL == "" {
-		return errors.New("the user's information cannot be empty")
-	}
-
 	if input.PasswordHash == "" {
 		return errors.New("the user's information cannot be empty")
 	}

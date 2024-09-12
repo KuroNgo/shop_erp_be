@@ -1,1 +1,1 @@
-package usecase
+package supplier_usecase

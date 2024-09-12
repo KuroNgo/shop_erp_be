@@ -5,9 +5,9 @@ import (
 	"net/http"
 )
 
-// DeleteCategory Delete a new category
-// @Summary Delete category
-// @Description Delete new category
+// DeleteCategory Delete a new product_category
+// @Summary Delete product_category
+// @Description Delete new product_category
 // @Tags Category
 // @Accept json
 // @Produce json

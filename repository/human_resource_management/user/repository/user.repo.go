@@ -188,7 +188,7 @@ func (r *userRepository) UpdateVerify(ctx context.Context, user *userdomain.User
 	return nil
 }
 
-func (r *userRepository) UpsertOne(ctx context.Context, user *userdomain.User) error {
+func (r *userRepository) UpsertOne(ctx context.Context, user *userdomain.User) (*userdomain.User, error) {
 	collectionUser := r.database.Collection(r.collectionUser)
 
 	filter := bson.M{"email": user.Email}
@@ -202,10 +202,10 @@ func (r *userRepository) UpsertOne(ctx context.Context, user *userdomain.User) e
 	opts := options.Update().SetUpsert(true)
 	_, err := collectionUser.UpdateOne(ctx, filter, update, opts)
 	if err != nil {
-		return errors.New(err.Error() + "error in the updating user's data into database")
+		return nil, errors.New(err.Error() + "error in the updating user's data into database")
 	}
 
-	return nil
+	return user, nil
 }
 
 func (r *userRepository) UpdateImage(ctx context.Context, user *userdomain.User) error {

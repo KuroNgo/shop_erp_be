@@ -1,1 +1,1 @@
-package usecase
+package purchase_order_detail_usecase

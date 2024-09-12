@@ -28,3 +28,7 @@ type Input struct {
 	TotalAmount float64   `bson:"total_amount" json:"total_amount"`
 	Status      string    `bson:"status" json:"status"` // Example: "Processing", "Received", "Cancelled"
 }
+
+type PurchaseOrderResponse struct {
+	PurchaseOrder PurchaseOrder `bson:"purchase_order" json:"purchase_order"`
+}

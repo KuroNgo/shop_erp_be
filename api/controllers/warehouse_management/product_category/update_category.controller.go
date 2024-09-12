@@ -6,16 +6,17 @@ import (
 	categorydomain "shop_erp_mono/domain/warehouse_management/product_category"
 )
 
-// CreateCategory Create a new category
-// @Summary Create category
-// @Description Create new category
+// UpdateCategory Update product_category
+// @Summary Update product_category
+// @Description Update product_category
 // @Tags Category
 // @Accept json
 // @Produce json
 // @Param Category body category_domain.Input true "Category data"
+// @Param name path string true "Category ID"
 // @Security ApiKeyAuth
-// @Router /api/v1/categories/create [post]
-func (c *CategoryController) CreateCategory(ctx *gin.Context) {
+// @Router /api/v1/categories/update [put]
+func (c *CategoryController) UpdateCategory(ctx *gin.Context) {
 	var input categorydomain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -25,7 +26,9 @@ func (c *CategoryController) CreateCategory(ctx *gin.Context) {
 		return
 	}
 
-	if err := c.CategoryUseCase.CreateCategory(ctx, &input); err != nil {
+	_id := ctx.Param("_id")
+
+	if err := c.CategoryUseCase.UpdateCategory(ctx, _id, &input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
 			"message": err.Error(),

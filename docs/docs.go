@@ -731,7 +731,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Create new category",
+                "description": "Create new product_category",
                 "consumes": [
                     "application/json"
                 ],
@@ -741,7 +741,7 @@ const docTemplate = `{
                 "tags": [
                     "Category"
                 ],
-                "summary": "Create category",
+                "summary": "Create product_category",
                 "parameters": [
                     {
                         "description": "Category data",
@@ -763,7 +763,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Delete new category",
+                "description": "Delete new product_category",
                 "consumes": [
                     "application/json"
                 ],
@@ -773,7 +773,7 @@ const docTemplate = `{
                 "tags": [
                     "Category"
                 ],
-                "summary": "Delete category",
+                "summary": "Delete product_category",
                 "parameters": [
                     {
                         "type": "string",
@@ -793,7 +793,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get by id category",
+                "description": "Get by id product_category",
                 "consumes": [
                     "application/json"
                 ],
@@ -803,7 +803,7 @@ const docTemplate = `{
                 "tags": [
                     "Category"
                 ],
-                "summary": "Get by id category",
+                "summary": "Get by id product_category",
                 "parameters": [
                     {
                         "type": "string",
@@ -823,7 +823,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get all category",
+                "description": "Get all product_category",
                 "consumes": [
                     "application/json"
                 ],
@@ -833,7 +833,7 @@ const docTemplate = `{
                 "tags": [
                     "Category"
                 ],
-                "summary": "Get all category",
+                "summary": "Get all product_category",
                 "responses": {}
             }
         },
@@ -844,7 +844,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get by id category",
+                "description": "Get by id product_category",
                 "consumes": [
                     "application/json"
                 ],
@@ -854,7 +854,7 @@ const docTemplate = `{
                 "tags": [
                     "Category"
                 ],
-                "summary": "Get by name category",
+                "summary": "Get by name product_category",
                 "parameters": [
                     {
                         "type": "string",
@@ -874,7 +874,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Update category",
+                "description": "Update product_category",
                 "consumes": [
                     "application/json"
                 ],
@@ -884,7 +884,7 @@ const docTemplate = `{
                 "tags": [
                     "Category"
                 ],
-                "summary": "Update category",
+                "summary": "Update product_category",
                 "parameters": [
                     {
                         "description": "Category data",
@@ -2297,6 +2297,37 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/api/v1/users/get/refresh": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Refresh the user's access token using a valid refresh token stored in cookies.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Refresh Access Token",
+                "responses": {}
+            }
+        },
+        "/api/v1/users/google/callback": {
+            "get": {
+                "description": "Login the user's google, but the function not use with swagger.",
+                "tags": [
+                    "User"
+                ],
+                "summary": "Login Google",
+                "responses": {}
+            }
+        },
         "/api/v1/users/login": {
             "post": {
                 "security": [
@@ -2342,6 +2373,130 @@ const docTemplate = `{
                     "User"
                 ],
                 "summary": "Logout user",
+                "responses": {}
+            }
+        },
+        "/api/v1/users/register": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Register a new user with form data",
+                "consumes": [
+                    "application/x-www-form-urlencoded",
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Register user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "example": "\"john.doe@example.com\"",
+                        "description": "Email of the user",
+                        "name": "email",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "example": "\"securepassword123\"",
+                        "description": "Password of the user",
+                        "name": "password",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "example": "\"John Doe\"",
+                        "description": "Full name of the user",
+                        "name": "fullName",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "example": "\"http://example.com/avatar.jpg\"",
+                        "description": "Avatar URL of the user",
+                        "name": "avatarUrl",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Image file to upload",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "example": "\"+1234567890\"",
+                        "description": "Phone number of the user",
+                        "name": "phone",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/users/update": {
+            "put": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Updates the user's first name, last name, and username",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update User Information",
+                "responses": {}
+            }
+        },
+        "/api/v1/users/verify": {
+            "patch": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Register a new user with form data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Register user",
+                "parameters": [
+                    {
+                        "description": "User data",
+                        "name": "User",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user_domain.VerificationInput"
+                        }
+                    }
+                ],
                 "responses": {}
             }
         }
@@ -2644,6 +2799,17 @@ const docTemplate = `{
                 "password_hash": {
                     "type": "string",
                     "example": "12345"
+                }
+            }
+        },
+        "user_domain.VerificationInput": {
+            "type": "object",
+            "required": [
+                "verification_code"
+            ],
+            "properties": {
+                "verification_code": {
+                    "type": "string"
                 }
             }
         }

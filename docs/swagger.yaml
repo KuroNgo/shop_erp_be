@@ -204,6 +204,13 @@ definitions:
         example: "12345"
         type: string
     type: object
+  user_domain.VerificationInput:
+    properties:
+      verification_code:
+        type: string
+    required:
+    - verification_code
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -663,7 +670,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Create new category
+      description: Create new product_category
       parameters:
       - description: Category data
         in: body
@@ -676,14 +683,14 @@ paths:
       responses: {}
       security:
       - ApiKeyAuth: []
-      summary: Create category
+      summary: Create product_category
       tags:
       - Category
   /api/v1/categories/delete:
     delete:
       consumes:
       - application/json
-      description: Delete new category
+      description: Delete new product_category
       parameters:
       - description: Category ID
         in: path
@@ -695,14 +702,14 @@ paths:
       responses: {}
       security:
       - ApiKeyAuth: []
-      summary: Delete category
+      summary: Delete product_category
       tags:
       - Category
   /api/v1/categories/get/_id:
     get:
       consumes:
       - application/json
-      description: Get by id category
+      description: Get by id product_category
       parameters:
       - description: Category ID
         in: path
@@ -714,27 +721,27 @@ paths:
       responses: {}
       security:
       - ApiKeyAuth: []
-      summary: Get by id category
+      summary: Get by id product_category
       tags:
       - Category
   /api/v1/categories/get/all:
     get:
       consumes:
       - application/json
-      description: Get all category
+      description: Get all product_category
       produces:
       - application/json
       responses: {}
       security:
       - ApiKeyAuth: []
-      summary: Get all category
+      summary: Get all product_category
       tags:
       - Category
   /api/v1/categories/get/name:
     get:
       consumes:
       - application/json
-      description: Get by id category
+      description: Get by id product_category
       parameters:
       - description: Category ID
         in: path
@@ -746,14 +753,14 @@ paths:
       responses: {}
       security:
       - ApiKeyAuth: []
-      summary: Get by name category
+      summary: Get by name product_category
       tags:
       - Category
   /api/v1/categories/update:
     put:
       consumes:
       - application/json
-      description: Update category
+      description: Update product_category
       parameters:
       - description: Category data
         in: body
@@ -771,7 +778,7 @@ paths:
       responses: {}
       security:
       - ApiKeyAuth: []
-      summary: Update category
+      summary: Update product_category
       tags:
       - Category
   /api/v1/contracts/create:
@@ -1649,6 +1656,27 @@ paths:
       summary: Get User Information
       tags:
       - User
+  /api/v1/users/get/refresh:
+    get:
+      consumes:
+      - application/json
+      description: Refresh the user's access token using a valid refresh token stored
+        in cookies.
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Refresh Access Token
+      tags:
+      - User
+  /api/v1/users/google/callback:
+    get:
+      description: Login the user's google, but the function not use with swagger.
+      responses: {}
+      summary: Login Google
+      tags:
+      - User
   /api/v1/users/login:
     post:
       consumes:
@@ -1678,6 +1706,89 @@ paths:
       - application/json
       responses: {}
       summary: Logout user
+      tags:
+      - User
+  /api/v1/users/register:
+    post:
+      consumes:
+      - application/x-www-form-urlencoded
+      - multipart/form-data
+      description: Register a new user with form data
+      parameters:
+      - description: Email of the user
+        example: '"john.doe@example.com"'
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: Password of the user
+        example: '"securepassword123"'
+        in: formData
+        name: password
+        required: true
+        type: string
+      - description: Full name of the user
+        example: '"John Doe"'
+        in: formData
+        name: fullName
+        required: true
+        type: string
+      - description: Avatar URL of the user
+        example: '"http://example.com/avatar.jpg"'
+        in: formData
+        name: avatarUrl
+        required: true
+        type: string
+      - description: Image file to upload
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: Phone number of the user
+        example: '"+1234567890"'
+        in: formData
+        name: phone
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Register user
+      tags:
+      - User
+  /api/v1/users/update:
+    put:
+      consumes:
+      - application/json
+      description: Updates the user's first name, last name, and username
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Update User Information
+      tags:
+      - User
+  /api/v1/users/verify:
+    patch:
+      consumes:
+      - application/json
+      description: Register a new user with form data
+      parameters:
+      - description: User data
+        in: body
+        name: User
+        required: true
+        schema:
+          $ref: '#/definitions/user_domain.VerificationInput'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Register user
       tags:
       - User
 swagger: "2.0"

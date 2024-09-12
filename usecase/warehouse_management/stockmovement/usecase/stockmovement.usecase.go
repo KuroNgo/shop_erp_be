@@ -1,1 +1,1 @@
-package usecase
+package stockmovement_usecase

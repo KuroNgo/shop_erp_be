@@ -1,1 +1,1 @@
-package usecase
+package warehouse_usecase
