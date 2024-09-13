@@ -19,9 +19,9 @@ type FinancialReports struct {
 }
 
 type FinancialData struct {
-	Category string  `bson:"category" json:"category"` // Loại dữ liệu, ví dụ: "Revenue", "Expense"
-	Amount   float64 `bson:"amount" json:"amount"`     // Giá trị tài chính
-	Currency string  `bson:"currency" json:"currency"` // Loại tiền tệ, ví dụ: "USD", "VND"
+	Category string  `bson:"product_category" json:"product_category"` // Loại dữ liệu, ví dụ: "Revenue", "Expense"
+	Amount   float64 `bson:"amount" json:"amount"`                     // Giá trị tài chính
+	Currency string  `bson:"currency" json:"currency"`                 // Loại tiền tệ, ví dụ: "USD", "VND"
 }
 
 type Input struct {

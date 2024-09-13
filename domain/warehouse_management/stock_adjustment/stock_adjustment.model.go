@@ -34,13 +34,7 @@ type Input struct {
 }
 
 type StockAdjustmentResponse struct {
-	ID             primitive.ObjectID         `bson:"_id,omitempty" json:"id,omitempty"`
-	Product        product_domain.Product     `bson:"product" json:"product"`
-	Warehouse      warehouse_domain.Warehouse `bson:"warehouse_id" json:"warehouse_id"`
-	AdjustmentType string                     `bson:"adjustment_type" json:"adjustment_type"` // Example: "Increase", "Decrease"
-	Quantity       int                        `bson:"quantity" json:"quantity"`
-	Reason         string                     `bson:"reason" json:"reason"`
-	AdjustmentDate time.Time                  `bson:"adjustment_date" json:"adjustment_date"`
-	CreatedAt      time.Time                  `bson:"created_at" json:"created_at"`
-	UpdatedAt      time.Time                  `bson:"updated_at" json:"updated_at"`
+	StockAdjustment StockAdjustment            `bson:"stock_adjustment" json:"stock_adjustment"`
+	Product         product_domain.Product     `bson:"product" json:"product"`
+	Warehouse       warehouse_domain.Warehouse `bson:"warehouse_id" json:"warehouse_id"`
 }

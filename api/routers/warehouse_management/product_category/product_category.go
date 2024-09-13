@@ -7,8 +7,8 @@ import (
 	"shop_erp_mono/bootstrap"
 	productdomain "shop_erp_mono/domain/warehouse_management/product"
 	categorydomain "shop_erp_mono/domain/warehouse_management/product_category"
-	category_repository "shop_erp_mono/repository/warehouse_management/category/repository"
 	product_repository "shop_erp_mono/repository/warehouse_management/product/repository"
+	category_repository "shop_erp_mono/repository/warehouse_management/product_category/repository"
 	category_usecase "shop_erp_mono/usecase/warehouse_management/product_category/usecase"
 	"time"
 )

@@ -6,15 +6,15 @@ import (
 )
 
 type InventoryRepository interface {
-	CreateOne(ctx context.Context, input Inventory) (*Inventory, error)
-	UpdateOne(ctx context.Context, id primitive.ObjectID, input Inventory) (*Inventory, error)
-	GetByID(ctx context.Context, id primitive.ObjectID) (*InventoryResponse, error)
-	GetByProduct(ctx context.Context, productID primitive.ObjectID) ([]InventoryResponse, error)
-	GetByWarehouse(ctx context.Context, warehouseID primitive.ObjectID) ([]InventoryResponse, error)
+	CreateOne(ctx context.Context, inventory Inventory) error
+	UpdateOne(ctx context.Context, inventory Inventory) error
+	GetByID(ctx context.Context, id primitive.ObjectID) (*Inventory, error)
+	GetByProduct(ctx context.Context, productID primitive.ObjectID) ([]Inventory, error)
+	GetByWarehouse(ctx context.Context, warehouseID primitive.ObjectID) ([]Inventory, error)
 	DeleteOne(ctx context.Context, id primitive.ObjectID) error
 	AdjustQuantity(ctx context.Context, id primitive.ObjectID, adjustment int) (*Inventory, error)
 	CheckAvailability(ctx context.Context, productID primitive.ObjectID, warehouseID primitive.ObjectID, requiredQuantity int) (bool, error)
-	GetAll(ctx context.Context) ([]InventoryResponse, error)
+	GetAll(ctx context.Context) ([]Inventory, error)
 }
 
 type InventoryUseCase interface {

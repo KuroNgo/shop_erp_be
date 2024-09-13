@@ -6,11 +6,11 @@ import (
 )
 
 type IWarehouseRepository interface {
-	CreateOne(ctx context.Context, warehouse Warehouse) (*Warehouse, error)
-	UpdateOne(ctx context.Context, id primitive.ObjectID, warehouse Warehouse) (*Warehouse, error)
-	GetByID(ctx context.Context, id primitive.ObjectID) (*WarehouseResponse, error)
-	GetByName(ctx context.Context, name string) (*WarehouseResponse, error)
-	GetAll(ctx context.Context) ([]WarehouseResponse, error)
+	CreateOne(ctx context.Context, warehouse Warehouse) error
+	UpdateOne(ctx context.Context, warehouse Warehouse) error
+	GetByID(ctx context.Context, id primitive.ObjectID) (*Warehouse, error)
+	GetByName(ctx context.Context, name string) (*Warehouse, error)
+	GetAll(ctx context.Context) ([]Warehouse, error)
 	DeleteOne(ctx context.Context, id primitive.ObjectID) error
 }
 
