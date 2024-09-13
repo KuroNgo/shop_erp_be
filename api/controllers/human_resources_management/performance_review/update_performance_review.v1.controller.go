@@ -6,17 +6,17 @@ import (
 	performancereviewdomain "shop_erp_mono/domain/human_resource_management/performance_review"
 )
 
-// CreateOnePerformanceReview create the performance review's information
-// @Summary Create Performance Review Information
-// @Description Create the performance review's information
+// UpdateOnePerformanceReviewV1 update the performance review's information
+// @Summary Update Performance Review Information
+// @Description Update the performance review's information
 // @Tags Performance Review
 // @Accept json
 // @Produce json
-// @Param PerformanceReview body performance_review_domain.Input true "Performance Review data"
-// @Router /api/v1/performance_reviews/create [post]
+// @Param PerformanceReview body performance_review_domain.Input1 true "Performance Review data"
+// @Router /api/v1/performance_reviews/update [put]
 // @Security CookieAuth
-func (p *PerformanceReviewController) CreateOnePerformanceReview(ctx *gin.Context) {
-	var input performancereviewdomain.Input
+func (p *PerformanceReviewController) UpdateOnePerformanceReviewV1(ctx *gin.Context) {
+	var input performancereviewdomain.Input1
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
@@ -25,7 +25,9 @@ func (p *PerformanceReviewController) CreateOnePerformanceReview(ctx *gin.Contex
 		return
 	}
 
-	err := p.PerformanceReviewUseCase.CreateOne(ctx, &input)
+	_id := ctx.Param("_id")
+
+	err := p.PerformanceReviewUseCase.UpdateOneWithEmailEmployee(ctx, _id, &input)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

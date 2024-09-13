@@ -1602,7 +1602,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/performance_review_domain.Input"
+                            "$ref": "#/definitions/performance_review_domain.Input1"
                         }
                     }
                 ],
@@ -1745,7 +1745,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/performance_review_domain.Input"
+                            "$ref": "#/definitions/performance_review_domain.Input1"
                         }
                     }
                 ],
@@ -2580,6 +2580,70 @@ const docTemplate = `{
                 ],
                 "responses": {}
             }
+        },
+        "/api/v2/performance_reviews/create": {
+            "post": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Create the performance review's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Performance Review"
+                ],
+                "summary": "Create Performance Review Information",
+                "parameters": [
+                    {
+                        "description": "Performance Review data",
+                        "name": "PerformanceReview",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/performance_review_domain.Input2"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v2/performance_reviews/update": {
+            "put": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Update the performance review's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Performance Review"
+                ],
+                "summary": "Update Performance Review Information",
+                "parameters": [
+                    {
+                        "description": "Performance Review data",
+                        "name": "PerformanceReview",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/performance_review_domain.Input1"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
         }
     },
     "definitions": {
@@ -2767,25 +2831,50 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "employee": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "admin@admin.com"
                 },
                 "end_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "20/07/2024"
                 },
                 "leave_type": {
                     "description": "Example: \"Sick Leave\", \"Annual Leave\", \"Unpaid Leave\"",
-                    "type": "string"
+                    "type": "string",
+                    "example": "Sick Leave"
                 },
                 "start_date": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "20/07/2024"
                 },
                 "status": {
                     "description": "Example: \"Approved\", \"Pending\", \"Rejected\"",
+                    "type": "string",
+                    "example": "Approved"
+                }
+            }
+        },
+        "performance_review_domain.Input1": {
+            "type": "object",
+            "properties": {
+                "comments": {
+                    "type": "string"
+                },
+                "employee": {
+                    "type": "string"
+                },
+                "performance_score": {
+                    "type": "integer"
+                },
+                "review_date": {
+                    "type": "string"
+                },
+                "reviewer": {
                     "type": "string"
                 }
             }
         },
-        "performance_review_domain.Input": {
+        "performance_review_domain.Input2": {
             "type": "object",
             "properties": {
                 "comments": {

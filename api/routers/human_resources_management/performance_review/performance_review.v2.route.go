@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-func PerformanceReviewRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func PerformanceReviewRouterV2(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
 	pr := performancereviewrepository.NewPerformanceReviewRepository(db, performancereviewdomain.CollectionPerformanceReview)
 	em := employeerepository.NewEmployeeRepository(db, employeesdomain.CollectionEmployee)
 	performanceReview := &performancereviewcontroller.PerformanceReviewController{
@@ -22,10 +22,6 @@ func PerformanceReviewRouter(env *bootstrap.Database, timeout time.Duration, db 
 	}
 
 	router := group.Group("/performance_reviews")
-	router.GET("/get/_id", performanceReview.GetOneByIDPerformanceReview)
-	router.GET("/get/email", performanceReview.GetOneByEmailPerformanceReview)
-	router.GET("/get/all", performanceReview.GetAllPerformanceReview)
-	router.POST("/create", performanceReview.CreateOnePerformanceReview)
-	router.PUT("/update", performanceReview.UpdateOnePerformanceReview)
-	router.DELETE("/delete", performanceReview.DeleteOnePerformanceReview)
+	router.POST("/create", performanceReview.CreateOnePerformanceReviewV2)
+	router.PUT("/update", performanceReview.UpdateOnePerformanceReviewV2)
 }

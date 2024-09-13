@@ -4,7 +4,7 @@ import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	departmentsdomain "shop_erp_mono/domain/human_resource_management/departments"
-	employees_domain "shop_erp_mono/domain/human_resource_management/employees"
+	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
 	"shop_erp_mono/repository/human_resource_management/department/validate"
 	"time"
 )
@@ -12,18 +12,19 @@ import (
 type departmentUseCase struct {
 	contextTimeout       time.Duration
 	departmentRepository departmentsdomain.IDepartmentRepository
-	employeeRepository   employees_domain.IEmployeeRepository
+	employeeRepository   employeesdomain.IEmployeeRepository
 }
 
 func NewDepartmentUseCase(contextTimeout time.Duration, departmentRepository departmentsdomain.IDepartmentRepository,
-	employeeRepository employees_domain.IEmployeeRepository) departmentsdomain.IDepartmentUseCase {
+	employeeRepository employeesdomain.IEmployeeRepository) departmentsdomain.IDepartmentUseCase {
 	return &departmentUseCase{contextTimeout: contextTimeout, departmentRepository: departmentRepository, employeeRepository: employeeRepository}
 }
 
 func (d *departmentUseCase) CreateOne(ctx context.Context, input *departmentsdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
-	if err := validate.IsNilDepartment(input); err != nil {
+
+	if err := validate.ValidateDepartment(input); err != nil {
 		return err
 	}
 
@@ -59,6 +60,10 @@ func (d *departmentUseCase) DeleteOne(ctx context.Context, id string) error {
 func (d *departmentUseCase) UpdateOne(ctx context.Context, id string, input *departmentsdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
+
+	if err := validate.ValidateDepartment(input); err != nil {
+		return err
+	}
 
 	departmentID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {

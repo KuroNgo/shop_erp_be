@@ -5,7 +5,7 @@ import (
 	leave_request_domain "shop_erp_mono/domain/human_resource_management/leave_request"
 )
 
-func IsNilLeaveRequest(input *leave_request_domain.Input) error {
+func ValidateLeaveRequest(input *leave_request_domain.Input) error {
 	if input.EmployeeEmail == "" {
 		return errors.New("email employee do not nil")
 	}
@@ -24,6 +24,10 @@ func IsNilLeaveRequest(input *leave_request_domain.Input) error {
 
 	if input.EndDate.IsZero() {
 		return errors.New("EndDate do not nil")
+	}
+
+	if input.StartDate.Before(input.EndDate) {
+		return errors.New("EndDate can not be before startDate")
 	}
 	return nil
 }

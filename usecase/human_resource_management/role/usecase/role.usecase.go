@@ -21,7 +21,7 @@ func (r *roleUseCase) CreateOneRole(ctx context.Context, input *roledomain.Input
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
 
-	if err := validate.IsNilRole(input); err != nil {
+	if err := validate.ValidateRole(input); err != nil {
 		return err
 	}
 
@@ -98,17 +98,17 @@ func (r *roleUseCase) UpdateOneRole(ctx context.Context, id string, input *roled
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
 
+	if err := validate.ValidateRole(input); err != nil {
+		return err
+	}
+
 	roleID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return err
 	}
 
-	if err = validate.IsNilRole(input); err != nil {
-		return err
-	}
-
 	role := &roledomain.Role{
-		ID:          primitive.NewObjectID(),
+		ID:          roleID,
 		Title:       input.Title,
 		Description: input.Description,
 		CreatedAt:   time.Now(),

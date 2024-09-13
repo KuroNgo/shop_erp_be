@@ -23,7 +23,7 @@ func (b *benefitUseCase) CreateOne(ctx context.Context, input *benefitsdomain.In
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
-	if err := validate.IsNilBenefit(input); err != nil {
+	if err := validate.ValidateBenefit(input); err != nil {
 		return err
 	}
 
@@ -63,6 +63,10 @@ func (b *benefitUseCase) DeleteOne(ctx context.Context, id string) error {
 func (b *benefitUseCase) UpdateOne(ctx context.Context, id string, input *benefitsdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
+
+	if err := validate.ValidateBenefit(input); err != nil {
+		return err
+	}
 
 	benefitID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {

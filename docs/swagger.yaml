@@ -127,19 +127,37 @@ definitions:
   leave_request_domain.Input:
     properties:
       employee:
+        example: admin@admin.com
         type: string
       end_date:
+        example: 20/07/2024
         type: string
       leave_type:
         description: 'Example: "Sick Leave", "Annual Leave", "Unpaid Leave"'
+        example: Sick Leave
         type: string
       start_date:
+        example: 20/07/2024
         type: string
       status:
         description: 'Example: "Approved", "Pending", "Rejected"'
+        example: Approved
         type: string
     type: object
-  performance_review_domain.Input:
+  performance_review_domain.Input1:
+    properties:
+      comments:
+        type: string
+      employee:
+        type: string
+      performance_score:
+        type: integer
+      review_date:
+        type: string
+      reviewer:
+        type: string
+    type: object
+  performance_review_domain.Input2:
     properties:
       comments:
         type: string
@@ -1229,7 +1247,7 @@ paths:
         name: PerformanceReview
         required: true
         schema:
-          $ref: '#/definitions/performance_review_domain.Input'
+          $ref: '#/definitions/performance_review_domain.Input1'
       produces:
       - application/json
       responses: {}
@@ -1319,7 +1337,7 @@ paths:
         name: PerformanceReview
         required: true
         schema:
-          $ref: '#/definitions/performance_review_domain.Input'
+          $ref: '#/definitions/performance_review_domain.Input1'
       produces:
       - application/json
       responses: {}
@@ -1860,6 +1878,46 @@ paths:
       summary: Verify code for password change
       tags:
       - User
+  /api/v2/performance_reviews/create:
+    post:
+      consumes:
+      - application/json
+      description: Create the performance review's information
+      parameters:
+      - description: Performance Review data
+        in: body
+        name: PerformanceReview
+        required: true
+        schema:
+          $ref: '#/definitions/performance_review_domain.Input2'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Create Performance Review Information
+      tags:
+      - Performance Review
+  /api/v2/performance_reviews/update:
+    put:
+      consumes:
+      - application/json
+      description: Update the performance review's information
+      parameters:
+      - description: Performance Review data
+        in: body
+        name: PerformanceReview
+        required: true
+        schema:
+          $ref: '#/definitions/performance_review_domain.Input1'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Update Performance Review Information
+      tags:
+      - Performance Review
 swagger: "2.0"
 tags:
 - description: represents the attendance information of an employee.

@@ -30,7 +30,7 @@ func (e *employeeUseCase) CreateOne(ctx context.Context, input *employeesdomain.
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
 
-	if err := validate.IsNilEmployee(input); err != nil {
+	if err := validate.ValidateEmployee(input); err != nil {
 		return err
 	}
 
@@ -86,6 +86,10 @@ func (e *employeeUseCase) DeleteOne(ctx context.Context, id string) error {
 func (e *employeeUseCase) UpdateOne(ctx context.Context, id string, input *employeesdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
+
+	if err := validate.ValidateEmployee(input); err != nil {
+		return err
+	}
 
 	employeeID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {

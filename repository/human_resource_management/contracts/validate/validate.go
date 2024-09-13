@@ -5,7 +5,7 @@ import (
 	contracts_domain "shop_erp_mono/domain/human_resource_management/contracts"
 )
 
-func IsNilContract(input *contracts_domain.Input) error {
+func ValidateContract(input *contracts_domain.Input) error {
 	if input.ContractType == "" {
 		return errors.New("contract type do not nil")
 	}
@@ -16,6 +16,10 @@ func IsNilContract(input *contracts_domain.Input) error {
 
 	if input.Salary == 0 {
 		return errors.New("salary do not not equal or lower with 0")
+	}
+
+	if input.StartDate.Before(input.EndDate) {
+		return errors.New("endDate do not before startDate")
 	}
 
 	return nil

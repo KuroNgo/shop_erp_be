@@ -2,6 +2,7 @@ package attendance_usecase
 
 import (
 	"context"
+	"errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	attendancedomain "shop_erp_mono/domain/human_resource_management/attendance"
 	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
@@ -63,6 +64,10 @@ func (a *attendanceUseCase) DeleteOne(ctx context.Context, id string) error {
 func (a *attendanceUseCase) UpdateOne(ctx context.Context, id string, input *attendancedomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
+
+	if input.CheckInTime.Before(input.CheckOutTime) {
+		return errors.New("check-out time cannot be before check-in time")
+	}
 
 	if err := validate.IsNilAttendance(input); err != nil {
 		return err

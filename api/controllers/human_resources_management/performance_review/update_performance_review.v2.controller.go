@@ -6,17 +6,17 @@ import (
 	performancereviewdomain "shop_erp_mono/domain/human_resource_management/performance_review"
 )
 
-// UpdateOnePerformanceReview update the performance review's information
+// UpdateOnePerformanceReviewV2 update the performance review's information
 // @Summary Update Performance Review Information
 // @Description Update the performance review's information
 // @Tags Performance Review
 // @Accept json
 // @Produce json
-// @Param PerformanceReview body performance_review_domain.Input true "Performance Review data"
-// @Router /api/v1/performance_reviews/update [put]
+// @Param PerformanceReview body performance_review_domain.Input1 true "Performance Review data"
+// @Router /api/v2/performance_reviews/update [put]
 // @Security CookieAuth
-func (p *PerformanceReviewController) UpdateOnePerformanceReview(ctx *gin.Context) {
-	var input performancereviewdomain.Input
+func (p *PerformanceReviewController) UpdateOnePerformanceReviewV2(ctx *gin.Context) {
+	var input performancereviewdomain.Input2
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
@@ -27,7 +27,7 @@ func (p *PerformanceReviewController) UpdateOnePerformanceReview(ctx *gin.Contex
 
 	_id := ctx.Param("_id")
 
-	err := p.PerformanceReviewUseCase.UpdateOne(ctx, _id, &input)
+	err := p.PerformanceReviewUseCase.UpdateOneWithIDEmployee(ctx, _id, &input)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

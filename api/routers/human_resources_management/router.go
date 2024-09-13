@@ -20,11 +20,13 @@ import (
 )
 
 func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, gin *gin.Engine) {
-	publicRouter := gin.Group("/api/v1")
-	publicRouter2 := gin.Group("/api")
+	publicRouterV1 := gin.Group("/api/v1")
+	publicRouterV2 := gin.Group("/api/v2")
+	publicRouter := gin.Group("/api")
+	router := gin.Group("")
 
 	// Middleware
-	publicRouter.Use(
+	publicRouterV1.Use(
 		middlewares.CORSPublic(),
 		middlewares.Recover(),
 		gzip.Gzip(gzip.DefaultCompression,
@@ -33,20 +35,23 @@ func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, g
 	)
 
 	// This is a CORS method for check IP validation
-	publicRouter.OPTIONS("/*path", middlewares.OptionMessages)
+	router.OPTIONS("/*path", middlewares.OptionMessages)
+
+	// All Public APIs v1
+	userroute.UserRouter(env, timeout, db, publicRouterV1)
+	roleroute.RoleRouter(env, timeout, db, publicRouterV1)
+	departmentroute.DepartmentRouter(env, timeout, db, publicRouterV1)
+	salaryroute.SalaryRouter(env, timeout, db, publicRouterV1)
+	attendanceroute.AttendanceRouter(env, timeout, db, publicRouterV1)
+	employeeroute.EmployeeRouter(env, timeout, db, publicRouterV1)
+	benefitroute.BenefitRouter(env, timeout, db, publicRouterV1)
+	contractroute.ContractRouter(env, timeout, db, publicRouterV1)
+	leaverequestroute.LeaveRequestRouter(env, timeout, db, publicRouterV1)
+	performancereviewroute.PerformanceReviewRouterV1(env, timeout, db, publicRouterV1)
+
+	// All Public APIs v2
+	performancereviewroute.PerformanceReviewRouterV2(env, timeout, db, publicRouterV2)
 
 	// All Public APIs
-	userroute.UserRouter(env, timeout, db, publicRouter)
-	roleroute.RoleRouter(env, timeout, db, publicRouter)
-	departmentroute.DepartmentRouter(env, timeout, db, publicRouter)
-	salaryroute.SalaryRouter(env, timeout, db, publicRouter)
-	attendanceroute.AttendanceRouter(env, timeout, db, publicRouter)
-	employeeroute.EmployeeRouter(env, timeout, db, publicRouter)
-	benefitroute.BenefitRouter(env, timeout, db, publicRouter)
-	contractroute.ContractRouter(env, timeout, db, publicRouter)
-	leaverequestroute.LeaveRequestRouter(env, timeout, db, publicRouter)
-	performancereviewroute.PerformanceReviewRouter(env, timeout, db, publicRouter)
-
-	// All Public APIs
-	userroute.UserGoogleRouter(env, timeout, db, publicRouter2)
+	userroute.UserGoogleRouter(env, timeout, db, publicRouter)
 }

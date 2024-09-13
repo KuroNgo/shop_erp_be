@@ -24,7 +24,7 @@ func (c *contractUseCase) CreateOne(ctx context.Context, input *contractsdomain.
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
-	if err := validate.IsNilContract(input); err != nil {
+	if err := validate.ValidateContract(input); err != nil {
 		return err
 	}
 
@@ -68,12 +68,12 @@ func (c *contractUseCase) UpdateOne(ctx context.Context, id string, input *contr
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
-	contractID, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
+	if err := validate.ValidateContract(input); err != nil {
 		return err
 	}
 
-	if err = validate.IsNilContract(input); err != nil {
+	contractID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
 		return err
 	}
 

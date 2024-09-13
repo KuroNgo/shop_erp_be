@@ -32,6 +32,9 @@ func (s *salaryUseCase) CreateOne(ctx context.Context, input *salarydomain.Input
 		return err
 	}
 
+	// Calculate net salary
+	netSalary := input.BaseSalary + input.Bonus - input.Deductions
+
 	salaryData := &salarydomain.Salary{
 		ID:           primitive.NewObjectID(),
 		RoleID:       roleData.ID,
@@ -39,7 +42,7 @@ func (s *salaryUseCase) CreateOne(ctx context.Context, input *salarydomain.Input
 		BaseSalary:   input.BaseSalary,
 		Bonus:        input.Bonus,
 		Deductions:   input.Deductions,
-		NetSalary:    input.NetSalary,
+		NetSalary:    netSalary,
 		CreatedAt:    time.Now(),
 		UpdatedAt:    time.Now(),
 	}
@@ -77,13 +80,16 @@ func (s *salaryUseCase) UpdateOne(ctx context.Context, id string, input *salaryd
 		return err
 	}
 
+	// Calculate net salary
+	netSalary := input.BaseSalary + input.Bonus - input.Deductions
+
 	salaryData := &salarydomain.Salary{
 		RoleID:       roleData.ID,
 		UnitCurrency: input.UnitCurrency,
 		BaseSalary:   input.BaseSalary,
 		Bonus:        input.Bonus,
 		Deductions:   input.Deductions,
-		NetSalary:    input.NetSalary,
+		NetSalary:    netSalary,
 		CreatedAt:    time.Now(),
 		UpdatedAt:    time.Now(),
 	}

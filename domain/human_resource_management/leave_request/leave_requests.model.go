@@ -23,11 +23,11 @@ type LeaveRequest struct {
 }
 
 type Input struct {
-	EmployeeEmail string    `bson:"employee" json:"employee"`
-	LeaveType     string    `bson:"leave_type" json:"leave_type"` // Example: "Sick Leave", "Annual Leave", "Unpaid Leave"
-	StartDate     time.Time `bson:"start_date" json:"start_date"`
-	EndDate       time.Time `bson:"end_date" json:"end_date"`
-	Status        string    `bson:"status" json:"status"` // Example: "Approved", "Pending", "Rejected"
+	EmployeeEmail string    `bson:"employee" json:"employee" example:"admin@admin.com"`
+	LeaveType     string    `bson:"leave_type" json:"leave_type" example:"Sick Leave"` // Example: "Sick Leave", "Annual Leave", "Unpaid Leave"
+	StartDate     time.Time `bson:"start_date" json:"start_date" example:"20/07/2024"`
+	EndDate       time.Time `bson:"end_date" json:"end_date" example:"20/07/2024"`
+	Status        string    `bson:"status" json:"status" example:"Approved"` // Example: "Approved", "Pending", "Rejected"
 }
 
 type Output struct {

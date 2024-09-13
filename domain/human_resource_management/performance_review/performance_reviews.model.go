@@ -22,10 +22,18 @@ type PerformanceReview struct {
 	UpdatedAt        time.Time          `bson:"updated_at" json:"updated_at"`
 }
 
-type Input struct {
-	Employee         string    `bson:"employee_id" json:"employee_id"`
+type Input1 struct {
+	EmployeeEmail    string    `bson:"employee" json:"employee"`
+	ReviewerEmail    string    `bson:"reviewer" json:"reviewer"`
 	ReviewDate       time.Time `bson:"review_date" json:"review_date"`
-	Reviewer         string    `bson:"reviewer_id" json:"reviewer_id"`
+	PerformanceScore int       `bson:"performance_score" json:"performance_score"`
+	Comments         string    `bson:"comments" json:"comments"`
+}
+
+type Input2 struct {
+	EmployeeID       string    `bson:"employee_id" json:"employee_id"`
+	ReviewerID       string    `bson:"reviewer_id" json:"reviewer_id"`
+	ReviewDate       time.Time `bson:"review_date" json:"review_date"`
 	PerformanceScore int       `bson:"performance_score" json:"performance_score"`
 	Comments         string    `bson:"comments" json:"comments"`
 }

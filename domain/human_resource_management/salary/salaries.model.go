@@ -29,7 +29,6 @@ type Input struct {
 	UnitCurrency string  `bson:"unit_currency" json:"unit_currency" exmaple:"USD"`
 	Bonus        float64 `bson:"bonus" json:"bonus" exmaple:"200"`
 	Deductions   float64 `bson:"deductions" json:"deductions" exmaple:"100"`
-	NetSalary    float64 `bson:"net_salary" json:"net_salary" exmaple:"1600"`
 }
 
 type Output struct {

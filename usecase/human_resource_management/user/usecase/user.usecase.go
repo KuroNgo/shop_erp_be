@@ -36,12 +36,8 @@ func (u *userUseCase) SignUp(ctx context.Context, file *multipart.FileHeader, in
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
 
-	if err := validate.IsNilUser(input); err != nil {
+	if err := validate.ValidateUser(input); err != nil {
 		return err
-	}
-
-	if !helper.EmailValid(input.Email) {
-		return errors.New("email Invalid ")
 	}
 
 	// Bên phía client sẽ phải so sánh password thêm một lần nữa đã đúng chưa
@@ -275,7 +271,7 @@ func (u *userUseCase) UpdateVerify(ctx context.Context, id string, input *userdo
 		return err
 	}
 
-	if err = validate.IsNilUser(input); err != nil {
+	if err = validate.ValidateUser(input); err != nil {
 		return err
 	}
 

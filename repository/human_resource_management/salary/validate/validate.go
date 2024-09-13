@@ -6,21 +6,27 @@ import (
 )
 
 func IsNilSalary(salary *salarydomain.Input) error {
-	if salary.BaseSalary == 0 {
-		return errors.New("the salary's information do not nil")
+	if salary.BaseSalary < 0 {
+		return errors.New("the salary's information is invalid")
 	}
 
-	if salary.UnitCurrency == "" {
-		return errors.New("the salary's information do not nil")
+	if salary.Deductions < 0 {
+		return errors.New("the salary's information is invalid")
 	}
 
-	if salary.Deductions == 0 {
-		return errors.New("the salary's information do not nil")
-	}
-
-	if salary.NetSalary == 0 {
-		return errors.New("the salary's information do not nil")
+	validCurrencies := []string{"USD", "EUR", "VND"}
+	if !contains(validCurrencies, salary.UnitCurrency) {
+		return errors.New("invalid currency unit")
 	}
 
 	return nil
+}
+
+func contains(slice []string, item string) bool {
+	for _, value := range slice {
+		if value == item {
+			return true
+		}
+	}
+	return false
 }

@@ -3,9 +3,10 @@ package validate
 import (
 	"errors"
 	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
+	"shop_erp_mono/pkg/helper"
 )
 
-func IsNilEmployee(employee *employeesdomain.Input) error {
+func ValidateEmployee(employee *employeesdomain.Input) error {
 	if employee.FirstName == "" {
 		return errors.New("the employee's information do not nil")
 	}
@@ -20,6 +21,10 @@ func IsNilEmployee(employee *employeesdomain.Input) error {
 
 	if employee.Email == "" {
 		return errors.New("the employee's information do not nil")
+	}
+
+	if !helper.EmailValid(employee.Email) {
+		return errors.New("the employee's information do not valid")
 	}
 
 	if employee.Phone == "" {

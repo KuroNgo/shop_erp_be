@@ -3,6 +3,7 @@ package validate
 import (
 	"errors"
 	userdomain "shop_erp_mono/domain/human_resource_management/user"
+	"shop_erp_mono/pkg/helper"
 )
 
 func IsInvalidUser(user *userdomain.User) error {
@@ -40,13 +41,19 @@ func IsNilImage(avatarUrl string) error {
 	return nil
 }
 
-func IsNilUser(input *userdomain.Input) error {
+func ValidateUser(input *userdomain.Input) error {
 	if input.PasswordHash == "" {
 		return errors.New("the user's information cannot be empty")
 	}
+
 	if input.Email == "" {
 		return errors.New("the user's information cannot be empty")
 	}
+
+	if !helper.EmailValid(input.Email) {
+		return errors.New("email Invalid ")
+	}
+
 	if input.Username == "" {
 		return errors.New("the user's information cannot be empty")
 	}

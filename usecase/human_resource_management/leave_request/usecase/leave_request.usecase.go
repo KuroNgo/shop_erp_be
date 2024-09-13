@@ -24,7 +24,7 @@ func (l *leaveRequestUseCase) CreateOne(ctx context.Context, input *leaverequest
 	ctx, cancel := context.WithTimeout(ctx, l.contextTimeout)
 	defer cancel()
 
-	if err := validate.IsNilLeaveRequest(input); err != nil {
+	if err := validate.ValidateLeaveRequest(input); err != nil {
 		return err
 	}
 
@@ -68,7 +68,7 @@ func (l *leaveRequestUseCase) UpdateOne(ctx context.Context, id string, input *l
 		return err
 	}
 
-	if err = validate.IsNilLeaveRequest(input); err != nil {
+	if err = validate.ValidateLeaveRequest(input); err != nil {
 		return err
 	}
 

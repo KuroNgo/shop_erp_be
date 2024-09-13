@@ -20,20 +20,61 @@ func NewPerformanceReviewUseCase(contextTimeout time.Duration, performanceReview
 	return &performanceReviewUseCase{contextTimeout: contextTimeout, performanceReviewRepository: performanceReviewRepository, employeeRepository: employeeRepository}
 }
 
-func (p *performanceReviewUseCase) CreateOne(ctx context.Context, input *performancereviewdomain.Input) error {
+func (p *performanceReviewUseCase) CreateOneWithEmailEmployee(ctx context.Context, input *performancereviewdomain.Input1) error {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
-	if err := validate.IsNilPerformanceReview(input); err != nil {
+	if err := validate.ValidatePerformanceReviewV1(input); err != nil {
 		return err
 	}
 
-	employeeData, err := p.employeeRepository.GetOneByEmail(ctx, input.Employee)
+	employeeData, err := p.employeeRepository.GetOneByEmail(ctx, input.EmployeeEmail)
 	if err != nil {
 		return err
 	}
 
-	reviewerData, err := p.employeeRepository.GetOneByEmail(ctx, input.Reviewer)
+	reviewerData, err := p.employeeRepository.GetOneByEmail(ctx, input.ReviewerEmail)
+	if err != nil {
+		return err
+	}
+
+	performanceReview := &performancereviewdomain.PerformanceReview{
+		ID:               primitive.NewObjectID(),
+		EmployeeID:       employeeData.ID,
+		ReviewerID:       reviewerData.ID,
+		ReviewDate:       input.ReviewDate,
+		PerformanceScore: input.PerformanceScore,
+		CreatedAt:        time.Now(),
+		UpdatedAt:        time.Now(),
+	}
+
+	return p.performanceReviewRepository.CreateOne(ctx, performanceReview)
+}
+
+func (p *performanceReviewUseCase) CreateOneWithIDEmployee(ctx context.Context, input *performancereviewdomain.Input2) error {
+	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
+	defer cancel()
+
+	if err := validate.ValidatePerformanceReviewV2(input); err != nil {
+		return err
+	}
+
+	employeeID, err := primitive.ObjectIDFromHex(input.EmployeeID)
+	if err != nil {
+		return err
+	}
+
+	reviewerID, err := primitive.ObjectIDFromHex(input.ReviewerID)
+	if err != nil {
+		return err
+	}
+
+	employeeData, err := p.employeeRepository.GetOneByID(ctx, employeeID)
+	if err != nil {
+		return err
+	}
+
+	reviewerData, err := p.employeeRepository.GetOneByID(ctx, reviewerID)
 	if err != nil {
 		return err
 	}
@@ -63,7 +104,7 @@ func (p *performanceReviewUseCase) DeleteOne(ctx context.Context, id string) err
 	return p.performanceReviewRepository.DeleteOne(ctx, performanceReviewID)
 }
 
-func (p *performanceReviewUseCase) UpdateOne(ctx context.Context, id string, input *performancereviewdomain.Input) error {
+func (p *performanceReviewUseCase) UpdateOneWithEmailEmployee(ctx context.Context, id string, input *performancereviewdomain.Input1) error {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
@@ -72,12 +113,53 @@ func (p *performanceReviewUseCase) UpdateOne(ctx context.Context, id string, inp
 		return err
 	}
 
-	employeeData, err := p.employeeRepository.GetOneByEmail(ctx, input.Employee)
+	employeeData, err := p.employeeRepository.GetOneByEmail(ctx, input.EmployeeEmail)
 	if err != nil {
 		return err
 	}
 
-	reviewerData, err := p.employeeRepository.GetOneByEmail(ctx, input.Reviewer)
+	reviewerData, err := p.employeeRepository.GetOneByEmail(ctx, input.ReviewerEmail)
+	if err != nil {
+		return err
+	}
+
+	performanceReview := &performancereviewdomain.PerformanceReview{
+		EmployeeID:       employeeData.ID,
+		ReviewerID:       reviewerData.ID,
+		ReviewDate:       input.ReviewDate,
+		PerformanceScore: input.PerformanceScore,
+		CreatedAt:        time.Now(),
+		UpdatedAt:        time.Now(),
+	}
+
+	return p.performanceReviewRepository.UpdateOne(ctx, performanceReviewID, performanceReview)
+}
+
+func (p *performanceReviewUseCase) UpdateOneWithIDEmployee(ctx context.Context, id string, input *performancereviewdomain.Input2) error {
+	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
+	defer cancel()
+
+	performanceReviewID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+
+	employeeID, err := primitive.ObjectIDFromHex(input.EmployeeID)
+	if err != nil {
+		return err
+	}
+
+	reviewerID, err := primitive.ObjectIDFromHex(input.ReviewerID)
+	if err != nil {
+		return err
+	}
+
+	employeeData, err := p.employeeRepository.GetOneByID(ctx, employeeID)
+	if err != nil {
+		return err
+	}
+
+	reviewerData, err := p.employeeRepository.GetOneByID(ctx, reviewerID)
 	if err != nil {
 		return err
 	}
