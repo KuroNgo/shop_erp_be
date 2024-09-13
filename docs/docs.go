@@ -2255,6 +2255,218 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/api/v1/suppliers/create": {
+            "post": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Create the supplier's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Supplier"
+                ],
+                "summary": "Create supplier Information",
+                "parameters": [
+                    {
+                        "description": "Supplier data",
+                        "name": "Supplier",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/supplier_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/suppliers/delete": {
+            "delete": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "delete the supplier's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Supplier"
+                ],
+                "summary": "delete supplier Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "supplier ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/suppliers/get/_id": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "get by id the supplier's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Supplier"
+                ],
+                "summary": "get by id supplier Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "supplier ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/suppliers/get/all": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "get all the supplier's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Supplier"
+                ],
+                "summary": "get all supplier Information",
+                "responses": {}
+            }
+        },
+        "/api/v1/suppliers/get/all/pagination": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "get all the supplier's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Supplier"
+                ],
+                "summary": "get all supplier Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Page number for pagination",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/suppliers/get/name": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "get by name the supplier's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Supplier"
+                ],
+                "summary": "get by name supplier Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "supplier ID",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/suppliers/update": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "update by name the supplier's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Supplier"
+                ],
+                "summary": "update by name supplier Information",
+                "parameters": [
+                    {
+                        "description": "Supplier data",
+                        "name": "Supplier",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/supplier_domain.Input"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "supplier ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/api/v1/users/delete": {
             "delete": {
                 "security": [
@@ -2955,6 +3167,26 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "supplier_domain.Input": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "contact_person": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "supplier_name": {
                     "type": "string"
                 }
             }

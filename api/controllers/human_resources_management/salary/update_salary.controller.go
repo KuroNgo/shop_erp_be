@@ -12,6 +12,8 @@ import (
 // @Tags Salary
 // @Accept json
 // @Produce json
+// @Param Salary body salary_domain.Salary true "Salary data"
+// @Param _id path string true "Employee ID"
 // @Router /api/v1/salaries/update [put]
 // @Security CookieAuth
 func (s *SalaryController) UpdateOneSalary(ctx *gin.Context) {

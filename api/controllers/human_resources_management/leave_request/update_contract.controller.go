@@ -12,6 +12,7 @@ import (
 // @Tags Leave Request
 // @Accept json
 // @Produce json
+// @Param LeaveRequest body leave_request_domain.Input true "Leave Request data"
 // @Router /api/v1/leave_requests/update [put]
 // @Security CookieAuth
 func (l *LeaveRequestController) UpdateOneLeaveRequest(ctx *gin.Context) {

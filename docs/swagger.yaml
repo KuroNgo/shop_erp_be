@@ -213,6 +213,19 @@ definitions:
       updated_at:
         type: string
     type: object
+  supplier_domain.Input:
+    properties:
+      address:
+        type: string
+      contact_person:
+        type: string
+      email:
+        type: string
+      phone_number:
+        type: string
+      supplier_name:
+        type: string
+    type: object
   user_domain.ChangePasswordInput:
     properties:
       password:
@@ -1662,6 +1675,140 @@ paths:
       summary: Update Salary Information
       tags:
       - Salary
+  /api/v1/suppliers/create:
+    post:
+      consumes:
+      - application/json
+      description: Create the supplier's information
+      parameters:
+      - description: Supplier data
+        in: body
+        name: Supplier
+        required: true
+        schema:
+          $ref: '#/definitions/supplier_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Create supplier Information
+      tags:
+      - Supplier
+  /api/v1/suppliers/delete:
+    delete:
+      consumes:
+      - application/json
+      description: delete the supplier's information
+      parameters:
+      - description: supplier ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: delete supplier Information
+      tags:
+      - Supplier
+  /api/v1/suppliers/get/_id:
+    get:
+      consumes:
+      - application/json
+      description: get by id the supplier's information
+      parameters:
+      - description: supplier ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: get by id supplier Information
+      tags:
+      - Supplier
+  /api/v1/suppliers/get/all:
+    get:
+      consumes:
+      - application/json
+      description: get all the supplier's information
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: get all supplier Information
+      tags:
+      - Supplier
+  /api/v1/suppliers/get/all/pagination:
+    get:
+      consumes:
+      - application/json
+      description: get all the supplier's information
+      parameters:
+      - description: Page number for pagination
+        in: query
+        name: page
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: get all supplier Information
+      tags:
+      - Supplier
+  /api/v1/suppliers/get/name:
+    get:
+      consumes:
+      - application/json
+      description: get by name the supplier's information
+      parameters:
+      - description: supplier ID
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: get by name supplier Information
+      tags:
+      - Supplier
+  /api/v1/suppliers/update:
+    get:
+      consumes:
+      - application/json
+      description: update by name the supplier's information
+      parameters:
+      - description: Supplier data
+        in: body
+        name: Supplier
+        required: true
+        schema:
+          $ref: '#/definitions/supplier_domain.Input'
+      - description: supplier ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: update by name supplier Information
+      tags:
+      - Supplier
   /api/v1/users/delete:
     delete:
       consumes:

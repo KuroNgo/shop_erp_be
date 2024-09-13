@@ -1,1 +1,152 @@
 package supplier_usecase
+
+import (
+	"context"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	supplierdomain "shop_erp_mono/domain/warehouse_management/supplier"
+	"shop_erp_mono/repository"
+	"time"
+)
+
+type supplierUseCase struct {
+	contextTimeout     time.Duration
+	supplierRepository supplierdomain.ISupplierRepository
+}
+
+func NewSupplierUseCase(contextTimeout time.Duration, supplierRepository supplierdomain.ISupplierRepository) supplierdomain.ISupplierUseCase {
+	return &supplierUseCase{contextTimeout: contextTimeout, supplierRepository: supplierRepository}
+}
+
+func (s *supplierUseCase) CreateSupplier(ctx context.Context, input *supplierdomain.Input) error {
+	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
+	defer cancel()
+
+	supplier := supplierdomain.Supplier{
+		ID:            primitive.NewObjectID(),
+		SupplierName:  input.SupplierName,
+		ContactPerson: input.ContactPerson,
+		PhoneNumber:   input.PhoneNumber,
+		Email:         input.Email,
+		Address:       input.Address,
+		CreatedAt:     time.Now(),
+		UpdatedAt:     time.Now(),
+	}
+
+	return s.supplierRepository.CreateOne(ctx, supplier)
+}
+
+func (s *supplierUseCase) GetSupplierByID(ctx context.Context, id string) (*supplierdomain.SupplierResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
+	defer cancel()
+
+	supplierID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
+	supplierData, err := s.supplierRepository.GetByID(ctx, supplierID)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &supplierdomain.SupplierResponse{
+		Supplier: *supplierData,
+	}
+
+	return response, nil
+}
+
+func (s *supplierUseCase) GetSupplierByName(ctx context.Context, name string) (*supplierdomain.SupplierResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
+	defer cancel()
+
+	supplierData, err := s.supplierRepository.GetByName(ctx, name)
+	if err != nil {
+		return nil, err
+	}
+
+	response := &supplierdomain.SupplierResponse{
+		Supplier: *supplierData,
+	}
+
+	return response, nil
+}
+
+func (s *supplierUseCase) GetSuppliersWithPagination(ctx context.Context, pagination repository.Pagination) ([]supplierdomain.SupplierResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
+	defer cancel()
+
+	supplierData, err := s.supplierRepository.GetAllWithPagination(ctx, pagination)
+	if err != nil {
+		return nil, err
+	}
+
+	var responses []supplierdomain.SupplierResponse
+	responses = make([]supplierdomain.SupplierResponse, 0, len(supplierData))
+	for _, supplier := range supplierData {
+		response := supplierdomain.SupplierResponse{
+			Supplier: supplier,
+		}
+
+		responses = append(responses, response)
+	}
+
+	return responses, nil
+}
+
+func (s *supplierUseCase) GetSuppliers(ctx context.Context) ([]supplierdomain.SupplierResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
+	defer cancel()
+
+	supplierData, err := s.supplierRepository.GetAll(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var responses []supplierdomain.SupplierResponse
+	responses = make([]supplierdomain.SupplierResponse, 0, len(supplierData))
+	for _, supplier := range supplierData {
+		response := supplierdomain.SupplierResponse{
+			Supplier: supplier,
+		}
+
+		responses = append(responses, response)
+	}
+
+	return responses, nil
+}
+
+func (s *supplierUseCase) UpdateSupplier(ctx context.Context, id string, input supplierdomain.Input) error {
+	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
+	defer cancel()
+
+	supplierID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+
+	supplier := &supplierdomain.Supplier{
+		ID:            supplierID,
+		SupplierName:  input.SupplierName,
+		ContactPerson: input.ContactPerson,
+		PhoneNumber:   input.PhoneNumber,
+		Email:         input.Email,
+		Address:       input.Address,
+		CreatedAt:     time.Now(),
+		UpdatedAt:     time.Now(),
+	}
+
+	return s.supplierRepository.UpdateOne(ctx, supplier)
+}
+
+func (s *supplierUseCase) DeleteSupplier(ctx context.Context, id string) error {
+	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
+	defer cancel()
+
+	supplierID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+
+	return s.supplierRepository.DeleteOne(ctx, supplierID)
+}

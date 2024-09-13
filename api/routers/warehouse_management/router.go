@@ -7,6 +7,7 @@ import (
 	"shop_erp_mono/api/middlewares"
 	product_route "shop_erp_mono/api/routers/warehouse_management/product"
 	"shop_erp_mono/api/routers/warehouse_management/product_category"
+	supplier_route "shop_erp_mono/api/routers/warehouse_management/supplier"
 	"shop_erp_mono/bootstrap"
 	"time"
 )
@@ -26,4 +27,5 @@ func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, g
 	// All Public APIs
 	product_route.ProductRouter(env, timeout, db, publicRouter)
 	product_category.ProductCategoryRouter(env, timeout, db, publicRouter)
+	supplier_route.SupplierRouter(env, timeout, db, publicRouter)
 }

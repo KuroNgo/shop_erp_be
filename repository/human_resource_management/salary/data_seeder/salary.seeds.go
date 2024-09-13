@@ -16,7 +16,6 @@ var salary = salarydomain.Input{
 	UnitCurrency: "USD",
 	Bonus:        200.00,
 	Deductions:   100.00,
-	NetSalary:    1600.00,
 }
 
 func SeedSalary(ctx context.Context, client *mongo.Client) error {
@@ -29,6 +28,8 @@ func SeedSalary(ctx context.Context, client *mongo.Client) error {
 		return err
 	}
 
+	netSalary := salary.BaseSalary + salary.Bonus - salary.Deductions
+
 	salaryData := salarydomain.Salary{
 		ID:           primitive.NewObjectID(),
 		RoleID:       role.ID,
@@ -36,7 +37,7 @@ func SeedSalary(ctx context.Context, client *mongo.Client) error {
 		BaseSalary:   salary.BaseSalary,
 		Bonus:        salary.Bonus,
 		Deductions:   salary.Deductions,
-		NetSalary:    salary.NetSalary,
+		NetSalary:    netSalary,
 		CreatedAt:    time.Now(),
 		UpdatedAt:    time.Now(),
 	}

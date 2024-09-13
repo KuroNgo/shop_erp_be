@@ -15,7 +15,13 @@ type FinancialReports struct {
 	StartDate   time.Time          `bson:"start_date" json:"startDate"`
 	EndDate     time.Time          `bson:"end_date" json:"endDate"`
 	GeneratedAt time.Time          `bson:"generated_at" json:"generatedAt"`
-	Data        []string           `bson:"data" json:"data"`
+	Data        []FinancialData    `bson:"data" json:"data"`
+}
+
+type FinancialData struct {
+	Category string  `bson:"category" json:"category"` // Loại dữ liệu, ví dụ: "Revenue", "Expense"
+	Amount   float64 `bson:"amount" json:"amount"`     // Giá trị tài chính
+	Currency string  `bson:"currency" json:"currency"` // Loại tiền tệ, ví dụ: "USD", "VND"
 }
 
 type Input struct {
