@@ -31,7 +31,7 @@ func (s *stockMovementRepository) GetByID(ctx context.Context, id primitive.Obje
 	return &stockMovement, nil
 }
 
-func (s *stockMovementRepository) Create(ctx context.Context, movement *stockmovementdomain.StockMovement) error {
+func (s *stockMovementRepository) CreateOne(ctx context.Context, movement *stockmovementdomain.StockMovement) error {
 	stockMovementCollection := s.database.Collection(s.stockMovementCollection)
 
 	_, err := stockMovementCollection.InsertOne(ctx, movement)
@@ -42,7 +42,7 @@ func (s *stockMovementRepository) Create(ctx context.Context, movement *stockmov
 	return nil
 }
 
-func (s *stockMovementRepository) Update(ctx context.Context, movement *stockmovementdomain.StockMovement) error {
+func (s *stockMovementRepository) UpdateOne(ctx context.Context, movement *stockmovementdomain.StockMovement) error {
 	stockMovementCollection := s.database.Collection(s.stockMovementCollection)
 
 	filter := bson.M{"_id": movement.ID}
@@ -65,7 +65,7 @@ func (s *stockMovementRepository) Update(ctx context.Context, movement *stockmov
 	return nil
 }
 
-func (s *stockMovementRepository) Delete(ctx context.Context, id primitive.ObjectID) error {
+func (s *stockMovementRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
 	stockMovementCollection := s.database.Collection(s.stockMovementCollection)
 
 	filter := bson.M{"_id": id}

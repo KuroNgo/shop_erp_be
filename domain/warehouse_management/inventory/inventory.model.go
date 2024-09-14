@@ -28,10 +28,7 @@ type Input struct {
 }
 
 type InventoryResponse struct {
-	ID        primitive.ObjectID        `bson:"_id,omitempty" json:"id,omitempty"`
+	Inventory Inventory                 `bson:"inventory" json:"inventory"`
 	Product   productdomain.Product     `bson:"product" json:"product"`
 	Warehouse warehousedomain.Warehouse `bson:"warehouse" json:"warehouse"`
-	Quantity  int                       `bson:"quantity" json:"quantity"`
-	CreatedAt time.Time                 `bson:"created_at" json:"created_at"`
-	UpdatedAt time.Time                 `bson:"updated_at" json:"updated_at"`
 }

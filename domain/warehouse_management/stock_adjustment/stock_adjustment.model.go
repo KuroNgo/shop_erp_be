@@ -1,4 +1,4 @@
-package stock_adjustment
+package stock_adjustment_domain
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"

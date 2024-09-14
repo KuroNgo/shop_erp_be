@@ -18,8 +18,8 @@ type IPurchaseOrderRepository interface {
 
 type IPurchaseOrderUseCase interface {
 	GetByID(ctx context.Context, id string) (*PurchaseOrder, error)
-	Create(ctx context.Context, order *PurchaseOrder) error
-	Update(ctx context.Context, id string, order *PurchaseOrder) error
+	Create(ctx context.Context, order *Input) error
+	Update(ctx context.Context, id string, order *Input) error
 	Delete(ctx context.Context, id string) error
 	GetAllWithPagination(ctx context.Context, pagination repository.Pagination) ([]PurchaseOrder, error)
 	GetBySupplierID(ctx context.Context, supplierID string) ([]PurchaseOrder, error)

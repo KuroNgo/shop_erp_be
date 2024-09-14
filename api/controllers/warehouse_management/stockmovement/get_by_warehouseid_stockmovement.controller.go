@@ -1,0 +1,24 @@
+package stockmovement_controller
+
+import (
+	"github.com/gin-gonic/gin"
+	"net/http"
+)
+
+func (s *StockMovementController) GetByWarehouseID(ctx *gin.Context) {
+	warehouseID := ctx.Param("warehouse_id")
+
+	data, err := s.StockMovementUseCase.GetByWarehouseID(ctx, warehouseID)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"status":  "error",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"status": "success",
+		"data":   data,
+	})
+}

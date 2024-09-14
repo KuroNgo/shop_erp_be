@@ -2,6 +2,7 @@ package inventory_repository
 
 import (
 	"context"
+	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -12,6 +13,10 @@ import (
 type inventoryRepository struct {
 	database            *mongo.Database
 	inventoryCollection string
+}
+
+func NewInventoryRepository(database *mongo.Database, inventoryCollection string) inventorydomain.InventoryRepository {
+	return &inventoryRepository{database: database, inventoryCollection: inventoryCollection}
 }
 
 func (i *inventoryRepository) CreateOne(ctx context.Context, inventory inventorydomain.Inventory) error {
@@ -126,13 +131,46 @@ func (i *inventoryRepository) DeleteOne(ctx context.Context, id primitive.Object
 }
 
 func (i *inventoryRepository) AdjustQuantity(ctx context.Context, id primitive.ObjectID, adjustment int) (*inventorydomain.Inventory, error) {
-	//TODO implement me
-	panic("implement me")
+	inventoryCollection := i.database.Collection(i.inventoryCollection)
+
+	filter := bson.M{"_id": id}
+	var inventory inventorydomain.Inventory
+	if err := inventoryCollection.FindOne(ctx, filter).Decode(&inventory); err != nil {
+		return nil, err
+	}
+
+	newQuantity := inventory.Quantity + adjustment // Điều chỉnh số lượng (adjust quantity)
+	update := bson.M{"$set": bson.M{"quantity": newQuantity}}
+	if _, err := inventoryCollection.UpdateOne(ctx, filter, update); err != nil {
+		return nil, err
+	}
+
+	inventory.Quantity = newQuantity
+
+	return &inventory, nil
 }
 
 func (i *inventoryRepository) CheckAvailability(ctx context.Context, productID primitive.ObjectID, warehouseID primitive.ObjectID, requiredQuantity int) (bool, error) {
-	//TODO implement me
-	panic("implement me")
+	inventoryCollection := i.database.Collection(i.inventoryCollection)
+
+	filter := bson.M{
+		"product_id":   productID,
+		"warehouse_id": warehouseID,
+	}
+
+	var inventory inventorydomain.Inventory
+	if err := inventoryCollection.FindOne(ctx, filter).Decode(&inventory); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return false, nil
+		}
+		return false, err
+	}
+
+	if inventory.Quantity >= requiredQuantity {
+		return true, nil
+	}
+
+	return false, nil
 }
 
 func (i *inventoryRepository) GetAll(ctx context.Context) ([]inventorydomain.Inventory, error) {
@@ -162,8 +200,4 @@ func (i *inventoryRepository) GetAll(ctx context.Context) ([]inventorydomain.Inv
 	}
 
 	return inventories, nil
-}
-
-func NewInventoryRepository(database *mongo.Database, inventoryCollection string) inventorydomain.InventoryRepository {
-	return &inventoryRepository{database: database, inventoryCollection: inventoryCollection}
 }

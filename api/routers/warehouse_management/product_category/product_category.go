@@ -1,4 +1,4 @@
-package product_category
+package product_category_route
 
 import (
 	"github.com/gin-gonic/gin"
