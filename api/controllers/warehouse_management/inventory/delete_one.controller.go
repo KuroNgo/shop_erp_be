@@ -5,6 +5,14 @@ import (
 	"net/http"
 )
 
+// DeleteInventory deletes an inventory record by ID
+// @Summary Delete inventory
+// @Description Delete an existing inventory record by its ID
+// @Tags Inventory
+// @Accept json
+// @Produce json
+// @Param _id path string true "Inventory ID"
+// @Router /api/v1/inventory/delete/{_id} [delete]
 func (i *InventoryController) DeleteInventory(ctx *gin.Context) {
 	_id := ctx.Param("_id")
 

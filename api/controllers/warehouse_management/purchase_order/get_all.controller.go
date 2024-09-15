@@ -7,6 +7,14 @@ import (
 	"strconv"
 )
 
+// GetAll retrieves all purchase orders with pagination
+// @Summary Get all purchase orders with pagination
+// @Description Retrieve a list of purchase orders with pagination
+// @Tags PurchaseOrder
+// @Accept json
+// @Produce json
+// @Param page query string false "Page number" default(1)
+// @Router /api/v1/purchase_orders/get/all [get]
 func (p *PurchaseOrderController) GetAll(ctx *gin.Context) {
 	page := ctx.DefaultQuery("page", "1")
 	pageValue, err := strconv.ParseInt(page, 10, 64)

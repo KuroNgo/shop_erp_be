@@ -6,7 +6,16 @@ import (
 	inventorydomain "shop_erp_mono/domain/warehouse_management/inventory"
 )
 
-func (i *InventoryController) CreateInventory(ctx *gin.Context) {
+// Update updates an inventory item
+// @Summary Update inventory by ID
+// @Description Update an inventory item using its ID
+// @Tags Inventory
+// @Accept json
+// @Produce json
+// @Param _id path string true "Inventory ID"
+// @Param input body inventory_domain.Input true "Inventory Input"
+// @Router /api/v1/inventory/{_id} [put]
+func (i *InventoryController) Update(ctx *gin.Context) {
 	var input inventorydomain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
@@ -16,7 +25,9 @@ func (i *InventoryController) CreateInventory(ctx *gin.Context) {
 		return
 	}
 
-	err := i.InventoryUseCase.CreateInventory(ctx, &input)
+	_id := ctx.Param("_id")
+
+	err := i.InventoryUseCase.UpdateInventory(ctx, _id, &input)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

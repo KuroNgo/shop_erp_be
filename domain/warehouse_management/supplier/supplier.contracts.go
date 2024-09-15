@@ -22,6 +22,6 @@ type ISupplierUseCase interface {
 	GetSupplierByName(ctx context.Context, name string) (*SupplierResponse, error)
 	GetSuppliersWithPagination(ctx context.Context, pagination repository.Pagination) ([]SupplierResponse, error)
 	GetSuppliers(ctx context.Context) ([]SupplierResponse, error)
-	UpdateSupplier(ctx context.Context, id string, input Input) error
+	UpdateSupplier(ctx context.Context, id string, input *Input) error
 	DeleteSupplier(ctx context.Context, id string) error
 }

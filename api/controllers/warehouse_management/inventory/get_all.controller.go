@@ -5,6 +5,13 @@ import (
 	"net/http"
 )
 
+// GetAllInventory retrieves all inventory records
+// @Summary Get all inventories
+// @Description Retrieve all inventory records from the system
+// @Tags Inventory
+// @Accept json
+// @Produce json
+// @Router /api/v1/inventory/all [get]
 func (i *InventoryController) GetAllInventory(ctx *gin.Context) {
 	data, err := i.InventoryUseCase.ListAllInventories(ctx)
 	if err != nil {

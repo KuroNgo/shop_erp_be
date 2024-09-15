@@ -5,6 +5,14 @@ import (
 	"net/http"
 )
 
+// GetBySupplierID retrieves purchase orders by supplier ID
+// @Summary Get purchase orders by supplier ID
+// @Description Retrieve a list of purchase orders associated with a specific supplier ID
+// @Tags PurchaseOrder
+// @Accept json
+// @Produce json
+// @Param supplier_id path string true "Supplier ID"
+// @Router /api/v1/purchase-orders/get/{supplier_id} [get]
 func (p *PurchaseOrderController) GetBySupplierID(ctx *gin.Context) {
 	supplierId := ctx.Param("supplier_id")
 

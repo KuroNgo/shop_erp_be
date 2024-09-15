@@ -124,6 +124,15 @@ definitions:
         example: developer
         type: string
     type: object
+  inventory_domain.Input:
+    properties:
+      product_id:
+        type: string
+      quantity:
+        type: integer
+      warehouse_id:
+        type: string
+    type: object
   leave_request_domain.Input:
     properties:
       employee:
@@ -182,6 +191,20 @@ definitions:
         type: string
       quantity_in_stock:
         type: integer
+    type: object
+  purchase_order_domain.Input:
+    properties:
+      order_date:
+        type: string
+      order_number:
+        type: string
+      status:
+        description: 'Example: "Processing", "Received", "Cancelled"'
+        type: string
+      supplier:
+        type: string
+      total_amount:
+        type: number
     type: object
   role_domain.Input:
     properties:
@@ -381,6 +404,30 @@ paths:
       summary: Update Account Information
       tags:
       - Account
+  /api/v1/accounts/update/adjustment:
+    put:
+      consumes:
+      - application/json
+      description: Create the inventory's information
+      parameters:
+      - description: Inventory ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      - description: Inventory adjustment
+        in: path
+        name: adjustment
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Create Inventory Information
+      tags:
+      - Inventory
   /api/v1/attendances/_id:
     delete:
       description: Deletes the attendance's information by ID
@@ -1146,6 +1193,153 @@ paths:
       summary: Create Employee Information
       tags:
       - Employee
+  /api/v1/inventory/{_id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve an inventory record using its ID
+      parameters:
+      - description: Inventory ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get inventory by ID
+      tags:
+      - Inventory
+    put:
+      consumes:
+      - application/json
+      description: Update an inventory item using its ID
+      parameters:
+      - description: Inventory ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      - description: Inventory Input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/inventory_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      summary: Update inventory by ID
+      tags:
+      - Inventory
+  /api/v1/inventory/all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all inventory records from the system
+      produces:
+      - application/json
+      responses: {}
+      summary: Get all inventories
+      tags:
+      - Inventory
+  /api/v1/inventory/check/{warehouse_id}/{product_id}/{required_quantity}:
+    get:
+      consumes:
+      - application/json
+      description: Check if the specified quantity of a product is available in a
+        given warehouse
+      parameters:
+      - description: Warehouse ID
+        in: path
+        name: warehouse_id
+        required: true
+        type: string
+      - description: Product ID
+        in: path
+        name: product_id
+        required: true
+        type: string
+      - description: Required quantity
+        in: path
+        name: required_quantity
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Check inventory availability
+      tags:
+      - Inventory
+  /api/v1/inventory/create:
+    post:
+      consumes:
+      - application/json
+      description: Add a new inventory record to the system
+      parameters:
+      - description: Inventory input data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/inventory_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      summary: Create new inventory
+      tags:
+      - Inventory
+  /api/v1/inventory/delete/{_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an existing inventory record by its ID
+      parameters:
+      - description: Inventory ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete inventory
+      tags:
+      - Inventory
+  /api/v1/inventory/product/{product_id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve inventory details using the product ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: product_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get inventory by product ID
+      tags:
+      - Inventory
+  /api/v1/inventory/warehouse/{warehouse_id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve inventory details using the warehouse ID
+      parameters:
+      - description: Warehouse ID
+        in: path
+        name: warehouse_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get inventory by warehouse ID
+      tags:
+      - Inventory
   /api/v1/leave_requests/create:
     post:
       consumes:
@@ -1223,7 +1417,7 @@ paths:
       - application/json
       description: Get one by email the leave request's information
       parameters:
-      - description: Employee ID
+      - description: Email
         in: path
         name: email
         required: true
@@ -1241,6 +1435,13 @@ paths:
       consumes:
       - application/json
       description: Updates the leave request's information
+      parameters:
+      - description: Leave Request data
+        in: body
+        name: LeaveRequest
+        required: true
+        schema:
+          $ref: '#/definitions/leave_request_domain.Input'
       produces:
       - application/json
       responses: {}
@@ -1345,6 +1546,11 @@ paths:
       - application/json
       description: Update the performance review's information
       parameters:
+      - description: Performance Review  ID
+        in: path
+        name: _id
+        required: true
+        type: string
       - description: Performance Review data
         in: body
         name: PerformanceReview
@@ -1469,6 +1675,116 @@ paths:
       summary: Update product
       tags:
       - Product
+  /api/v1/purchase-orders/get/{_id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a purchase order using its ID
+      parameters:
+      - description: Purchase Order ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get a purchase order by ID
+      tags:
+      - PurchaseOrder
+  /api/v1/purchase-orders/get/{supplier_id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of purchase orders associated with a specific supplier
+        ID
+      parameters:
+      - description: Supplier ID
+        in: path
+        name: supplier_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get purchase orders by supplier ID
+      tags:
+      - PurchaseOrder
+  /api/v1/purchase_orders/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new purchase order with the given details
+      parameters:
+      - description: Purchase Order Input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/purchase_order_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      summary: Create a new purchase order
+      tags:
+      - PurchaseOrder
+  /api/v1/purchase_orders/delete{_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a purchase order using its ID
+      parameters:
+      - description: Purchase Order ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete a purchase order
+      tags:
+      - PurchaseOrder
+  /api/v1/purchase_orders/get/all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of purchase orders with pagination
+      parameters:
+      - default: "1"
+        description: Page number
+        in: query
+        name: page
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get all purchase orders with pagination
+      tags:
+      - PurchaseOrder
+  /api/v1/purchase_orders/update/{_id}:
+    put:
+      consumes:
+      - application/json
+      description: Update the details of a purchase order using its ID
+      parameters:
+      - description: Purchase Order ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      - description: Purchase Order Input
+        in: body
+        name: purchase_order
+        required: true
+        schema:
+          $ref: '#/definitions/purchase_order_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      summary: Update a purchase order by ID
+      tags:
+      - PurchaseOrder
   /api/v1/roles/create:
     post:
       consumes:
@@ -1617,7 +1933,7 @@ paths:
       - application/json
       description: Retrieves the salary's information id
       parameters:
-      - description: Employee ID
+      - description: Role ID
         in: path
         name: _id
         required: true
@@ -1649,7 +1965,7 @@ paths:
       - application/json
       description: Retrieves the salary's information role
       parameters:
-      - description: Employee ID
+      - description: Role
         in: path
         name: role
         required: true
@@ -1667,6 +1983,18 @@ paths:
       consumes:
       - application/json
       description: Updates the salary's information
+      parameters:
+      - description: Salary data
+        in: body
+        name: Salary
+        required: true
+        schema:
+          $ref: '#/definitions/salary_domain.Salary'
+      - description: Employee ID
+        in: path
+        name: _id
+        required: true
+        type: string
       produces:
       - application/json
       responses: {}
@@ -1771,7 +2099,7 @@ paths:
       - application/json
       description: get by name the supplier's information
       parameters:
-      - description: supplier ID
+      - description: supplier name
         in: path
         name: name
         required: true
@@ -2051,6 +2379,11 @@ paths:
       - application/json
       description: Update the performance review's information
       parameters:
+      - description: Performance Review  ID
+        in: path
+        name: _id
+        required: true
+        type: string
       - description: Performance Review data
         in: body
         name: PerformanceReview

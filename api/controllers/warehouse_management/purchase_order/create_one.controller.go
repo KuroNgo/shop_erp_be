@@ -6,7 +6,15 @@ import (
 	purchaseorderdomain "shop_erp_mono/domain/warehouse_management/purchase_order"
 )
 
-func (p *PurchaseOrderController) UpdateOne(ctx *gin.Context) {
+// CreateOne creates a new purchase order
+// @Summary Create a new purchase order
+// @Description Create a new purchase order with the given details
+// @Tags PurchaseOrder
+// @Accept json
+// @Produce json
+// @Param input body purchase_order_domain.Input true "Purchase Order Input"
+// @Router /api/v1/purchase_orders/create [post]
+func (p *PurchaseOrderController) CreateOne(ctx *gin.Context) {
 	var input purchaseorderdomain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
@@ -16,9 +24,7 @@ func (p *PurchaseOrderController) UpdateOne(ctx *gin.Context) {
 		return
 	}
 
-	_id := ctx.Param("_id")
-
-	err := p.PurchaseOrderUseCase.Update(ctx, _id, &input)
+	err := p.PurchaseOrderUseCase.Create(ctx, &input)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

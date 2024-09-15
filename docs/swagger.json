@@ -194,6 +194,43 @@
                 "responses": {}
             }
         },
+        "/api/v1/accounts/update/adjustment": {
+            "put": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Create the inventory's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Inventory"
+                ],
+                "summary": "Create Inventory Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Inventory ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Inventory adjustment",
+                        "name": "adjustment",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/api/v1/attendances/_id": {
             "put": {
                 "security": [
@@ -1407,6 +1444,220 @@
                 "responses": {}
             }
         },
+        "/api/v1/inventory/all": {
+            "get": {
+                "description": "Retrieve all inventory records from the system",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Inventory"
+                ],
+                "summary": "Get all inventories",
+                "responses": {}
+            }
+        },
+        "/api/v1/inventory/check/{warehouse_id}/{product_id}/{required_quantity}": {
+            "get": {
+                "description": "Check if the specified quantity of a product is available in a given warehouse",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Inventory"
+                ],
+                "summary": "Check inventory availability",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Warehouse ID",
+                        "name": "warehouse_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Product ID",
+                        "name": "product_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Required quantity",
+                        "name": "required_quantity",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/inventory/create": {
+            "post": {
+                "description": "Add a new inventory record to the system",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Inventory"
+                ],
+                "summary": "Create new inventory",
+                "parameters": [
+                    {
+                        "description": "Inventory input data",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/inventory_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/inventory/delete/{_id}": {
+            "delete": {
+                "description": "Delete an existing inventory record by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Inventory"
+                ],
+                "summary": "Delete inventory",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Inventory ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/inventory/product/{product_id}": {
+            "get": {
+                "description": "Retrieve inventory details using the product ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Inventory"
+                ],
+                "summary": "Get inventory by product ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product ID",
+                        "name": "product_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/inventory/warehouse/{warehouse_id}": {
+            "get": {
+                "description": "Retrieve inventory details using the warehouse ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Inventory"
+                ],
+                "summary": "Get inventory by warehouse ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Warehouse ID",
+                        "name": "warehouse_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/inventory/{_id}": {
+            "get": {
+                "description": "Retrieve an inventory record using its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Inventory"
+                ],
+                "summary": "Get inventory by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Inventory ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            },
+            "put": {
+                "description": "Update an inventory item using its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Inventory"
+                ],
+                "summary": "Update inventory by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Inventory ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Inventory Input",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/inventory_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/api/v1/leave_requests/create": {
             "post": {
                 "security": [
@@ -1541,7 +1792,7 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Employee ID",
+                        "description": "Email",
                         "name": "email",
                         "in": "path",
                         "required": true
@@ -1568,6 +1819,17 @@
                     "Leave Request"
                 ],
                 "summary": "Update Leave Request Information",
+                "parameters": [
+                    {
+                        "description": "Leave Request data",
+                        "name": "LeaveRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/leave_request_domain.Input"
+                        }
+                    }
+                ],
                 "responses": {}
             }
         },
@@ -1733,6 +1995,13 @@
                 ],
                 "summary": "Update Performance Review Information",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Performance Review  ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "description": "Performance Review data",
                         "name": "PerformanceReview",
@@ -1915,6 +2184,167 @@
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/product_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/purchase-orders/get/{_id}": {
+            "get": {
+                "description": "Retrieve a purchase order using its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PurchaseOrder"
+                ],
+                "summary": "Get a purchase order by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Purchase Order ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/purchase-orders/get/{supplier_id}": {
+            "get": {
+                "description": "Retrieve a list of purchase orders associated with a specific supplier ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PurchaseOrder"
+                ],
+                "summary": "Get purchase orders by supplier ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Supplier ID",
+                        "name": "supplier_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/purchase_orders/create": {
+            "post": {
+                "description": "Create a new purchase order with the given details",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PurchaseOrder"
+                ],
+                "summary": "Create a new purchase order",
+                "parameters": [
+                    {
+                        "description": "Purchase Order Input",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/purchase_order_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/purchase_orders/delete{_id}": {
+            "delete": {
+                "description": "Delete a purchase order using its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PurchaseOrder"
+                ],
+                "summary": "Delete a purchase order",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Purchase Order ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/purchase_orders/get/all": {
+            "get": {
+                "description": "Retrieve a list of purchase orders with pagination",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PurchaseOrder"
+                ],
+                "summary": "Get all purchase orders with pagination",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "1",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/purchase_orders/update/{_id}": {
+            "put": {
+                "description": "Update the details of a purchase order using its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PurchaseOrder"
+                ],
+                "summary": "Update a purchase order by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Purchase Order ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Purchase Order Input",
+                        "name": "purchase_order",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/purchase_order_domain.Input"
                         }
                     }
                 ],
@@ -2168,7 +2598,7 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Employee ID",
+                        "description": "Role ID",
                         "name": "_id",
                         "in": "path",
                         "required": true
@@ -2219,7 +2649,7 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Employee ID",
+                        "description": "Role",
                         "name": "role",
                         "in": "path",
                         "required": true
@@ -2246,6 +2676,24 @@
                     "Salary"
                 ],
                 "summary": "Update Salary Information",
+                "parameters": [
+                    {
+                        "description": "Salary data",
+                        "name": "Salary",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/salary_domain.Salary"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Employee ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {}
             }
         },
@@ -2413,7 +2861,7 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "supplier ID",
+                        "description": "supplier name",
                         "name": "name",
                         "in": "path",
                         "required": true
@@ -2839,6 +3287,13 @@
                 "summary": "Update Performance Review Information",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Performance Review  ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
                         "description": "Performance Review data",
                         "name": "PerformanceReview",
                         "in": "body",
@@ -3033,6 +3488,20 @@
                 }
             }
         },
+        "inventory_domain.Input": {
+            "type": "object",
+            "properties": {
+                "product_id": {
+                    "type": "string"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "warehouse_id": {
+                    "type": "string"
+                }
+            }
+        },
         "leave_request_domain.Input": {
             "type": "object",
             "properties": {
@@ -3117,6 +3586,27 @@
                 },
                 "quantity_in_stock": {
                     "type": "integer"
+                }
+            }
+        },
+        "purchase_order_domain.Input": {
+            "type": "object",
+            "properties": {
+                "order_date": {
+                    "type": "string"
+                },
+                "order_number": {
+                    "type": "string"
+                },
+                "status": {
+                    "description": "Example: \"Processing\", \"Received\", \"Cancelled\"",
+                    "type": "string"
+                },
+                "supplier": {
+                    "type": "string"
+                },
+                "total_amount": {
+                    "type": "number"
                 }
             }
         },

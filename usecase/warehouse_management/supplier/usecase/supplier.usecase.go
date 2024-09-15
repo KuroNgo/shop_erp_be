@@ -5,6 +5,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	supplierdomain "shop_erp_mono/domain/warehouse_management/supplier"
 	"shop_erp_mono/repository"
+	"shop_erp_mono/usecase/warehouse_management/supplier/validate"
 	"time"
 )
 
@@ -20,6 +21,10 @@ func NewSupplierUseCase(contextTimeout time.Duration, supplierRepository supplie
 func (s *supplierUseCase) CreateSupplier(ctx context.Context, input *supplierdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
+
+	if err := validate.ValidateSupplier(input); err != nil {
+		return err
+	}
 
 	supplier := supplierdomain.Supplier{
 		ID:            primitive.NewObjectID(),
@@ -116,9 +121,13 @@ func (s *supplierUseCase) GetSuppliers(ctx context.Context) ([]supplierdomain.Su
 	return responses, nil
 }
 
-func (s *supplierUseCase) UpdateSupplier(ctx context.Context, id string, input supplierdomain.Input) error {
+func (s *supplierUseCase) UpdateSupplier(ctx context.Context, id string, input *supplierdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
+
+	if err := validate.ValidateSupplier(input); err != nil {
+		return err
+	}
 
 	supplierID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {

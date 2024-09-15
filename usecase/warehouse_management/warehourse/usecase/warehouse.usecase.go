@@ -4,6 +4,7 @@ import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	warehousedomain "shop_erp_mono/domain/warehouse_management/warehouse"
+	"shop_erp_mono/usecase/warehouse_management/warehourse/validate"
 	"time"
 )
 
@@ -20,6 +21,10 @@ func (w *warehouseUseCase) CreateWarehouse(ctx context.Context, input *warehouse
 	ctx, cancel := context.WithTimeout(ctx, w.contextTimeout)
 	defer cancel()
 
+	if err := validate.ValidateWarehouse(input); err != nil {
+		return err
+	}
+
 	warehouse := warehousedomain.Warehouse{
 		ID:            primitive.NewObjectID(),
 		WarehouseName: input.WarehouseName,
@@ -35,6 +40,10 @@ func (w *warehouseUseCase) CreateWarehouse(ctx context.Context, input *warehouse
 func (w *warehouseUseCase) UpdateWarehouse(ctx context.Context, id string, input *warehousedomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, w.contextTimeout)
 	defer cancel()
+
+	if err := validate.ValidateWarehouse(input); err != nil {
+		return err
+	}
 
 	warehouseID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
