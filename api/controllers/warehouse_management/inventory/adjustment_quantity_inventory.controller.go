@@ -6,6 +6,16 @@ import (
 	"strconv"
 )
 
+// AdjustmentQuantity update the inventory's information
+// @Summary Create Inventory Information
+// @Description Create the inventory's information
+// @Tags Inventory
+// @Accept json
+// @Produce json
+// @Param _id path string true "Inventory ID"
+// @Param adjustment path string true "Inventory adjustment"
+// @Router /api/v1/accounts/update/adjustment [put]
+// @Security CookieAuth
 func (i *InventoryController) AdjustmentQuantity(ctx *gin.Context) {
 	_id := ctx.Param("_id")
 	adjustment := ctx.Param("adjustment")

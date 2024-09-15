@@ -24,11 +24,11 @@ type PurchaseOrderDetail struct {
 }
 
 type Input struct {
-	PurchaseOrder string  `bson:"purchase_order" json:"purchase_order"`
-	Product       string  `bson:"product" json:"product"`
-	Quantity      int     `bson:"quantity" json:"quantity"`
-	UnitPrice     float64 `bson:"unit_price" json:"unit_price"`
-	TotalPrice    float64 `bson:"total_price" json:"total_price"`
+	PurchaseOrderID primitive.ObjectID `bson:"purchase_order_id" json:"purchase_order_id"`
+	Product         string             `bson:"product" json:"product"`
+	Quantity        int                `bson:"quantity" json:"quantity"`
+	UnitPrice       float64            `bson:"unit_price" json:"unit_price"`
+	TotalPrice      float64            `bson:"total_price" json:"total_price"`
 }
 
 type PurchaseOrderDetailResponse struct {

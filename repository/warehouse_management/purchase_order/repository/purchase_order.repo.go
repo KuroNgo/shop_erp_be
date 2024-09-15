@@ -42,10 +42,10 @@ func (p *purchaseOrderRepository) Create(ctx context.Context, order *purchaseord
 	return nil
 }
 
-func (p *purchaseOrderRepository) Update(ctx context.Context, id primitive.ObjectID, order *purchaseorderdomain.PurchaseOrder) error {
+func (p *purchaseOrderRepository) Update(ctx context.Context, order *purchaseorderdomain.PurchaseOrder) error {
 	purchaseOrderCollection := p.database.Collection(p.purchaseOrderCollection)
 
-	filter := bson.M{"_id": id}
+	filter := bson.M{"_id": order.ID}
 	update := bson.M{"$set": bson.M{
 		"order_number": order.OrderNumber,
 		"supplier_id":  order.SupplierID,

@@ -20,13 +20,13 @@ type IStockMovementRepository interface {
 }
 
 type IStockMovementUseCase interface {
-	GetByID(ctx context.Context, id string) (*StockMovement, error)
+	GetByID(ctx context.Context, id string) (*StockMovementResponse, error)
 	CreateOne(ctx context.Context, input *Input) error
 	UpdateOne(ctx context.Context, id string, input *Input) error
 	DeleteOne(ctx context.Context, id string) error
-	GetAllWithPagination(ctx context.Context, pagination repository.Pagination) ([]StockMovement, error)
-	GetByProductID(ctx context.Context, productID string) ([]StockMovement, error)
-	GetByWarehouseID(ctx context.Context, warehouseID string) ([]StockMovement, error)
-	GetByUserID(ctx context.Context, userID string) ([]StockMovement, error)
-	GetByMovementDateRange(ctx context.Context, startDate, endDate time.Time) ([]StockMovement, error)
+	GetAllWithPagination(ctx context.Context, pagination repository.Pagination) ([]StockMovementResponse, error)
+	GetByProductID(ctx context.Context, productID string) ([]StockMovementResponse, error)
+	GetByWarehouseID(ctx context.Context, warehouseID string) ([]StockMovementResponse, error)
+	GetByUserID(ctx context.Context, userID string) ([]StockMovementResponse, error)
+	GetByMovementDateRange(ctx context.Context, startDate, endDate time.Time) ([]StockMovementResponse, error)
 }

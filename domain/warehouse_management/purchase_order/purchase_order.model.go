@@ -2,6 +2,7 @@ package purchase_order_domain
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	supplierdomain "shop_erp_mono/domain/warehouse_management/supplier"
 	"time"
 )
 
@@ -30,5 +31,6 @@ type Input struct {
 }
 
 type PurchaseOrderResponse struct {
-	PurchaseOrder PurchaseOrder `bson:"purchase_order" json:"purchase_order"`
+	PurchaseOrder PurchaseOrder           `bson:"purchase_order" json:"purchase_order"`
+	Supplier      supplierdomain.Supplier `bson:"supplier" json:"supplier"`
 }

@@ -19,12 +19,12 @@ type IStockAdjustmentRepository interface {
 }
 
 type IStockAdjustmentUseCase interface {
-	GetByID(ctx context.Context, id string) (*StockAdjustment, error)
+	GetByID(ctx context.Context, id string) (*StockAdjustmentResponse, error)
 	CreateOne(ctx context.Context, input *Input) error
 	UpdateOne(ctx context.Context, id string, input *Input) error
 	DeleteOne(ctx context.Context, id string) error
-	GetAllWithPagination(ctx context.Context, pagination repository.Pagination) ([]StockAdjustment, error)
-	GetByProductID(ctx context.Context, productID string) ([]StockAdjustment, error)
-	GetByWarehouseID(ctx context.Context, warehouseID string) ([]StockAdjustment, error)
-	GetByAdjustmentDateRange(ctx context.Context, startDate, endDate time.Time) ([]StockAdjustment, error)
+	GetAllWithPagination(ctx context.Context, pagination repository.Pagination) ([]StockAdjustmentResponse, error)
+	GetByProductID(ctx context.Context, productID string) ([]StockAdjustmentResponse, error)
+	GetByWarehouseID(ctx context.Context, warehouseID string) ([]StockAdjustmentResponse, error)
+	GetByAdjustmentDateRange(ctx context.Context, startDate, endDate time.Time) ([]StockAdjustmentResponse, error)
 }
