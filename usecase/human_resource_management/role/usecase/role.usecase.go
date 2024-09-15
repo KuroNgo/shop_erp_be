@@ -4,7 +4,7 @@ import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	roledomain "shop_erp_mono/domain/human_resource_management/role"
-	"shop_erp_mono/repository/human_resource_management/role/validate"
+	"shop_erp_mono/usecase/human_resource_management/role/validate"
 	"time"
 )
 

@@ -6,7 +6,7 @@ import (
 	inventory_domain "shop_erp_mono/domain/warehouse_management/inventory"
 	productdomain "shop_erp_mono/domain/warehouse_management/product"
 	warehousedomain "shop_erp_mono/domain/warehouse_management/warehouse"
-	"shop_erp_mono/repository/warehouse_management/inventory/validate"
+	"shop_erp_mono/usecase/warehouse_management/inventory/validate"
 	"time"
 )
 

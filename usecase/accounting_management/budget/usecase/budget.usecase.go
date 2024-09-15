@@ -7,7 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	budgetsdomain "shop_erp_mono/domain/accounting_management/budgets"
 	transactioncategoriesdomain "shop_erp_mono/domain/accounting_management/transaction_categories"
-	"shop_erp_mono/repository/accounting_management/budget/validate"
+	"shop_erp_mono/usecase/accounting_management/budget/validate"
 	"time"
 )
 

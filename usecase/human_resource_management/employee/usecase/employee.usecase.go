@@ -7,7 +7,7 @@ import (
 	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
 	roledomain "shop_erp_mono/domain/human_resource_management/role"
 	salarydomain "shop_erp_mono/domain/human_resource_management/salary"
-	"shop_erp_mono/repository/human_resource_management/employee/validate"
+	"shop_erp_mono/usecase/human_resource_management/employee/validate"
 	"time"
 )
 

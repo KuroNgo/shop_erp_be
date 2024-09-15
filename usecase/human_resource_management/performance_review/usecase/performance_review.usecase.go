@@ -5,7 +5,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	employees_domain "shop_erp_mono/domain/human_resource_management/employees"
 	performancereviewdomain "shop_erp_mono/domain/human_resource_management/performance_review"
-	"shop_erp_mono/repository/human_resource_management/performance_review/validate"
+	"shop_erp_mono/usecase/human_resource_management/performance_review/validate"
 	"time"
 )
 

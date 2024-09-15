@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	accountdomain "shop_erp_mono/domain/accounting_management/account"
-	"shop_erp_mono/repository/accounting_management/account/validate"
+	"shop_erp_mono/usecase/accounting_management/account/validate"
 	"time"
 )
 

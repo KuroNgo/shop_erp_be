@@ -17,7 +17,7 @@ import (
 	google_oauth2 "shop_erp_mono/pkg/oauth2/google"
 	"shop_erp_mono/pkg/password"
 	"shop_erp_mono/pkg/token"
-	"shop_erp_mono/repository/human_resource_management/user/validate"
+	"shop_erp_mono/usecase/human_resource_management/user/validate"
 	"time"
 )
 

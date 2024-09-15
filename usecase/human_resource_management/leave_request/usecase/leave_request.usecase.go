@@ -5,7 +5,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
 	leaverequestdomain "shop_erp_mono/domain/human_resource_management/leave_request"
-	"shop_erp_mono/repository/human_resource_management/leave_request/validate"
+	"shop_erp_mono/usecase/human_resource_management/leave_request/validate"
 	"time"
 )
 

@@ -6,7 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	attendancedomain "shop_erp_mono/domain/human_resource_management/attendance"
 	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
-	"shop_erp_mono/repository/human_resource_management/attendance/validate"
+	"shop_erp_mono/usecase/human_resource_management/attendence/validate"
 	"time"
 )
 
