@@ -5,6 +5,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	productdomain "shop_erp_mono/domain/warehouse_management/product"
 	categorydomain "shop_erp_mono/domain/warehouse_management/product_category"
+	"shop_erp_mono/usecase/warehouse_management/product/validate"
 	"time"
 )
 
@@ -21,6 +22,10 @@ func NewProductUseCase(contextTimeout time.Duration, productRepository productdo
 func (p *productUseCase) CreateProduct(ctx context.Context, input *productdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
+
+	if err := validate.ValidateProduct(input); err != nil {
+		return err
+	}
 
 	categoryData, err := p.categoryRepository.GetByName(ctx, input.Category)
 	if err != nil {
@@ -44,6 +49,10 @@ func (p *productUseCase) CreateProduct(ctx context.Context, input *productdomain
 func (p *productUseCase) UpdateProduct(ctx context.Context, id string, input *productdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
+
+	if err := validate.ValidateProduct(input); err != nil {
+		return err
+	}
 
 	productID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {

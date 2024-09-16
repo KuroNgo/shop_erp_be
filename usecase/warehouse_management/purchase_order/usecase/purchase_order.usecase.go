@@ -6,6 +6,7 @@ import (
 	purchaseorderdomain "shop_erp_mono/domain/warehouse_management/purchase_order"
 	supplierdomain "shop_erp_mono/domain/warehouse_management/supplier"
 	"shop_erp_mono/repository"
+	"shop_erp_mono/usecase/warehouse_management/purchase_order/validate"
 	"time"
 )
 
@@ -44,7 +45,11 @@ func (p *purchaseOrderUseCase) Create(ctx context.Context, input *purchaseorderd
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
-	supplierData, err := p.supplierRepository.GetByName(ctx, input.SupplierID)
+	if err := validate.ValidatePurchaseOrder(input); err != nil {
+		return err
+	}
+
+	supplierData, err := p.supplierRepository.GetByName(ctx, input.Supplier)
 	if err != nil {
 		return err
 	}
@@ -66,12 +71,16 @@ func (p *purchaseOrderUseCase) Update(ctx context.Context, id string, input *pur
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
+	if err := validate.ValidatePurchaseOrder(input); err != nil {
+		return err
+	}
+
 	purchaseOrderID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return err
 	}
 
-	supplierData, err := p.supplierRepository.GetByName(ctx, input.SupplierID)
+	supplierData, err := p.supplierRepository.GetByName(ctx, input.Supplier)
 	if err != nil {
 		return err
 	}

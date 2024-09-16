@@ -7,6 +7,7 @@ import (
 	purchaseorderdomain "shop_erp_mono/domain/warehouse_management/purchase_order"
 	purchaseorderdetaildomain "shop_erp_mono/domain/warehouse_management/purchase_order_detail"
 	"shop_erp_mono/repository"
+	"shop_erp_mono/usecase/warehouse_management/purchase_order_detail/validate"
 	"time"
 )
 
@@ -99,10 +100,16 @@ func (p *purchaseOrderDetailUseCase) Create(ctx context.Context, input *purchase
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
+	if err := validate.ValidatePurchaseOrderDetail(input); err != nil {
+		return err
+	}
+
 	productData, err := p.productRepository.GetProductByName(ctx, input.Product)
 	if err != nil {
 		return err
 	}
+
+	totalPrice := input.UnitPrice * float64(input.Quantity)
 
 	purchaseOrderDetail := purchaseorderdetaildomain.PurchaseOrderDetail{
 		ID:              primitive.NewObjectID(),
@@ -110,7 +117,7 @@ func (p *purchaseOrderDetailUseCase) Create(ctx context.Context, input *purchase
 		ProductID:       productData.ID,
 		Quantity:        input.Quantity,
 		UnitPrice:       input.UnitPrice,
-		TotalPrice:      input.TotalPrice,
+		TotalPrice:      totalPrice,
 		CreatedAt:       time.Now(),
 		UpdatedAt:       time.Now(),
 	}
@@ -122,6 +129,10 @@ func (p *purchaseOrderDetailUseCase) Update(ctx context.Context, id string, inpu
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
+	if err := validate.ValidatePurchaseOrderDetail(input); err != nil {
+		return err
+	}
+
 	purchaseOrderDetailID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return err
@@ -132,13 +143,15 @@ func (p *purchaseOrderDetailUseCase) Update(ctx context.Context, id string, inpu
 		return err
 	}
 
+	totalPrice := input.UnitPrice * float64(input.Quantity)
+
 	purchaseOrderDetail := &purchaseorderdetaildomain.PurchaseOrderDetail{
 		ID:              purchaseOrderDetailID,
 		PurchaseOrderID: input.PurchaseOrderID,
 		ProductID:       productData.ID,
 		Quantity:        input.Quantity,
 		UnitPrice:       input.UnitPrice,
-		TotalPrice:      input.TotalPrice,
+		TotalPrice:      totalPrice,
 		CreatedAt:       time.Now(),
 		UpdatedAt:       time.Now(),
 	}

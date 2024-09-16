@@ -24,7 +24,7 @@ type PurchaseOrder struct {
 
 type Input struct {
 	OrderNumber string    `bson:"order_number" json:"order_number"`
-	SupplierID  string    `bson:"supplier" json:"supplier"`
+	Supplier    string    `bson:"supplier" json:"supplier"`
 	OrderDate   time.Time `bson:"order_date" json:"order_date"`
 	TotalAmount float64   `bson:"total_amount" json:"total_amount"`
 	Status      string    `bson:"status" json:"status"` // Example: "Processing", "Received", "Cancelled"

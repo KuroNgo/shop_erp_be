@@ -7,6 +7,7 @@ import (
 	stockadjustmentdomain "shop_erp_mono/domain/warehouse_management/stock_adjustment"
 	warehousedomain "shop_erp_mono/domain/warehouse_management/warehouse"
 	"shop_erp_mono/repository"
+	"shop_erp_mono/usecase/warehouse_management/stock_adjustment/validate"
 	"time"
 )
 
@@ -46,6 +47,10 @@ func (s *stockAdjustmentUseCase) CreateOne(ctx context.Context, input *stockadju
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
+	if err := validate.ValidateStockAdjustment(input); err != nil {
+		return err
+	}
+
 	productData, err := s.productRepository.GetProductByName(ctx, input.Product)
 	if err != nil {
 		return err
@@ -74,6 +79,10 @@ func (s *stockAdjustmentUseCase) CreateOne(ctx context.Context, input *stockadju
 func (s *stockAdjustmentUseCase) UpdateOne(ctx context.Context, id string, input *stockadjustmentdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
+
+	if err := validate.ValidateStockAdjustment(input); err != nil {
+		return err
+	}
 
 	stockAdjustmentID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
