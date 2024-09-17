@@ -15,7 +15,7 @@ import (
 
 func ProductCategoryRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
 	pr := product_repository.NewProductRepository(db, productdomain.CollectionProduct)
-	ca := category_repository.NewInvoiceRepository(db, categorydomain.CollectionCategory)
+	ca := category_repository.NewCategoryRepository(db, categorydomain.CollectionCategory)
 	category := &category_controller.CategoryController{
 		CategoryUseCase: category_usecase.NewCategoryUseCase(timeout, ca, pr),
 		Database:        env,

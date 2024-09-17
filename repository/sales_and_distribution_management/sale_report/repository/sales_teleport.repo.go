@@ -1,1 +1,0 @@
-package sales_teleport_repository

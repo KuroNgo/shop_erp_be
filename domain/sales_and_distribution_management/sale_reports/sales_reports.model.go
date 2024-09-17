@@ -1,4 +1,4 @@
-package sale_reports
+package sale_reports_domain
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -19,6 +19,15 @@ type SalesReport struct {
 	TotalRevenue float64            `bson:"total_revenue" json:"total_revenue"`
 	CreatedAt    time.Time          `bson:"created_at" json:"created_at"`
 	UpdatedAt    time.Time          `bson:"updated_at" json:"updated_at"`
+}
+
+type Input struct {
+	ReportDate   time.Time `bson:"report_date" json:"report_date"`
+	TotalSales   float64   `bson:"total_sales" json:"total_sales"`
+	Product      string    `bson:"product" json:"product"`
+	ProductName  string    `bson:"product_name" json:"product_name"`
+	QuantitySold int       `bson:"quantity_sold" json:"quantity_sold"`
+	TotalRevenue float64   `bson:"total_revenue" json:"total_revenue"`
 }
 
 type SalesReportReport struct {

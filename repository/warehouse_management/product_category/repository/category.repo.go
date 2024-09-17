@@ -15,7 +15,7 @@ type categoryRepository struct {
 	categoryCollection string
 }
 
-func NewInvoiceRepository(database *mongo.Database, categoryCollection string) category_domain.ICategoryRepository {
+func NewCategoryRepository(database *mongo.Database, categoryCollection string) category_domain.ICategoryRepository {
 	return &categoryRepository{database: database, categoryCollection: categoryCollection}
 }
 
