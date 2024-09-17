@@ -10,7 +10,7 @@ type IOrderDetailRepository interface {
 	GetByID(ctx context.Context, id primitive.ObjectID) (*OrderDetail, error)
 	GetByOrderID(ctx context.Context, orderID primitive.ObjectID) ([]OrderDetail, error)
 	GetByProductID(ctx context.Context, productID primitive.ObjectID) ([]OrderDetail, error)
-	UpdateOne(ctx context.Context, id primitive.ObjectID, updatedDetail Input) error
+	UpdateOne(ctx context.Context, detail OrderDetail) error
 	DeleteOne(ctx context.Context, id primitive.ObjectID) error
 	List(ctx context.Context) ([]OrderDetail, error)
 }

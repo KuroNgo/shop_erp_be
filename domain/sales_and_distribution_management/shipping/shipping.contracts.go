@@ -7,10 +7,10 @@ import (
 )
 
 type IShippingRepository interface {
-	CreateOne(ctx context.Context, shipping Input) (primitive.ObjectID, error)
+	CreateOne(ctx context.Context, shipping Shipping) error
 	GetByID(ctx context.Context, id primitive.ObjectID) (*Shipping, error)
 	GetByOrderID(ctx context.Context, orderID primitive.ObjectID) (*Shipping, error)
-	UpdateOne(ctx context.Context, id primitive.ObjectID, updatedShipping Input) error
+	UpdateOne(ctx context.Context, shipping Shipping) error
 	DeleteOne(ctx context.Context, id primitive.ObjectID) error
 	List(ctx context.Context) ([]Shipping, error)
 	GetByStatus(ctx context.Context, status string) ([]Shipping, error)

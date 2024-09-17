@@ -10,9 +10,9 @@ type ISalesReportRepository interface {
 	CreateOne(ctx context.Context, report SalesReport) error
 	GetByID(ctx context.Context, id primitive.ObjectID) (*SalesReport, error)
 	GetByDate(ctx context.Context, reportDate time.Time) (*SalesReport, error)
-	GetReportSummary(ctx context.Context, startDate, endDate time.Time) (*SalesReportReport, error)
+	GetReportSummary(ctx context.Context, startDate, endDate time.Time) ([]SalesReport, error)
 	GetTopSellingProducts(ctx context.Context, startDate, endDate time.Time) ([]TopSellingProduct, error)
-	UpdateOne(ctx context.Context, id primitive.ObjectID, updatedReport SalesReport) error
+	UpdateOne(ctx context.Context, updatedReport SalesReport) error
 	DeleteOne(ctx context.Context, id primitive.ObjectID) error
 	List(ctx context.Context) ([]SalesReport, error)
 }

@@ -67,8 +67,27 @@ func (i *invoicesRepository) GetByOrderID(ctx context.Context, orderID primitive
 }
 
 func (i *invoicesRepository) GetByStatus(ctx context.Context, status string) ([]invoicesdomain.Invoice, error) {
-	//TODO implement me
-	panic("implement me")
+	invoiceCollection := i.database.Collection(i.invoiceCollection)
+
+	filter := bson.M{"status": status}
+	cursor, err := invoiceCollection.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var orders []invoicesdomain.Invoice
+	orders = make([]invoicesdomain.Invoice, 0, cursor.RemainingBatchLength())
+	for cursor.Next(ctx) {
+		var order invoicesdomain.Invoice
+		if err = cursor.Decode(&order); err != nil {
+			return nil, err
+		}
+
+		orders = append(orders, order)
+	}
+
+	return orders, nil
 }
 
 func (i *invoicesRepository) UpdateOne(ctx context.Context, invoice invoicesdomain.Invoice) error {

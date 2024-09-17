@@ -10,7 +10,7 @@ type IPaymentRepository interface {
 	GetByID(ctx context.Context, id primitive.ObjectID) (*Payment, error)
 	GetByOrderID(ctx context.Context, orderID primitive.ObjectID) ([]Payment, error)
 	GetByStatus(ctx context.Context, status string) ([]Payment, error)
-	UpdateOne(ctx context.Context, id primitive.ObjectID, updatedPayment Input) error
+	UpdateOne(ctx context.Context, payment Payment) error
 	DeleteOne(ctx context.Context, id primitive.ObjectID) error
 	List(ctx context.Context) ([]Payment, error)
 }
