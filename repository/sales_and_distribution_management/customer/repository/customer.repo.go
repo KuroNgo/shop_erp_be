@@ -41,10 +41,10 @@ func (c *customerRepository) DeleteOne(ctx context.Context, id primitive.ObjectI
 	return nil
 }
 
-func (c *customerRepository) UpdateOne(ctx context.Context, id primitive.ObjectID, customer *customerdomain.Customer) error {
+func (c *customerRepository) UpdateOne(ctx context.Context, customer *customerdomain.Customer) error {
 	customerCollection := c.database.Collection(c.customerCollection)
 
-	filter := bson.M{"_id": id}
+	filter := bson.M{"_id": customer.ID}
 	update := bson.M{"$set": bson.M{
 		"first_name":   customer.FirstName,
 		"last_name":    customer.LastName,
@@ -66,6 +66,23 @@ func (c *customerRepository) GetOneByID(ctx context.Context, id primitive.Object
 	customerCollection := c.database.Collection(c.customerCollection)
 
 	filter := bson.M{"_id": id}
+
+	var customer *customerdomain.Customer
+	err := customerCollection.FindOne(ctx, filter).Decode(&customer)
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	return customer, nil
+}
+
+func (c *customerRepository) GetOneByName(ctx context.Context, name string) (*customerdomain.Customer, error) {
+	customerCollection := c.database.Collection(c.customerCollection)
+
+	filter := bson.M{"name": name}
 
 	var customer *customerdomain.Customer
 	err := customerCollection.FindOne(ctx, filter).Decode(&customer)
