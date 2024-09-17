@@ -5,10 +5,10 @@ import (
 	"net/http"
 )
 
-func (i *InvoiceController) DeleteOne(ctx *gin.Context) {
-	_id := ctx.Param("_id")
-
-	if err := i.InvoiceUseCase.DeleteOne(ctx, _id); err != nil {
+func (i *InvoiceController) GetByStatus(ctx *gin.Context) {
+	status := ctx.Param("status")
+	data, err := i.InvoiceUseCase.GetByStatus(ctx, status)
+	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
 			"message": err.Error(),
@@ -18,5 +18,6 @@ func (i *InvoiceController) DeleteOne(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": "success",
+		"data":   data,
 	})
 }
