@@ -24,11 +24,11 @@ type OrderDetail struct {
 }
 
 type Input struct {
-	OrderID    primitive.ObjectID `bson:"order_id" json:"order_id"`
-	ProductID  primitive.ObjectID `bson:"product_id" json:"product_id"`
-	Quantity   int                `bson:"quantity" json:"quantity"`
-	UnitPrice  float64            `bson:"unit_price" json:"unit_price"`
-	TotalPrice float64            `bson:"total_price" json:"total_price"`
+	OrderID    string  `bson:"order_id" json:"order_id"`
+	ProductID  string  `bson:"product_id" json:"product_id"`
+	Quantity   int     `bson:"quantity" json:"quantity"`
+	UnitPrice  float64 `bson:"unit_price" json:"unit_price"`
+	TotalPrice float64 `bson:"total_price" json:"total_price"`
 }
 
 type OrderDetailResponse struct {

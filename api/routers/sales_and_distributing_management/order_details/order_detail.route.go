@@ -6,15 +6,21 @@ import (
 	orderdetailcontroller "shop_erp_mono/api/controllers/sales_and_distributing_management/order_details"
 	"shop_erp_mono/bootstrap"
 	orderdetailsdomain "shop_erp_mono/domain/sales_and_distribution_management/order_details"
+	sale_orders_domain "shop_erp_mono/domain/sales_and_distribution_management/sale_orders"
+	productdomain "shop_erp_mono/domain/warehouse_management/product"
 	orderdetailrepository "shop_erp_mono/repository/sales_and_distribution_management/order_details/repository"
+	sales_order_repository "shop_erp_mono/repository/sales_and_distribution_management/sale_order/repository"
+	productrepository "shop_erp_mono/repository/warehouse_management/product/repository"
 	orderdetailusecase "shop_erp_mono/usecase/sales_and_distribution_management/order_details/usecase"
 	"time"
 )
 
 func OrderDetailRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
 	od := orderdetailrepository.NewOrderDetailRepository(db, orderdetailsdomain.CollectionOrderDetail)
+	so := sales_order_repository.NewSaleOrderRepository(db, sale_orders_domain.CollectionSalesOrder)
+	pr := productrepository.NewProductRepository(db, productdomain.CollectionProduct)
 	orderDetail := &orderdetailcontroller.OrderDetailController{
-		OrderDetailUseCase: orderdetailusecase.NewOrderDetailUseCase(timeout, od),
+		OrderDetailUseCase: orderdetailusecase.NewOrderDetailUseCase(timeout, od, so, pr),
 		Database:           env,
 	}
 
