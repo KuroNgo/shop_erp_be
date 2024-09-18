@@ -3,19 +3,19 @@ package supplier_route
 import (
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
-	supplier_controller "shop_erp_mono/api/controllers/warehouse_management/supplier"
+	suppliercontroller "shop_erp_mono/api/controllers/warehouse_management/supplier"
 	"shop_erp_mono/bootstrap"
 	supplierdomain "shop_erp_mono/domain/warehouse_management/supplier"
-	supplier_repository "shop_erp_mono/repository/warehouse_management/supplier/repository"
-	supplier_usecase "shop_erp_mono/usecase/warehouse_management/supplier/usecase"
+	supplierrepository "shop_erp_mono/repository/warehouse_management/supplier/repository"
+	supplierusecase "shop_erp_mono/usecase/warehouse_management/supplier/usecase"
 	"time"
 )
 
 func SupplierRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
-	su := supplier_repository.NewSupplierRepository(db, supplierdomain.CollectionSupplier)
+	su := supplierrepository.NewSupplierRepository(db, supplierdomain.CollectionSupplier)
 
-	supplier := &supplier_controller.SupplierController{
-		SupplierUseCase: supplier_usecase.NewSupplierUseCase(timeout, su),
+	supplier := &suppliercontroller.SupplierController{
+		SupplierUseCase: supplierusecase.NewSupplierUseCase(timeout, su),
 		Database:        env,
 	}
 

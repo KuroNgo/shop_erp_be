@@ -5,10 +5,11 @@ import (
 	"net/http"
 )
 
-func (o *OrderDetailController) DeleteOne(ctx *gin.Context) {
-	_id := ctx.Param("_id")
+func (o *OrderDetailController) GetByOrderID(ctx *gin.Context) {
+	orderId := ctx.Param("order_id")
 
-	if err := o.OrderDetailUseCase.DeleteOne(ctx, _id); err != nil {
+	data, err := o.OrderDetailUseCase.GetByOrderID(ctx, orderId)
+	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
 			"message": err.Error(),
@@ -18,5 +19,6 @@ func (o *OrderDetailController) DeleteOne(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": "success",
+		"data":   data,
 	})
 }

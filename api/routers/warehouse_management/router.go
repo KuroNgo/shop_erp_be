@@ -9,6 +9,7 @@ import (
 	product_route "shop_erp_mono/api/routers/warehouse_management/product"
 	product_category_route "shop_erp_mono/api/routers/warehouse_management/product_category"
 	purchase_order_route "shop_erp_mono/api/routers/warehouse_management/purchase_order"
+	purchase_order_detail_route "shop_erp_mono/api/routers/warehouse_management/purchase_order_detail"
 	stock_adjustment_route "shop_erp_mono/api/routers/warehouse_management/stock_adjustment"
 	stockmovement_route "shop_erp_mono/api/routers/warehouse_management/stockmovement"
 	supplier_route "shop_erp_mono/api/routers/warehouse_management/supplier"
@@ -32,6 +33,7 @@ func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, g
 	// All Public APIs
 	product_route.ProductRouter(env, timeout, db, publicRouter)
 	product_category_route.ProductCategoryRouter(env, timeout, db, publicRouter)
+	purchase_order_detail_route.PurchaseOrderDetailRouter(env, timeout, db, publicRouter)
 	supplier_route.SupplierRouter(env, timeout, db, publicRouter)
 	inventory_route.InventoryRouter(env, timeout, db, publicRouter)
 	purchase_order_route.PurchaseOrderRouter(env, timeout, db, publicRouter)

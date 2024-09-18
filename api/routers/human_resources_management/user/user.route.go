@@ -7,6 +7,7 @@ import (
 	"shop_erp_mono/api/middlewares"
 	"shop_erp_mono/bootstrap"
 	userdomain "shop_erp_mono/domain/human_resource_management/user"
+	middlewares_cloudinary "shop_erp_mono/pkg/cloudinary/middlewares"
 	userrepository "shop_erp_mono/repository/human_resource_management/user/repository"
 	userusecase "shop_erp_mono/usecase/human_resource_management/user/usecase"
 	"time"
@@ -22,8 +23,8 @@ func UserRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Databa
 
 	router := group.Group("/users")
 	router.POST("/login", middlewares.RateLimiter(), user.LoginUser)
-	router.POST("/signup", user.SignUp)
-	router.PATCH("/update", middlewares.DeserializeUser(), user.UpdateUser)
+	router.POST("/signup", middlewares_cloudinary.FileUploadMiddleware(), user.SignUp)
+	router.PATCH("/update", middlewares_cloudinary.FileUploadMiddleware(), middlewares.DeserializeUser(), user.UpdateUser)
 	router.PATCH("/verify", user.VerificationCode)
 	router.PATCH("/verify/password", user.VerificationCodeForChangePassword)
 	router.PATCH("/password/forget", user.ChangePassword)

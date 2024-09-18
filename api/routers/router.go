@@ -1,10 +1,12 @@
 package routers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 	"shop_erp_mono/api/routers/accounting_management"
 	"shop_erp_mono/api/routers/human_resources_management"
+	"shop_erp_mono/api/routers/sales_and_distributing_management"
 	swaggerroute "shop_erp_mono/api/routers/swagger"
 	"shop_erp_mono/api/routers/warehouse_management"
 	"shop_erp_mono/bootstrap"
@@ -15,5 +17,19 @@ func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, g
 	swaggerroute.SwaggerRouter(env, timeout, db, gin.Group(""))
 	human_resources_management.SetUp(env, timeout, db, gin)
 	accounting_management.SetUp(env, timeout, db, gin)
+	sales_and_distributing_management.SetUp(env, timeout, db, gin)
 	warehouse_management.SetUp(env, timeout, db, gin)
+
+	// Đếm các route
+	routeCount := countRoutes(gin)
+	fmt.Printf("The number of API endpoints: %d\n", routeCount)
+}
+
+func countRoutes(r *gin.Engine) int {
+	count := 0
+	routes := r.Routes()
+	for range routes {
+		count++
+	}
+	return count
 }

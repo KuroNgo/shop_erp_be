@@ -65,7 +65,7 @@ func (p *purchaseOrderDetailRepository) Create(ctx context.Context, detail *purc
 	return nil
 }
 
-func (p *purchaseOrderDetailRepository) Update(ctx context.Context, id primitive.ObjectID, detail *purchaseorderdetaildomain.PurchaseOrderDetail) error {
+func (p *purchaseOrderDetailRepository) Update(ctx context.Context, detail *purchaseorderdetaildomain.PurchaseOrderDetail) error {
 	//TODO implement me
 	panic("implement me")
 }
