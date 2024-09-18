@@ -24,7 +24,7 @@ type Invoice struct {
 }
 
 type Input struct {
-	Order       string    `bson:"order" json:"order"`
+	OrderID     string    `bson:"order_id" json:"order_id"`
 	InvoiceDate time.Time `bson:"invoice_date" json:"invoice_date"`
 	DueDate     time.Time `bson:"due_date" json:"due_date"`
 	AmountDue   float64   `bson:"amount_due" json:"amount_due"`
