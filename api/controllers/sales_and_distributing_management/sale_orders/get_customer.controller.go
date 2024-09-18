@@ -5,10 +5,11 @@ import (
 	"net/http"
 )
 
-func (s *SalesOrderController) DeleteOne(ctx *gin.Context) {
-	_id := ctx.Param("_id")
+func (s *SalesOrderController) GetByCustomerID(ctx *gin.Context) {
+	customerId := ctx.Param("customer_id")
 
-	if err := s.SalesOrderUseCase.DeleteOne(ctx, _id); err != nil {
+	data, err := s.SalesOrderUseCase.GetByCustomerID(ctx, customerId)
+	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
 			"message": err.Error(),
@@ -18,5 +19,6 @@ func (s *SalesOrderController) DeleteOne(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": "success",
+		"data":   data,
 	})
 }

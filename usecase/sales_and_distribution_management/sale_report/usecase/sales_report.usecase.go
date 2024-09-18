@@ -25,12 +25,12 @@ func (s *saleReportUseCase) GetByID(ctx context.Context, id string) (*salereport
 	panic("implement me")
 }
 
-func (s *saleReportUseCase) GetByDate(ctx context.Context, reportDate time.Time) (*salereportsdomain.SalesReport, error) {
+func (s *saleReportUseCase) GetByDate(ctx context.Context, reportDate string) (*salereportsdomain.SalesReport, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s *saleReportUseCase) GetReportSummary(ctx context.Context, startDate, endDate time.Time) (*salereportsdomain.SalesReportReport, error) {
+func (s *saleReportUseCase) GetReportSummary(ctx context.Context, startDate, endDate string) (*salereportsdomain.SalesReportReport, error) {
 	//TODO implement me
 	panic("implement me")
 }
@@ -40,7 +40,7 @@ func (s *saleReportUseCase) GetTopSellingProducts(ctx context.Context, startDate
 	panic("implement me")
 }
 
-func (s *saleReportUseCase) UpdateOne(ctx context.Context, id string, updatedReport salereportsdomain.SalesReport) error {
+func (s *saleReportUseCase) UpdateOne(ctx context.Context, id string, updatedReport *salereportsdomain.Input) error {
 	//TODO implement me
 	panic("implement me")
 }

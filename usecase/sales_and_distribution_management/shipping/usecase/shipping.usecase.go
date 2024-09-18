@@ -2,7 +2,6 @@ package shipping_usecase
 
 import (
 	"context"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	shippingdomain "shop_erp_mono/domain/sales_and_distribution_management/shipping"
 	"time"
 )
@@ -12,46 +11,46 @@ type shippingUseCase struct {
 	shippingRepository shippingdomain.IShippingRepository
 }
 
-func NewShippingUseCase(contextTimeout time.Duration, shippingRepository shippingdomain.IShippingRepository) shippingdomain.IShippingRepository {
+func NewShippingUseCase(contextTimeout time.Duration, shippingRepository shippingdomain.IShippingRepository) shippingdomain.IShippingUseCase {
 	return &shippingUseCase{contextTimeout: contextTimeout, shippingRepository: shippingRepository}
 }
 
-func (s *shippingUseCase) CreateOne(ctx context.Context, shipping shippingdomain.Shipping) error {
+func (s *shippingUseCase) CreateOne(ctx context.Context, input *shippingdomain.Input) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s *shippingUseCase) GetByID(ctx context.Context, id primitive.ObjectID) (*shippingdomain.Shipping, error) {
+func (s *shippingUseCase) GetByID(ctx context.Context, id string) (*shippingdomain.ShippingResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s *shippingUseCase) GetByOrderID(ctx context.Context, orderID primitive.ObjectID) (*shippingdomain.Shipping, error) {
+func (s *shippingUseCase) GetByOrderID(ctx context.Context, orderID string) (*shippingdomain.ShippingResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s *shippingUseCase) UpdateOne(ctx context.Context, shipping shippingdomain.Shipping) error {
+func (s *shippingUseCase) UpdateOne(ctx context.Context, id string, updatedShipping *shippingdomain.Input) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s *shippingUseCase) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
+func (s *shippingUseCase) DeleteOne(ctx context.Context, id string) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s *shippingUseCase) List(ctx context.Context) ([]shippingdomain.Shipping, error) {
+func (s *shippingUseCase) List(ctx context.Context) ([]shippingdomain.ShippingResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s *shippingUseCase) GetByStatus(ctx context.Context, status string) ([]shippingdomain.Shipping, error) {
+func (s *shippingUseCase) GetByStatus(ctx context.Context, status string) ([]shippingdomain.ShippingResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s *shippingUseCase) UpdateDeliveryStatus(ctx context.Context, id primitive.ObjectID, status string, actualDelivery *time.Time) error {
+func (s *shippingUseCase) UpdateDeliveryStatus(ctx context.Context, id string, status string, actualDelivery *time.Time) error {
 	//TODO implement me
 	panic("implement me")
 }

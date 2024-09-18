@@ -9,6 +9,9 @@ import (
 	invoicesroute "shop_erp_mono/api/routers/sales_and_distributing_management/invoices"
 	orderdetailsroute "shop_erp_mono/api/routers/sales_and_distributing_management/order_details"
 	payments_route "shop_erp_mono/api/routers/sales_and_distributing_management/payments"
+	sale_orders_route "shop_erp_mono/api/routers/sales_and_distributing_management/sale_orders"
+	sale_reports_route "shop_erp_mono/api/routers/sales_and_distributing_management/sale_reports"
+	shipping_route "shop_erp_mono/api/routers/sales_and_distributing_management/shipping"
 	"shop_erp_mono/bootstrap"
 	"time"
 )
@@ -30,4 +33,7 @@ func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, g
 	invoicesroute.InvoiceRouter(env, timeout, db, publicRouter)
 	orderdetailsroute.OrderDetailRouter(env, timeout, db, publicRouter)
 	payments_route.PaymentRouter(env, timeout, db, publicRouter)
+	sale_orders_route.SaleOrderRouter(env, timeout, db, publicRouter)
+	sale_reports_route.SaleReportRouter(env, timeout, db, publicRouter)
+	shipping_route.ShippingRouter(env, timeout, db, publicRouter)
 }

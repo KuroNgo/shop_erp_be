@@ -21,7 +21,7 @@ type IShippingUseCase interface {
 	CreateOne(ctx context.Context, input *Input) error
 	GetByID(ctx context.Context, id string) (*ShippingResponse, error)
 	GetByOrderID(ctx context.Context, orderID string) (*ShippingResponse, error)
-	UpdateOne(ctx context.Context, id string, updatedShipping Input) error
+	UpdateOne(ctx context.Context, id string, updatedShipping *Input) error
 	DeleteOne(ctx context.Context, id string) error
 	List(ctx context.Context) ([]ShippingResponse, error)
 	GetByStatus(ctx context.Context, status string) ([]ShippingResponse, error)

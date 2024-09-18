@@ -1,14 +1,14 @@
-package sales_order_controller
+package sales_report_controller
 
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-func (s *SalesOrderController) GetByStatus(ctx *gin.Context) {
-	status := ctx.Param("status")
+func (s *SalesReportController) GetByDate(ctx *gin.Context) {
+	reportDate := ctx.Param("report_date")
 
-	data, err := s.SalesOrderUseCase.GetByStatus(ctx, status)
+	data, err := s.SalesReportUseCase.GetByDate(ctx, reportDate)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

@@ -6,6 +6,10 @@ import (
 	"time"
 )
 
+const (
+	CollectionSalesOrder = "sales_order"
+)
+
 type SalesOrder struct {
 	ID              primitive.ObjectID `bson:"_id,omitempty"`
 	OrderNumber     string             `bson:"order_number"`

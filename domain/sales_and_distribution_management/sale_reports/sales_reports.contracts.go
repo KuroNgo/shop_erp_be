@@ -20,10 +20,10 @@ type ISalesReportRepository interface {
 type ISalesReportUseCase interface {
 	CreateOne(ctx context.Context, input *Input) error
 	GetByID(ctx context.Context, id string) (*SalesReport, error)
-	GetByDate(ctx context.Context, reportDate time.Time) (*SalesReport, error)
-	GetReportSummary(ctx context.Context, startDate, endDate time.Time) (*SalesReportReport, error)
+	GetByDate(ctx context.Context, reportDate string) (*SalesReport, error)
+	GetReportSummary(ctx context.Context, startDate, endDate string) (*SalesReportReport, error)
 	GetTopSellingProducts(ctx context.Context, startDate, endDate time.Time) ([]TopSellingProduct, error)
-	UpdateOne(ctx context.Context, id string, updatedReport SalesReport) error
+	UpdateOne(ctx context.Context, id string, updatedReport *Input) error
 	DeleteOne(ctx context.Context, id string) error
 	List(ctx context.Context) ([]SalesReport, error)
 }

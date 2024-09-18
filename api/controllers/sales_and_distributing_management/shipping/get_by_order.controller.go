@@ -1,14 +1,15 @@
-package sales_order_controller
+package shipping_controller
 
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-func (s *SalesOrderController) DeleteOne(ctx *gin.Context) {
-	_id := ctx.Param("_id")
+func (s *ShippingController) GetByOrderID(ctx *gin.Context) {
+	orderId := ctx.Param("order_id")
 
-	if err := s.SalesOrderUseCase.DeleteOne(ctx, _id); err != nil {
+	data, err := s.ShippingUseCase.GetByOrderID(ctx, orderId)
+	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
 			"message": err.Error(),
@@ -18,5 +19,6 @@ func (s *SalesOrderController) DeleteOne(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": "success",
+		"data":   data,
 	})
 }
