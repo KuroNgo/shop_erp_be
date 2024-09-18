@@ -5,10 +5,10 @@ import (
 	"net/http"
 )
 
-func (p *PaymentController) GetByID(ctx *gin.Context) {
-	_id := ctx.Param("_id")
+func (p *PaymentController) GetByStatus(ctx *gin.Context) {
+	status := ctx.Param("status")
 
-	data, err := p.PaymentUseCase.GetByID(ctx, _id)
+	data, err := p.PaymentUseCase.GetByStatus(ctx, status)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
