@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/budgets/get/name [get]
 // @Security CookieAuth
 func (b BudgetController) GetByNameBudget(ctx *gin.Context) {
-	name := ctx.Param("name")
+	name := ctx.Query("name")
 
 	data, err := b.BudgetUseCase.GetBudgetByName(ctx, name)
 	if err != nil {

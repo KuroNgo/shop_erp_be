@@ -3,45 +3,22 @@ package stock_adjustment_controller
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"time"
 )
 
+// GetByMovementDataRange godoc
+// @Summary Get stock adjustments by date range
+// @Description Retrieve stock adjustments within a specified date range
+// @Tags stock_adjustments
+// @Accept json
+// @Produce json
+// @Param startDate path string true "Start date in format YYYY-MM-DD"
+// @Param endDate path string true "End date in format YYYY-MM-DD"
+// @Router /stock-adjustments/get/by-date-range/{startDate}/{endDate} [get]
 func (s *StockAdjustmentController) GetByMovementDataRange(ctx *gin.Context) {
 	startDateStr := ctx.Query("startDate")
 	endDateStr := ctx.Query("endDate")
 
-	if startDateStr == "" || endDateStr == "" {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"status":  "error",
-			"message": "startDate and endDate are required",
-		})
-		return
-	}
-
-	// Định dạng thời gian mà bạn mong đợi (ví dụ: "2006-01-02" cho định dạng YYYY-MM-DD)
-	layout := "2006-01-02"
-
-	// Chuyển đổi startDate từ chuỗi sang time.Time
-	startDate, err := time.Parse(layout, startDateStr)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"status":  "error",
-			"message": "Invalid startDate format. Expected format: YYYY-MM-DD",
-		})
-		return
-	}
-
-	// Chuyển đổi endDate từ chuỗi sang time.Time
-	endDate, err := time.Parse(layout, endDateStr)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"status":  "error",
-			"message": "Invalid endDate format. Expected format: YYYY-MM-DD",
-		})
-		return
-	}
-
-	data, err := s.StockAdjustmentUseCase.GetByAdjustmentDateRange(ctx, startDate, endDate)
+	data, err := s.StockAdjustmentUseCase.GetByAdjustmentDateRange(ctx, startDateStr, endDateStr)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

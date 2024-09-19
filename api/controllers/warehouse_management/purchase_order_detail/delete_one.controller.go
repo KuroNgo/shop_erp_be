@@ -5,8 +5,16 @@ import (
 	"net/http"
 )
 
+// DeleteOne godoc
+// @Summary Delete a purchase order detail by ID
+// @Description Delete a purchase order detail from the system using its ID
+// @Tags PurchaseOrderDetail
+// @Accept json
+// @Produce json
+// @Param _id path string true "Purchase Order Detail ID"
+// @Router /api/v1/purchase_order_details/delete/{_id} [delete]
 func (p *PurchaseOrderDetailController) DeleteOne(ctx *gin.Context) {
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	err := p.PurchaseOrderDetailUseCase.Delete(ctx, _id)
 	if err != nil {

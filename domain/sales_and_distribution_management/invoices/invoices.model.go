@@ -1,4 +1,4 @@
-package invoices_domain
+package invoice_domain
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"

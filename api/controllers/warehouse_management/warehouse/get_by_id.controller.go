@@ -6,7 +6,7 @@ import (
 )
 
 func (w *WarehouseController) GetByID(ctx *gin.Context) {
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	data, err := w.WarehouseUseCase.GetWarehouseByID(ctx, _id)
 	if err != nil {

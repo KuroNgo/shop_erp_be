@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/salaries/get/role [get]
 // @Security CookieAuth
 func (s *SalaryController) GetOneSalaryByRole(ctx *gin.Context) {
-	role := ctx.Param("role")
+	role := ctx.Query("role")
 
 	data, err := s.SalaryUseCase.GetOneByRoleTitle(ctx, role)
 	if err != nil {

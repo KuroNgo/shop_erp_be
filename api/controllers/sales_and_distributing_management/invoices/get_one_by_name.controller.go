@@ -5,8 +5,16 @@ import (
 	"net/http"
 )
 
+// GetByName godoc
+// @Summary Get an invoice by name
+// @Description Retrieve an invoice from the system using its name
+// @Tags Invoices
+// @Accept json
+// @Produce json
+// @Param name path string true "Invoice Name"
+// @Router /invoices/get/name/{name} [get]
 func (i *InvoiceController) GetByName(ctx *gin.Context) {
-	name := ctx.Param("name")
+	name := ctx.Query("name")
 
 	data, err := i.InvoiceUseCase.GetByStatus(ctx, name)
 	if err != nil {

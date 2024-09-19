@@ -5,8 +5,16 @@ import (
 	"net/http"
 )
 
+// GetOneByID godoc
+// @Summary Get a customer by ID
+// @Description Retrieve a customer from the system using their ID
+// @Tags Customers
+// @Accept json
+// @Produce json
+// @Param _id path string true "Customer ID"
+// @Router /customers/get/{_id} [get]
 func (c *CustomerController) GetOneByID(ctx *gin.Context) {
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	data, err := c.CustomerUseCase.GetOneByID(ctx, _id)
 	if err != nil {

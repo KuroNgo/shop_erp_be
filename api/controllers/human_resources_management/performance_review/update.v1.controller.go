@@ -26,7 +26,7 @@ func (p *PerformanceReviewController) UpdateOnePerformanceReviewV1(ctx *gin.Cont
 		return
 	}
 
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	err := p.PerformanceReviewUseCase.UpdateOneWithEmailEmployee(ctx, _id, &input)
 	if err != nil {

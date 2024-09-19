@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/roles/get/_id [get]
 // @Security CookieAuth
 func (r *RoleController) GetOneRoleByID(ctx *gin.Context) {
-	id := ctx.Param("_id")
+	id := ctx.Query("_id")
 
 	data, err := r.RoleUseCase.GetByIDRole(ctx, id)
 	if err != nil {

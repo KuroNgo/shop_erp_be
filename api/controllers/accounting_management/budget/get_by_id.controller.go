@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/budgets/get/_id [get]
 // @Security CookieAuth
 func (b BudgetController) GetByIDBudget(ctx *gin.Context) {
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	data, err := b.BudgetUseCase.GetBudget(ctx, _id)
 	if err != nil {

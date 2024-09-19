@@ -14,7 +14,7 @@ import (
 // @Router /api/v1/employees/get/name [get]
 // @Security CookieAuth
 func (e *EmployeeController) FetchByEmailEmployee(ctx *gin.Context) {
-	employeeEmail := ctx.Param("email")
+	employeeEmail := ctx.Query("email")
 
 	data, err := e.EmployeeUseCase.GetOneByEmail(ctx, employeeEmail)
 	if err != nil {

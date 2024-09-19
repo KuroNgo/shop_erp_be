@@ -14,7 +14,7 @@ import (
 // @Router /api/v1/employees/delete [delete]
 // @Security CookieAuth
 func (e *EmployeeController) DeleteOneEmployee(ctx *gin.Context) {
-	attendanceID := ctx.Param("_id")
+	attendanceID := ctx.Query("_id")
 
 	if err := e.EmployeeUseCase.DeleteOne(ctx, attendanceID); err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{

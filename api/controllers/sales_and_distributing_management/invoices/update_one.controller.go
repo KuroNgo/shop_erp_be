@@ -6,6 +6,15 @@ import (
 	invoicesdomain "shop_erp_mono/domain/sales_and_distribution_management/invoices"
 )
 
+// UpdateOne godoc
+// @Summary Update an invoice by ID
+// @Description Update an invoice's information in the system using its ID
+// @Tags Invoices
+// @Accept json
+// @Produce json
+// @Param _id path string true "Invoice ID"
+// @Param invoice body invoice_domain.Input true "Invoice data"
+// @Router /invoices/update/{_id} [put]
 func (i *InvoiceController) UpdateOne(ctx *gin.Context) {
 	var invoice invoicesdomain.Input
 	if err := ctx.ShouldBindJSON(&invoice); err != nil {
@@ -16,7 +25,7 @@ func (i *InvoiceController) UpdateOne(ctx *gin.Context) {
 		return
 	}
 
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	err := i.InvoiceUseCase.UpdateOne(ctx, _id, &invoice)
 	if err != nil {

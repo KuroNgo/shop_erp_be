@@ -6,7 +6,7 @@ import (
 )
 
 func (s *SalesOrderController) GetByCustomerID(ctx *gin.Context) {
-	customerId := ctx.Param("customer_id")
+	customerId := ctx.Query("customer_id")
 
 	data, err := s.SalesOrderUseCase.GetByCustomerID(ctx, customerId)
 	if err != nil {

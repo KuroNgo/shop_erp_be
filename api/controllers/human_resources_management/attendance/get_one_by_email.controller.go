@@ -14,7 +14,7 @@ import (
 // @Router /api/v1/attendances/get/email [get]
 // @Security CookieAuth
 func (a *AttendanceController) FetchOneAttendanceByEmail(ctx *gin.Context) {
-	email := ctx.Param("email")
+	email := ctx.Query("email")
 
 	data, err := a.AttendanceUseCase.GetOneByEmail(ctx, email)
 	if err != nil {

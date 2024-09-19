@@ -6,8 +6,8 @@ import (
 )
 
 func (s *SalesReportController) GetBySummary(ctx *gin.Context) {
-	startDate := ctx.Param("start_date")
-	endDate := ctx.Param("end_date")
+	startDate := ctx.Query("start_date")
+	endDate := ctx.Query("end_date")
 
 	data, err := s.SalesReportUseCase.GetReportSummary(ctx, startDate, endDate)
 	if err != nil {

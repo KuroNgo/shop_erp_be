@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/salaries/get/_id [get]
 // @Security CookieAuth
 func (s *SalaryController) GetOneSalaryByID(ctx *gin.Context) {
-	id := ctx.Param("_id")
+	id := ctx.Query("_id")
 
 	data, err := s.SalaryUseCase.GetOneByID(ctx, id)
 	if err != nil {

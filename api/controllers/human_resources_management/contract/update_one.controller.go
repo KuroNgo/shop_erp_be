@@ -26,7 +26,7 @@ func (c *ContractController) UpdateOneContract(ctx *gin.Context) {
 		return
 	}
 
-	id := ctx.Param("_id")
+	id := ctx.Query("_id")
 
 	err := c.ContractUseCase.UpdateOne(ctx, id, &input)
 	if err != nil {

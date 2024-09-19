@@ -6,7 +6,7 @@ import (
 )
 
 func (p *PaymentController) GetByStatus(ctx *gin.Context) {
-	status := ctx.Param("status")
+	status := ctx.Query("status")
 
 	data, err := p.PaymentUseCase.GetByStatus(ctx, status)
 	if err != nil {

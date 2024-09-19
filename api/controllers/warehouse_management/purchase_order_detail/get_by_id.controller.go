@@ -5,8 +5,16 @@ import (
 	"net/http"
 )
 
+// GetByID godoc
+// @Summary Get a purchase order detail by ID
+// @Description Retrieve a purchase order detail from the system using its ID
+// @Tags PurchaseOrderDetail
+// @Accept json
+// @Produce json
+// @Param _id path string true "Purchase Order Detail ID"
+// @Router /api/v1/purchase_order_details/get/_id/{_id} [get]
 func (p *PurchaseOrderDetailController) GetByID(ctx *gin.Context) {
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	data, err := p.PurchaseOrderDetailUseCase.GetByID(ctx, _id)
 	if err != nil {

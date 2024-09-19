@@ -26,7 +26,7 @@ func (s *SupplierController) UpdateSupplier(ctx *gin.Context) {
 		return
 	}
 
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	err := s.SupplierUseCase.UpdateSupplier(ctx, _id, &input)
 	if err != nil {

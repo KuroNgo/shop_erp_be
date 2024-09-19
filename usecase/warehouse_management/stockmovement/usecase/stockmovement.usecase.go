@@ -20,7 +20,8 @@ type stockMovementUseCase struct {
 }
 
 func NewStockMovementUseCase(contextTimeout time.Duration, stockMovementRepository stockmovementdomain.IStockMovementRepository,
-	productRepository productdomain.IProductRepository, userRepository userdomain.IUserRepository, warehouseRepository warehousedomain.IWarehouseRepository) stockmovementdomain.IStockMovementUseCase {
+	productRepository productdomain.IProductRepository, userRepository userdomain.IUserRepository,
+	warehouseRepository warehousedomain.IWarehouseRepository) stockmovementdomain.IStockMovementUseCase {
 	return &stockMovementUseCase{contextTimeout: contextTimeout, stockMovementRepository: stockMovementRepository,
 		productRepository: productRepository, userRepository: userRepository, warehouseRepository: warehouseRepository}
 }
@@ -324,11 +325,22 @@ func (s *stockMovementUseCase) GetByUserID(ctx context.Context, userID string) (
 	return responses, nil
 }
 
-func (s *stockMovementUseCase) GetByMovementDateRange(ctx context.Context, startDate, endDate time.Time) ([]stockmovementdomain.StockMovementResponse, error) {
+func (s *stockMovementUseCase) GetByMovementDateRange(ctx context.Context, startDate, endDate string) ([]stockmovementdomain.StockMovementResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
-	stockMovementData, err := s.stockMovementRepository.GetByMovementDateRange(ctx, startDate, endDate)
+	layout := "02/06/2002"
+	start, err := time.Parse(layout, startDate)
+	if err != nil {
+		return nil, err
+	}
+
+	end, err := time.Parse(layout, endDate)
+	if err != nil {
+		return nil, err
+	}
+
+	stockMovementData, err := s.stockMovementRepository.GetByMovementDateRange(ctx, start, end)
 	if err != nil {
 		return nil, err
 	}

@@ -14,7 +14,7 @@ import (
 // @Param product_id path string true "Product ID"
 // @Router /api/v1/inventory/product/{product_id} [get]
 func (i *InventoryController) GetByProductID(ctx *gin.Context) {
-	productId := ctx.Param("product_id")
+	productId := ctx.Query("product_id")
 
 	data, err := i.InventoryUseCase.GetInventoryByProduct(ctx, productId)
 	if err != nil {

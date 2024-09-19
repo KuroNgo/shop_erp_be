@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/suppliers/delete [delete]
 // @Security CookieAuth
 func (s *SupplierController) DeleteSupplier(ctx *gin.Context) {
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	err := s.SupplierUseCase.DeleteSupplier(ctx, _id)
 	if err != nil {

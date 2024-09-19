@@ -15,7 +15,7 @@ import (
 // @Security ApiKeyAuth
 // @Router /api/v1/categories/delete [delete]
 func (c *CategoryController) DeleteCategory(ctx *gin.Context) {
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	if err := c.CategoryUseCase.DeleteCategory(ctx, _id); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{

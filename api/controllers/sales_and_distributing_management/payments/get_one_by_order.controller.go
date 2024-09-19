@@ -6,7 +6,7 @@ import (
 )
 
 func (p *PaymentController) GetByOrder(ctx *gin.Context) {
-	orderId := ctx.Param("order_id")
+	orderId := ctx.Query("order_id")
 
 	data, err := p.PaymentUseCase.GetByStatus(ctx, orderId)
 	if err != nil {

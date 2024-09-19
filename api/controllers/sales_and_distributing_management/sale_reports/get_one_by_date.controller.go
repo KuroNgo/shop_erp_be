@@ -6,7 +6,7 @@ import (
 )
 
 func (s *SalesReportController) GetByDate(ctx *gin.Context) {
-	reportDate := ctx.Param("report_date")
+	reportDate := ctx.Query("report_date")
 
 	data, err := s.SalesReportUseCase.GetByDate(ctx, reportDate)
 	if err != nil {

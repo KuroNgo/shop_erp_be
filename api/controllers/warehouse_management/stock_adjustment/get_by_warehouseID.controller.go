@@ -6,7 +6,7 @@ import (
 )
 
 func (s *StockAdjustmentController) GetByWarehouseID(ctx *gin.Context) {
-	warehouseiD := ctx.Param("warehouse_id")
+	warehouseiD := ctx.Query("warehouse_id")
 
 	data, err := s.StockAdjustmentUseCase.GetByWarehouseID(ctx, warehouseiD)
 	if err != nil {

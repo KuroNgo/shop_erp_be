@@ -6,7 +6,7 @@ import (
 )
 
 func (o *OrderDetailController) GetByOrderID(ctx *gin.Context) {
-	orderId := ctx.Param("order_id")
+	orderId := ctx.Query("order_id")
 
 	data, err := o.OrderDetailUseCase.GetByOrderID(ctx, orderId)
 	if err != nil {

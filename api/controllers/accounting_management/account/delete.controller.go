@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/accounts/delete [delete]
 // @Security CookieAuth
 func (a *AccountController) DeleteAccount(ctx *gin.Context) {
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	err := a.AccountUseCase.DeleteAccount(ctx, _id)
 	if err != nil {

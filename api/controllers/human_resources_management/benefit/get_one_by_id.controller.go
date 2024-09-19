@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/benefits/get/_id [get]
 // @Security CookieAuth
 func (b *BenefitController) FetchOneBenefitByID(ctx *gin.Context) {
-	attendanceID := ctx.Param("_id")
+	attendanceID := ctx.Query("_id")
 
 	data, err := b.BenefitUseCase.GetOneByID(ctx, attendanceID)
 	if err != nil {

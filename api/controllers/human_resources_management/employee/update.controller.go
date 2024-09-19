@@ -25,7 +25,7 @@ func (e *EmployeeController) UpdateOneEmployee(ctx *gin.Context) {
 		return
 	}
 
-	employeeID := ctx.Param("_id")
+	employeeID := ctx.Query("_id")
 
 	err := e.EmployeeUseCase.UpdateOne(ctx, employeeID, &input)
 	if err != nil {

@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/attendances/get/_id [get]
 // @Security CookieAuth
 func (a *AttendanceController) FetchOneAttendanceByID(ctx *gin.Context) {
-	attendanceID := ctx.Param("_id")
+	attendanceID := ctx.Query("_id")
 
 	data, err := a.AttendanceUseCase.GetOneByID(ctx, attendanceID)
 	if err != nil {

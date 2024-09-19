@@ -6,7 +6,7 @@ import (
 )
 
 func (w *WarehouseController) DeleteOne(ctx *gin.Context) {
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	err := w.WarehouseUseCase.DeleteWarehouse(ctx, _id)
 	if err != nil {

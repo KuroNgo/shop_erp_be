@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/performance_reviews/get/email [get]
 // @Security CookieAuth
 func (p *PerformanceReviewController) GetOneByEmailPerformanceReview(ctx *gin.Context) {
-	email := ctx.Param("email")
+	email := ctx.Query("email")
 
 	data, err := p.PerformanceReviewUseCase.GetOneByEmailEmployee(ctx, email)
 	if err != nil {

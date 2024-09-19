@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/budgets/delete [delete]
 // @Security CookieAuth
 func (b BudgetController) DeleteBudget(ctx *gin.Context) {
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	err := b.BudgetUseCase.DeleteBudget(ctx, _id)
 	if err != nil {

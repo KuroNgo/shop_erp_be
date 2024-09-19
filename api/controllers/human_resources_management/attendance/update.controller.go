@@ -25,7 +25,7 @@ func (a *AttendanceController) UpdateOneAttendance(ctx *gin.Context) {
 		return
 	}
 
-	attendanceID := ctx.Param("_id")
+	attendanceID := ctx.Query("_id")
 
 	if err := a.AttendanceUseCase.UpdateOne(ctx, attendanceID, &input); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{

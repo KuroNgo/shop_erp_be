@@ -238,11 +238,22 @@ func (s *stockAdjustmentUseCase) GetByWarehouseID(ctx context.Context, warehouse
 	return responses, nil
 }
 
-func (s *stockAdjustmentUseCase) GetByAdjustmentDateRange(ctx context.Context, startDate, endDate time.Time) ([]stockadjustmentdomain.StockAdjustmentResponse, error) {
+func (s *stockAdjustmentUseCase) GetByAdjustmentDateRange(ctx context.Context, startDate, endDate string) ([]stockadjustmentdomain.StockAdjustmentResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
-	stockAdjustmentData, err := s.stockAdjustmentRepository.GetByAdjustmentDateRange(ctx, startDate, endDate)
+	layout := "06/02/2002"
+	start, err := time.Parse(layout, startDate)
+	if err != nil {
+		return nil, err
+	}
+
+	end, err := time.Parse(layout, endDate)
+	if err != nil {
+		return nil, err
+	}
+
+	stockAdjustmentData, err := s.stockAdjustmentRepository.GetByAdjustmentDateRange(ctx, start, end)
 	if err != nil {
 		return nil, err
 	}

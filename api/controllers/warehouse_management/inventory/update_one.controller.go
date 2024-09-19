@@ -25,7 +25,7 @@ func (i *InventoryController) Update(ctx *gin.Context) {
 		return
 	}
 
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	err := i.InventoryUseCase.UpdateInventory(ctx, _id, &input)
 	if err != nil {

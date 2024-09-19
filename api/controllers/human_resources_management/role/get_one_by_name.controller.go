@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/roles/get/title [get]
 // @Security CookieAuth
 func (r *RoleController) GetOneRoleByTitle(ctx *gin.Context) {
-	title := ctx.Param("title")
+	title := ctx.Query("title")
 
 	data, err := r.RoleUseCase.GetByTitleRole(ctx, title)
 	if err != nil {

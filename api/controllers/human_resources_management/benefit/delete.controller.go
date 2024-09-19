@@ -14,7 +14,7 @@ import (
 // @Router /api/v1/benefits/_id [delete]
 // @Security CookieAuth
 func (b *BenefitController) DeleteOneBenefit(ctx *gin.Context) {
-	attendanceID := ctx.Param("_id")
+	attendanceID := ctx.Query("_id")
 
 	if err := b.BenefitUseCase.DeleteOne(ctx, attendanceID); err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{

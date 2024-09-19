@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/roles/delete [delete]
 // @Security CookieAuth
 func (r *RoleController) DeleteOneRole(ctx *gin.Context) {
-	id := ctx.Param("_id")
+	id := ctx.Query("_id")
 
 	err := r.RoleUseCase.DeleteOneRole(ctx, id)
 	if err != nil {

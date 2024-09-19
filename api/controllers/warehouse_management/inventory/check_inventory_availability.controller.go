@@ -17,9 +17,9 @@ import (
 // @Param required_quantity path string true "Required quantity"
 // @Router /api/v1/inventory/check/{warehouse_id}/{product_id}/{required_quantity} [get]
 func (i *InventoryController) CheckInventoryAvailability(ctx *gin.Context) {
-	warehouseId := ctx.Param("warehouse_id")
-	productId := ctx.Param("product_id")
-	requiredQuantity := ctx.Param("required_quantity")
+	warehouseId := ctx.Query("warehouse_id")
+	productId := ctx.Query("product_id")
+	requiredQuantity := ctx.Query("required_quantity")
 	requireQuan, err := strconv.Atoi(requiredQuantity)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{

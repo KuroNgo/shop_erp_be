@@ -6,7 +6,7 @@ import (
 )
 
 func (s *StockMovementController) DeleteOne(ctx *gin.Context) {
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	err := s.StockMovementUseCase.DeleteOne(ctx, _id)
 	if err != nil {

@@ -24,7 +24,7 @@ func (d *DepartmentController) UpdateOneDepartment(ctx *gin.Context) {
 		return
 	}
 
-	departmentID := ctx.Param("_id")
+	departmentID := ctx.Query("_id")
 
 	if err := d.DepartmentUseCase.UpdateOne(ctx, departmentID, &input); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{

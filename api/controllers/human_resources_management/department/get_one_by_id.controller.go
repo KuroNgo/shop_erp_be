@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/departments/get/_id [get]
 // @Security CookieAuth
 func (d *DepartmentController) FetchOneDepartmentByID(ctx *gin.Context) {
-	departmentID := ctx.Param("_id")
+	departmentID := ctx.Query("_id")
 
 	data, err := d.DepartmentUseCase.GetOneByID(ctx, departmentID)
 	if err != nil {

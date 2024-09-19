@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/performance_reviews/get/_id [get]
 // @Security CookieAuth
 func (p *PerformanceReviewController) GetOneByIDPerformanceReview(ctx *gin.Context) {
-	id := ctx.Param("id")
+	id := ctx.Query("id")
 
 	data, err := p.PerformanceReviewUseCase.GetOneByID(ctx, id)
 	if err != nil {

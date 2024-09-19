@@ -6,7 +6,7 @@ import (
 )
 
 func (s *SalesOrderController) GetByStatus(ctx *gin.Context) {
-	status := ctx.Param("status")
+	status := ctx.Query("status")
 
 	data, err := s.SalesOrderUseCase.GetByStatus(ctx, status)
 	if err != nil {

@@ -5,6 +5,13 @@ import (
 	"net/http"
 )
 
+// GetAll godoc
+// @Summary Get all customers
+// @Description Retrieve all customers from the system
+// @Tags Customers
+// @Accept json
+// @Produce json
+// @Router /customers/get/all [get]
 func (c *CustomerController) GetAll(ctx *gin.Context) {
 	data, err := c.CustomerUseCase.GetAll(ctx)
 	if err != nil {

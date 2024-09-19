@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/leave_requests/get/email [get]
 // @Security CookieAuth
 func (l *LeaveRequestController) FetchOneByEmailLeaveRequest(ctx *gin.Context) {
-	email := ctx.Param("email")
+	email := ctx.Query("email")
 
 	data, err := l.LeaveRequestUseCase.GetOneByEmailEmployee(ctx, email)
 	if err != nil {

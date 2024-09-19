@@ -14,7 +14,7 @@ import (
 // @Router /api/v1/attendances/_id [delete]
 // @Security CookieAuth
 func (a *AttendanceController) DeleteOneAttendance(ctx *gin.Context) {
-	attendanceID := ctx.Param("_id")
+	attendanceID := ctx.Query("_id")
 
 	if err := a.AttendanceUseCase.DeleteOne(ctx, attendanceID); err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{

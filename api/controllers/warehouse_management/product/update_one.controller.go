@@ -25,7 +25,7 @@ func (p *ProductController) UpdateProduct(ctx *gin.Context) {
 		return
 	}
 
-	id := ctx.Param("_id")
+	id := ctx.Query("_id")
 
 	err := p.ProductUseCase.UpdateProduct(ctx, id, &input)
 	if err != nil {

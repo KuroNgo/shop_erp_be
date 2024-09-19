@@ -6,6 +6,14 @@ import (
 	customerdomain "shop_erp_mono/domain/sales_and_distribution_management/customer"
 )
 
+// CreateOne godoc
+// @Summary Create a new customer
+// @Description Create a new customer in the system
+// @Tags Customers
+// @Accept json
+// @Produce json
+// @Param customer body customer_domain.Input true "Customer data"
+// @Router /customers/create [post]
 func (c *CustomerController) CreateOne(ctx *gin.Context) {
 	var customer customerdomain.Input
 	if err := ctx.ShouldBindJSON(&customer); err != nil {

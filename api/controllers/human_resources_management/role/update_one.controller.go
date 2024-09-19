@@ -24,7 +24,7 @@ func (r *RoleController) UpdateRole(ctx *gin.Context) {
 		return
 	}
 
-	roleID := ctx.Param("_id")
+	roleID := ctx.Query("_id")
 
 	if err := r.RoleUseCase.UpdateOneRole(ctx, roleID, &role); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{

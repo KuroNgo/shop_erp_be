@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/performance_reviews/delete [delete]
 // @Security CookieAuth
 func (p *PerformanceReviewController) DeleteOnePerformanceReview(ctx *gin.Context) {
-	id := ctx.Param("_id")
+	id := ctx.Query("_id")
 
 	err := p.PerformanceReviewUseCase.DeleteOne(ctx, id)
 	if err != nil {

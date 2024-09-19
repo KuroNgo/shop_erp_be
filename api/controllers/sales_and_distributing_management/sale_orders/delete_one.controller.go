@@ -6,7 +6,7 @@ import (
 )
 
 func (s *SalesOrderController) DeleteOne(ctx *gin.Context) {
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	if err := s.SalesOrderUseCase.DeleteOne(ctx, _id); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{

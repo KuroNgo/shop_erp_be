@@ -26,5 +26,5 @@ type IStockAdjustmentUseCase interface {
 	GetAllWithPagination(ctx context.Context, pagination repository.Pagination) ([]StockAdjustmentResponse, error)
 	GetByProductID(ctx context.Context, productID string) ([]StockAdjustmentResponse, error)
 	GetByWarehouseID(ctx context.Context, warehouseID string) ([]StockAdjustmentResponse, error)
-	GetByAdjustmentDateRange(ctx context.Context, startDate, endDate time.Time) ([]StockAdjustmentResponse, error)
+	GetByAdjustmentDateRange(ctx context.Context, startDate, endDate string) ([]StockAdjustmentResponse, error)
 }

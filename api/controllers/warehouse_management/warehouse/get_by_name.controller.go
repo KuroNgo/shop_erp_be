@@ -6,7 +6,7 @@ import (
 )
 
 func (w *WarehouseController) GetByName(ctx *gin.Context) {
-	name := ctx.Param("name")
+	name := ctx.Query("name")
 
 	data, err := w.WarehouseUseCase.GetWarehouseByName(ctx, name)
 	if err != nil {

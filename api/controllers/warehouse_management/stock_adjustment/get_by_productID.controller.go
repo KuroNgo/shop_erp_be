@@ -5,8 +5,16 @@ import (
 	"net/http"
 )
 
+// GetByProductID godoc
+// @Summary Get stock adjustments by Product ID
+// @Description Retrieve stock adjustments related to a specific Product ID
+// @Tags stock_adjustments
+// @Accept json
+// @Produce json
+// @Param product_id path string true "Product ID"
+// @Router /stock-adjustments/get/product/{product_id} [get]
 func (s *StockAdjustmentController) GetByProductID(ctx *gin.Context) {
-	productId := ctx.Param("product_id")
+	productId := ctx.Query("product_id")
 
 	data, err := s.StockAdjustmentUseCase.GetByID(ctx, productId)
 	if err != nil {

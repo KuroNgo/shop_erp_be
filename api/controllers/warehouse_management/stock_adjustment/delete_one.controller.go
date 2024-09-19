@@ -5,8 +5,16 @@ import (
 	"net/http"
 )
 
+// DeleteOne godoc
+// @Summary Delete a stock adjustment by ID
+// @Description Delete a stock adjustment from the system using its ID
+// @Tags StockAdjustment
+// @Accept json
+// @Produce json
+// @Param _id path string true "Stock Adjustment ID"
+// @Router /stock-adjustments/delete/{_id} [delete]
 func (s *StockAdjustmentController) DeleteOne(ctx *gin.Context) {
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	err := s.StockAdjustmentUseCase.DeleteOne(ctx, _id)
 	if err != nil {

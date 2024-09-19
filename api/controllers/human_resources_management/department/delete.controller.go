@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/departments/delete [delete]
 // @Security CookieAuth
 func (d *DepartmentController) DeleteOneDepartment(ctx *gin.Context) {
-	departmentID := ctx.Param("_id")
+	departmentID := ctx.Query("_id")
 
 	if err := d.DepartmentUseCase.DeleteOne(ctx, departmentID); err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{

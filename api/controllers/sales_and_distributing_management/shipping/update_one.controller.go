@@ -16,7 +16,7 @@ func (s *ShippingController) UpdateOne(ctx *gin.Context) {
 		return
 	}
 
-	_id := ctx.Param("id")
+	_id := ctx.Query("id")
 
 	if err := s.ShippingUseCase.UpdateOne(ctx, _id, &input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{

@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/salaries/delete [delete]
 // @Security CookieAuth
 func (s *SalaryController) DeleteOneSalary(ctx *gin.Context) {
-	id := ctx.Param("_id")
+	id := ctx.Query("_id")
 
 	err := s.SalaryUseCase.DeleteOne(ctx, id)
 	if err != nil {

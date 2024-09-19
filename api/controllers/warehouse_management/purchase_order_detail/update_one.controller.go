@@ -6,6 +6,15 @@ import (
 	purchaseorderdetaildomain "shop_erp_mono/domain/warehouse_management/purchase_order_detail"
 )
 
+// UpdateOne godoc
+// @Summary Update a purchase order detail
+// @Description Update a purchase order detail using its ID
+// @Tags purchase_order_details
+// @Accept json
+// @Produce json
+// @Param _id path string true "Purchase Order Detail ID"
+// @Param input body purchase_order_detail_domain.Input true "Purchase Order Detail Input"
+// @Router /api/v1/purchase_order_details/update/{_id} [put]
 func (p *PurchaseOrderDetailController) UpdateOne(ctx *gin.Context) {
 	var input purchaseorderdetaildomain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {
@@ -16,7 +25,7 @@ func (p *PurchaseOrderDetailController) UpdateOne(ctx *gin.Context) {
 		return
 	}
 
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	err := p.PurchaseOrderDetailUseCase.Update(ctx, _id, &input)
 	if err != nil {

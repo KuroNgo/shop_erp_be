@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/leave_requests/get/_id [get]
 // @Security CookieAuth
 func (l *LeaveRequestController) FetchOneByIDLeaveRequest(ctx *gin.Context) {
-	id := ctx.Param("_id")
+	id := ctx.Query("_id")
 
 	data, err := l.LeaveRequestUseCase.GetOneByID(ctx, id)
 	if err != nil {

@@ -6,6 +6,14 @@ import (
 	invoicesdomain "shop_erp_mono/domain/sales_and_distribution_management/invoices"
 )
 
+// CreateOne godoc
+// @Summary Create a new invoice
+// @Description Create a new invoice in the system
+// @Tags Invoices
+// @Accept json
+// @Produce json
+// @Param invoice body invoice_domain.Input true "Invoice data"
+// @Router /invoices/create [post]
 func (i *InvoiceController) CreateOne(ctx *gin.Context) {
 	var invoice invoicesdomain.Input
 	if err := ctx.ShouldBindJSON(&invoice); err != nil {

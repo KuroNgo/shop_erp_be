@@ -6,6 +6,14 @@ import (
 	"shop_erp_mono/domain/warehouse_management/stock_adjustment"
 )
 
+// CreateOne godoc
+// @Summary Create a new stock adjustment
+// @Description Create a new stock adjustment in the system
+// @Tags StockAdjustment
+// @Accept json
+// @Produce json
+// @Param input body stock_adjustment_domain.Input true "Stock Adjustment Input"
+// @Router /stock-adjustments/create [post]
 func (s *StockAdjustmentController) CreateOne(ctx *gin.Context) {
 	var input stock_adjustment_domain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {

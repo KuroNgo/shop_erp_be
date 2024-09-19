@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/accounts/get/name [get]
 // @Security CookieAuth
 func (a *AccountController) GetByNameAccount(ctx *gin.Context) {
-	name := ctx.Param("name")
+	name := ctx.Query("name")
 
 	data, err := a.AccountUseCase.GetAccountByName(ctx, name)
 	if err != nil {

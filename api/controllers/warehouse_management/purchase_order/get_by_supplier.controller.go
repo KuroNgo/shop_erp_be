@@ -14,7 +14,7 @@ import (
 // @Param supplier_id path string true "Supplier ID"
 // @Router /api/v1/purchase-orders/get/{supplier_id} [get]
 func (p *PurchaseOrderController) GetBySupplierID(ctx *gin.Context) {
-	supplierId := ctx.Param("supplier_id")
+	supplierId := ctx.Query("supplier_id")
 
 	data, err := p.PurchaseOrderUseCase.GetByID(ctx, supplierId)
 	if err != nil {

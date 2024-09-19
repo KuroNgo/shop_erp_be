@@ -17,8 +17,8 @@ import (
 // @Router /api/v1/accounts/update/adjustment [put]
 // @Security CookieAuth
 func (i *InventoryController) AdjustmentQuantity(ctx *gin.Context) {
-	_id := ctx.Param("_id")
-	adjustment := ctx.Param("adjustment")
+	_id := ctx.Query("_id")
+	adjustment := ctx.Query("adjustment")
 	adjusts, err := strconv.Atoi(adjustment)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{

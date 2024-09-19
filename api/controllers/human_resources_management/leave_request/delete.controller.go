@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/leave_requests/delete [delete]
 // @Security CookieAuth
 func (l *LeaveRequestController) DeleteOneLeaveRequest(ctx *gin.Context) {
-	id := ctx.Param("_id")
+	id := ctx.Query("_id")
 
 	err := l.LeaveRequestUseCase.DeleteOne(ctx, id)
 	if err != nil {

@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/suppliers/get/_id [get]
 // @Security CookieAuth
 func (s *SupplierController) GetByIDSupplier(ctx *gin.Context) {
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	data, err := s.SupplierUseCase.GetSupplierByID(ctx, _id)
 	if err != nil {

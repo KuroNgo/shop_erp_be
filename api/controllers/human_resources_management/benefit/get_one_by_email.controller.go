@@ -14,7 +14,7 @@ import (
 // @Router /api/v1/benefits/get/email [get]
 // @Security CookieAuth
 func (b *BenefitController) FetchOneBenefitByEmail(ctx *gin.Context) {
-	email := ctx.Param("email")
+	email := ctx.Query("email")
 
 	data, err := b.BenefitUseCase.GetOneByEmail(ctx, email)
 	if err != nil {

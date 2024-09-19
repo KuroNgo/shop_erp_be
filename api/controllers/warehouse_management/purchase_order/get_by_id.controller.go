@@ -14,7 +14,7 @@ import (
 // @Param _id path string true "Purchase Order ID"
 // @Router /api/v1/purchase-orders/get/{_id} [get]
 func (p *PurchaseOrderController) GetByID(ctx *gin.Context) {
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	data, err := p.PurchaseOrderUseCase.GetByID(ctx, _id)
 	if err != nil {

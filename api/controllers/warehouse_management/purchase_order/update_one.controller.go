@@ -13,7 +13,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param _id path string true "Purchase Order ID"
-// @Param purchase_order body purchaseorderdomain.Input true "Purchase Order Input"
+// @Param purchase_order body purchase_order_domain.Input true "Purchase Order Input"
 // @Router /api/v1/purchase_orders/update/{_id} [put]
 func (p *PurchaseOrderController) UpdateOne(ctx *gin.Context) {
 	var input purchaseorderdomain.Input
@@ -25,7 +25,7 @@ func (p *PurchaseOrderController) UpdateOne(ctx *gin.Context) {
 		return
 	}
 
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	err := p.PurchaseOrderUseCase.Update(ctx, _id, &input)
 	if err != nil {

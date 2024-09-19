@@ -14,7 +14,7 @@ import (
 // @Router /api/v1/employees/get/_id [get]
 // @Security CookieAuth
 func (e *EmployeeController) FetchByIDEmployee(ctx *gin.Context) {
-	employeeID := ctx.Param("_id")
+	employeeID := ctx.Query("_id")
 
 	data, err := e.EmployeeUseCase.GetOneByID(ctx, employeeID)
 	if err != nil {

@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/accounts/get/_id [get]
 // @Security CookieAuth
 func (a *AccountController) GetByIDAccount(ctx *gin.Context) {
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	data, err := a.AccountUseCase.GetAccountByID(ctx, _id)
 	if err != nil {

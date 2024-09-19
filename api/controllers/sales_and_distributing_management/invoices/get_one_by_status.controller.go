@@ -5,8 +5,17 @@ import (
 	"net/http"
 )
 
+// GetByStatus godoc
+// @Summary Get invoices by status
+// @Description Retrieve invoices from the system using their status
+// @Tags Invoices
+// @Accept json
+// @Produce json
+// @Param status path string true "Invoice Status"
+// @Router /invoices/status/{status} [get]
 func (i *InvoiceController) GetByStatus(ctx *gin.Context) {
-	status := ctx.Param("status")
+	status := ctx.Query("status")
+
 	data, err := i.InvoiceUseCase.GetByStatus(ctx, status)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{

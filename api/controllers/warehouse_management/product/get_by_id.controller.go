@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/products/get/_id [get]
 // @Security CookieAuth
 func (p *ProductController) GetOneByIDProduct(ctx *gin.Context) {
-	id := ctx.Param("_id")
+	id := ctx.Query("_id")
 
 	data, err := p.ProductUseCase.GetProductByID(ctx, id)
 	if err != nil {

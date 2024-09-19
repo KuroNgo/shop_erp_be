@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/departments/get/name [get]
 // @Security CookieAuth
 func (d *DepartmentController) FetchOneDepartmentByName(ctx *gin.Context) {
-	departmentName := ctx.Param("name")
+	departmentName := ctx.Query("name")
 
 	data, err := d.DepartmentUseCase.GetOneByName(ctx, departmentName)
 	if err != nil {

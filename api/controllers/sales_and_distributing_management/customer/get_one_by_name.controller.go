@@ -5,8 +5,16 @@ import (
 	"net/http"
 )
 
+// GetOneByName godoc
+// @Summary Get a customer by name
+// @Description Retrieve a customer from the system using their name
+// @Tags Customers
+// @Accept json
+// @Produce json
+// @Param name path string true "Customer Name"
+// @Router /customers/get/name/{name} [get]
 func (c *CustomerController) GetOneByName(ctx *gin.Context) {
-	name := ctx.Param("name")
+	name := ctx.Query("name")
 
 	data, err := c.CustomerUseCase.GetOneByName(ctx, name)
 	if err != nil {

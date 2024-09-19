@@ -14,7 +14,7 @@ import (
 // @Router /api/v1/contracts/delete/_id [delete]
 // @Security CookieAuth
 func (c *ContractController) DeleteOneContract(ctx *gin.Context) {
-	id := ctx.Param("_id")
+	id := ctx.Query("_id")
 
 	err := c.ContractUseCase.DeleteOne(ctx, id)
 	if err != nil {

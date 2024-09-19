@@ -15,7 +15,7 @@ import (
 // @Router /api/v1/products/delete [delete]
 // @Security CookieAuth
 func (p *ProductController) DeleteOneProduct(ctx *gin.Context) {
-	id := ctx.Param("_id")
+	id := ctx.Query("_id")
 
 	err := p.ProductUseCase.DeleteProduct(ctx, id)
 	if err != nil {

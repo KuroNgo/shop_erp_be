@@ -26,7 +26,7 @@ func (c *CategoryController) UpdateCategory(ctx *gin.Context) {
 		return
 	}
 
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	if err := c.CategoryUseCase.UpdateCategory(ctx, _id, &input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{

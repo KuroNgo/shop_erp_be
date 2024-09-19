@@ -6,7 +6,7 @@ import (
 )
 
 func (p *PaymentController) GetByID(ctx *gin.Context) {
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	data, err := p.PaymentUseCase.GetByID(ctx, _id)
 	if err != nil {

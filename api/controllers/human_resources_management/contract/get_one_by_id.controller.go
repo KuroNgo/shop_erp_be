@@ -14,7 +14,7 @@ import (
 // @Router /api/v1/contracts/get/_id [get]
 // @Security CookieAuth
 func (c *ContractController) FetchOneByIDContract(ctx *gin.Context) {
-	id := ctx.Param("_id")
+	id := ctx.Query("_id")
 
 	data, err := c.ContractUseCase.GetOneByID(ctx, id)
 	if err != nil {

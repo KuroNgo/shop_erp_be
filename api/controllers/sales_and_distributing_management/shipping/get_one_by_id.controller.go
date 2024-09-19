@@ -6,7 +6,7 @@ import (
 )
 
 func (s *ShippingController) GetByID(ctx *gin.Context) {
-	_id := ctx.Param("id")
+	_id := ctx.Query("id")
 
 	data, err := s.ShippingUseCase.GetByID(ctx, _id)
 	if err != nil {

@@ -6,7 +6,7 @@ import (
 )
 
 func (s *StockMovementController) GetByWarehouseID(ctx *gin.Context) {
-	warehouseID := ctx.Param("warehouse_id")
+	warehouseID := ctx.Query("warehouse_id")
 
 	data, err := s.StockMovementUseCase.GetByWarehouseID(ctx, warehouseID)
 	if err != nil {

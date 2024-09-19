@@ -6,7 +6,7 @@ import (
 )
 
 func (s *ShippingController) GetByStatus(ctx *gin.Context) {
-	status := ctx.Param("status")
+	status := ctx.Query("status")
 
 	data, err := s.ShippingUseCase.GetByStatus(ctx, status)
 	if err != nil {

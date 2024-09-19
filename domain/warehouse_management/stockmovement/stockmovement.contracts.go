@@ -28,5 +28,5 @@ type IStockMovementUseCase interface {
 	GetByProductID(ctx context.Context, productID string) ([]StockMovementResponse, error)
 	GetByWarehouseID(ctx context.Context, warehouseID string) ([]StockMovementResponse, error)
 	GetByUserID(ctx context.Context, userID string) ([]StockMovementResponse, error)
-	GetByMovementDateRange(ctx context.Context, startDate, endDate time.Time) ([]StockMovementResponse, error)
+	GetByMovementDateRange(ctx context.Context, startDate, endDate string) ([]StockMovementResponse, error)
 }

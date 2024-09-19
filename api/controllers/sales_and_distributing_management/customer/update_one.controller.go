@@ -6,6 +6,15 @@ import (
 	customerdomain "shop_erp_mono/domain/sales_and_distribution_management/customer"
 )
 
+// UpdateOne godoc
+// @Summary Update a customer by ID
+// @Description Update a customer's information in the system using their ID
+// @Tags Customers
+// @Accept json
+// @Produce json
+// @Param _id path string true "Customer ID"
+// @Param customer body customerdomain.Input true "Customer data"
+// @Router /customers/update/{_id} [put]
 func (c *CustomerController) UpdateOne(ctx *gin.Context) {
 	var customer customerdomain.Input
 	if err := ctx.ShouldBindJSON(&customer); err != nil {
@@ -16,7 +25,7 @@ func (c *CustomerController) UpdateOne(ctx *gin.Context) {
 		return
 	}
 
-	_id := ctx.Param("_id")
+	_id := ctx.Query("_id")
 
 	err := c.CustomerUseCase.UpdateOne(ctx, _id, &customer)
 	if err != nil {

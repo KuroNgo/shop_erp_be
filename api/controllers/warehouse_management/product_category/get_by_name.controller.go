@@ -15,7 +15,7 @@ import (
 // @Security ApiKeyAuth
 // @Router /api/v1/categories/get/name [get]
 func (c *CategoryController) GetByNameCategories(ctx *gin.Context) {
-	name := ctx.Param("name")
+	name := ctx.Query("name")
 
 	data, err := c.CategoryUseCase.GetByNameCategory(ctx, name)
 	if err != nil {
