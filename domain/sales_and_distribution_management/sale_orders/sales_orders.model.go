@@ -24,7 +24,7 @@ type SalesOrder struct {
 
 type Input struct {
 	OrderNumber     string    `bson:"order_number"`
-	CustomerEmail   string    `bson:"customer_email"`
+	CustomerID      string    `bson:"customer_email"`
 	OrderDate       time.Time `bson:"order_date"`
 	ShippingAddress string    `bson:"shipping_address"`
 	TotalAmount     float64   `bson:"total_amount"`

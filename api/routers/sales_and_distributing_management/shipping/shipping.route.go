@@ -5,7 +5,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	shipping_controller "shop_erp_mono/api/controllers/sales_and_distributing_management/shipping"
 	"shop_erp_mono/bootstrap"
+	sale_orders_domain "shop_erp_mono/domain/sales_and_distribution_management/sale_orders"
 	shippingdomain "shop_erp_mono/domain/sales_and_distribution_management/shipping"
+	sales_order_repository "shop_erp_mono/repository/sales_and_distribution_management/sale_order/repository"
 	shipping_repository "shop_erp_mono/repository/sales_and_distribution_management/shipping/repository"
 	shipping_usecase "shop_erp_mono/usecase/sales_and_distribution_management/shipping/usecase"
 	"time"
@@ -13,8 +15,9 @@ import (
 
 func ShippingRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
 	sh := shipping_repository.NewShippingRepository(db, shippingdomain.CollectionShipping)
+	so := sales_order_repository.NewSaleOrderRepository(db, sale_orders_domain.CollectionSalesOrder)
 	shipping := &shipping_controller.ShippingController{
-		ShippingUseCase: shipping_usecase.NewShippingUseCase(timeout, sh),
+		ShippingUseCase: shipping_usecase.NewShippingUseCase(timeout, sh, so),
 		Database:        env,
 	}
 

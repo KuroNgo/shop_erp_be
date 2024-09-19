@@ -53,7 +53,7 @@ func (s *saleReportRepository) GetByDate(ctx context.Context, reportDate time.Ti
 	return &report, nil
 }
 
-func (s *saleReportRepository) GetReportSummary(ctx context.Context, startDate, endDate time.Time) ([]salereportsdomain.SalesReport, error) {
+func (s *saleReportRepository) GetReportSummary(ctx context.Context, startDate, endDate time.Time) (salereportsdomain.SalesReportReport, error) {
 	saleReportCollection := s.database.Collection(s.saleReportCollection)
 
 	filter := bson.M{
@@ -65,16 +65,52 @@ func (s *saleReportRepository) GetReportSummary(ctx context.Context, startDate, 
 
 	cursor, err := saleReportCollection.Find(ctx, filter)
 	if err != nil {
-		return nil, err
+		return salereportsdomain.SalesReportReport{}, err
 	}
 	defer cursor.Close(ctx)
 
 	var reports []salereportsdomain.SalesReport
 	if err := cursor.All(ctx, &reports); err != nil {
-		return nil, err
+		return salereportsdomain.SalesReportReport{}, err
 	}
 
-	return reports, nil
+	// Tính toán tổng doanh thu và số lượng bán
+	totalSales := 0.0
+	topSellingProducts := make(map[primitive.ObjectID]*salereportsdomain.TopSellingProduct)
+
+	for _, report := range reports {
+		totalSales += report.TotalSales
+
+		// Cập nhật thông tin sản phẩm bán chạy
+		if _, exists := topSellingProducts[report.ProductID]; !exists {
+			topSellingProducts[report.ProductID] = &salereportsdomain.TopSellingProduct{
+				ProductID:    report.ProductID,
+				ProductName:  report.ProductName,
+				QuantitySold: report.QuantitySold,
+				TotalRevenue: report.TotalRevenue,
+			}
+		} else {
+			topSellingProducts[report.ProductID].QuantitySold += report.QuantitySold
+			topSellingProducts[report.ProductID].TotalRevenue += report.TotalRevenue
+		}
+	}
+
+	// Chuyển đổi map sang slice
+	var topSellingProductList []salereportsdomain.TopSellingProduct
+	for _, product := range topSellingProducts {
+		topSellingProductList = append(topSellingProductList, *product)
+	}
+
+	// Tạo SalesReportReport
+	reportSummary := salereportsdomain.SalesReportReport{
+		ReportDate:        startDate,
+		TotalSales:        totalSales,
+		TopSellingProduct: topSellingProductList,
+		CreatedAt:         time.Now(),
+		UpdatedAt:         time.Now(),
+	}
+
+	return reportSummary, nil
 }
 
 // need fix

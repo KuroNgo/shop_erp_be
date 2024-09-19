@@ -25,13 +25,13 @@ type Shipping struct {
 }
 
 type Input struct {
-	OrderID           primitive.ObjectID `bson:"order_id" json:"order_id"`
-	ShippingMethod    string             `bson:"shipping_method" json:"shipping_method"` // Example: "Standard", "Express", "International"
-	ShippingDate      time.Time          `bson:"shipping_date" json:"shipping_date"`
-	EstimatedDelivery time.Time          `bson:"estimated_delivery" json:"estimated_delivery"`
-	ActualDelivery    *time.Time         `bson:"actual_delivery,omitempty" json:"actual_delivery,omitempty"`
-	TrackingNumber    string             `bson:"tracking_number" json:"tracking_number"`
-	Status            string             `bson:"status" json:"status"` // Example: "In Transit", "Delivered", "Returned"
+	OrderID           string     `bson:"order_id" json:"order_id"`
+	ShippingMethod    string     `bson:"shipping_method" json:"shipping_method"` // Example: "Standard", "Express", "International"
+	ShippingDate      time.Time  `bson:"shipping_date" json:"shipping_date"`
+	EstimatedDelivery time.Time  `bson:"estimated_delivery" json:"estimated_delivery"`
+	ActualDelivery    *time.Time `bson:"actual_delivery,omitempty" json:"actual_delivery,omitempty"`
+	TrackingNumber    string     `bson:"tracking_number" json:"tracking_number"`
+	Status            string     `bson:"status" json:"status"` // Example: "In Transit", "Delivered", "Returned"
 }
 
 type ShippingResponse struct {

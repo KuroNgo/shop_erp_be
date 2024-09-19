@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	CollectionPayment = "payment"
+	CollectionPayment = "payments"
 )
 
 // Payment represents payment details for an order.
@@ -23,11 +23,11 @@ type Payment struct {
 }
 
 type Input struct {
-	OrderID       primitive.ObjectID `bson:"order_id" json:"order_id"`
-	PaymentDate   time.Time          `bson:"payment_date" json:"payment_date"`
-	PaymentMethod string             `bson:"payment_method" json:"payment_method"` // Example: "Credit Card", "Bank Transfer", "Cash on Delivery"
-	AmountPaid    float64            `bson:"amount_paid" json:"amount_paid"`
-	Status        string             `bson:"status" json:"status"` // Example: "Paid", "Unpaid"
+	OrderID       string    `bson:"order_id" json:"order_id"`
+	PaymentDate   time.Time `bson:"payment_date" json:"payment_date"`
+	PaymentMethod string    `bson:"payment_method" json:"payment_method"` // Example: "Credit Card", "Bank Transfer", "Cash on Delivery"
+	AmountPaid    float64   `bson:"amount_paid" json:"amount_paid"`
+	Status        string    `bson:"status" json:"status"` // Example: "Paid", "Unpaid"
 }
 
 type PaymentResponse struct {
