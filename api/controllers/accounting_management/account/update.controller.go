@@ -6,7 +6,7 @@ import (
 	accountdomain "shop_erp_mono/domain/accounting_management/account"
 )
 
-// UpdateAccount update the account's information
+// UpdateOne update the account's information
 // @Summary Update Account Information
 // @Description Update the account's information
 // @Tags Account
@@ -16,7 +16,7 @@ import (
 // @Param name path string true "Attendance ID"
 // @Router /api/v1/accounts/update [put]
 // @Security CookieAuth
-func (a *AccountController) UpdateAccount(ctx *gin.Context) {
+func (a *AccountController) UpdateOne(ctx *gin.Context) {
 	var input accountdomain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
@@ -28,7 +28,7 @@ func (a *AccountController) UpdateAccount(ctx *gin.Context) {
 
 	_id := ctx.Param("_id")
 
-	if err := a.AccountUseCase.UpdateAccount(ctx, _id, &input); err != nil {
+	if err := a.AccountUseCase.UpdateOne(ctx, _id, &input); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
 			"message": err.Error(),

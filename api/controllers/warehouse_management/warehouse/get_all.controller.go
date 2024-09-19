@@ -6,7 +6,7 @@ import (
 )
 
 func (w *WarehouseController) GetAll(ctx *gin.Context) {
-	data, err := w.WarehouseUseCase.GetAllWarehouses(ctx)
+	data, err := w.WarehouseUseCase.GetAll(ctx)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

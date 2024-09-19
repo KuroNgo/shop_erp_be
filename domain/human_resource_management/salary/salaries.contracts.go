@@ -9,8 +9,8 @@ type ISalaryRepository interface {
 	CreateOne(ctx context.Context, salary *Salary) error
 	DeleteOne(ctx context.Context, id primitive.ObjectID) error
 	UpdateOne(ctx context.Context, id primitive.ObjectID, salary *Salary) error
-	GetOneByID(ctx context.Context, id primitive.ObjectID) (Salary, error)
-	GetOneByRoleID(ctx context.Context, roleID primitive.ObjectID) (Salary, error)
+	GetByID(ctx context.Context, id primitive.ObjectID) (Salary, error)
+	GetByRoleID(ctx context.Context, roleID primitive.ObjectID) (Salary, error)
 	GetAll(ctx context.Context) ([]Salary, error)
 }
 
@@ -18,7 +18,7 @@ type ISalaryUseCase interface {
 	CreateOne(ctx context.Context, salary *Input) error
 	DeleteOne(ctx context.Context, id string) error
 	UpdateOne(ctx context.Context, id string, salary *Input) error
-	GetOneByID(ctx context.Context, id string) (Output, error)
-	GetOneByRoleTitle(ctx context.Context, roleTitle string) (Output, error)
+	GetByID(ctx context.Context, id string) (Output, error)
+	GetByRoleTitle(ctx context.Context, roleTitle string) (Output, error)
 	GetAll(ctx context.Context) ([]Output, error)
 }

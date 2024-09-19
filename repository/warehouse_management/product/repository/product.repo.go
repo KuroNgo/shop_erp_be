@@ -19,7 +19,7 @@ func NewProductRepository(database *mongo.Database, productCollection string) pr
 	return &productRepository{database: database, productCollection: productCollection}
 }
 
-func (p *productRepository) CreateProduct(ctx context.Context, product productdomain.Product) error {
+func (p *productRepository) CreateOne(ctx context.Context, product productdomain.Product) error {
 	productCollection := p.database.Collection(p.productCollection)
 
 	_, err := productCollection.InsertOne(ctx, product)
@@ -30,7 +30,7 @@ func (p *productRepository) CreateProduct(ctx context.Context, product productdo
 	return nil
 }
 
-func (p *productRepository) UpdateProduct(ctx context.Context, id primitive.ObjectID, product productdomain.Product) error {
+func (p *productRepository) UpdateOne(ctx context.Context, id primitive.ObjectID, product productdomain.Product) error {
 	productCollection := p.database.Collection(p.productCollection)
 
 	filter := bson.M{"_id": id}
@@ -51,7 +51,7 @@ func (p *productRepository) UpdateProduct(ctx context.Context, id primitive.Obje
 	return nil
 }
 
-func (p *productRepository) GetProductByID(ctx context.Context, id primitive.ObjectID) (*productdomain.Product, error) {
+func (p *productRepository) GetByID(ctx context.Context, id primitive.ObjectID) (*productdomain.Product, error) {
 	productCollection := p.database.Collection(p.productCollection)
 
 	filter := bson.M{"_id": id}
@@ -67,7 +67,7 @@ func (p *productRepository) GetProductByID(ctx context.Context, id primitive.Obj
 	return product, nil
 }
 
-func (p *productRepository) GetProductByName(ctx context.Context, productName string) (*productdomain.Product, error) {
+func (p *productRepository) GetByName(ctx context.Context, productName string) (*productdomain.Product, error) {
 	productCollection := p.database.Collection(p.productCollection)
 
 	filter := bson.M{"name": productName}
@@ -82,7 +82,7 @@ func (p *productRepository) GetProductByName(ctx context.Context, productName st
 	return product, nil
 }
 
-func (p *productRepository) GetAllProducts(ctx context.Context) ([]productdomain.Product, error) {
+func (p *productRepository) GetAll(ctx context.Context) ([]productdomain.Product, error) {
 	productCollection := p.database.Collection(p.productCollection)
 
 	filter := bson.M{}
@@ -106,7 +106,7 @@ func (p *productRepository) GetAllProducts(ctx context.Context) ([]productdomain
 	return products, nil
 }
 
-func (p *productRepository) DeleteProduct(ctx context.Context, id primitive.ObjectID) error {
+func (p *productRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
 	productCollection := p.database.Collection(p.productCollection)
 
 	filter := bson.M{"_id": id}

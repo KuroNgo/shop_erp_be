@@ -6,7 +6,7 @@ import (
 	departmentsdomain "shop_erp_mono/domain/human_resource_management/departments"
 )
 
-// CreateOneDepartment create the department's information
+// CreateOne create the department's information
 // @Summary Create Department Information
 // @Description Create the department's information
 // @Tags Department
@@ -15,7 +15,7 @@ import (
 // @Param Department body departments_domain.Input true "Department data"
 // @Router /api/v1/departments/create [post]
 // @Security CookieAuth
-func (d *DepartmentController) CreateOneDepartment(ctx *gin.Context) {
+func (d *DepartmentController) CreateOne(ctx *gin.Context) {
 	var input departmentsdomain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{

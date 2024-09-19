@@ -43,7 +43,7 @@ func (p *purchaseOrderDetailUseCase) GetByID(ctx context.Context, id string) (*p
 		return nil, err
 	}
 
-	productData, err := p.productRepository.GetProductByID(ctx, purchaseOrderDetailData.ProductID)
+	productData, err := p.productRepository.GetByID(ctx, purchaseOrderDetailData.ProductID)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +79,7 @@ func (p *purchaseOrderDetailUseCase) GetByPurchaseOrderID(ctx context.Context, p
 			return nil, err
 		}
 
-		productData, err := p.productRepository.GetProductByID(ctx, purchaseOrderDetail.ProductID)
+		productData, err := p.productRepository.GetByID(ctx, purchaseOrderDetail.ProductID)
 		if err != nil {
 			return nil, err
 		}
@@ -96,7 +96,7 @@ func (p *purchaseOrderDetailUseCase) GetByPurchaseOrderID(ctx context.Context, p
 	return responses, nil
 }
 
-func (p *purchaseOrderDetailUseCase) Create(ctx context.Context, input *purchaseorderdetaildomain.Input) error {
+func (p *purchaseOrderDetailUseCase) CreateOne(ctx context.Context, input *purchaseorderdetaildomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
@@ -104,7 +104,7 @@ func (p *purchaseOrderDetailUseCase) Create(ctx context.Context, input *purchase
 		return err
 	}
 
-	productData, err := p.productRepository.GetProductByName(ctx, input.Product)
+	productData, err := p.productRepository.GetByName(ctx, input.Product)
 	if err != nil {
 		return err
 	}
@@ -122,10 +122,10 @@ func (p *purchaseOrderDetailUseCase) Create(ctx context.Context, input *purchase
 		UpdatedAt:       time.Now(),
 	}
 
-	return p.purchaseOrderDetailRepository.Create(ctx, &purchaseOrderDetail)
+	return p.purchaseOrderDetailRepository.CreateOne(ctx, &purchaseOrderDetail)
 }
 
-func (p *purchaseOrderDetailUseCase) Update(ctx context.Context, id string, input *purchaseorderdetaildomain.Input) error {
+func (p *purchaseOrderDetailUseCase) UpdateOne(ctx context.Context, id string, input *purchaseorderdetaildomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
@@ -138,7 +138,7 @@ func (p *purchaseOrderDetailUseCase) Update(ctx context.Context, id string, inpu
 		return err
 	}
 
-	productData, err := p.productRepository.GetProductByName(ctx, input.Product)
+	productData, err := p.productRepository.GetByName(ctx, input.Product)
 	if err != nil {
 		return err
 	}
@@ -156,10 +156,10 @@ func (p *purchaseOrderDetailUseCase) Update(ctx context.Context, id string, inpu
 		UpdatedAt:       time.Now(),
 	}
 
-	return p.purchaseOrderDetailRepository.Update(ctx, purchaseOrderDetail)
+	return p.purchaseOrderDetailRepository.UpdateOne(ctx, purchaseOrderDetail)
 }
 
-func (p *purchaseOrderDetailUseCase) Delete(ctx context.Context, id string) error {
+func (p *purchaseOrderDetailUseCase) DeleteOne(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
@@ -168,7 +168,7 @@ func (p *purchaseOrderDetailUseCase) Delete(ctx context.Context, id string) erro
 		return err
 	}
 
-	return p.purchaseOrderDetailRepository.Delete(ctx, purchaseOrderDetailID)
+	return p.purchaseOrderDetailRepository.DeleteOne(ctx, purchaseOrderDetailID)
 }
 
 func (p *purchaseOrderDetailUseCase) GetAllWithPagination(ctx context.Context, pagination repository.Pagination) ([]purchaseorderdetaildomain.PurchaseOrderDetailResponse, error) {
@@ -188,7 +188,7 @@ func (p *purchaseOrderDetailUseCase) GetAllWithPagination(ctx context.Context, p
 			return nil, err
 		}
 
-		productData, err := p.productRepository.GetProductByID(ctx, purchaseOrderDetail.ProductID)
+		productData, err := p.productRepository.GetByID(ctx, purchaseOrderDetail.ProductID)
 		if err != nil {
 			return nil, err
 		}
@@ -222,7 +222,7 @@ func (p *purchaseOrderDetailUseCase) GetAll(ctx context.Context) ([]purchaseorde
 			return nil, err
 		}
 
-		productData, err := p.productRepository.GetProductByID(ctx, purchaseOrderDetail.ProductID)
+		productData, err := p.productRepository.GetByID(ctx, purchaseOrderDetail.ProductID)
 		if err != nil {
 			return nil, err
 		}

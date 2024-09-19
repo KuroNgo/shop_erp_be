@@ -6,7 +6,7 @@ import (
 	departmentsdomain "shop_erp_mono/domain/human_resource_management/departments"
 )
 
-// UpdateOneDepartment updates the department's information
+// UpdateOne updates the department's information
 // @Summary Update Department Information
 // @Description Updates the department's information
 // @Tags Department
@@ -14,7 +14,7 @@ import (
 // @Produce json
 // @Router /api/v1/departments/update [put]
 // @Security CookieAuth
-func (d *DepartmentController) UpdateOneDepartment(ctx *gin.Context) {
+func (d *DepartmentController) UpdateOne(ctx *gin.Context) {
 	var input departmentsdomain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{

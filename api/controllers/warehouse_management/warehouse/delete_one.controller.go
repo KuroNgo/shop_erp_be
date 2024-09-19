@@ -8,7 +8,7 @@ import (
 func (w *WarehouseController) DeleteOne(ctx *gin.Context) {
 	_id := ctx.Query("_id")
 
-	err := w.WarehouseUseCase.DeleteWarehouse(ctx, _id)
+	err := w.WarehouseUseCase.DeleteOne(ctx, _id)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

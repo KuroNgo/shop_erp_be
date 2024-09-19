@@ -28,12 +28,12 @@ func (p *performanceReviewUseCase) CreateOneWithEmailEmployee(ctx context.Contex
 		return err
 	}
 
-	employeeData, err := p.employeeRepository.GetOneByEmail(ctx, input.EmployeeEmail)
+	employeeData, err := p.employeeRepository.GetByEmail(ctx, input.EmployeeEmail)
 	if err != nil {
 		return err
 	}
 
-	reviewerData, err := p.employeeRepository.GetOneByEmail(ctx, input.ReviewerEmail)
+	reviewerData, err := p.employeeRepository.GetByEmail(ctx, input.ReviewerEmail)
 	if err != nil {
 		return err
 	}
@@ -69,12 +69,12 @@ func (p *performanceReviewUseCase) CreateOneWithIDEmployee(ctx context.Context, 
 		return err
 	}
 
-	employeeData, err := p.employeeRepository.GetOneByID(ctx, employeeID)
+	employeeData, err := p.employeeRepository.GetByID(ctx, employeeID)
 	if err != nil {
 		return err
 	}
 
-	reviewerData, err := p.employeeRepository.GetOneByID(ctx, reviewerID)
+	reviewerData, err := p.employeeRepository.GetByID(ctx, reviewerID)
 	if err != nil {
 		return err
 	}
@@ -113,12 +113,12 @@ func (p *performanceReviewUseCase) UpdateOneWithEmailEmployee(ctx context.Contex
 		return err
 	}
 
-	employeeData, err := p.employeeRepository.GetOneByEmail(ctx, input.EmployeeEmail)
+	employeeData, err := p.employeeRepository.GetByEmail(ctx, input.EmployeeEmail)
 	if err != nil {
 		return err
 	}
 
-	reviewerData, err := p.employeeRepository.GetOneByEmail(ctx, input.ReviewerEmail)
+	reviewerData, err := p.employeeRepository.GetByEmail(ctx, input.ReviewerEmail)
 	if err != nil {
 		return err
 	}
@@ -154,12 +154,12 @@ func (p *performanceReviewUseCase) UpdateOneWithIDEmployee(ctx context.Context, 
 		return err
 	}
 
-	employeeData, err := p.employeeRepository.GetOneByID(ctx, employeeID)
+	employeeData, err := p.employeeRepository.GetByID(ctx, employeeID)
 	if err != nil {
 		return err
 	}
 
-	reviewerData, err := p.employeeRepository.GetOneByID(ctx, reviewerID)
+	reviewerData, err := p.employeeRepository.GetByID(ctx, reviewerID)
 	if err != nil {
 		return err
 	}
@@ -176,7 +176,7 @@ func (p *performanceReviewUseCase) UpdateOneWithIDEmployee(ctx context.Context, 
 	return p.performanceReviewRepository.UpdateOne(ctx, performanceReviewID, performanceReview)
 }
 
-func (p *performanceReviewUseCase) GetOneByID(ctx context.Context, id string) (performancereviewdomain.Output, error) {
+func (p *performanceReviewUseCase) GetByID(ctx context.Context, id string) (performancereviewdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
@@ -185,17 +185,17 @@ func (p *performanceReviewUseCase) GetOneByID(ctx context.Context, id string) (p
 		return performancereviewdomain.Output{}, err
 	}
 
-	performanceReviewData, err := p.performanceReviewRepository.GetOneByID(ctx, performanceReviewID)
+	performanceReviewData, err := p.performanceReviewRepository.GetByID(ctx, performanceReviewID)
 	if err != nil {
 		return performancereviewdomain.Output{}, err
 	}
 
-	employeeData, err := p.employeeRepository.GetOneByID(ctx, performanceReviewData.EmployeeID)
+	employeeData, err := p.employeeRepository.GetByID(ctx, performanceReviewData.EmployeeID)
 	if err != nil {
 		return performancereviewdomain.Output{}, err
 	}
 
-	reviewerData, err := p.employeeRepository.GetOneByID(ctx, performanceReviewData.ReviewerID)
+	reviewerData, err := p.employeeRepository.GetByID(ctx, performanceReviewData.ReviewerID)
 	if err != nil {
 		return performancereviewdomain.Output{}, err
 	}
@@ -209,21 +209,21 @@ func (p *performanceReviewUseCase) GetOneByID(ctx context.Context, id string) (p
 	return output, nil
 }
 
-func (p *performanceReviewUseCase) GetOneByEmailEmployee(ctx context.Context, email string) (performancereviewdomain.Output, error) {
+func (p *performanceReviewUseCase) GetByEmailEmployee(ctx context.Context, email string) (performancereviewdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
-	employeeData, err := p.employeeRepository.GetOneByEmail(ctx, email)
+	employeeData, err := p.employeeRepository.GetByEmail(ctx, email)
 	if err != nil {
 		return performancereviewdomain.Output{}, err
 	}
 
-	reviewerData, err := p.employeeRepository.GetOneByEmail(ctx, email)
+	reviewerData, err := p.employeeRepository.GetByEmail(ctx, email)
 	if err != nil {
 		return performancereviewdomain.Output{}, err
 	}
 
-	performanceReviewData, err := p.performanceReviewRepository.GetOneByEmployeeID(ctx, employeeData.ID)
+	performanceReviewData, err := p.performanceReviewRepository.GetByEmployeeID(ctx, employeeData.ID)
 	if err != nil {
 		return performancereviewdomain.Output{}, err
 	}
@@ -249,12 +249,12 @@ func (p *performanceReviewUseCase) GetAll(ctx context.Context) ([]performancerev
 	var outputs []performancereviewdomain.Output
 	outputs = make([]performancereviewdomain.Output, 0, len(performanceReviewData))
 	for _, performanceReview := range performanceReviewData {
-		employeeData, err := p.employeeRepository.GetOneByID(ctx, performanceReview.EmployeeID)
+		employeeData, err := p.employeeRepository.GetByID(ctx, performanceReview.EmployeeID)
 		if err != nil {
 			return nil, err
 		}
 
-		reviewerData, err := p.employeeRepository.GetOneByID(ctx, performanceReview.ReviewerID)
+		reviewerData, err := p.employeeRepository.GetByID(ctx, performanceReview.ReviewerID)
 		if err != nil {
 			return nil, err
 		}

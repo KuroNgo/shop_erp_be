@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// DeleteOneBenefit delete the benefit's information
+// DeleteOne delete the benefit's information
 // @Summary Delete Benefit Information
 // @Description Deletes the benefit's information by ID
 // @Tags Benefit
@@ -13,7 +13,7 @@ import (
 // @Param _id path string true "Benefit ID"
 // @Router /api/v1/benefits/_id [delete]
 // @Security CookieAuth
-func (b *BenefitController) DeleteOneBenefit(ctx *gin.Context) {
+func (b *BenefitController) DeleteOne(ctx *gin.Context) {
 	attendanceID := ctx.Query("_id")
 
 	if err := b.BenefitUseCase.DeleteOne(ctx, attendanceID); err != nil {

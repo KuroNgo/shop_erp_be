@@ -8,7 +8,7 @@ import (
 // GetByMovementDataRange godoc
 // @Summary Get stock adjustments by date range
 // @Description Retrieve stock adjustments within a specified date range
-// @Tags stock_adjustments
+// @Tags StockAdjustment
 // @Accept json
 // @Produce json
 // @Param startDate path string true "Start date in format YYYY-MM-DD"

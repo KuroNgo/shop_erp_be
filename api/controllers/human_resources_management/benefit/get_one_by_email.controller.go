@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// FetchOneBenefitByEmail retrieves the benefit's information
+// GetByEmail retrieves the benefit's information
 // @Summary Get Benefit Information By ID
 // @Description Retrieves the benefit's information name
 // @Tags Benefit
@@ -13,10 +13,10 @@ import (
 // @Param email path string true "Benefit ID"
 // @Router /api/v1/benefits/get/email [get]
 // @Security CookieAuth
-func (b *BenefitController) FetchOneBenefitByEmail(ctx *gin.Context) {
+func (b *BenefitController) GetByEmail(ctx *gin.Context) {
 	email := ctx.Query("email")
 
-	data, err := b.BenefitUseCase.GetOneByEmail(ctx, email)
+	data, err := b.BenefitUseCase.GetByEmail(ctx, email)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{
 			"status":  "error",

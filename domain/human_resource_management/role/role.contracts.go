@@ -6,19 +6,19 @@ import (
 )
 
 type IRoleRepository interface {
-	CreateOneRole(ctx context.Context, role *Role) error
-	GetByTitleRole(ctx context.Context, title string) (Role, error)
-	GetByIDRole(ctx context.Context, id primitive.ObjectID) (Role, error)
-	GetAllRole(ctx context.Context) ([]Role, error)
-	UpdateOneRole(ctx context.Context, id primitive.ObjectID, role *Role) error
-	DeleteOneRole(ctx context.Context, id primitive.ObjectID) error
+	CreateOne(ctx context.Context, role *Role) error
+	GetByTitle(ctx context.Context, title string) (Role, error)
+	GetByID(ctx context.Context, id primitive.ObjectID) (Role, error)
+	GetAll(ctx context.Context) ([]Role, error)
+	UpdateOne(ctx context.Context, id primitive.ObjectID, role *Role) error
+	DeleteOne(ctx context.Context, id primitive.ObjectID) error
 }
 
 type IRoleUseCase interface {
-	CreateOneRole(ctx context.Context, input *Input) error
-	GetByTitleRole(ctx context.Context, title string) (Output, error)
-	GetByIDRole(ctx context.Context, id string) (Output, error)
-	GetAllRole(ctx context.Context) ([]Output, error)
-	UpdateOneRole(ctx context.Context, id string, input *Input) error
-	DeleteOneRole(ctx context.Context, id string) error
+	CreateOne(ctx context.Context, input *Input) error
+	GetByTitle(ctx context.Context, title string) (Output, error)
+	GetByID(ctx context.Context, id string) (Output, error)
+	GetAll(ctx context.Context) ([]Output, error)
+	UpdateOne(ctx context.Context, id string, input *Input) error
+	DeleteOne(ctx context.Context, id string) error
 }

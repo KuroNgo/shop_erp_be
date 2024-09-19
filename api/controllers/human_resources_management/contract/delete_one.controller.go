@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// DeleteOneContract delete the contract's information
+// DeleteOne delete the contract's information
 // @Summary Delete Contract Information
 // @Description Deletes the contract's information by ID
 // @Tags Contract
@@ -13,7 +13,7 @@ import (
 // @Param _id path string true "Contract ID"
 // @Router /api/v1/contracts/delete/_id [delete]
 // @Security CookieAuth
-func (c *ContractController) DeleteOneContract(ctx *gin.Context) {
+func (c *ContractController) DeleteOne(ctx *gin.Context) {
 	id := ctx.Query("_id")
 
 	err := c.ContractUseCase.DeleteOne(ctx, id)

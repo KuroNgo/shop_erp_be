@@ -6,20 +6,20 @@ import (
 )
 
 type IProductRepository interface {
-	CreateProduct(ctx context.Context, product Product) error
-	UpdateProduct(ctx context.Context, id primitive.ObjectID, product Product) error
-	GetProductByID(ctx context.Context, id primitive.ObjectID) (*Product, error)
-	GetProductByName(ctx context.Context, productName string) (*Product, error)
-	GetAllProducts(ctx context.Context) ([]Product, error)
-	DeleteProduct(ctx context.Context, id primitive.ObjectID) error
+	CreateOne(ctx context.Context, product Product) error
+	UpdateOne(ctx context.Context, id primitive.ObjectID, product Product) error
+	GetByID(ctx context.Context, id primitive.ObjectID) (*Product, error)
+	GetByName(ctx context.Context, productName string) (*Product, error)
+	GetAll(ctx context.Context) ([]Product, error)
+	DeleteOne(ctx context.Context, id primitive.ObjectID) error
 	CountCategory(ctx context.Context, categoryID primitive.ObjectID) (int64, error)
 }
 
 type IProductUseCase interface {
-	CreateProduct(ctx context.Context, input *Input) error
-	UpdateProduct(ctx context.Context, id string, input *Input) error
-	GetProductByID(ctx context.Context, id string) (*ProductResponse, error)
-	GetProductByName(ctx context.Context, productName string) (*ProductResponse, error)
-	GetAllProducts(ctx context.Context) ([]ProductResponse, error)
-	DeleteProduct(ctx context.Context, id string) error
+	CreateOne(ctx context.Context, input *Input) error
+	UpdateOne(ctx context.Context, id string, input *Input) error
+	GetByID(ctx context.Context, id string) (*ProductResponse, error)
+	GetByName(ctx context.Context, productName string) (*ProductResponse, error)
+	GetAll(ctx context.Context) ([]ProductResponse, error)
+	DeleteOne(ctx context.Context, id string) error
 }

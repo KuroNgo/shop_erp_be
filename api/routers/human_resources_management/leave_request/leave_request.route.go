@@ -22,10 +22,10 @@ func LeaveRequestRouter(env *bootstrap.Database, timeout time.Duration, db *mong
 	}
 
 	router := group.Group("/leave_requests")
-	router.GET("/get/_id", leaveRequest.FetchOneByIDLeaveRequest)
-	router.GET("/get/email", leaveRequest.FetchOneByEmailLeaveRequest)
-	router.GET("/get/all", leaveRequest.FetchAllLeaveRequest)
-	router.POST("/create", leaveRequest.CreateOneLeaveRequest)
-	router.PUT("/update", leaveRequest.UpdateOneLeaveRequest)
-	router.DELETE("/delete", leaveRequest.DeleteOneLeaveRequest)
+	router.GET("/get/_id", leaveRequest.GetByID)
+	router.GET("/get/email", leaveRequest.GetByEmailEmployee)
+	router.GET("/get/all", leaveRequest.GetAll)
+	router.POST("/create", leaveRequest.CreateOne)
+	router.PUT("/update", leaveRequest.UpdateOne)
+	router.DELETE("/delete", leaveRequest.DeleteOne)
 }

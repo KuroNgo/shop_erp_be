@@ -51,7 +51,7 @@ func (s *stockAdjustmentUseCase) CreateOne(ctx context.Context, input *stockadju
 		return err
 	}
 
-	productData, err := s.productRepository.GetProductByName(ctx, input.Product)
+	productData, err := s.productRepository.GetByName(ctx, input.Product)
 	if err != nil {
 		return err
 	}
@@ -89,7 +89,7 @@ func (s *stockAdjustmentUseCase) UpdateOne(ctx context.Context, id string, input
 		return err
 	}
 
-	productData, err := s.productRepository.GetProductByName(ctx, input.Product)
+	productData, err := s.productRepository.GetByName(ctx, input.Product)
 	if err != nil {
 		return err
 	}
@@ -138,7 +138,7 @@ func (s *stockAdjustmentUseCase) GetAllWithPagination(ctx context.Context, pagin
 	var responses []stockadjustmentdomain.StockAdjustmentResponse
 	responses = make([]stockadjustmentdomain.StockAdjustmentResponse, 0, len(stockAdjustmentData))
 	for _, stockAdjustment := range stockAdjustmentData {
-		productData, err := s.productRepository.GetProductByID(ctx, stockAdjustment.ProductID)
+		productData, err := s.productRepository.GetByID(ctx, stockAdjustment.ProductID)
 		if err != nil {
 			return nil, err
 		}
@@ -177,7 +177,7 @@ func (s *stockAdjustmentUseCase) GetByProductID(ctx context.Context, productID s
 	var responses []stockadjustmentdomain.StockAdjustmentResponse
 	responses = make([]stockadjustmentdomain.StockAdjustmentResponse, 0, len(stockAdjustmentData))
 	for _, stockAdjustment := range stockAdjustmentData {
-		productData, err := s.productRepository.GetProductByID(ctx, stockAdjustment.ProductID)
+		productData, err := s.productRepository.GetByID(ctx, stockAdjustment.ProductID)
 		if err != nil {
 			return nil, err
 		}
@@ -216,7 +216,7 @@ func (s *stockAdjustmentUseCase) GetByWarehouseID(ctx context.Context, warehouse
 	var responses []stockadjustmentdomain.StockAdjustmentResponse
 	responses = make([]stockadjustmentdomain.StockAdjustmentResponse, 0, len(stockAdjustmentData))
 	for _, stockAdjustment := range stockAdjustmentData {
-		productData, err := s.productRepository.GetProductByID(ctx, stockAdjustment.ProductID)
+		productData, err := s.productRepository.GetByID(ctx, stockAdjustment.ProductID)
 		if err != nil {
 			return nil, err
 		}
@@ -261,7 +261,7 @@ func (s *stockAdjustmentUseCase) GetByAdjustmentDateRange(ctx context.Context, s
 	var responses []stockadjustmentdomain.StockAdjustmentResponse
 	responses = make([]stockadjustmentdomain.StockAdjustmentResponse, 0, len(stockAdjustmentData))
 	for _, stockAdjustment := range stockAdjustmentData {
-		productData, err := s.productRepository.GetProductByID(ctx, stockAdjustment.ProductID)
+		productData, err := s.productRepository.GetByID(ctx, stockAdjustment.ProductID)
 		if err != nil {
 			return nil, err
 		}

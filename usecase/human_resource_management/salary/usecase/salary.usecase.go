@@ -27,7 +27,7 @@ func (s *salaryUseCase) CreateOne(ctx context.Context, input *salarydomain.Input
 		return err
 	}
 
-	roleData, err := s.roleRepository.GetByTitleRole(ctx, input.Role)
+	roleData, err := s.roleRepository.GetByTitle(ctx, input.Role)
 	if err != nil {
 		return err
 	}
@@ -75,7 +75,7 @@ func (s *salaryUseCase) UpdateOne(ctx context.Context, id string, input *salaryd
 		return err
 	}
 
-	roleData, err := s.roleRepository.GetByTitleRole(ctx, input.Role)
+	roleData, err := s.roleRepository.GetByTitle(ctx, input.Role)
 	if err != nil {
 		return err
 	}
@@ -97,7 +97,7 @@ func (s *salaryUseCase) UpdateOne(ctx context.Context, id string, input *salaryd
 	return s.salaryRepository.UpdateOne(ctx, salaryID, salaryData)
 }
 
-func (s *salaryUseCase) GetOneByID(ctx context.Context, id string) (salarydomain.Output, error) {
+func (s *salaryUseCase) GetByID(ctx context.Context, id string) (salarydomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
@@ -106,12 +106,12 @@ func (s *salaryUseCase) GetOneByID(ctx context.Context, id string) (salarydomain
 		return salarydomain.Output{}, err
 	}
 
-	salaryData, err := s.salaryRepository.GetOneByID(ctx, salaryID)
+	salaryData, err := s.salaryRepository.GetByID(ctx, salaryID)
 	if err != nil {
 		return salarydomain.Output{}, err
 	}
 
-	roleData, err := s.roleRepository.GetByIDRole(ctx, salaryData.RoleID)
+	roleData, err := s.roleRepository.GetByID(ctx, salaryData.RoleID)
 	if err != nil {
 		return salarydomain.Output{}, err
 	}
@@ -124,16 +124,16 @@ func (s *salaryUseCase) GetOneByID(ctx context.Context, id string) (salarydomain
 	return output, nil
 }
 
-func (s *salaryUseCase) GetOneByRoleTitle(ctx context.Context, roleTitle string) (salarydomain.Output, error) {
+func (s *salaryUseCase) GetByRoleTitle(ctx context.Context, roleTitle string) (salarydomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
-	roleData, err := s.roleRepository.GetByTitleRole(ctx, roleTitle)
+	roleData, err := s.roleRepository.GetByTitle(ctx, roleTitle)
 	if err != nil {
 		return salarydomain.Output{}, err
 	}
 
-	salaryData, err := s.salaryRepository.GetOneByRoleID(ctx, roleData.ID)
+	salaryData, err := s.salaryRepository.GetByRoleID(ctx, roleData.ID)
 	if err != nil {
 		return salarydomain.Output{}, err
 	}
@@ -158,7 +158,7 @@ func (s *salaryUseCase) GetAll(ctx context.Context) ([]salarydomain.Output, erro
 	var outputs []salarydomain.Output
 	outputs = make([]salarydomain.Output, 0, len(salaryData))
 	for _, salary := range salaryData {
-		roleData, err := s.roleRepository.GetByIDRole(ctx, salary.RoleID)
+		roleData, err := s.roleRepository.GetByID(ctx, salary.RoleID)
 		if err != nil {
 			return nil, err
 		}

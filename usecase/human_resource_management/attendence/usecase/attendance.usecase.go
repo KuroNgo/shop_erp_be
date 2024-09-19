@@ -28,7 +28,7 @@ func (a *attendanceUseCase) CreateOne(ctx context.Context, input *attendancedoma
 		return err
 	}
 
-	employee, err := a.employeeRepository.GetOneByEmail(ctx, input.EmailEmployee)
+	employee, err := a.employeeRepository.GetByEmail(ctx, input.EmailEmployee)
 	if err != nil {
 		return err
 	}
@@ -78,7 +78,7 @@ func (a *attendanceUseCase) UpdateOne(ctx context.Context, id string, input *att
 		return err
 	}
 
-	employee, err := a.employeeRepository.GetOneByEmail(ctx, input.EmailEmployee)
+	employee, err := a.employeeRepository.GetByEmail(ctx, input.EmailEmployee)
 	if err != nil {
 		return err
 	}
@@ -97,7 +97,7 @@ func (a *attendanceUseCase) UpdateOne(ctx context.Context, id string, input *att
 	return a.attendanceRepository.UpdateOne(ctx, &attendance)
 }
 
-func (a *attendanceUseCase) GetOneByID(ctx context.Context, id string) (attendancedomain.Output, error) {
+func (a *attendanceUseCase) GetByID(ctx context.Context, id string) (attendancedomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
@@ -106,12 +106,12 @@ func (a *attendanceUseCase) GetOneByID(ctx context.Context, id string) (attendan
 		return attendancedomain.Output{}, err
 	}
 
-	attendanceData, err := a.attendanceRepository.GetOneByID(ctx, attendanceID)
+	attendanceData, err := a.attendanceRepository.GetByID(ctx, attendanceID)
 	if err != nil {
 		return attendancedomain.Output{}, err
 	}
 
-	employeeData, err := a.employeeRepository.GetOneByID(ctx, attendanceData.EmployeeID)
+	employeeData, err := a.employeeRepository.GetByID(ctx, attendanceData.EmployeeID)
 	if err != nil {
 		return attendancedomain.Output{}, err
 	}
@@ -124,16 +124,16 @@ func (a *attendanceUseCase) GetOneByID(ctx context.Context, id string) (attendan
 	return output, nil
 }
 
-func (a *attendanceUseCase) GetOneByEmail(ctx context.Context, email string) (attendancedomain.Output, error) {
+func (a *attendanceUseCase) GetByEmail(ctx context.Context, email string) (attendancedomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
-	employeeData, err := a.employeeRepository.GetOneByEmail(ctx, email)
+	employeeData, err := a.employeeRepository.GetByEmail(ctx, email)
 	if err != nil {
 		return attendancedomain.Output{}, err
 	}
 
-	attendanceData, err := a.attendanceRepository.GetOneByEmployeeID(ctx, employeeData.ID)
+	attendanceData, err := a.attendanceRepository.GetByEmployeeID(ctx, employeeData.ID)
 	if err != nil {
 		return attendancedomain.Output{}, err
 	}
@@ -160,7 +160,7 @@ func (a *attendanceUseCase) GetAll(ctx context.Context) ([]attendancedomain.Outp
 	var employeesData []employeesdomain.Employee
 	employeesData = make([]employeesdomain.Employee, 0, len(attendanceData))
 	for _, i := range attendanceData {
-		employeeData, err := a.employeeRepository.GetOneByID(ctx, i.EmployeeID)
+		employeeData, err := a.employeeRepository.GetByID(ctx, i.EmployeeID)
 		if err != nil {
 			return nil, err
 		}

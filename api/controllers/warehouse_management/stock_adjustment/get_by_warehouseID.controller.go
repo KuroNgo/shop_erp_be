@@ -6,9 +6,9 @@ import (
 )
 
 func (s *StockAdjustmentController) GetByWarehouseID(ctx *gin.Context) {
-	warehouseiD := ctx.Query("warehouse_id")
+	warehouseID := ctx.Query("warehouse_id")
 
-	data, err := s.StockAdjustmentUseCase.GetByWarehouseID(ctx, warehouseiD)
+	data, err := s.StockAdjustmentUseCase.GetByWarehouseID(ctx, warehouseID)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

@@ -171,7 +171,7 @@ func (s *saleReportRepository) DeleteOne(ctx context.Context, id primitive.Objec
 	return nil
 }
 
-func (s *saleReportRepository) List(ctx context.Context) ([]salereportsdomain.SalesReport, error) {
+func (s *saleReportRepository) GetAll(ctx context.Context) ([]salereportsdomain.SalesReport, error) {
 	saleReportCollection := s.database.Collection(s.saleReportCollection)
 
 	filter := bson.M{}

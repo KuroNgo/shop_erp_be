@@ -22,6 +22,6 @@ func PerformanceReviewRouterV2(env *bootstrap.Database, timeout time.Duration, d
 	}
 
 	router := group.Group("/performance_reviews")
-	router.POST("/create", performanceReview.CreateOnePerformanceReviewV2)
-	router.PUT("/update", performanceReview.UpdateOnePerformanceReviewV2)
+	router.POST("/create", performanceReview.CreateOneWithIDEmployee)
+	router.PUT("/update", performanceReview.CreateOneWithIDEmployee)
 }

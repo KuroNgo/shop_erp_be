@@ -6,7 +6,7 @@ import (
 	leaverequestdomain "shop_erp_mono/domain/human_resource_management/leave_request"
 )
 
-// CreateOneLeaveRequest create the leave request's information
+// CreateOne create the leave request's information
 // @Summary Create Leave Request Information
 // @Description Create the leave request's information
 // @Tags Leave Request
@@ -15,7 +15,7 @@ import (
 // @Param LeaveRequest body leave_request_domain.Input true "Leave Request data"
 // @Router /api/v1/leave_requests/create [post]
 // @Security CookieAuth
-func (l *LeaveRequestController) CreateOneLeaveRequest(ctx *gin.Context) {
+func (l *LeaveRequestController) CreateOne(ctx *gin.Context) {
 	var input leaverequestdomain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{

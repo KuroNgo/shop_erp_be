@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// FetchAllEmployee retrieves the employee's information
+// GetAll retrieves the employee's information
 // @Summary Get Employee Information
 // @Description Retrieves the employee's information
 // @Tags Employee
@@ -13,7 +13,7 @@ import (
 // @Produce  json
 // @Router /api/v1/employees/get/all [get]
 // @Security CookieAuth
-func (e *EmployeeController) FetchAllEmployee(ctx *gin.Context) {
+func (e *EmployeeController) GetAll(ctx *gin.Context) {
 	data, err := e.EmployeeUseCase.GetAll(ctx)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{

@@ -14,7 +14,7 @@ import (
 // @Security ApiKeyAuth
 // @Router /api/v1/categories/get/all [get]
 func (c *CategoryController) GetAllCategories(ctx *gin.Context) {
-	data, err := c.CategoryUseCase.GetAllCategories(ctx)
+	data, err := c.CategoryUseCase.GetAll(ctx)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

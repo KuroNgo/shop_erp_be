@@ -93,7 +93,7 @@ func (e *employeeRepository) UpdateOne(ctx context.Context, id primitive.ObjectI
 	return nil
 }
 
-func (e *employeeRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (employeesdomain.Employee, error) {
+func (e *employeeRepository) GetByID(ctx context.Context, id primitive.ObjectID) (employeesdomain.Employee, error) {
 	collectionEmployee := e.database.Collection(e.collectionEmployee)
 
 	var employee employeesdomain.Employee
@@ -108,7 +108,7 @@ func (e *employeeRepository) GetOneByID(ctx context.Context, id primitive.Object
 	return employee, nil
 }
 
-func (e *employeeRepository) GetOneByName(ctx context.Context, name string) (employeesdomain.Employee, error) {
+func (e *employeeRepository) GetByName(ctx context.Context, name string) (employeesdomain.Employee, error) {
 	collectionEmployee := e.database.Collection(e.collectionEmployee)
 
 	var employee employeesdomain.Employee
@@ -123,7 +123,7 @@ func (e *employeeRepository) GetOneByName(ctx context.Context, name string) (emp
 	return employee, nil
 }
 
-func (e *employeeRepository) GetOneByEmail(ctx context.Context, email string) (employeesdomain.Employee, error) {
+func (e *employeeRepository) GetByEmail(ctx context.Context, email string) (employeesdomain.Employee, error) {
 	collectionEmployee := e.database.Collection(e.collectionEmployee)
 
 	filter := bson.M{"email": email}

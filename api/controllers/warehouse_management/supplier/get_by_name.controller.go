@@ -17,7 +17,7 @@ import (
 func (s *SupplierController) GetByNameSupplier(ctx *gin.Context) {
 	name := ctx.Query("name")
 
-	data, err := s.SupplierUseCase.GetSupplierByID(ctx, name)
+	data, err := s.SupplierUseCase.GetByName(ctx, name)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

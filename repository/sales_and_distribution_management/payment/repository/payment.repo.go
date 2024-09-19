@@ -122,7 +122,7 @@ func (p *paymentRepository) DeleteOne(ctx context.Context, id primitive.ObjectID
 	return nil
 }
 
-func (p *paymentRepository) List(ctx context.Context) ([]paymentsdomain.Payment, error) {
+func (p *paymentRepository) GetAll(ctx context.Context) ([]paymentsdomain.Payment, error) {
 	paymentCollection := p.database.Collection(p.paymentCollection)
 
 	filter := bson.M{}

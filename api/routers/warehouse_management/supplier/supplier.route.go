@@ -23,7 +23,7 @@ func SupplierRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Da
 	router.GET("/get/_id", supplier.GetByIDSupplier)
 	router.GET("/get/name", supplier.GetByNameSupplier)
 	router.GET("/get/all/pagination", supplier.GetAllSupplierWithPagination)
-	router.GET("/get/all", supplier.GetAllSupplier)
+	router.GET("/get/all", supplier.GetAll)
 	router.POST("/create", supplier.CreateSupplier)
 	router.PUT("/update", supplier.UpdateSupplier)
 	router.DELETE("/delete", supplier.DeleteSupplier)

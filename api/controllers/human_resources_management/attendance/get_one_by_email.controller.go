@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// FetchOneAttendanceByEmail retrieves the attendance's information
+// GetByEmail retrieves the attendance's information
 // @Summary Get Attendance Information By ID
 // @Description Retrieves the attendance's information name
 // @Tags Attendance
@@ -13,10 +13,10 @@ import (
 // @Param email path string true "Attendance ID"
 // @Router /api/v1/attendances/get/email [get]
 // @Security CookieAuth
-func (a *AttendanceController) FetchOneAttendanceByEmail(ctx *gin.Context) {
+func (a *AttendanceController) GetByEmail(ctx *gin.Context) {
 	email := ctx.Query("email")
 
-	data, err := a.AttendanceUseCase.GetOneByEmail(ctx, email)
+	data, err := a.AttendanceUseCase.GetByEmail(ctx, email)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{
 			"status":  "error",

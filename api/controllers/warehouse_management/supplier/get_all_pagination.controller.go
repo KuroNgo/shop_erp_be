@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"shop_erp_mono/repository"
-	"strconv"
 )
 
 // GetAllSupplierWithPagination get all the supplier information with pagination
@@ -18,12 +17,10 @@ import (
 // @Security CookieAuth
 func (s *SupplierController) GetAllSupplierWithPagination(ctx *gin.Context) {
 	page := ctx.DefaultQuery("page", "1")
-	number, err := strconv.ParseInt(page, 10, 64)
-
 	var pagination repository.Pagination
-	pagination.Page = number
+	pagination.Page = page
 
-	data, err := s.SupplierUseCase.GetSuppliersWithPagination(ctx, pagination)
+	data, err := s.SupplierUseCase.GetAllWithPagination(ctx, pagination)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

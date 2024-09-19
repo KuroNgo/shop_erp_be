@@ -9,7 +9,7 @@ import (
 // UpdateOne godoc
 // @Summary Update a purchase order detail
 // @Description Update a purchase order detail using its ID
-// @Tags purchase_order_details
+// @Tags PurchaseOrderDetail
 // @Accept json
 // @Produce json
 // @Param _id path string true "Purchase Order Detail ID"
@@ -27,7 +27,7 @@ func (p *PurchaseOrderDetailController) UpdateOne(ctx *gin.Context) {
 
 	_id := ctx.Query("_id")
 
-	err := p.PurchaseOrderDetailUseCase.Update(ctx, _id, &input)
+	err := p.PurchaseOrderDetailUseCase.UpdateOne(ctx, _id, &input)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

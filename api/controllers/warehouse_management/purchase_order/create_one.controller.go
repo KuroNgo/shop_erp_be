@@ -24,7 +24,7 @@ func (p *PurchaseOrderController) CreateOne(ctx *gin.Context) {
 		return
 	}
 
-	err := p.PurchaseOrderUseCase.Create(ctx, &input)
+	err := p.PurchaseOrderUseCase.CreateOne(ctx, &input)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

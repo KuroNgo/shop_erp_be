@@ -63,7 +63,7 @@ func (p *performanceReviewRepository) UpdateOne(ctx context.Context, id primitiv
 	return nil
 }
 
-func (p *performanceReviewRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (performancereviewdomain.PerformanceReview, error) {
+func (p *performanceReviewRepository) GetByID(ctx context.Context, id primitive.ObjectID) (performancereviewdomain.PerformanceReview, error) {
 	collectionPerformanceReview := p.database.Collection(p.collectionPerformanceReview)
 
 	var performanceReview performancereviewdomain.PerformanceReview
@@ -78,7 +78,7 @@ func (p *performanceReviewRepository) GetOneByID(ctx context.Context, id primiti
 	return performanceReview, nil
 }
 
-func (p *performanceReviewRepository) GetOneByEmployeeID(ctx context.Context, employeeID primitive.ObjectID) (performancereviewdomain.PerformanceReview, error) {
+func (p *performanceReviewRepository) GetByEmployeeID(ctx context.Context, employeeID primitive.ObjectID) (performancereviewdomain.PerformanceReview, error) {
 	collectionPerformanceReview := p.database.Collection(p.collectionPerformanceReview)
 
 	var performanceReview performancereviewdomain.PerformanceReview

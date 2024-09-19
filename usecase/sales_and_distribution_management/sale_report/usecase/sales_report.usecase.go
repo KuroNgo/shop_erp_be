@@ -23,7 +23,7 @@ func (s *saleReportUseCase) CreateOne(ctx context.Context, input *salereportsdom
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
-	productData, err := s.productRepository.GetProductByName(ctx, input.ProductName)
+	productData, err := s.productRepository.GetByName(ctx, input.ProductName)
 	if err != nil {
 		return err
 	}
@@ -107,7 +107,7 @@ func (s *saleReportUseCase) UpdateOne(ctx context.Context, id string, updatedRep
 		return err
 	}
 
-	productData, err := s.productRepository.GetProductByName(ctx, updatedReport.ProductName)
+	productData, err := s.productRepository.GetByName(ctx, updatedReport.ProductName)
 	if err != nil {
 		return err
 	}
@@ -138,8 +138,8 @@ func (s *saleReportUseCase) DeleteOne(ctx context.Context, id string) error {
 	return s.saleReportRepository.DeleteOne(ctx, reportID)
 }
 
-func (s *saleReportUseCase) List(ctx context.Context) ([]salereportsdomain.SalesReport, error) {
+func (s *saleReportUseCase) GetAll(ctx context.Context) ([]salereportsdomain.SalesReport, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
-	return s.saleReportRepository.List(ctx)
+	return s.saleReportRepository.GetAll(ctx)
 }

@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// DeleteOneSalary delete the salary's information
+// DeleteOne delete the salary's information
 // @Summary Delete Salary Information
 // @Description Deletes the salary's information
 // @Tags Salary
@@ -14,7 +14,7 @@ import (
 // @Param _id path string true "Role ID"
 // @Router /api/v1/salaries/delete [delete]
 // @Security CookieAuth
-func (s *SalaryController) DeleteOneSalary(ctx *gin.Context) {
+func (s *SalaryController) DeleteOne(ctx *gin.Context) {
 	id := ctx.Query("_id")
 
 	err := s.SalaryUseCase.DeleteOne(ctx, id)

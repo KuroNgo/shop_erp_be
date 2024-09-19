@@ -17,7 +17,7 @@ func NewRoleUseCase(contextTimeout time.Duration, roleRepository roledomain.IRol
 	return &roleUseCase{contextTimeout: contextTimeout, roleRepository: roleRepository}
 }
 
-func (r *roleUseCase) CreateOneRole(ctx context.Context, input *roledomain.Input) error {
+func (r *roleUseCase) CreateOne(ctx context.Context, input *roledomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
 
@@ -33,14 +33,14 @@ func (r *roleUseCase) CreateOneRole(ctx context.Context, input *roledomain.Input
 		UpdatedAt:   time.Now(),
 	}
 
-	return r.roleRepository.CreateOneRole(ctx, role)
+	return r.roleRepository.CreateOne(ctx, role)
 }
 
-func (r *roleUseCase) GetByTitleRole(ctx context.Context, title string) (roledomain.Output, error) {
+func (r *roleUseCase) GetByTitle(ctx context.Context, title string) (roledomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
 
-	roleData, err := r.roleRepository.GetByTitleRole(ctx, title)
+	roleData, err := r.roleRepository.GetByTitle(ctx, title)
 	if err != nil {
 		return roledomain.Output{}, err
 	}
@@ -52,7 +52,7 @@ func (r *roleUseCase) GetByTitleRole(ctx context.Context, title string) (roledom
 	return output, nil
 }
 
-func (r *roleUseCase) GetByIDRole(ctx context.Context, id string) (roledomain.Output, error) {
+func (r *roleUseCase) GetByID(ctx context.Context, id string) (roledomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
 
@@ -61,7 +61,7 @@ func (r *roleUseCase) GetByIDRole(ctx context.Context, id string) (roledomain.Ou
 		return roledomain.Output{}, err
 	}
 
-	roleData, err := r.roleRepository.GetByIDRole(ctx, roleID)
+	roleData, err := r.roleRepository.GetByID(ctx, roleID)
 	if err != nil {
 		return roledomain.Output{}, err
 	}
@@ -72,11 +72,11 @@ func (r *roleUseCase) GetByIDRole(ctx context.Context, id string) (roledomain.Ou
 	return output, nil
 }
 
-func (r *roleUseCase) GetAllRole(ctx context.Context) ([]roledomain.Output, error) {
+func (r *roleUseCase) GetAll(ctx context.Context) ([]roledomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
 
-	roleData, err := r.roleRepository.GetAllRole(ctx)
+	roleData, err := r.roleRepository.GetAll(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +94,7 @@ func (r *roleUseCase) GetAllRole(ctx context.Context) ([]roledomain.Output, erro
 	return outputs, nil
 }
 
-func (r *roleUseCase) UpdateOneRole(ctx context.Context, id string, input *roledomain.Input) error {
+func (r *roleUseCase) UpdateOne(ctx context.Context, id string, input *roledomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
 
@@ -115,10 +115,10 @@ func (r *roleUseCase) UpdateOneRole(ctx context.Context, id string, input *roled
 		UpdatedAt:   time.Now(),
 	}
 
-	return r.roleRepository.UpdateOneRole(ctx, roleID, role)
+	return r.roleRepository.UpdateOne(ctx, roleID, role)
 }
 
-func (r *roleUseCase) DeleteOneRole(ctx context.Context, id string) error {
+func (r *roleUseCase) DeleteOne(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
 
@@ -127,5 +127,5 @@ func (r *roleUseCase) DeleteOneRole(ctx context.Context, id string) error {
 		return err
 	}
 
-	return r.roleRepository.DeleteOneRole(ctx, roleID)
+	return r.roleRepository.DeleteOne(ctx, roleID)
 }

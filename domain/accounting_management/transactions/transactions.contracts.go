@@ -6,19 +6,19 @@ import (
 )
 
 type ITransactionsRepository interface {
-	Create(ctx context.Context, transaction *Transactions) error
+	CreateOne(ctx context.Context, transaction *Transactions) error
 	GetByID(ctx context.Context, id primitive.ObjectID) (Transactions, error)
 	GetByAccountID(ctx context.Context, accountID primitive.ObjectID) ([]Transactions, error)
-	Update(ctx context.Context, transaction *Transactions) error
-	Delete(ctx context.Context, id primitive.ObjectID) error
-	List(ctx context.Context) ([]Transactions, error)
+	UpdateOne(ctx context.Context, transaction *Transactions) error
+	DeleteOne(ctx context.Context, id primitive.ObjectID) error
+	GetAll(ctx context.Context) ([]Transactions, error)
 }
 
 type ITransactionsUseCase interface {
-	CreateTransaction(ctx context.Context, input *Input) error
-	GetTransactionByID(ctx context.Context, id string) (TransactionsResponse, error)
-	GetTransactionByAccountID(ctx context.Context, accountID string) ([]TransactionsResponse, error)
-	UpdateTransaction(ctx context.Context, id string, input *Input) error
-	DeleteTransaction(ctx context.Context, id string) error
-	ListTransactions(ctx context.Context) ([]TransactionsResponse, error)
+	CreateOne(ctx context.Context, input *Input) error
+	GetByID(ctx context.Context, id string) (TransactionsResponse, error)
+	GetByAccountID(ctx context.Context, accountID string) ([]TransactionsResponse, error)
+	UpdateOne(ctx context.Context, id string, input *Input) error
+	DeleteOne(ctx context.Context, id string) error
+	GetAll(ctx context.Context) ([]TransactionsResponse, error)
 }

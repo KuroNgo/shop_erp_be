@@ -6,7 +6,7 @@ import (
 	roledomain "shop_erp_mono/domain/human_resource_management/role"
 )
 
-// CreateOneRole Create a new role
+// CreateOne Create a new role
 // @Summary Create role
 // @Description Create new role
 // @Tags Role
@@ -15,7 +15,7 @@ import (
 // @Param Role body role_domain.Input true "Role data"
 // @Security ApiKeyAuth
 // @Router /api/v1/roles/create [post]
-func (r *RoleController) CreateOneRole(ctx *gin.Context) {
+func (r *RoleController) CreateOne(ctx *gin.Context) {
 	var input roledomain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -25,7 +25,7 @@ func (r *RoleController) CreateOneRole(ctx *gin.Context) {
 		return
 	}
 
-	if err := r.RoleUseCase.CreateOneRole(ctx, &input); err != nil {
+	if err := r.RoleUseCase.CreateOne(ctx, &input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
 			"message": err.Error(),

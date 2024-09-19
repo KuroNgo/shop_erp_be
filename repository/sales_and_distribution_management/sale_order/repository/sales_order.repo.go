@@ -78,7 +78,7 @@ func (s *saleOrderRepository) GetByStatus(ctx context.Context, status string) ([
 	return orders, nil
 }
 
-func (s *saleOrderRepository) List(ctx context.Context) ([]saleordersdomain.SalesOrder, error) {
+func (s *saleOrderRepository) GetAll(ctx context.Context) ([]saleordersdomain.SalesOrder, error) {
 	salesOrderCollection := s.database.Collection(s.saleOrderCollection)
 
 	filter := bson.M{}

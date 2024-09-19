@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// GetByIDBudget Get by id the budget's information
+// GetByID Get by id the budget's information
 // @Summary Get by id Budget Information
 // @Description Get by id the budget's information
 // @Tags Budget
@@ -14,10 +14,10 @@ import (
 // @Param _id path string true "Budget ID"
 // @Router /api/v1/budgets/get/_id [get]
 // @Security CookieAuth
-func (b BudgetController) GetByIDBudget(ctx *gin.Context) {
+func (b BudgetController) GetByID(ctx *gin.Context) {
 	_id := ctx.Query("_id")
 
-	data, err := b.BudgetUseCase.GetBudget(ctx, _id)
+	data, err := b.BudgetUseCase.GetByID(ctx, _id)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

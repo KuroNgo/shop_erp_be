@@ -19,7 +19,7 @@ func NewProductUseCase(contextTimeout time.Duration, productRepository productdo
 	return &productUseCase{contextTimeout: contextTimeout, productRepository: productRepository, categoryRepository: categoryRepository}
 }
 
-func (p *productUseCase) CreateProduct(ctx context.Context, input *productdomain.Input) error {
+func (p *productUseCase) CreateOne(ctx context.Context, input *productdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
@@ -43,10 +43,10 @@ func (p *productUseCase) CreateProduct(ctx context.Context, input *productdomain
 		CreatedAt:       time.Now(),
 	}
 
-	return p.productRepository.CreateProduct(ctx, product)
+	return p.productRepository.CreateOne(ctx, product)
 }
 
-func (p *productUseCase) UpdateProduct(ctx context.Context, id string, input *productdomain.Input) error {
+func (p *productUseCase) UpdateOne(ctx context.Context, id string, input *productdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
@@ -75,10 +75,10 @@ func (p *productUseCase) UpdateProduct(ctx context.Context, id string, input *pr
 		CreatedAt:       time.Now(),
 	}
 
-	return p.productRepository.UpdateProduct(ctx, productID, product)
+	return p.productRepository.UpdateOne(ctx, productID, product)
 }
 
-func (p *productUseCase) GetProductByID(ctx context.Context, id string) (*productdomain.ProductResponse, error) {
+func (p *productUseCase) GetByID(ctx context.Context, id string) (*productdomain.ProductResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
@@ -87,7 +87,7 @@ func (p *productUseCase) GetProductByID(ctx context.Context, id string) (*produc
 		return nil, err
 	}
 
-	productData, err := p.productRepository.GetProductByID(ctx, productID)
+	productData, err := p.productRepository.GetByID(ctx, productID)
 	if err != nil {
 		return nil, err
 	}
@@ -99,11 +99,11 @@ func (p *productUseCase) GetProductByID(ctx context.Context, id string) (*produc
 	return response, nil
 }
 
-func (p *productUseCase) GetProductByName(ctx context.Context, productName string) (*productdomain.ProductResponse, error) {
+func (p *productUseCase) GetByName(ctx context.Context, productName string) (*productdomain.ProductResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
-	productData, err := p.productRepository.GetProductByName(ctx, productName)
+	productData, err := p.productRepository.GetByName(ctx, productName)
 	if err != nil {
 		return nil, err
 	}
@@ -115,11 +115,11 @@ func (p *productUseCase) GetProductByName(ctx context.Context, productName strin
 	return response, nil
 }
 
-func (p *productUseCase) GetAllProducts(ctx context.Context) ([]productdomain.ProductResponse, error) {
+func (p *productUseCase) GetAll(ctx context.Context) ([]productdomain.ProductResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
-	productData, err := p.productRepository.GetAllProducts(ctx)
+	productData, err := p.productRepository.GetAll(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -137,7 +137,7 @@ func (p *productUseCase) GetAllProducts(ctx context.Context) ([]productdomain.Pr
 	return responses, nil
 }
 
-func (p *productUseCase) DeleteProduct(ctx context.Context, id string) error {
+func (p *productUseCase) DeleteOne(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
@@ -146,5 +146,5 @@ func (p *productUseCase) DeleteProduct(ctx context.Context, id string) error {
 		return err
 	}
 
-	return p.productRepository.DeleteProduct(ctx, productID)
+	return p.productRepository.DeleteOne(ctx, productID)
 }

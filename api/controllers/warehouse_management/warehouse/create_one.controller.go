@@ -16,7 +16,7 @@ func (w *WarehouseController) CreateOne(ctx *gin.Context) {
 		return
 	}
 
-	err := w.WarehouseUseCase.CreateWarehouse(ctx, &input)
+	err := w.WarehouseUseCase.CreateOne(ctx, &input)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

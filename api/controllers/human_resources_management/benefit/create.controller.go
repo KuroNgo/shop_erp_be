@@ -6,7 +6,7 @@ import (
 	benefitsdomain "shop_erp_mono/domain/human_resource_management/benefits"
 )
 
-// CreateOneBenefit create the benefit's information
+// CreateOne create the benefit's information
 // @Summary Create Benefit Information
 // @Description Create the benefit's information
 // @Tags Benefit
@@ -15,7 +15,7 @@ import (
 // @Param Benefit body benefits_domain.Input true "Benefit data"
 // @Router /api/v1/benefits/create [post]
 // @Security CookieAuth
-func (b *BenefitController) CreateOneBenefit(ctx *gin.Context) {
+func (b *BenefitController) CreateOne(ctx *gin.Context) {
 	var input benefitsdomain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{

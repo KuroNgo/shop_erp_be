@@ -17,7 +17,7 @@ import (
 func (p *ProductController) GetOneByNameProduct(ctx *gin.Context) {
 	name := ctx.Query("name")
 
-	data, err := p.ProductUseCase.GetProductByName(ctx, name)
+	data, err := p.ProductUseCase.GetByName(ctx, name)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",

@@ -28,7 +28,7 @@ func (l *leaveRequestUseCase) CreateOne(ctx context.Context, input *leaverequest
 		return err
 	}
 
-	employeeData, err := l.employeeRepository.GetOneByEmail(ctx, input.EmployeeEmail)
+	employeeData, err := l.employeeRepository.GetByEmail(ctx, input.EmployeeEmail)
 	if err != nil {
 		return err
 	}
@@ -72,7 +72,7 @@ func (l *leaveRequestUseCase) UpdateOne(ctx context.Context, id string, input *l
 		return err
 	}
 
-	employeeData, err := l.employeeRepository.GetOneByEmail(ctx, input.EmployeeEmail)
+	employeeData, err := l.employeeRepository.GetByEmail(ctx, input.EmployeeEmail)
 	if err != nil {
 		return err
 	}
@@ -91,7 +91,7 @@ func (l *leaveRequestUseCase) UpdateOne(ctx context.Context, id string, input *l
 	return l.leaveRequestRepository.UpdateOne(ctx, leaveRequestID, leaveRequest)
 }
 
-func (l *leaveRequestUseCase) GetOneByID(ctx context.Context, id string) (leaverequestdomain.Output, error) {
+func (l *leaveRequestUseCase) GetByID(ctx context.Context, id string) (leaverequestdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, l.contextTimeout)
 	defer cancel()
 
@@ -100,12 +100,12 @@ func (l *leaveRequestUseCase) GetOneByID(ctx context.Context, id string) (leaver
 		return leaverequestdomain.Output{}, err
 	}
 
-	leaveRequestData, err := l.leaveRequestRepository.GetOneByID(ctx, leaveRequestID)
+	leaveRequestData, err := l.leaveRequestRepository.GetByID(ctx, leaveRequestID)
 	if err != nil {
 		return leaverequestdomain.Output{}, err
 	}
 
-	employeeData, err := l.employeeRepository.GetOneByID(ctx, leaveRequestData.EmployeeID)
+	employeeData, err := l.employeeRepository.GetByID(ctx, leaveRequestData.EmployeeID)
 	if err != nil {
 		return leaverequestdomain.Output{}, err
 	}
@@ -118,16 +118,16 @@ func (l *leaveRequestUseCase) GetOneByID(ctx context.Context, id string) (leaver
 	return output, nil
 }
 
-func (l *leaveRequestUseCase) GetOneByEmailEmployee(ctx context.Context, email string) (leaverequestdomain.Output, error) {
+func (l *leaveRequestUseCase) GetByEmailEmployee(ctx context.Context, email string) (leaverequestdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, l.contextTimeout)
 	defer cancel()
 
-	employeeData, err := l.employeeRepository.GetOneByEmail(ctx, email)
+	employeeData, err := l.employeeRepository.GetByEmail(ctx, email)
 	if err != nil {
 		return leaverequestdomain.Output{}, err
 	}
 
-	leaveRequestData, err := l.leaveRequestRepository.GetOneByEmployeeID(ctx, employeeData.ID)
+	leaveRequestData, err := l.leaveRequestRepository.GetByEmployeeID(ctx, employeeData.ID)
 	if err != nil {
 		return leaverequestdomain.Output{}, err
 	}
@@ -152,7 +152,7 @@ func (l *leaveRequestUseCase) GetAll(ctx context.Context) ([]leaverequestdomain.
 	var outputs []leaverequestdomain.Output
 	outputs = make([]leaverequestdomain.Output, 0, len(leaveRequestData))
 	for _, leaveRequest := range leaveRequestData {
-		employeeData, err := l.employeeRepository.GetOneByID(ctx, leaveRequest.EmployeeID)
+		employeeData, err := l.employeeRepository.GetByID(ctx, leaveRequest.EmployeeID)
 		if err != nil {
 			return nil, err
 		}

@@ -16,7 +16,7 @@ import (
 func (p *PurchaseOrderController) DeleteOne(ctx *gin.Context) {
 	_id := ctx.Query("_id")
 
-	err := p.PurchaseOrderUseCase.Delete(ctx, _id)
+	err := p.PurchaseOrderUseCase.DeleteOne(ctx, _id)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

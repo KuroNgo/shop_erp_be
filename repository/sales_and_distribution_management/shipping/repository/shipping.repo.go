@@ -89,7 +89,7 @@ func (s *shippingRepository) DeleteOne(ctx context.Context, id primitive.ObjectI
 	return nil
 }
 
-func (s *shippingRepository) List(ctx context.Context) ([]shippingdomain.Shipping, error) {
+func (s *shippingRepository) GetAll(ctx context.Context) ([]shippingdomain.Shipping, error) {
 	shippingCollection := s.database.Collection(s.shippingCollection)
 
 	filter := bson.D{}

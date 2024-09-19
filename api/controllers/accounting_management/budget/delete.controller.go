@@ -14,10 +14,10 @@ import (
 // @Param _id path string true "Budget ID"
 // @Router /api/v1/budgets/delete [delete]
 // @Security CookieAuth
-func (b BudgetController) DeleteBudget(ctx *gin.Context) {
+func (b BudgetController) DeleteOne(ctx *gin.Context) {
 	_id := ctx.Query("_id")
 
-	err := b.BudgetUseCase.DeleteBudget(ctx, _id)
+	err := b.BudgetUseCase.DeleteOne(ctx, _id)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

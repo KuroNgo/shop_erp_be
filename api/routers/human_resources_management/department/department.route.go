@@ -22,10 +22,10 @@ func DepartmentRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.
 	}
 
 	router := group.Group("/departments")
-	router.GET("/get/_id", department.FetchOneDepartmentByID)
-	router.GET("/get/name", department.FetchOneDepartmentByName)
-	router.GET("/get/all", department.FetchAllDepartment)
-	router.POST("/create", department.CreateOneDepartment)
-	router.PUT("/update", department.UpdateOneDepartment)
-	router.DELETE("/delete", department.DeleteOneDepartment)
+	router.GET("/get/_id", department.GetByID)
+	router.GET("/get/name", department.GetByName)
+	router.GET("/get/all", department.GetAll)
+	router.POST("/create", department.CreateOne)
+	router.PUT("/update", department.UpdateOne)
+	router.DELETE("/delete", department.DeleteOne)
 }

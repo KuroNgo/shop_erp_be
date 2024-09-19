@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// DeleteOneAttendance delete the attendance's information
+// DeleteOne delete the attendance's information
 // @Summary Delete Attendance Information
 // @Description Deletes the attendance's information by ID
 // @Tags Attendance
@@ -13,7 +13,7 @@ import (
 // @Param _id path string true "Attendance ID"
 // @Router /api/v1/attendances/_id [delete]
 // @Security CookieAuth
-func (a *AttendanceController) DeleteOneAttendance(ctx *gin.Context) {
+func (a *AttendanceController) DeleteOne(ctx *gin.Context) {
 	attendanceID := ctx.Query("_id")
 
 	if err := a.AttendanceUseCase.DeleteOne(ctx, attendanceID); err != nil {

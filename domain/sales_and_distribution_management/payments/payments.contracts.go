@@ -12,7 +12,7 @@ type IPaymentRepository interface {
 	GetByStatus(ctx context.Context, status string) ([]Payment, error)
 	UpdateOne(ctx context.Context, payment Payment) error
 	DeleteOne(ctx context.Context, id primitive.ObjectID) error
-	List(ctx context.Context) ([]Payment, error)
+	GetAll(ctx context.Context) ([]Payment, error)
 }
 
 type IPaymentUseCase interface {
@@ -22,5 +22,5 @@ type IPaymentUseCase interface {
 	GetByStatus(ctx context.Context, status string) ([]PaymentResponse, error)
 	UpdateOne(ctx context.Context, id string, input *Input) error
 	DeleteOne(ctx context.Context, id string) error
-	List(ctx context.Context) ([]PaymentResponse, error)
+	GetAll(ctx context.Context) ([]PaymentResponse, error)
 }

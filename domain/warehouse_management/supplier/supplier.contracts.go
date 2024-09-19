@@ -17,11 +17,11 @@ type ISupplierRepository interface {
 }
 
 type ISupplierUseCase interface {
-	CreateSupplier(ctx context.Context, input *Input) error
-	GetSupplierByID(ctx context.Context, id string) (*SupplierResponse, error)
-	GetSupplierByName(ctx context.Context, name string) (*SupplierResponse, error)
-	GetSuppliersWithPagination(ctx context.Context, pagination repository.Pagination) ([]SupplierResponse, error)
-	GetSuppliers(ctx context.Context) ([]SupplierResponse, error)
-	UpdateSupplier(ctx context.Context, id string, input *Input) error
-	DeleteSupplier(ctx context.Context, id string) error
+	CreateOne(ctx context.Context, input *Input) error
+	GetByID(ctx context.Context, id string) (*SupplierResponse, error)
+	GetByName(ctx context.Context, name string) (*SupplierResponse, error)
+	GetAllWithPagination(ctx context.Context, pagination repository.Pagination) ([]SupplierResponse, error)
+	GetAll(ctx context.Context) ([]SupplierResponse, error)
+	UpdateOne(ctx context.Context, id string, input *Input) error
+	DeleteOne(ctx context.Context, id string) error
 }

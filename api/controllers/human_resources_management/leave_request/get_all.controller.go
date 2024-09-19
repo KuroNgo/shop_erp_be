@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// FetchAllLeaveRequest get all the leave request's information
+// GetAll get all the leave request's information
 // @Summary Get all Leave Request Information
 // @Description Get all the leave request's information
 // @Tags Leave Request
@@ -13,7 +13,7 @@ import (
 // @Produce json
 // @Router /api/v1/leave_requests/get/all [get]
 // @Security CookieAuth
-func (l *LeaveRequestController) FetchAllLeaveRequest(ctx *gin.Context) {
+func (l *LeaveRequestController) GetAll(ctx *gin.Context) {
 	data, err := l.LeaveRequestUseCase.GetAll(ctx)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{

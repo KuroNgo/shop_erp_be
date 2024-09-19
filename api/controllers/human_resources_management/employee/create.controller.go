@@ -6,7 +6,7 @@ import (
 	employees_domain "shop_erp_mono/domain/human_resource_management/employees"
 )
 
-// CreateOneEmployee create the employee's information
+// CreateOne create the employee's information
 // @Summary Create Employee Information
 // @Description Create the employee's information
 // @Tags Employee
@@ -15,7 +15,7 @@ import (
 // @Param attendance body employees_domain.Input true "Employee data"
 // @Router /api/v1/employees/create [post]
 // @Security CookieAuth
-func (e *EmployeeController) CreateOneEmployee(ctx *gin.Context) {
+func (e *EmployeeController) CreateOne(ctx *gin.Context) {
 	var input employees_domain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{

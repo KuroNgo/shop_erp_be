@@ -17,7 +17,7 @@ import (
 func (c *CategoryController) DeleteCategory(ctx *gin.Context) {
 	_id := ctx.Query("_id")
 
-	if err := c.CategoryUseCase.DeleteCategory(ctx, _id); err != nil {
+	if err := c.CategoryUseCase.DeleteOne(ctx, _id); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
 			"message": err.Error(),

@@ -62,7 +62,7 @@ func (o *orderDetailUseCase) GetByID(ctx context.Context, id string) (*orderdeta
 		return nil, err
 	}
 
-	productData, err := o.productRepository.GetProductByID(ctx, orderDetailData.ProductID)
+	productData, err := o.productRepository.GetByID(ctx, orderDetailData.ProductID)
 	if err != nil {
 		return nil, err
 	}
@@ -98,7 +98,7 @@ func (o *orderDetailUseCase) GetByOrderID(ctx context.Context, orderID string) (
 			return nil, err
 		}
 
-		productData, err := o.productRepository.GetProductByID(ctx, order.ProductID)
+		productData, err := o.productRepository.GetByID(ctx, order.ProductID)
 		if err != nil {
 			return nil, err
 		}
@@ -137,7 +137,7 @@ func (o *orderDetailUseCase) GetByProductID(ctx context.Context, productID strin
 			return nil, err
 		}
 
-		productData, err := o.productRepository.GetProductByID(ctx, order.ProductID)
+		productData, err := o.productRepository.GetByID(ctx, order.ProductID)
 		if err != nil {
 			return nil, err
 		}
@@ -200,11 +200,11 @@ func (o *orderDetailUseCase) DeleteOne(ctx context.Context, id string) error {
 	return o.orderDetailRepository.DeleteOne(ctx, idOrderDetail)
 }
 
-func (o *orderDetailUseCase) List(ctx context.Context) ([]orderdetailsdomain.OrderDetailResponse, error) {
+func (o *orderDetailUseCase) GetAll(ctx context.Context) ([]orderdetailsdomain.OrderDetailResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, o.contextTimeout)
 	defer cancel()
 
-	orderDetailData, err := o.orderDetailRepository.List(ctx)
+	orderDetailData, err := o.orderDetailRepository.GetAll(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -217,7 +217,7 @@ func (o *orderDetailUseCase) List(ctx context.Context) ([]orderdetailsdomain.Ord
 			return nil, err
 		}
 
-		productData, err := o.productRepository.GetProductByID(ctx, order.ProductID)
+		productData, err := o.productRepository.GetByID(ctx, order.ProductID)
 		if err != nil {
 			return nil, err
 		}

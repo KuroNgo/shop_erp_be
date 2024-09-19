@@ -14,7 +14,7 @@ import (
 // @Router /api/v1/products/get/all [get]
 // @Security CookieAuth
 func (p *ProductController) GetAllProduct(ctx *gin.Context) {
-	data, err := p.ProductUseCase.GetAllProducts(ctx)
+	data, err := p.ProductUseCase.GetAll(ctx)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",

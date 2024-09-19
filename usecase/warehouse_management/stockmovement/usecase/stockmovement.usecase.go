@@ -40,7 +40,7 @@ func (s *stockMovementUseCase) GetByID(ctx context.Context, id string) (*stockmo
 		return nil, err
 	}
 
-	productData, err := s.productRepository.GetProductByID(ctx, stockMovementData.ProductID)
+	productData, err := s.productRepository.GetByID(ctx, stockMovementData.ProductID)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +69,7 @@ func (s *stockMovementUseCase) CreateOne(ctx context.Context, input *stockmoveme
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
-	productData, err := s.productRepository.GetProductByName(ctx, input.Product)
+	productData, err := s.productRepository.GetByName(ctx, input.Product)
 	if err != nil {
 		return err
 	}
@@ -108,7 +108,7 @@ func (s *stockMovementUseCase) UpdateOne(ctx context.Context, id string, input *
 		return err
 	}
 
-	productData, err := s.productRepository.GetProductByName(ctx, input.Product)
+	productData, err := s.productRepository.GetByName(ctx, input.Product)
 	if err != nil {
 		return err
 	}
@@ -162,7 +162,7 @@ func (s *stockMovementUseCase) GetAllWithPagination(ctx context.Context, paginat
 	var responses []stockmovementdomain.StockMovementResponse
 	responses = make([]stockmovementdomain.StockMovementResponse, 0, len(stockMovementData))
 	for _, stockMovement := range stockMovementData {
-		productData, err := s.productRepository.GetProductByID(ctx, stockMovement.ProductID)
+		productData, err := s.productRepository.GetByID(ctx, stockMovement.ProductID)
 		if err != nil {
 			return nil, err
 		}
@@ -207,7 +207,7 @@ func (s *stockMovementUseCase) GetByProductID(ctx context.Context, productID str
 	var responses []stockmovementdomain.StockMovementResponse
 	responses = make([]stockmovementdomain.StockMovementResponse, 0, len(stockMovementData))
 	for _, stockMovement := range stockMovementData {
-		productData, err := s.productRepository.GetProductByID(ctx, stockMovement.ProductID)
+		productData, err := s.productRepository.GetByID(ctx, stockMovement.ProductID)
 		if err != nil {
 			return nil, err
 		}
@@ -252,7 +252,7 @@ func (s *stockMovementUseCase) GetByWarehouseID(ctx context.Context, warehouseID
 	var responses []stockmovementdomain.StockMovementResponse
 	responses = make([]stockmovementdomain.StockMovementResponse, 0, len(stockMovementData))
 	for _, stockMovement := range stockMovementData {
-		productData, err := s.productRepository.GetProductByID(ctx, stockMovement.ProductID)
+		productData, err := s.productRepository.GetByID(ctx, stockMovement.ProductID)
 		if err != nil {
 			return nil, err
 		}
@@ -297,7 +297,7 @@ func (s *stockMovementUseCase) GetByUserID(ctx context.Context, userID string) (
 	var responses []stockmovementdomain.StockMovementResponse
 	responses = make([]stockmovementdomain.StockMovementResponse, 0, len(stockMovementData))
 	for _, stockMovement := range stockMovementData {
-		productData, err := s.productRepository.GetProductByID(ctx, stockMovement.ProductID)
+		productData, err := s.productRepository.GetByID(ctx, stockMovement.ProductID)
 		if err != nil {
 			return nil, err
 		}
@@ -348,7 +348,7 @@ func (s *stockMovementUseCase) GetByMovementDateRange(ctx context.Context, start
 	var responses []stockmovementdomain.StockMovementResponse
 	responses = make([]stockmovementdomain.StockMovementResponse, 0, len(stockMovementData))
 	for _, stockMovement := range stockMovementData {
-		productData, err := s.productRepository.GetProductByID(ctx, stockMovement.ProductID)
+		productData, err := s.productRepository.GetByID(ctx, stockMovement.ProductID)
 		if err != nil {
 			return nil, err
 		}

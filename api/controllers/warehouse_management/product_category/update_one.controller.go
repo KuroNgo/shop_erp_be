@@ -28,7 +28,7 @@ func (c *CategoryController) UpdateCategory(ctx *gin.Context) {
 
 	_id := ctx.Query("_id")
 
-	if err := c.CategoryUseCase.UpdateCategory(ctx, _id, &input); err != nil {
+	if err := c.CategoryUseCase.UpdateOne(ctx, _id, &input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
 			"message": err.Error(),

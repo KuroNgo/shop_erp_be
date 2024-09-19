@@ -73,7 +73,7 @@ func (d *departmentRepository) UpdateOne(ctx context.Context, id primitive.Objec
 	return nil
 }
 
-func (d *departmentRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (departmentsdomain.Department, error) {
+func (d *departmentRepository) GetByID(ctx context.Context, id primitive.ObjectID) (departmentsdomain.Department, error) {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
 	filter := bson.M{"_id": id}
@@ -88,7 +88,7 @@ func (d *departmentRepository) GetOneByID(ctx context.Context, id primitive.Obje
 	return department, nil
 }
 
-func (d *departmentRepository) GetOneByName(ctx context.Context, name string) (departmentsdomain.Department, error) {
+func (d *departmentRepository) GetByName(ctx context.Context, name string) (departmentsdomain.Department, error) {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
 	filter := bson.M{"name": name}

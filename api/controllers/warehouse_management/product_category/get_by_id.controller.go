@@ -17,7 +17,7 @@ import (
 func (c *CategoryController) GetByIDCategories(ctx *gin.Context) {
 	_id := ctx.Query("_id")
 
-	data, err := c.CategoryUseCase.GetByIDCategory(ctx, _id)
+	data, err := c.CategoryUseCase.GetByID(ctx, _id)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

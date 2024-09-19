@@ -6,7 +6,7 @@ import (
 	budgetsdomain "shop_erp_mono/domain/accounting_management/budgets"
 )
 
-// UpdateBudget Get by name the budget's information
+// UpdateOne Get by name the budget's information
 // @Summary Get by name Budget Information
 // @Description Get by name the budget's information
 // @Tags Budget
@@ -16,7 +16,7 @@ import (
 // @Param Budget body budgets_domain.Input true "Budget data"
 // @Router /api/v1/budgets/update [put]
 // @Security CookieAuth
-func (b BudgetController) UpdateBudget(ctx *gin.Context) {
+func (b BudgetController) UpdateOne(ctx *gin.Context) {
 	var input budgetsdomain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
@@ -28,7 +28,7 @@ func (b BudgetController) UpdateBudget(ctx *gin.Context) {
 
 	_id := ctx.Param("_id")
 
-	err := b.BudgetUseCase.UpdateBudget(ctx, _id, &input)
+	err := b.BudgetUseCase.UpdateOne(ctx, _id, &input)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

@@ -6,19 +6,19 @@ import (
 )
 
 type ICategoryRepository interface {
-	Create(ctx context.Context, category Category) error
+	CreateOne(ctx context.Context, category Category) error
 	GetByID(ctx context.Context, id primitive.ObjectID) (*Category, error)
 	GetByName(ctx context.Context, name string) (*Category, error)
-	Update(ctx context.Context, id primitive.ObjectID, category Category) error
-	Delete(ctx context.Context, id primitive.ObjectID) error
+	UpdateOne(ctx context.Context, id primitive.ObjectID, category Category) error
+	DeleteOne(ctx context.Context, id primitive.ObjectID) error
 	GetAll(ctx context.Context) ([]Category, error)
 }
 
 type ICategoryUseCase interface {
-	CreateCategory(ctx context.Context, input *Input) error
-	GetByIDCategory(ctx context.Context, id string) (*CategoryResponse, error)
-	GetByNameCategory(ctx context.Context, name string) (*CategoryResponse, error)
-	GetAllCategories(ctx context.Context) ([]CategoryResponse, error)
-	UpdateCategory(ctx context.Context, id string, input *Input) error
-	DeleteCategory(ctx context.Context, id string) error
+	CreateOne(ctx context.Context, input *Input) error
+	GetByID(ctx context.Context, id string) (*CategoryResponse, error)
+	GetByName(ctx context.Context, name string) (*CategoryResponse, error)
+	GetAll(ctx context.Context) ([]CategoryResponse, error)
+	UpdateOne(ctx context.Context, id string, input *Input) error
+	DeleteOne(ctx context.Context, id string) error
 }

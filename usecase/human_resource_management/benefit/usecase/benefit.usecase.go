@@ -27,7 +27,7 @@ func (b *benefitUseCase) CreateOne(ctx context.Context, input *benefitsdomain.In
 		return err
 	}
 
-	employeeData, err := b.employeeRepository.GetOneByEmail(ctx, input.EmployeeEmail)
+	employeeData, err := b.employeeRepository.GetByEmail(ctx, input.EmployeeEmail)
 	if err != nil {
 		return err
 	}
@@ -73,7 +73,7 @@ func (b *benefitUseCase) UpdateOne(ctx context.Context, id string, input *benefi
 		return err
 	}
 
-	employeeData, err := b.employeeRepository.GetOneByEmail(ctx, input.EmployeeEmail)
+	employeeData, err := b.employeeRepository.GetByEmail(ctx, input.EmployeeEmail)
 	if err != nil {
 		return err
 	}
@@ -89,7 +89,7 @@ func (b *benefitUseCase) UpdateOne(ctx context.Context, id string, input *benefi
 	return b.benefitRepository.UpdateOne(ctx, benefitID, &benefit)
 }
 
-func (b *benefitUseCase) GetOneByID(ctx context.Context, id string) (benefitsdomain.Output, error) {
+func (b *benefitUseCase) GetByID(ctx context.Context, id string) (benefitsdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
@@ -98,12 +98,12 @@ func (b *benefitUseCase) GetOneByID(ctx context.Context, id string) (benefitsdom
 		return benefitsdomain.Output{}, err
 	}
 
-	benefitData, err := b.benefitRepository.GetOneByID(ctx, benefitID)
+	benefitData, err := b.benefitRepository.GetByID(ctx, benefitID)
 	if err != nil {
 		return benefitsdomain.Output{}, err
 	}
 
-	employeeData, err := b.employeeRepository.GetOneByID(ctx, benefitData.EmployeeID)
+	employeeData, err := b.employeeRepository.GetByID(ctx, benefitData.EmployeeID)
 	if err != nil {
 		return benefitsdomain.Output{}, err
 	}
@@ -116,16 +116,16 @@ func (b *benefitUseCase) GetOneByID(ctx context.Context, id string) (benefitsdom
 	return output, nil
 }
 
-func (b *benefitUseCase) GetOneByEmail(ctx context.Context, email string) (benefitsdomain.Output, error) {
+func (b *benefitUseCase) GetByEmail(ctx context.Context, email string) (benefitsdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
-	employeeData, err := b.employeeRepository.GetOneByEmail(ctx, email)
+	employeeData, err := b.employeeRepository.GetByEmail(ctx, email)
 	if err != nil {
 		return benefitsdomain.Output{}, err
 	}
 
-	benefitData, err := b.benefitRepository.GetOneByEmployeeID(ctx, employeeData.ID)
+	benefitData, err := b.benefitRepository.GetByEmployeeID(ctx, employeeData.ID)
 	if err != nil {
 		return benefitsdomain.Output{}, err
 	}
@@ -150,7 +150,7 @@ func (b *benefitUseCase) GetAll(ctx context.Context) ([]benefitsdomain.Output, e
 	var outputs []benefitsdomain.Output
 	outputs = make([]benefitsdomain.Output, 0, len(benefitData))
 	for _, benefit := range benefitData {
-		employeeData, err := b.employeeRepository.GetOneByID(ctx, benefit.EmployeeID)
+		employeeData, err := b.employeeRepository.GetByID(ctx, benefit.EmployeeID)
 		if err != nil {
 			return nil, err
 		}

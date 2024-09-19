@@ -19,7 +19,7 @@ func NewCategoryRepository(database *mongo.Database, categoryCollection string) 
 	return &categoryRepository{database: database, categoryCollection: categoryCollection}
 }
 
-func (c *categoryRepository) Create(ctx context.Context, category category_domain.Category) error {
+func (c *categoryRepository) CreateOne(ctx context.Context, category category_domain.Category) error {
 	categoryCollection := c.database.Collection(c.categoryCollection)
 
 	_, err := categoryCollection.InsertOne(ctx, category)
@@ -62,7 +62,7 @@ func (c *categoryRepository) GetByName(ctx context.Context, name string) (*categ
 	return category, nil
 }
 
-func (c *categoryRepository) Update(ctx context.Context, id primitive.ObjectID, input category_domain.Category) error {
+func (c *categoryRepository) UpdateOne(ctx context.Context, id primitive.ObjectID, input category_domain.Category) error {
 	categoryCollection := c.database.Collection(c.categoryCollection)
 
 	filter := bson.M{"_id": id}
@@ -80,7 +80,7 @@ func (c *categoryRepository) Update(ctx context.Context, id primitive.ObjectID, 
 	return nil
 }
 
-func (c *categoryRepository) Delete(ctx context.Context, id primitive.ObjectID) error {
+func (c *categoryRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
 	categoryCollection := c.database.Collection(c.categoryCollection)
 
 	filter := bson.M{"_id": id}

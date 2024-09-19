@@ -6,7 +6,7 @@ import (
 	performancereviewdomain "shop_erp_mono/domain/human_resource_management/performance_review"
 )
 
-// CreateOnePerformanceReviewV2 create the performance review's information
+// CreateOneWithIDEmployee create the performance review's information
 // @Summary Create Performance Review Information
 // @Description Create the performance review's information
 // @Tags Performance Review
@@ -15,7 +15,7 @@ import (
 // @Param PerformanceReview body performance_review_domain.Input2 true "Performance Review data"
 // @Router /api/v2/performance_reviews/create [post]
 // @Security CookieAuth
-func (p *PerformanceReviewController) CreateOnePerformanceReviewV2(ctx *gin.Context) {
+func (p *PerformanceReviewController) CreateOneWithIDEmployee(ctx *gin.Context) {
 	var input performancereviewdomain.Input2
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{

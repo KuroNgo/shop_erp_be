@@ -170,11 +170,11 @@ func (p *paymentUseCase) DeleteOne(ctx context.Context, id string) error {
 	return p.paymentRepository.DeleteOne(ctx, idOrder)
 }
 
-func (p *paymentUseCase) List(ctx context.Context) ([]paymentsdomain.PaymentResponse, error) {
+func (p *paymentUseCase) GetAll(ctx context.Context) ([]paymentsdomain.PaymentResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
-	paymentData, err := p.paymentRepository.List(ctx)
+	paymentData, err := p.paymentRepository.GetAll(ctx)
 	if err != nil {
 		return nil, err
 	}

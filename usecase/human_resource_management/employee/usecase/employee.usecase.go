@@ -34,17 +34,17 @@ func (e *employeeUseCase) CreateOne(ctx context.Context, input *employeesdomain.
 		return err
 	}
 
-	departmentData, err := e.departmentRepository.GetOneByName(ctx, input.Department)
+	departmentData, err := e.departmentRepository.GetByName(ctx, input.Department)
 	if err != nil {
 		return err
 	}
 
-	roleData, err := e.roleRepository.GetByTitleRole(ctx, input.Role)
+	roleData, err := e.roleRepository.GetByTitle(ctx, input.Role)
 	if err != nil {
 		return err
 	}
 
-	salaryData, err := e.salaryRepository.GetOneByRoleID(ctx, roleData.ID)
+	salaryData, err := e.salaryRepository.GetByRoleID(ctx, roleData.ID)
 	if err != nil {
 		return err
 	}
@@ -96,17 +96,17 @@ func (e *employeeUseCase) UpdateOne(ctx context.Context, id string, input *emplo
 		return err
 	}
 
-	departmentData, err := e.departmentRepository.GetOneByName(ctx, input.Department)
+	departmentData, err := e.departmentRepository.GetByName(ctx, input.Department)
 	if err != nil {
 		return err
 	}
 
-	roleData, err := e.roleRepository.GetByTitleRole(ctx, input.Role)
+	roleData, err := e.roleRepository.GetByTitle(ctx, input.Role)
 	if err != nil {
 		return err
 	}
 
-	salaryData, err := e.salaryRepository.GetOneByRoleID(ctx, roleData.ID)
+	salaryData, err := e.salaryRepository.GetByID(ctx, roleData.ID)
 	if err != nil {
 		return err
 	}
@@ -130,7 +130,7 @@ func (e *employeeUseCase) UpdateOne(ctx context.Context, id string, input *emplo
 	return e.employeeRepository.UpdateOne(ctx, employeeID, employee)
 }
 
-func (e *employeeUseCase) GetOneByID(ctx context.Context, id string) (employeesdomain.Output, error) {
+func (e *employeeUseCase) GetByID(ctx context.Context, id string) (employeesdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
 
@@ -139,7 +139,7 @@ func (e *employeeUseCase) GetOneByID(ctx context.Context, id string) (employeesd
 		return employeesdomain.Output{}, err
 	}
 
-	employeeData, err := e.employeeRepository.GetOneByID(ctx, employeeID)
+	employeeData, err := e.employeeRepository.GetByID(ctx, employeeID)
 	if err != nil {
 		return employeesdomain.Output{}, err
 	}
@@ -150,11 +150,11 @@ func (e *employeeUseCase) GetOneByID(ctx context.Context, id string) (employeesd
 	return output, nil
 }
 
-func (e *employeeUseCase) GetOneByEmail(ctx context.Context, name string) (employeesdomain.Output, error) {
+func (e *employeeUseCase) GetByEmail(ctx context.Context, name string) (employeesdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
 
-	employeeData, err := e.employeeRepository.GetOneByEmail(ctx, name)
+	employeeData, err := e.employeeRepository.GetByEmail(ctx, name)
 	if err != nil {
 		return employeesdomain.Output{}, err
 	}

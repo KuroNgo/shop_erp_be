@@ -6,7 +6,7 @@ import (
 	contracts_domain "shop_erp_mono/domain/human_resource_management/contracts"
 )
 
-// CreateOneContract create the contract's information
+// CreateOne create the contract's information
 // @Summary Create Contract Information
 // @Description Create the contract's information
 // @Tags Contract
@@ -15,7 +15,7 @@ import (
 // @Param Contract body contracts_domain.Input true "Contract data"
 // @Router /api/v1/contracts/create [post]
 // @Security CookieAuth
-func (c *ContractController) CreateOneContract(ctx *gin.Context) {
+func (c *ContractController) CreateOne(ctx *gin.Context) {
 	var input contracts_domain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{

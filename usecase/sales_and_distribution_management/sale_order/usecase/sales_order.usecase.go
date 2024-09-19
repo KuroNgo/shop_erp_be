@@ -108,11 +108,11 @@ func (s *saleOrderUseCase) GetByStatus(ctx context.Context, status string) ([]sa
 	return responses, nil
 }
 
-func (s *saleOrderUseCase) List(ctx context.Context) ([]saleordersdomain.SalesOrderResponse, error) {
+func (s *saleOrderUseCase) GetAll(ctx context.Context) ([]saleordersdomain.SalesOrderResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
-	salesOrderData, err := s.saleOrderRepository.List(ctx)
+	salesOrderData, err := s.saleOrderRepository.GetAll(ctx)
 	if err != nil {
 		return nil, err
 	}

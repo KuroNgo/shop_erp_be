@@ -28,7 +28,7 @@ func (s *SupplierController) UpdateSupplier(ctx *gin.Context) {
 
 	_id := ctx.Query("_id")
 
-	err := s.SupplierUseCase.UpdateSupplier(ctx, _id, &input)
+	err := s.SupplierUseCase.UpdateOne(ctx, _id, &input)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

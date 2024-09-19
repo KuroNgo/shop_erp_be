@@ -25,7 +25,7 @@ func (p *ProductController) CreateProduct(ctx *gin.Context) {
 		return
 	}
 
-	if err := p.ProductUseCase.CreateProduct(ctx, &input); err != nil {
+	if err := p.ProductUseCase.CreateOne(ctx, &input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
 			"message": err.Error(),

@@ -41,7 +41,7 @@ func (p *purchaseOrderUseCase) GetByID(ctx context.Context, id string) (*purchas
 	return response, nil
 }
 
-func (p *purchaseOrderUseCase) Create(ctx context.Context, input *purchaseorderdomain.Input) error {
+func (p *purchaseOrderUseCase) CreateOne(ctx context.Context, input *purchaseorderdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
@@ -64,10 +64,10 @@ func (p *purchaseOrderUseCase) Create(ctx context.Context, input *purchaseorderd
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	}
-	return p.purchaseOrderRepository.Create(ctx, order)
+	return p.purchaseOrderRepository.CreateOne(ctx, order)
 }
 
-func (p *purchaseOrderUseCase) Update(ctx context.Context, id string, input *purchaseorderdomain.Input) error {
+func (p *purchaseOrderUseCase) UpdateOne(ctx context.Context, id string, input *purchaseorderdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
@@ -96,10 +96,10 @@ func (p *purchaseOrderUseCase) Update(ctx context.Context, id string, input *pur
 		UpdatedAt:   time.Now(),
 	}
 
-	return p.purchaseOrderRepository.Update(ctx, order)
+	return p.purchaseOrderRepository.UpdateOne(ctx, order)
 }
 
-func (p *purchaseOrderUseCase) Delete(ctx context.Context, id string) error {
+func (p *purchaseOrderUseCase) DeleteOne(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
@@ -108,7 +108,7 @@ func (p *purchaseOrderUseCase) Delete(ctx context.Context, id string) error {
 		return err
 	}
 
-	return p.purchaseOrderRepository.Delete(ctx, purchaseOrderID)
+	return p.purchaseOrderRepository.DeleteOne(ctx, purchaseOrderID)
 }
 
 func (p *purchaseOrderUseCase) GetAllWithPagination(ctx context.Context, pagination repository.Pagination) ([]purchaseorderdomain.PurchaseOrderResponse, error) {
@@ -175,5 +175,5 @@ func (p *purchaseOrderUseCase) UpdateStatus(ctx context.Context, id string, stat
 		UpdatedAt: time.Now(),
 	}
 
-	return p.purchaseOrderRepository.Update(ctx, order)
+	return p.purchaseOrderRepository.UpdateOne(ctx, order)
 }

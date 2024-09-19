@@ -124,7 +124,7 @@ func (i *invoicesRepository) DeleteOne(ctx context.Context, id primitive.ObjectI
 	return nil
 }
 
-func (i *invoicesRepository) List(ctx context.Context) ([]invoicesdomain.Invoice, error) {
+func (i *invoicesRepository) GetAll(ctx context.Context) ([]invoicesdomain.Invoice, error) {
 	invoiceCollection := i.database.Collection(i.invoiceCollection)
 
 	filter := bson.M{}

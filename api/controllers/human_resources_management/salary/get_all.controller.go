@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// GetAllSalary retrieves the salary's information
+// GetAll retrieves the salary's information
 // @Summary Get Salary Information
 // @Description Retrieves the salary's information
 // @Tags Salary
@@ -13,7 +13,7 @@ import (
 // @Produce  json
 // @Router /api/v1/salaries/get/all [get]
 // @Security CookieAuth
-func (s *SalaryController) GetAllSalary(ctx *gin.Context) {
+func (s *SalaryController) GetAll(ctx *gin.Context) {
 	data, err := s.SalaryUseCase.GetAll(ctx)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{

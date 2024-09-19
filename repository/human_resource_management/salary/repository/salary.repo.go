@@ -74,7 +74,7 @@ func (s *salaryRepository) UpdateOne(ctx context.Context, id primitive.ObjectID,
 	return nil
 }
 
-func (s *salaryRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (salarydomain.Salary, error) {
+func (s *salaryRepository) GetByID(ctx context.Context, id primitive.ObjectID) (salarydomain.Salary, error) {
 	collectionSalary := s.database.Collection(s.collectionSalary)
 
 	filter := bson.M{"_id": id}
@@ -89,7 +89,7 @@ func (s *salaryRepository) GetOneByID(ctx context.Context, id primitive.ObjectID
 	return salary, nil
 }
 
-func (s *salaryRepository) GetOneByRoleID(ctx context.Context, roleID primitive.ObjectID) (salarydomain.Salary, error) {
+func (s *salaryRepository) GetByRoleID(ctx context.Context, roleID primitive.ObjectID) (salarydomain.Salary, error) {
 	collectionSalary := s.database.Collection(s.collectionSalary)
 
 	filter := bson.M{"role_id": roleID}

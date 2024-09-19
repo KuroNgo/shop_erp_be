@@ -17,7 +17,7 @@ import (
 func (s *SupplierController) DeleteSupplier(ctx *gin.Context) {
 	_id := ctx.Query("_id")
 
-	err := s.SupplierUseCase.DeleteSupplier(ctx, _id)
+	err := s.SupplierUseCase.DeleteOne(ctx, _id)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

@@ -12,7 +12,7 @@ type InvoiceRepository interface {
 	GetByStatus(ctx context.Context, status string) ([]Invoice, error)
 	UpdateOne(ctx context.Context, invoice Invoice) error
 	DeleteOne(ctx context.Context, id primitive.ObjectID) error
-	List(ctx context.Context) ([]Invoice, error)
+	GetAll(ctx context.Context) ([]Invoice, error)
 }
 
 type InvoiceUseCase interface {
@@ -22,5 +22,5 @@ type InvoiceUseCase interface {
 	GetByStatus(ctx context.Context, status string) ([]InvoiceResponse, error)
 	UpdateOne(ctx context.Context, id string, input *Input) error
 	DeleteOne(ctx context.Context, id string) error
-	List(ctx context.Context) ([]InvoiceResponse, error)
+	GetAll(ctx context.Context) ([]InvoiceResponse, error)
 }

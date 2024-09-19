@@ -14,7 +14,7 @@ import (
 // @Router /api/v1/accounts/get/all [get]
 // @Security CookieAuth
 func (a *AccountController) GetAll(ctx *gin.Context) {
-	data, err := a.AccountUseCase.ListAccounts(ctx)
+	data, err := a.AccountUseCase.GetAll(ctx)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{
 			"status":  "error",

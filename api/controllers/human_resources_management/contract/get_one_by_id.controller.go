@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// FetchOneByIDContract get the contract's information
+// GetByID get the contract's information
 // @Summary Get Contract Information
 // @Description Deletes the contract's information by ID
 // @Tags Contract
@@ -13,10 +13,10 @@ import (
 // @Param _id path string true "Contract ID"
 // @Router /api/v1/contracts/get/_id [get]
 // @Security CookieAuth
-func (c *ContractController) FetchOneByIDContract(ctx *gin.Context) {
+func (c *ContractController) GetByID(ctx *gin.Context) {
 	id := ctx.Query("_id")
 
-	data, err := c.ContractUseCase.GetOneByID(ctx, id)
+	data, err := c.ContractUseCase.GetByID(ctx, id)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

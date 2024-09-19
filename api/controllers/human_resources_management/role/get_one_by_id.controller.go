@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// GetOneRoleByID retrieves the role's information
+// GetByID retrieves the role's information
 // @Summary Get Role Information By Name
 // @Description Retrieves the role's information name
 // @Tags Role
@@ -14,10 +14,10 @@ import (
 // @Param _id path string true "Employee ID"
 // @Router /api/v1/roles/get/_id [get]
 // @Security CookieAuth
-func (r *RoleController) GetOneRoleByID(ctx *gin.Context) {
+func (r *RoleController) GetByID(ctx *gin.Context) {
 	id := ctx.Query("_id")
 
-	data, err := r.RoleUseCase.GetByIDRole(ctx, id)
+	data, err := r.RoleUseCase.GetByID(ctx, id)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",

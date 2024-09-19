@@ -23,10 +23,10 @@ func AttendanceRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.
 	}
 
 	router := group.Group("/attendances")
-	router.GET("/get/_id", attendance.FetchOneAttendanceByID)
-	router.GET("/get/email", attendance.FetchOneAttendanceByEmail)
-	router.GET("/get/all", attendance.FetchAllAttendance)
-	router.POST("/create", attendance.CreateOneAttendance)
-	router.PUT("/update", attendance.UpdateOneAttendance)
-	router.DELETE("/delete", attendance.DeleteOneAttendance)
+	router.GET("/get/_id", attendance.GetByID)
+	router.GET("/get/email", attendance.GetByEmail)
+	router.GET("/get/all", attendance.GetAll)
+	router.POST("/create", attendance.CreateOne)
+	router.PUT("/update", attendance.UpdateOne)
+	router.DELETE("/delete", attendance.DeleteOne)
 }

@@ -22,10 +22,10 @@ func PerformanceReviewRouterV1(env *bootstrap.Database, timeout time.Duration, d
 	}
 
 	router := group.Group("/performance_reviews")
-	router.GET("/get/_id", performanceReview.GetOneByIDPerformanceReview)
-	router.GET("/get/email", performanceReview.GetOneByEmailPerformanceReview)
-	router.GET("/get/all", performanceReview.GetAllPerformanceReview)
-	router.POST("/create", performanceReview.CreateOnePerformanceReviewV1)
-	router.PUT("/update", performanceReview.UpdateOnePerformanceReviewV1)
-	router.DELETE("/delete", performanceReview.DeleteOnePerformanceReview)
+	router.GET("/get/_id", performanceReview.GetByID)
+	router.GET("/get/email", performanceReview.GetByEmailEmployee)
+	router.GET("/get/all", performanceReview.GetAll)
+	router.POST("/create", performanceReview.CreateOneWithIDEmployee)
+	router.PUT("/update", performanceReview.UpdateOneWithIDEmployee)
+	router.DELETE("/delete", performanceReview.DeleteOne)
 }

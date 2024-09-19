@@ -25,7 +25,7 @@ func (s *SupplierController) CreateSupplier(ctx *gin.Context) {
 		return
 	}
 
-	err := s.SupplierUseCase.CreateSupplier(ctx, &input)
+	err := s.SupplierUseCase.CreateOne(ctx, &input)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

@@ -12,7 +12,7 @@ type IShippingRepository interface {
 	GetByOrderID(ctx context.Context, orderID primitive.ObjectID) (*Shipping, error)
 	UpdateOne(ctx context.Context, shipping Shipping) error
 	DeleteOne(ctx context.Context, id primitive.ObjectID) error
-	List(ctx context.Context) ([]Shipping, error)
+	GetAll(ctx context.Context) ([]Shipping, error)
 	GetByStatus(ctx context.Context, status string) ([]Shipping, error)
 	UpdateDeliveryStatus(ctx context.Context, id primitive.ObjectID, status string, actualDelivery *time.Time) error
 }
@@ -23,7 +23,7 @@ type IShippingUseCase interface {
 	GetByOrderID(ctx context.Context, orderID string) (*ShippingResponse, error)
 	UpdateOne(ctx context.Context, id string, updatedShipping *Input) error
 	DeleteOne(ctx context.Context, id string) error
-	List(ctx context.Context) ([]ShippingResponse, error)
+	GetAll(ctx context.Context) ([]ShippingResponse, error)
 	GetByStatus(ctx context.Context, status string) ([]ShippingResponse, error)
 	UpdateDeliveryStatus(ctx context.Context, id string, status string, actualDelivery *time.Time) error
 }

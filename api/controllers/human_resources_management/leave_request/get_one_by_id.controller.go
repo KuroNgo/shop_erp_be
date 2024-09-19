@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// FetchOneByIDLeaveRequest get one by id the leave request's information
+// GetByID get one by id the leave request's information
 // @Summary Get one by id Leave Request Information
 // @Description Get one by email the leave request's information
 // @Tags Leave Request
@@ -14,10 +14,10 @@ import (
 // @Param _id path string true "Employee ID"
 // @Router /api/v1/leave_requests/get/_id [get]
 // @Security CookieAuth
-func (l *LeaveRequestController) FetchOneByIDLeaveRequest(ctx *gin.Context) {
+func (l *LeaveRequestController) GetByID(ctx *gin.Context) {
 	id := ctx.Query("_id")
 
-	data, err := l.LeaveRequestUseCase.GetOneByID(ctx, id)
+	data, err := l.LeaveRequestUseCase.GetByID(ctx, id)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

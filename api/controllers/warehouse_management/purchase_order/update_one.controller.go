@@ -27,7 +27,7 @@ func (p *PurchaseOrderController) UpdateOne(ctx *gin.Context) {
 
 	_id := ctx.Query("_id")
 
-	err := p.PurchaseOrderUseCase.Update(ctx, _id, &input)
+	err := p.PurchaseOrderUseCase.UpdateOne(ctx, _id, &input)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

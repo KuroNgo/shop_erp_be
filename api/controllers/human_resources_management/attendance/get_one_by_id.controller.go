@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// FetchOneAttendanceByID retrieves the attendance's information
+// GetByID retrieves the attendance's information
 // @Summary Get Attendance Information By ID
 // @Description Retrieves the attendance's information name
 // @Tags Attendance
@@ -14,10 +14,10 @@ import (
 // @Param _id path string true "Attendance ID"
 // @Router /api/v1/attendances/get/_id [get]
 // @Security CookieAuth
-func (a *AttendanceController) FetchOneAttendanceByID(ctx *gin.Context) {
+func (a *AttendanceController) GetByID(ctx *gin.Context) {
 	attendanceID := ctx.Query("_id")
 
-	data, err := a.AttendanceUseCase.GetOneByID(ctx, attendanceID)
+	data, err := a.AttendanceUseCase.GetByID(ctx, attendanceID)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{
 			"status":  "error",

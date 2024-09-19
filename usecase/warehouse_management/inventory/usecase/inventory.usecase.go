@@ -31,7 +31,7 @@ func (i *inventoryUseCase) CreateInventory(ctx context.Context, input *inventory
 		return err
 	}
 
-	productData, err := i.productRepository.GetProductByName(ctx, input.ProductName)
+	productData, err := i.productRepository.GetByName(ctx, input.ProductName)
 	if err != nil {
 		return err
 	}
@@ -66,7 +66,7 @@ func (i *inventoryUseCase) UpdateInventory(ctx context.Context, id string, input
 		return err
 	}
 
-	productData, err := i.productRepository.GetProductByName(ctx, input.ProductName)
+	productData, err := i.productRepository.GetByName(ctx, input.ProductName)
 	if err != nil {
 		return err
 	}
@@ -102,7 +102,7 @@ func (i *inventoryUseCase) GetInventoryByID(ctx context.Context, id string) (*in
 		return nil, err
 	}
 
-	productData, err := i.productRepository.GetProductByID(ctx, inventoryData.ProductID)
+	productData, err := i.productRepository.GetByID(ctx, inventoryData.ProductID)
 	if err != nil {
 		return nil, err
 	}
@@ -138,7 +138,7 @@ func (i *inventoryUseCase) GetInventoryByProduct(ctx context.Context, productID 
 	var responses []inventory_domain.InventoryResponse
 	responses = make([]inventory_domain.InventoryResponse, 0, len(inventoryData))
 	for _, inventory := range inventoryData {
-		productData, err := i.productRepository.GetProductByID(ctx, inventory.ProductID)
+		productData, err := i.productRepository.GetByID(ctx, inventory.ProductID)
 		if err != nil {
 			return nil, err
 		}
@@ -178,7 +178,7 @@ func (i *inventoryUseCase) GetInventoryByWarehouse(ctx context.Context, warehous
 	var responses []inventory_domain.InventoryResponse
 	responses = make([]inventory_domain.InventoryResponse, 0, len(inventoryData))
 	for _, inventory := range inventoryData {
-		productData, err := i.productRepository.GetProductByID(ctx, inventory.ProductID)
+		productData, err := i.productRepository.GetByID(ctx, inventory.ProductID)
 		if err != nil {
 			return nil, err
 		}
@@ -227,7 +227,7 @@ func (i *inventoryUseCase) AdjustInventoryQuantity(ctx context.Context, id strin
 		return nil, err
 	}
 
-	productData, err := i.productRepository.GetProductByID(ctx, inventoryData.ProductID)
+	productData, err := i.productRepository.GetByID(ctx, inventoryData.ProductID)
 	if err != nil {
 		return nil, err
 	}
@@ -275,7 +275,7 @@ func (i *inventoryUseCase) ListAllInventories(ctx context.Context) ([]inventory_
 	var responses []inventory_domain.InventoryResponse
 	responses = make([]inventory_domain.InventoryResponse, 0, len(inventoryData))
 	for _, inventory := range inventoryData {
-		productData, err := i.productRepository.GetProductByID(ctx, inventory.ProductID)
+		productData, err := i.productRepository.GetByID(ctx, inventory.ProductID)
 		if err != nil {
 			return nil, err
 		}

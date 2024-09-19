@@ -28,10 +28,10 @@ func EmployeeRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Da
 	}
 
 	router := group.Group("/employees")
-	router.GET("/get/_id", employee.FetchByIDEmployee)
-	router.GET("/get/email", employee.FetchByEmailEmployee)
-	router.GET("/get/all", employee.FetchAllEmployee)
-	router.POST("/create", employee.CreateOneEmployee)
-	router.PUT("/update", employee.UpdateOneEmployee)
-	router.DELETE("/delete", employee.DeleteOneEmployee)
+	router.GET("/get/_id", employee.GetByID)
+	router.GET("/get/email", employee.GetByEmail)
+	router.GET("/get/all", employee.GetAll)
+	router.POST("/create", employee.CreateOne)
+	router.PUT("/update", employee.UpdateOne)
+	router.DELETE("/delete", employee.DeleteOne)
 }

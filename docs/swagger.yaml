@@ -282,6 +282,22 @@ definitions:
       updated_at:
         type: string
     type: object
+  stock_adjustment_domain.Input:
+    properties:
+      adjustment_date:
+        type: string
+      adjustment_type:
+        description: 'Example: "Increase", "Decrease"'
+        type: string
+      product:
+        type: string
+      quantity:
+        type: integer
+      reason:
+        type: string
+      warehouse:
+        type: string
+    type: object
   supplier_domain.Input:
     properties:
       address:
@@ -1876,7 +1892,7 @@ paths:
       responses: {}
       summary: Update a purchase order detail
       tags:
-      - purchase_order_details
+      - PurchaseOrderDetail
   /api/v1/purchase_orders/create:
     post:
       consumes:
@@ -2777,6 +2793,114 @@ paths:
       summary: Update an invoice by ID
       tags:
       - Invoices
+  /stock-adjustments/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new stock adjustment in the system
+      parameters:
+      - description: Stock Adjustment Input
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/stock_adjustment_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      summary: Create a new stock adjustment
+      tags:
+      - StockAdjustment
+  /stock-adjustments/delete/{_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a stock adjustment from the system using its ID
+      parameters:
+      - description: Stock Adjustment ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete a stock adjustment by ID
+      tags:
+      - StockAdjustment
+  /stock-adjustments/get/_id/{_id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a stock adjustment from the system using its ID
+      parameters:
+      - description: Stock Adjustment ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get a stock adjustment by ID
+      tags:
+      - StockAdjustment
+  /stock-adjustments/get/all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of stock adjustments, supporting pagination
+      parameters:
+      - default: "1"
+        description: Page number
+        in: query
+        name: page
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get all stock adjustments with pagination
+      tags:
+      - StockAdjustment
+  /stock-adjustments/get/by-date-range/{startDate}/{endDate}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve stock adjustments within a specified date range
+      parameters:
+      - description: Start date in format YYYY-MM-DD
+        in: path
+        name: startDate
+        required: true
+        type: string
+      - description: End date in format YYYY-MM-DD
+        in: path
+        name: endDate
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get stock adjustments by date range
+      tags:
+      - StockAdjustment
+  /stock-adjustments/get/product/{product_id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve stock adjustments related to a specific Product ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: product_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get stock adjustments by Product ID
+      tags:
+      - StockAdjustment
 swagger: "2.0"
 tags:
 - description: represents the attendance information of an employee.

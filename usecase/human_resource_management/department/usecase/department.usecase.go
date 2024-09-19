@@ -28,7 +28,7 @@ func (d *departmentUseCase) CreateOne(ctx context.Context, input *departmentsdom
 		return err
 	}
 
-	managerData, err := d.employeeRepository.GetOneByEmail(ctx, input.ManagerEmail)
+	managerData, err := d.employeeRepository.GetByEmail(ctx, input.ManagerEmail)
 	if err != nil {
 		return err
 	}
@@ -80,7 +80,7 @@ func (d *departmentUseCase) UpdateOne(ctx context.Context, id string, input *dep
 	return d.departmentRepository.UpdateOne(ctx, departmentID, department)
 }
 
-func (d *departmentUseCase) GetOneByID(ctx context.Context, id string) (departmentsdomain.Output, error) {
+func (d *departmentUseCase) GetByID(ctx context.Context, id string) (departmentsdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
 
@@ -89,7 +89,7 @@ func (d *departmentUseCase) GetOneByID(ctx context.Context, id string) (departme
 		return departmentsdomain.Output{}, err
 	}
 
-	departmentData, err := d.departmentRepository.GetOneByID(ctx, departmentID)
+	departmentData, err := d.departmentRepository.GetByID(ctx, departmentID)
 	if err != nil {
 		return departmentsdomain.Output{}, err
 	}
@@ -101,11 +101,11 @@ func (d *departmentUseCase) GetOneByID(ctx context.Context, id string) (departme
 	return output, nil
 }
 
-func (d *departmentUseCase) GetOneByName(ctx context.Context, name string) (departmentsdomain.Output, error) {
+func (d *departmentUseCase) GetByName(ctx context.Context, name string) (departmentsdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
 
-	departmentData, err := d.departmentRepository.GetOneByName(ctx, name)
+	departmentData, err := d.departmentRepository.GetByName(ctx, name)
 	if err != nil {
 		return departmentsdomain.Output{}, err
 	}
@@ -128,7 +128,7 @@ func (d *departmentUseCase) GetAll(ctx context.Context) ([]departmentsdomain.Out
 	var outputs []departmentsdomain.Output
 	outputs = make([]departmentsdomain.Output, 0, len(departmentsData))
 	for _, departmentData := range departmentsData {
-		managerData, err := d.employeeRepository.GetOneByID(ctx, departmentData.ManagerID)
+		managerData, err := d.employeeRepository.GetByID(ctx, departmentData.ManagerID)
 		if err != nil {
 			return nil, err
 		}

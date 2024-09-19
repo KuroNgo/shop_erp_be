@@ -136,11 +136,11 @@ func (s *shippingUseCase) DeleteOne(ctx context.Context, id string) error {
 	return s.shippingRepository.DeleteOne(ctx, shippingID)
 }
 
-func (s *shippingUseCase) List(ctx context.Context) ([]shippingdomain.ShippingResponse, error) {
+func (s *shippingUseCase) GetAll(ctx context.Context) ([]shippingdomain.ShippingResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
-	shippingData, err := s.shippingRepository.List(ctx)
+	shippingData, err := s.shippingRepository.GetAll(ctx)
 	if err != nil {
 		return nil, err
 	}

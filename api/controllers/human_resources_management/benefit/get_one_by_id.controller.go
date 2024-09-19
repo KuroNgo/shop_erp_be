@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// FetchOneBenefitByID retrieves the benefit's information
+// GetByID retrieves the benefit's information
 // @Summary Get Benefit Information By ID
 // @Description Retrieves the benefit's information name
 // @Tags Benefit
@@ -14,10 +14,10 @@ import (
 // @Param _id path string true "Benefit ID"
 // @Router /api/v1/benefits/get/_id [get]
 // @Security CookieAuth
-func (b *BenefitController) FetchOneBenefitByID(ctx *gin.Context) {
+func (b *BenefitController) GetByID(ctx *gin.Context) {
 	attendanceID := ctx.Query("_id")
 
-	data, err := b.BenefitUseCase.GetOneByID(ctx, attendanceID)
+	data, err := b.BenefitUseCase.GetByID(ctx, attendanceID)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{
 			"status":  "error",

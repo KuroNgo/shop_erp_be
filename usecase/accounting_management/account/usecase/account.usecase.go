@@ -18,7 +18,7 @@ func NewAccountUseCase(contextTimeout time.Duration, accountRepository accountdo
 	return &accountUseCase{contextTimeout: contextTimeout, accountRepository: accountRepository}
 }
 
-func (a *accountUseCase) CreateAccount(ctx context.Context, input *accountdomain.Input) error {
+func (a *accountUseCase) CreateOne(ctx context.Context, input *accountdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
@@ -36,10 +36,10 @@ func (a *accountUseCase) CreateAccount(ctx context.Context, input *accountdomain
 		UpdatedAt:     time.Now(),
 	}
 
-	return a.accountRepository.CreateAccount(ctx, account)
+	return a.accountRepository.CreateOne(ctx, account)
 }
 
-func (a *accountUseCase) GetAccountByID(ctx context.Context, id string) (accountdomain.AccountResponse, error) {
+func (a *accountUseCase) GetByID(ctx context.Context, id string) (accountdomain.AccountResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
@@ -48,7 +48,7 @@ func (a *accountUseCase) GetAccountByID(ctx context.Context, id string) (account
 		return accountdomain.AccountResponse{}, err
 	}
 
-	accountData, err := a.accountRepository.GetAccountByID(ctx, accountID)
+	accountData, err := a.accountRepository.GetByID(ctx, accountID)
 	if err != nil {
 		return accountdomain.AccountResponse{}, err
 	}
@@ -60,11 +60,11 @@ func (a *accountUseCase) GetAccountByID(ctx context.Context, id string) (account
 	return response, nil
 }
 
-func (a *accountUseCase) GetAccountByName(ctx context.Context, name string) (accountdomain.AccountResponse, error) {
+func (a *accountUseCase) GetByName(ctx context.Context, name string) (accountdomain.AccountResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
-	accountData, err := a.accountRepository.GetAccountByName(ctx, name)
+	accountData, err := a.accountRepository.GetByName(ctx, name)
 	if err != nil {
 		return accountdomain.AccountResponse{}, err
 	}
@@ -76,7 +76,7 @@ func (a *accountUseCase) GetAccountByName(ctx context.Context, name string) (acc
 	return response, nil
 }
 
-func (a *accountUseCase) UpdateAccount(ctx context.Context, id string, input *accountdomain.Input) error {
+func (a *accountUseCase) UpdateOne(ctx context.Context, id string, input *accountdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
@@ -94,10 +94,10 @@ func (a *accountUseCase) UpdateAccount(ctx context.Context, id string, input *ac
 		UpdatedAt:     time.Now(),
 	}
 
-	return a.accountRepository.UpdateAccount(ctx, account)
+	return a.accountRepository.UpdateOne(ctx, account)
 }
 
-func (a *accountUseCase) DeleteAccount(ctx context.Context, id string) error {
+func (a *accountUseCase) DeleteOne(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
@@ -106,14 +106,14 @@ func (a *accountUseCase) DeleteAccount(ctx context.Context, id string) error {
 		return err
 	}
 
-	return a.accountRepository.DeleteAccount(ctx, accountID)
+	return a.accountRepository.DeleteOne(ctx, accountID)
 }
 
-func (a *accountUseCase) ListAccounts(ctx context.Context) ([]accountdomain.AccountResponse, error) {
+func (a *accountUseCase) GetAll(ctx context.Context) ([]accountdomain.AccountResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
-	accountData, err := a.accountRepository.ListAccounts(ctx)
+	accountData, err := a.accountRepository.GetAll(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -131,7 +131,7 @@ func (a *accountUseCase) ListAccounts(ctx context.Context) ([]accountdomain.Acco
 	return responses, nil
 }
 
-func (a *accountUseCase) GetAccountsByDateRange(ctx context.Context, startDate, endDate string) ([]accountdomain.AccountResponse, error) {
+func (a *accountUseCase) GetByDateRange(ctx context.Context, startDate, endDate string) ([]accountdomain.AccountResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
@@ -147,7 +147,7 @@ func (a *accountUseCase) GetAccountsByDateRange(ctx context.Context, startDate, 
 		return nil, fmt.Errorf("invalid end date format: %v", err)
 	}
 
-	accountData, err := a.accountRepository.GetAccountsByDateRange(ctx, start, end)
+	accountData, err := a.accountRepository.GetByDateRange(ctx, start, end)
 	if err != nil {
 		return nil, err
 	}
@@ -164,7 +164,7 @@ func (a *accountUseCase) GetAccountsByDateRange(ctx context.Context, startDate, 
 	return responses, nil
 }
 
-func (a *accountUseCase) GetTotalAccountBalance(ctx context.Context) (float64, error) {
+func (a *accountUseCase) GetTotalBalance(ctx context.Context) (float64, error) {
 	//TODO implement me
 	panic("implement me")
 }

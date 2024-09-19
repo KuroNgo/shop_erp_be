@@ -64,7 +64,7 @@ func (l *leaveRequestRepository) UpdateOne(ctx context.Context, id primitive.Obj
 	return nil
 }
 
-func (l *leaveRequestRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (leaverequestdomain.LeaveRequest, error) {
+func (l *leaveRequestRepository) GetByID(ctx context.Context, id primitive.ObjectID) (leaverequestdomain.LeaveRequest, error) {
 	collectionLeaveRequest := l.database.Collection(l.collectionLeaveRequest)
 
 	if id == primitive.NilObjectID {
@@ -83,7 +83,7 @@ func (l *leaveRequestRepository) GetOneByID(ctx context.Context, id primitive.Ob
 	return leaveRequest, nil
 }
 
-func (l *leaveRequestRepository) GetOneByEmployeeID(ctx context.Context, employeeID primitive.ObjectID) (leaverequestdomain.LeaveRequest, error) {
+func (l *leaveRequestRepository) GetByEmployeeID(ctx context.Context, employeeID primitive.ObjectID) (leaverequestdomain.LeaveRequest, error) {
 	collectionLeaveRequest := l.database.Collection(l.collectionLeaveRequest)
 
 	var leaveRequest leaverequestdomain.LeaveRequest

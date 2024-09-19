@@ -62,7 +62,7 @@ func (a *attendanceRepository) UpdateOne(ctx context.Context, attendance *attend
 	return nil
 }
 
-func (a *attendanceRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (attendancedomain.Attendance, error) {
+func (a *attendanceRepository) GetByID(ctx context.Context, id primitive.ObjectID) (attendancedomain.Attendance, error) {
 	collectionAttendance := a.database.Collection(a.collectionAttendance)
 
 	if id == primitive.NilObjectID {
@@ -81,7 +81,7 @@ func (a *attendanceRepository) GetOneByID(ctx context.Context, id primitive.Obje
 	return attendance, nil
 }
 
-func (a *attendanceRepository) GetOneByEmployeeID(ctx context.Context, idEmployee primitive.ObjectID) (attendancedomain.Attendance, error) {
+func (a *attendanceRepository) GetByEmployeeID(ctx context.Context, idEmployee primitive.ObjectID) (attendancedomain.Attendance, error) {
 	collectionAttendance := a.database.Collection(a.collectionAttendance)
 
 	if idEmployee == primitive.NilObjectID {

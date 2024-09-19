@@ -6,7 +6,7 @@ import (
 	salarydomain "shop_erp_mono/domain/human_resource_management/salary"
 )
 
-// CreateOneSalary Create a new salary
+// CreateOne Create a new salary
 // @Summary Create salary
 // @Description Create new salary
 // @Tags Salary
@@ -15,7 +15,7 @@ import (
 // @Param Salary body salary_domain.Salary true "Salary data"
 // @Security ApiKeyAuth
 // @Router /api/v1/salaries/create [post]
-func (s *SalaryController) CreateOneSalary(ctx *gin.Context) {
+func (s *SalaryController) CreateOne(ctx *gin.Context) {
 	var salary salarydomain.Input
 	if err := ctx.ShouldBindJSON(&salary); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{

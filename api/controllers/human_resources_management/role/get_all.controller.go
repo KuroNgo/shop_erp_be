@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// GetAllRole retrieves the role's information
+// GetAll retrieves the role's information
 // @Summary Get Role Information
 // @Description Retrieves the role's information
 // @Tags Role
@@ -13,8 +13,8 @@ import (
 // @Produce  json
 // @Router /api/v1/roles/get/all [get]
 // @Security CookieAuth
-func (r *RoleController) GetAllRole(ctx *gin.Context) {
-	data, err := r.RoleUseCase.GetAllRole(ctx)
+func (r *RoleController) GetAll(ctx *gin.Context) {
+	data, err := r.RoleUseCase.GetAll(ctx)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",

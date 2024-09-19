@@ -6,15 +6,7 @@ import (
 	"shop_erp_mono/repository"
 )
 
-// GetAll godoc
-// @Summary Get all stock adjustments with pagination
-// @Description Retrieve a list of stock adjustments, supporting pagination
-// @Tags StockAdjustment
-// @Accept json
-// @Produce json
-// @Param page query string false "Page number" default(1)
-// @Router /stock-adjustments/get/all [get]
-func (s *StockAdjustmentController) GetAll(ctx *gin.Context) {
+func (s *StockAdjustmentController) GetAllWithPagination(ctx *gin.Context) {
 	page := ctx.DefaultQuery("page", "1")
 	var paginate repository.Pagination
 	paginate.Page = page

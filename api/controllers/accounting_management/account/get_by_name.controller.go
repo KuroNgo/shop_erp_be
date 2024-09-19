@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// GetByNameAccount get by name the account's information
+// GetByName get by name the account's information
 // @Summary Get Account Information
 // @Description Get the account's information
 // @Tags Account
@@ -14,10 +14,10 @@ import (
 // @Param name path string true "Attendance ID"
 // @Router /api/v1/accounts/get/name [get]
 // @Security CookieAuth
-func (a *AccountController) GetByNameAccount(ctx *gin.Context) {
+func (a *AccountController) GetByName(ctx *gin.Context) {
 	name := ctx.Query("name")
 
-	data, err := a.AccountUseCase.GetAccountByName(ctx, name)
+	data, err := a.AccountUseCase.GetByName(ctx, name)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{
 			"status":  "error",

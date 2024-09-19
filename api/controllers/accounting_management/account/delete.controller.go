@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// DeleteAccount delete the account's information
+// DeleteOne delete the account's information
 // @Summary Delete Account Information
 // @Description Delete the account's information
 // @Tags Account
@@ -14,10 +14,10 @@ import (
 // @Param _id path string true "Account ID"
 // @Router /api/v1/accounts/delete [delete]
 // @Security CookieAuth
-func (a *AccountController) DeleteAccount(ctx *gin.Context) {
+func (a *AccountController) DeleteOne(ctx *gin.Context) {
 	_id := ctx.Query("_id")
 
-	err := a.AccountUseCase.DeleteAccount(ctx, _id)
+	err := a.AccountUseCase.DeleteOne(ctx, _id)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{
 			"status":  "error",

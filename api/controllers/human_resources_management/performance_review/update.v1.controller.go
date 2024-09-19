@@ -6,7 +6,7 @@ import (
 	performancereviewdomain "shop_erp_mono/domain/human_resource_management/performance_review"
 )
 
-// UpdateOnePerformanceReviewV1 update the performance review's information
+// UpdateOneWithEmailEmployee update the performance review's information
 // @Summary Update Performance Review Information
 // @Description Update the performance review's information
 // @Tags Performance Review
@@ -16,7 +16,7 @@ import (
 // @Param PerformanceReview body performance_review_domain.Input1 true "Performance Review data"
 // @Router /api/v1/performance_reviews/update [put]
 // @Security CookieAuth
-func (p *PerformanceReviewController) UpdateOnePerformanceReviewV1(ctx *gin.Context) {
+func (p *PerformanceReviewController) UpdateOneWithEmailEmployee(ctx *gin.Context) {
 	var input performancereviewdomain.Input1
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{

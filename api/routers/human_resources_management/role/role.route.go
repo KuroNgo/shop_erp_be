@@ -19,10 +19,10 @@ func RoleRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Databa
 	}
 
 	router := group.Group("/roles")
-	router.GET("/get/_id", role.GetOneRoleByID)
-	router.GET("/get/title", role.GetOneRoleByTitle)
-	router.GET("/get/all", role.GetAllRole)
-	router.POST("/create", role.CreateOneRole)
-	router.PUT("/update", role.UpdateRole)
-	router.DELETE("/delete", role.DeleteOneRole)
+	router.GET("/get/_id", role.GetByID)
+	router.GET("/get/title", role.GetByTitle)
+	router.GET("/get/all", role.GetAll)
+	router.POST("/create", role.CreateOne)
+	router.PUT("/update", role.UpdateOne)
+	router.DELETE("/delete", role.DeleteOne)
 }

@@ -17,7 +17,7 @@ func NewWarehouseUseCase(contextTimeout time.Duration, warehouseRepository wareh
 	return &warehouseUseCase{contextTimeout: contextTimeout, warehouseRepository: warehouseRepository}
 }
 
-func (w *warehouseUseCase) CreateWarehouse(ctx context.Context, input *warehousedomain.Input) error {
+func (w *warehouseUseCase) CreateOne(ctx context.Context, input *warehousedomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, w.contextTimeout)
 	defer cancel()
 
@@ -37,7 +37,7 @@ func (w *warehouseUseCase) CreateWarehouse(ctx context.Context, input *warehouse
 	return w.warehouseRepository.CreateOne(ctx, warehouse)
 }
 
-func (w *warehouseUseCase) UpdateWarehouse(ctx context.Context, id string, input *warehousedomain.Input) error {
+func (w *warehouseUseCase) UpdateOne(ctx context.Context, id string, input *warehousedomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, w.contextTimeout)
 	defer cancel()
 
@@ -62,7 +62,7 @@ func (w *warehouseUseCase) UpdateWarehouse(ctx context.Context, id string, input
 	return w.warehouseRepository.UpdateOne(ctx, warehouse)
 }
 
-func (w *warehouseUseCase) GetWarehouseByName(ctx context.Context, name string) (*warehousedomain.WarehouseResponse, error) {
+func (w *warehouseUseCase) GetByName(ctx context.Context, name string) (*warehousedomain.WarehouseResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, w.contextTimeout)
 	defer cancel()
 
@@ -77,7 +77,7 @@ func (w *warehouseUseCase) GetWarehouseByName(ctx context.Context, name string) 
 	return response, nil
 }
 
-func (w *warehouseUseCase) GetWarehouseByID(ctx context.Context, id string) (*warehousedomain.WarehouseResponse, error) {
+func (w *warehouseUseCase) GetByID(ctx context.Context, id string) (*warehousedomain.WarehouseResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, w.contextTimeout)
 	defer cancel()
 
@@ -97,7 +97,7 @@ func (w *warehouseUseCase) GetWarehouseByID(ctx context.Context, id string) (*wa
 	return response, nil
 }
 
-func (w *warehouseUseCase) GetAllWarehouses(ctx context.Context) ([]warehousedomain.WarehouseResponse, error) {
+func (w *warehouseUseCase) GetAll(ctx context.Context) ([]warehousedomain.WarehouseResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, w.contextTimeout)
 	defer cancel()
 
@@ -119,7 +119,7 @@ func (w *warehouseUseCase) GetAllWarehouses(ctx context.Context) ([]warehousedom
 	return responses, nil
 }
 
-func (w *warehouseUseCase) DeleteWarehouse(ctx context.Context, id string) error {
+func (w *warehouseUseCase) DeleteOne(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, w.contextTimeout)
 	defer cancel()
 

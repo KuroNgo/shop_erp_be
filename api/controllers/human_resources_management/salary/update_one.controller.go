@@ -6,7 +6,7 @@ import (
 	salarydomain "shop_erp_mono/domain/human_resource_management/salary"
 )
 
-// UpdateOneSalary updates the salary's information
+// UpdateOne updates the salary's information
 // @Summary Update Salary Information
 // @Description Updates the salary's information
 // @Tags Salary
@@ -16,7 +16,7 @@ import (
 // @Param _id path string true "Employee ID"
 // @Router /api/v1/salaries/update [put]
 // @Security CookieAuth
-func (s *SalaryController) UpdateOneSalary(ctx *gin.Context) {
+func (s *SalaryController) UpdateOne(ctx *gin.Context) {
 	var salary salarydomain.Input
 	if err := ctx.ShouldBindJSON(&salary); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{

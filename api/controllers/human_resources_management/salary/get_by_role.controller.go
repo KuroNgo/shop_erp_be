@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// GetOneSalaryByRole retrieves the salary's information
+// GetByRoleTitle retrieves the salary's information
 // @Summary Get Salary Information By Role
 // @Description Retrieves the salary's information role
 // @Tags Salary
@@ -14,10 +14,10 @@ import (
 // @Param role path string true "Role"
 // @Router /api/v1/salaries/get/role [get]
 // @Security CookieAuth
-func (s *SalaryController) GetOneSalaryByRole(ctx *gin.Context) {
+func (s *SalaryController) GetByRoleTitle(ctx *gin.Context) {
 	role := ctx.Query("role")
 
-	data, err := s.SalaryUseCase.GetOneByRoleTitle(ctx, role)
+	data, err := s.SalaryUseCase.GetByRoleTitle(ctx, role)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",

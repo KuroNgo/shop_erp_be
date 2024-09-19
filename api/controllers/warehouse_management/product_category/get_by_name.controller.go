@@ -17,7 +17,7 @@ import (
 func (c *CategoryController) GetByNameCategories(ctx *gin.Context) {
 	name := ctx.Query("name")
 
-	data, err := c.CategoryUseCase.GetByNameCategory(ctx, name)
+	data, err := c.CategoryUseCase.GetByName(ctx, name)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

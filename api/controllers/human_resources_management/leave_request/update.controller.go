@@ -6,7 +6,7 @@ import (
 	leaverequestdomain "shop_erp_mono/domain/human_resource_management/leave_request"
 )
 
-// UpdateOneLeaveRequest update the leave request's information
+// UpdateOne update the leave request's information
 // @Summary Update Leave Request Information
 // @Description Updates the leave request's information
 // @Tags Leave Request
@@ -15,7 +15,7 @@ import (
 // @Param LeaveRequest body leave_request_domain.Input true "Leave Request data"
 // @Router /api/v1/leave_requests/update [put]
 // @Security CookieAuth
-func (l *LeaveRequestController) UpdateOneLeaveRequest(ctx *gin.Context) {
+func (l *LeaveRequestController) UpdateOne(ctx *gin.Context) {
 	var input leaverequestdomain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{

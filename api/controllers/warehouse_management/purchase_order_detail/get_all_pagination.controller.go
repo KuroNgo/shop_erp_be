@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"shop_erp_mono/repository"
-	"strconv"
 )
 
 // GetAllPagination godoc
@@ -17,18 +16,8 @@ import (
 // @Router /api/v1/purchase_order_details/pagination [get]
 func (p *PurchaseOrderDetailController) GetAllPagination(ctx *gin.Context) {
 	page := ctx.DefaultQuery("page", "1")
-	pageValue, err := strconv.ParseInt(page, 10, 64)
-
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"status":  "error",
-			"message": err.Error(),
-		})
-		return
-	}
-
 	var paginate repository.Pagination
-	paginate.Page = pageValue
+	paginate.Page = page
 
 	data, err := p.PurchaseOrderDetailUseCase.GetAllWithPagination(ctx, paginate)
 	if err != nil {

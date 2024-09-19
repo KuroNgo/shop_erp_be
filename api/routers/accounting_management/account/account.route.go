@@ -20,10 +20,10 @@ func AccountRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Dat
 	}
 
 	router := group.Group("/accounts")
-	router.GET("/get/_id", account.GetByIDAccount)
-	router.GET("/get/name", account.GetByNameAccount)
+	router.GET("/get/_id", account.GetByID)
+	router.GET("/get/name", account.GetByName)
 	router.GET("/get/all", account.GetAll)
-	router.POST("/create", account.CreateAccount)
-	router.PUT("/update", account.UpdateAccount)
-	router.DELETE("/delete", account.DeleteAccount)
+	router.POST("/create", account.CreateOne)
+	router.PUT("/update", account.UpdateOne)
+	router.DELETE("/delete", account.DeleteOne)
 }

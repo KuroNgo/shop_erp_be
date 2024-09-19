@@ -70,7 +70,7 @@ func (c *contractRepository) UpdateOne(ctx context.Context, id primitive.ObjectI
 	return nil
 }
 
-func (c *contractRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (contractsdomain.Contract, error) {
+func (c *contractRepository) GetByID(ctx context.Context, id primitive.ObjectID) (contractsdomain.Contract, error) {
 	collectionContract := c.database.Collection(c.collectionContract)
 
 	var contract contractsdomain.Contract
@@ -86,7 +86,7 @@ func (c *contractRepository) GetOneByID(ctx context.Context, id primitive.Object
 	return contract, nil
 }
 
-func (c *contractRepository) GetOneByEmployeeID(ctx context.Context, employeeID primitive.ObjectID) (contractsdomain.Contract, error) {
+func (c *contractRepository) GetByEmployeeID(ctx context.Context, employeeID primitive.ObjectID) (contractsdomain.Contract, error) {
 	collectionContract := c.database.Collection(c.collectionContract)
 
 	var contract contractsdomain.Contract

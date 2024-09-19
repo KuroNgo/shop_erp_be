@@ -22,10 +22,10 @@ func ContractRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Da
 	}
 
 	router := group.Group("/contracts")
-	router.GET("/get/_id", contract.FetchOneByIDContract)
-	router.GET("/get/email", contract.FetchOneByEmailContract)
-	router.GET("/get/all", contract.FetchAllContract)
-	router.POST("/create", contract.CreateOneContract)
-	router.PUT("/update", contract.UpdateOneContract)
-	router.DELETE("/delete", contract.DeleteOneContract)
+	router.GET("/get/_id", contract.GetByID)
+	router.GET("/get/email", contract.GetByEmail)
+	router.GET("/get/all", contract.GetAll)
+	router.POST("/create", contract.CreateOne)
+	router.PUT("/update", contract.UpdateOne)
+	router.DELETE("/delete", contract.DeleteOne)
 }

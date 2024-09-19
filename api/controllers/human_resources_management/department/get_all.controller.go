@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// FetchAllDepartment retrieves the department's information
+// GetAll retrieves the department's information
 // @Summary Get Department Information
 // @Description Retrieves the department's information
 // @Tags Department
@@ -13,7 +13,7 @@ import (
 // @Produce  json
 // @Router /api/v1/departments/get/all [get]
 // @Security CookieAuth
-func (d *DepartmentController) FetchAllDepartment(ctx *gin.Context) {
+func (d *DepartmentController) GetAll(ctx *gin.Context) {
 	data, err := d.DepartmentUseCase.GetAll(ctx)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{

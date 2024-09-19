@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"shop_erp_mono/repository"
-	"strconv"
 )
 
 // GetAll retrieves all purchase orders with pagination
@@ -17,18 +16,8 @@ import (
 // @Router /api/v1/purchase_orders/get/all [get]
 func (p *PurchaseOrderController) GetAll(ctx *gin.Context) {
 	page := ctx.DefaultQuery("page", "1")
-	pageValue, err := strconv.ParseInt(page, 10, 64)
-
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"status":  "error",
-			"message": err.Error(),
-		})
-		return
-	}
-
 	var paginate repository.Pagination
-	paginate.Page = pageValue
+	paginate.Page = page
 
 	data, err := p.PurchaseOrderUseCase.GetAllWithPagination(ctx, paginate)
 	if err != nil {

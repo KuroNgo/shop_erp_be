@@ -27,7 +27,7 @@ func (p *ProductController) UpdateProduct(ctx *gin.Context) {
 
 	id := ctx.Query("_id")
 
-	err := p.ProductUseCase.UpdateProduct(ctx, id, &input)
+	err := p.ProductUseCase.UpdateOne(ctx, id, &input)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",

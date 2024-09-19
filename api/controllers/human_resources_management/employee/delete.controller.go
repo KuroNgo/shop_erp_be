@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// DeleteOneEmployee delete the employee's information
+// DeleteOne delete the employee's information
 // @Summary Delete Employee Information
 // @Description Deletes the employee's information
 // @Tags Employee
@@ -13,7 +13,7 @@ import (
 // @Param _id path string true "Employee ID"
 // @Router /api/v1/employees/delete [delete]
 // @Security CookieAuth
-func (e *EmployeeController) DeleteOneEmployee(ctx *gin.Context) {
+func (e *EmployeeController) DeleteOne(ctx *gin.Context) {
 	attendanceID := ctx.Query("_id")
 
 	if err := e.EmployeeUseCase.DeleteOne(ctx, attendanceID); err != nil {

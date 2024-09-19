@@ -123,7 +123,7 @@ func (o *orderDetailRepository) DeleteOne(ctx context.Context, id primitive.Obje
 	return nil
 }
 
-func (o *orderDetailRepository) List(ctx context.Context) ([]orderdetailsdomain.OrderDetail, error) {
+func (o *orderDetailRepository) GetAll(ctx context.Context) ([]orderdetailsdomain.OrderDetail, error) {
 	orderDetailCollection := o.database.Collection(o.orderDetailCollection)
 
 	filter := bson.M{}

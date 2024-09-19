@@ -14,7 +14,7 @@ type ISalesReportRepository interface {
 	GetTopSellingProducts(ctx context.Context, startDate, endDate time.Time) ([]TopSellingProduct, error)
 	UpdateOne(ctx context.Context, updatedReport SalesReport) error
 	DeleteOne(ctx context.Context, id primitive.ObjectID) error
-	List(ctx context.Context) ([]SalesReport, error)
+	GetAll(ctx context.Context) ([]SalesReport, error)
 }
 
 type ISalesReportUseCase interface {
@@ -25,5 +25,5 @@ type ISalesReportUseCase interface {
 	GetTopSellingProducts(ctx context.Context, startDate, endDate time.Time) ([]TopSellingProduct, error)
 	UpdateOne(ctx context.Context, id string, updatedReport *Input) error
 	DeleteOne(ctx context.Context, id string) error
-	List(ctx context.Context) ([]SalesReport, error)
+	GetAll(ctx context.Context) ([]SalesReport, error)
 }

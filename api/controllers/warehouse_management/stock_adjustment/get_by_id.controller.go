@@ -8,7 +8,7 @@ import (
 // GetByID godoc
 // @Summary Get a stock adjustment by ID
 // @Description Retrieve a stock adjustment from the system using its ID
-// @Tags stock_adjustments
+// @Tags StockAdjustment
 // @Accept json
 // @Produce json
 // @Param _id path string true "Stock Adjustment ID"

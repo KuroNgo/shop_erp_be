@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// FetchAllContract retrieves the contract's information
+// GetAll retrieves the contract's information
 // @Summary Get Contract Information
 // @Description Retrieves the contract's information
 // @Tags Contract
@@ -13,7 +13,7 @@ import (
 // @Produce  json
 // @Router /api/v1/contracts/get/all [get]
 // @Security CookieAuth
-func (c *ContractController) FetchAllContract(ctx *gin.Context) {
+func (c *ContractController) GetAll(ctx *gin.Context) {
 	data, err := c.ContractUseCase.GetAll(ctx)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{

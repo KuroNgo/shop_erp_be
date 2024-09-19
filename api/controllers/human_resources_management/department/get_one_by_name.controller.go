@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// FetchOneDepartmentByName retrieves the department's information
+// GetByName retrieves the department's information
 // @Summary Get Department Information By Name
 // @Description Retrieves the department's information name
 // @Tags Department
@@ -14,10 +14,10 @@ import (
 // @Param name path string true "Contract ID"
 // @Router /api/v1/departments/get/name [get]
 // @Security CookieAuth
-func (d *DepartmentController) FetchOneDepartmentByName(ctx *gin.Context) {
+func (d *DepartmentController) GetByName(ctx *gin.Context) {
 	departmentName := ctx.Query("name")
 
-	data, err := d.DepartmentUseCase.GetOneByName(ctx, departmentName)
+	data, err := d.DepartmentUseCase.GetByName(ctx, departmentName)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{
 			"status":  "error",

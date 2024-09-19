@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// FetchOneByEmailContract Get one the contract's information
+// GetByEmail Get one the contract's information
 // @Summary Get one Contract Information
 // @Description Get one the contract's information by ID
 // @Tags Contract
@@ -13,10 +13,10 @@ import (
 // @Param email path string true "Contract ID"
 // @Router /api/v1/contracts/get/email [get]
 // @Security CookieAuth
-func (c *ContractController) FetchOneByEmailContract(ctx *gin.Context) {
+func (c *ContractController) GetByEmail(ctx *gin.Context) {
 	id := ctx.Query("email")
 
-	data, err := c.ContractUseCase.GetOneByEmail(ctx, id)
+	data, err := c.ContractUseCase.GetByEmail(ctx, id)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

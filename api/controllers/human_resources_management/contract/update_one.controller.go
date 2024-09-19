@@ -6,7 +6,7 @@ import (
 	contracts_domain "shop_erp_mono/domain/human_resource_management/contracts"
 )
 
-// UpdateOneContract create the contract's information
+// UpdateOne create the contract's information
 // @Summary Update Contract Information
 // @Description Update the contract's information
 // @Tags Contract
@@ -16,7 +16,7 @@ import (
 // @Param _id path string true "Contract ID"
 // @Router /api/v1/contracts/update [put]
 // @Security CookieAuth
-func (c *ContractController) UpdateOneContract(ctx *gin.Context) {
+func (c *ContractController) UpdateOne(ctx *gin.Context) {
 	var input contracts_domain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{

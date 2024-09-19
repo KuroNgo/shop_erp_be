@@ -12,7 +12,7 @@ type IOrderDetailRepository interface {
 	GetByProductID(ctx context.Context, productID primitive.ObjectID) ([]OrderDetail, error)
 	UpdateOne(ctx context.Context, detail OrderDetail) error
 	DeleteOne(ctx context.Context, id primitive.ObjectID) error
-	List(ctx context.Context) ([]OrderDetail, error)
+	GetAll(ctx context.Context) ([]OrderDetail, error)
 }
 
 type IOrderDetailUseCase interface {
@@ -22,5 +22,5 @@ type IOrderDetailUseCase interface {
 	GetByProductID(ctx context.Context, productID string) ([]OrderDetailResponse, error)
 	UpdateOne(ctx context.Context, id string, input *Input) error
 	DeleteOne(ctx context.Context, id string) error
-	List(ctx context.Context) ([]OrderDetailResponse, error)
+	GetAll(ctx context.Context) ([]OrderDetailResponse, error)
 }

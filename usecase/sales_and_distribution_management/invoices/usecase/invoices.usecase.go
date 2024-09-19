@@ -170,11 +170,11 @@ func (i *invoiceUseCase) DeleteOne(ctx context.Context, id string) error {
 	return i.invoiceRepository.DeleteOne(ctx, invoiceID)
 }
 
-func (i *invoiceUseCase) List(ctx context.Context) ([]invoices_domain.InvoiceResponse, error) {
+func (i *invoiceUseCase) GetAll(ctx context.Context) ([]invoices_domain.InvoiceResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, i.contextTimeout)
 	defer cancel()
 
-	invoiceData, err := i.invoiceRepository.List(ctx)
+	invoiceData, err := i.invoiceRepository.GetAll(ctx)
 	if err != nil {
 		return nil, err
 	}

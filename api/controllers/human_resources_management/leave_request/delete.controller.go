@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// DeleteOneLeaveRequest delete the leave request's information
+// DeleteOne delete the leave request's information
 // @Summary Delete Leave Request Information
 // @Description Delete the leave request's information
 // @Tags Leave Request
@@ -14,7 +14,7 @@ import (
 // @Param _id path string true "Leave Request ID"
 // @Router /api/v1/leave_requests/delete [delete]
 // @Security CookieAuth
-func (l *LeaveRequestController) DeleteOneLeaveRequest(ctx *gin.Context) {
+func (l *LeaveRequestController) DeleteOne(ctx *gin.Context) {
 	id := ctx.Query("_id")
 
 	err := l.LeaveRequestUseCase.DeleteOne(ctx, id)

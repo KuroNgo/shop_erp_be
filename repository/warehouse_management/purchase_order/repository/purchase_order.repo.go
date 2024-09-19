@@ -31,7 +31,7 @@ func (p *purchaseOrderRepository) GetByID(ctx context.Context, id primitive.Obje
 	return &purchaseOrder, nil
 }
 
-func (p *purchaseOrderRepository) Create(ctx context.Context, order *purchaseorderdomain.PurchaseOrder) error {
+func (p *purchaseOrderRepository) CreateOne(ctx context.Context, order *purchaseorderdomain.PurchaseOrder) error {
 	purchaseOrderCollection := p.database.Collection(p.purchaseOrderCollection)
 
 	_, err := purchaseOrderCollection.InsertOne(ctx, order)
@@ -42,7 +42,7 @@ func (p *purchaseOrderRepository) Create(ctx context.Context, order *purchaseord
 	return nil
 }
 
-func (p *purchaseOrderRepository) Update(ctx context.Context, order *purchaseorderdomain.PurchaseOrder) error {
+func (p *purchaseOrderRepository) UpdateOne(ctx context.Context, order *purchaseorderdomain.PurchaseOrder) error {
 	purchaseOrderCollection := p.database.Collection(p.purchaseOrderCollection)
 
 	filter := bson.M{"_id": order.ID}
@@ -62,7 +62,7 @@ func (p *purchaseOrderRepository) Update(ctx context.Context, order *purchaseord
 	return nil
 }
 
-func (p *purchaseOrderRepository) Delete(ctx context.Context, id primitive.ObjectID) error {
+func (p *purchaseOrderRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
 	purchaseOrderCollection := p.database.Collection(p.purchaseOrderCollection)
 
 	filter := bson.M{"_id": id}

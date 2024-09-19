@@ -6,7 +6,7 @@ import (
 	attendancedomain "shop_erp_mono/domain/human_resource_management/attendance"
 )
 
-// CreateOneAttendance create the attendance's information
+// CreateOne create the attendance's information
 // @Summary Create Attendance Information
 // @Description Create the attendance's information
 // @Tags Attendance
@@ -15,7 +15,7 @@ import (
 // @Param CreateOneAttendance body attendance_domain.Input true "Attendance data"
 // @Router /api/v1/attendances/create [post]
 // @Security CookieAuth
-func (a *AttendanceController) CreateOneAttendance(ctx *gin.Context) {
+func (a *AttendanceController) CreateOne(ctx *gin.Context) {
 	var input attendancedomain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{

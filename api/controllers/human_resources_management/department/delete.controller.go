@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// DeleteOneDepartment delete the department's information
+// DeleteOne delete the department's information
 // @Summary Delete Department Information
 // @Description Deletes the department's information
 // @Tags Department
@@ -14,7 +14,7 @@ import (
 // @Param _id path string true "Department ID"
 // @Router /api/v1/departments/delete [delete]
 // @Security CookieAuth
-func (d *DepartmentController) DeleteOneDepartment(ctx *gin.Context) {
+func (d *DepartmentController) DeleteOne(ctx *gin.Context) {
 	departmentID := ctx.Query("_id")
 
 	if err := d.DepartmentUseCase.DeleteOne(ctx, departmentID); err != nil {

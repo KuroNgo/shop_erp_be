@@ -28,7 +28,7 @@ func (c *contractUseCase) CreateOne(ctx context.Context, input *contractsdomain.
 		return err
 	}
 
-	employeeData, err := c.employeeRepository.GetOneByEmail(ctx, input.EmployeeEmail)
+	employeeData, err := c.employeeRepository.GetByEmail(ctx, input.EmployeeEmail)
 	if err != nil {
 		return err
 	}
@@ -77,7 +77,7 @@ func (c *contractUseCase) UpdateOne(ctx context.Context, id string, input *contr
 		return err
 	}
 
-	employeeData, err := c.employeeRepository.GetOneByEmail(ctx, input.EmployeeEmail)
+	employeeData, err := c.employeeRepository.GetByEmail(ctx, input.EmployeeEmail)
 	if err != nil {
 		return err
 	}
@@ -98,7 +98,7 @@ func (c *contractUseCase) UpdateOne(ctx context.Context, id string, input *contr
 	return c.contractRepository.UpdateOne(ctx, contractID, &contract)
 }
 
-func (c *contractUseCase) GetOneByID(ctx context.Context, id string) (contractsdomain.Output, error) {
+func (c *contractUseCase) GetByID(ctx context.Context, id string) (contractsdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
@@ -111,12 +111,12 @@ func (c *contractUseCase) GetOneByID(ctx context.Context, id string) (contractsd
 		return contractsdomain.Output{}, errors.New("id do not nil")
 	}
 
-	contractData, err := c.contractRepository.GetOneByID(ctx, contractID)
+	contractData, err := c.contractRepository.GetByID(ctx, contractID)
 	if err != nil {
 		return contractsdomain.Output{}, err
 	}
 
-	employeeData, err := c.employeeRepository.GetOneByID(ctx, contractData.EmployeeID)
+	employeeData, err := c.employeeRepository.GetByID(ctx, contractData.EmployeeID)
 	if err != nil {
 		return contractsdomain.Output{}, err
 	}
@@ -129,7 +129,7 @@ func (c *contractUseCase) GetOneByID(ctx context.Context, id string) (contractsd
 	return output, nil
 }
 
-func (c *contractUseCase) GetOneByEmail(ctx context.Context, email string) (contractsdomain.Output, error) {
+func (c *contractUseCase) GetByEmail(ctx context.Context, email string) (contractsdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
@@ -137,12 +137,12 @@ func (c *contractUseCase) GetOneByEmail(ctx context.Context, email string) (cont
 		return contractsdomain.Output{}, err
 	}
 
-	employeeData, err := c.employeeRepository.GetOneByEmail(ctx, email)
+	employeeData, err := c.employeeRepository.GetByEmail(ctx, email)
 	if err != nil {
 		return contractsdomain.Output{}, err
 	}
 
-	contractData, err := c.contractRepository.GetOneByEmployeeID(ctx, employeeData.ID)
+	contractData, err := c.contractRepository.GetByEmployeeID(ctx, employeeData.ID)
 	if err != nil {
 		return contractsdomain.Output{}, err
 	}
@@ -167,7 +167,7 @@ func (c *contractUseCase) GetAll(ctx context.Context) ([]contractsdomain.Output,
 	var outputs []contractsdomain.Output
 	outputs = make([]contractsdomain.Output, 0, len(contractsData))
 	for _, contractData := range contractsData {
-		employeeData, err := c.employeeRepository.GetOneByID(ctx, contractData.EmployeeID)
+		employeeData, err := c.employeeRepository.GetByID(ctx, contractData.EmployeeID)
 		if err != nil {
 			return nil, err
 		}

@@ -20,7 +20,7 @@ func NewCategoryUseCase(contextTimeout time.Duration, categoryRepository categor
 	return &categoryUseCase{contextTimeout: contextTimeout, categoryRepository: categoryRepository, productRepository: productRepository}
 }
 
-func (c *categoryUseCase) CreateCategory(ctx context.Context, input *categorydomain.Input) error {
+func (c *categoryUseCase) CreateOne(ctx context.Context, input *categorydomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
@@ -36,10 +36,10 @@ func (c *categoryUseCase) CreateCategory(ctx context.Context, input *categorydom
 		UpdatedAt:    time.Now(),
 	}
 
-	return c.categoryRepository.Create(ctx, category)
+	return c.categoryRepository.CreateOne(ctx, category)
 }
 
-func (c *categoryUseCase) GetByIDCategory(ctx context.Context, id string) (*categorydomain.CategoryResponse, error) {
+func (c *categoryUseCase) GetByID(ctx context.Context, id string) (*categorydomain.CategoryResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
@@ -60,7 +60,7 @@ func (c *categoryUseCase) GetByIDCategory(ctx context.Context, id string) (*cate
 	return response, nil
 }
 
-func (c *categoryUseCase) GetByNameCategory(ctx context.Context, name string) (*categorydomain.CategoryResponse, error) {
+func (c *categoryUseCase) GetByName(ctx context.Context, name string) (*categorydomain.CategoryResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
@@ -76,7 +76,7 @@ func (c *categoryUseCase) GetByNameCategory(ctx context.Context, name string) (*
 	return response, nil
 }
 
-func (c *categoryUseCase) UpdateCategory(ctx context.Context, id string, input *categorydomain.Input) error {
+func (c *categoryUseCase) UpdateOne(ctx context.Context, id string, input *categorydomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
@@ -95,10 +95,10 @@ func (c *categoryUseCase) UpdateCategory(ctx context.Context, id string, input *
 		UpdatedAt:    time.Now(),
 	}
 
-	return c.categoryRepository.Update(ctx, categoryID, category)
+	return c.categoryRepository.UpdateOne(ctx, categoryID, category)
 }
 
-func (c *categoryUseCase) DeleteCategory(ctx context.Context, id string) error {
+func (c *categoryUseCase) DeleteOne(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
@@ -116,10 +116,10 @@ func (c *categoryUseCase) DeleteCategory(ctx context.Context, id string) error {
 		return errors.New("cannot delete product_category with linked products")
 	}
 
-	return c.categoryRepository.Delete(ctx, categoryID)
+	return c.categoryRepository.DeleteOne(ctx, categoryID)
 }
 
-func (c *categoryUseCase) GetAllCategories(ctx context.Context) ([]categorydomain.CategoryResponse, error) {
+func (c *categoryUseCase) GetAll(ctx context.Context) ([]categorydomain.CategoryResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 

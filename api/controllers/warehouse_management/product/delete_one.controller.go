@@ -17,7 +17,7 @@ import (
 func (p *ProductController) DeleteOneProduct(ctx *gin.Context) {
 	id := ctx.Query("_id")
 
-	err := p.ProductUseCase.DeleteProduct(ctx, id)
+	err := p.ProductUseCase.DeleteOne(ctx, id)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",

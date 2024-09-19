@@ -16,7 +16,7 @@ type invoiceRepository struct {
 	invoiceCollection string
 }
 
-func NewInvoiceRepository(database *mongo.Database, invoiceCollection string) invoicesdomain.IInvoicesRepository {
+func NewInvoiceRepository(database *mongo.Database, invoiceCollection string) invoicesdomain.InvoicesRepository {
 	return &invoiceRepository{database: database, invoiceCollection: invoiceCollection}
 }
 

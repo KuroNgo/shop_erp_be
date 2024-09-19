@@ -18,7 +18,7 @@ func NewSupplierUseCase(contextTimeout time.Duration, supplierRepository supplie
 	return &supplierUseCase{contextTimeout: contextTimeout, supplierRepository: supplierRepository}
 }
 
-func (s *supplierUseCase) CreateSupplier(ctx context.Context, input *supplierdomain.Input) error {
+func (s *supplierUseCase) CreateOne(ctx context.Context, input *supplierdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
@@ -40,7 +40,7 @@ func (s *supplierUseCase) CreateSupplier(ctx context.Context, input *supplierdom
 	return s.supplierRepository.CreateOne(ctx, supplier)
 }
 
-func (s *supplierUseCase) GetSupplierByID(ctx context.Context, id string) (*supplierdomain.SupplierResponse, error) {
+func (s *supplierUseCase) GetByID(ctx context.Context, id string) (*supplierdomain.SupplierResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
@@ -61,7 +61,7 @@ func (s *supplierUseCase) GetSupplierByID(ctx context.Context, id string) (*supp
 	return response, nil
 }
 
-func (s *supplierUseCase) GetSupplierByName(ctx context.Context, name string) (*supplierdomain.SupplierResponse, error) {
+func (s *supplierUseCase) GetByName(ctx context.Context, name string) (*supplierdomain.SupplierResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
@@ -77,7 +77,7 @@ func (s *supplierUseCase) GetSupplierByName(ctx context.Context, name string) (*
 	return response, nil
 }
 
-func (s *supplierUseCase) GetSuppliersWithPagination(ctx context.Context, pagination repository.Pagination) ([]supplierdomain.SupplierResponse, error) {
+func (s *supplierUseCase) GetAllWithPagination(ctx context.Context, pagination repository.Pagination) ([]supplierdomain.SupplierResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
@@ -99,7 +99,7 @@ func (s *supplierUseCase) GetSuppliersWithPagination(ctx context.Context, pagina
 	return responses, nil
 }
 
-func (s *supplierUseCase) GetSuppliers(ctx context.Context) ([]supplierdomain.SupplierResponse, error) {
+func (s *supplierUseCase) GetAll(ctx context.Context) ([]supplierdomain.SupplierResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
@@ -121,7 +121,7 @@ func (s *supplierUseCase) GetSuppliers(ctx context.Context) ([]supplierdomain.Su
 	return responses, nil
 }
 
-func (s *supplierUseCase) UpdateSupplier(ctx context.Context, id string, input *supplierdomain.Input) error {
+func (s *supplierUseCase) UpdateOne(ctx context.Context, id string, input *supplierdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
@@ -148,7 +148,7 @@ func (s *supplierUseCase) UpdateSupplier(ctx context.Context, id string, input *
 	return s.supplierRepository.UpdateOne(ctx, supplier)
 }
 
-func (s *supplierUseCase) DeleteSupplier(ctx context.Context, id string) error {
+func (s *supplierUseCase) DeleteOne(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 

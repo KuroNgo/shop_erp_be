@@ -72,7 +72,7 @@ func (b *benefitRepository) UpdateOne(ctx context.Context, id primitive.ObjectID
 	return nil
 }
 
-func (b *benefitRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (benefitsdomain.Benefit, error) {
+func (b *benefitRepository) GetByID(ctx context.Context, id primitive.ObjectID) (benefitsdomain.Benefit, error) {
 	collectionBenefit := b.database.Collection(b.collectionBenefit)
 
 	if id == primitive.NilObjectID {
@@ -91,7 +91,7 @@ func (b *benefitRepository) GetOneByID(ctx context.Context, id primitive.ObjectI
 	return benefit, nil
 }
 
-func (b *benefitRepository) GetOneByEmployeeID(ctx context.Context, employeeID primitive.ObjectID) (benefitsdomain.Benefit, error) {
+func (b *benefitRepository) GetByEmployeeID(ctx context.Context, employeeID primitive.ObjectID) (benefitsdomain.Benefit, error) {
 	collectionBenefit := b.database.Collection(b.collectionBenefit)
 
 	var benefit benefitsdomain.Benefit

@@ -25,7 +25,7 @@ func (c *CategoryController) CreateCategory(ctx *gin.Context) {
 		return
 	}
 
-	if err := c.CategoryUseCase.CreateCategory(ctx, &input); err != nil {
+	if err := c.CategoryUseCase.CreateOne(ctx, &input); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
 			"message": err.Error(),

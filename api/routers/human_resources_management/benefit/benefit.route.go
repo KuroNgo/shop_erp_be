@@ -22,10 +22,10 @@ func BenefitRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Dat
 	}
 
 	router := group.Group("/benefits")
-	router.GET("/get/_id", benefit.FetchOneBenefitByID)
-	router.GET("/get/email", benefit.FetchOneBenefitByEmail)
-	router.GET("/get/all", benefit.FetchAllBenefit)
-	router.POST("/create", benefit.CreateOneBenefit)
-	router.PUT("/update", benefit.UpdateOneBenefit)
-	router.DELETE("/delete", benefit.DeleteOneBenefit)
+	router.GET("/get/_id", benefit.GetByID)
+	router.GET("/get/email", benefit.GetByEmail)
+	router.GET("/get/all", benefit.GetAll)
+	router.POST("/create", benefit.CreateOne)
+	router.PUT("/update", benefit.UpdateOne)
+	router.DELETE("/delete", benefit.DeleteOne)
 }

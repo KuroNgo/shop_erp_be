@@ -1,4 +1,4 @@
-package payments_domain
+package payment_domain
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"

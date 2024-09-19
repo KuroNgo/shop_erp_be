@@ -13,8 +13,8 @@ import (
 // @Produce json
 // @Router /api/v1/suppliers/get/all [get]
 // @Security CookieAuth
-func (s *SupplierController) GetAllSupplier(ctx *gin.Context) {
-	data, err := s.SupplierUseCase.GetSuppliers(ctx)
+func (s *SupplierController) GetAll(ctx *gin.Context) {
+	data, err := s.SupplierUseCase.GetAll(ctx)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

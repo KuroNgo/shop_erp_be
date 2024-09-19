@@ -54,7 +54,7 @@ func (p *purchaseOrderDetailRepository) GetByPurchaseOrderID(ctx context.Context
 	return purchaseOrderDetails, nil
 }
 
-func (p *purchaseOrderDetailRepository) Create(ctx context.Context, detail *purchaseorderdetaildomain.PurchaseOrderDetail) error {
+func (p *purchaseOrderDetailRepository) CreateOne(ctx context.Context, detail *purchaseorderdetaildomain.PurchaseOrderDetail) error {
 	purchaseOrderCollection := p.database.Collection(p.purchaseOrderCollection)
 
 	_, err := purchaseOrderCollection.InsertOne(ctx, detail)
@@ -65,12 +65,12 @@ func (p *purchaseOrderDetailRepository) Create(ctx context.Context, detail *purc
 	return nil
 }
 
-func (p *purchaseOrderDetailRepository) Update(ctx context.Context, detail *purchaseorderdetaildomain.PurchaseOrderDetail) error {
+func (p *purchaseOrderDetailRepository) UpdateOne(ctx context.Context, detail *purchaseorderdetaildomain.PurchaseOrderDetail) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (p *purchaseOrderDetailRepository) Delete(ctx context.Context, id primitive.ObjectID) error {
+func (p *purchaseOrderDetailRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
 	purchaseOrderCollection := p.database.Collection(p.purchaseOrderCollection)
 
 	filter := bson.M{"_id": id}

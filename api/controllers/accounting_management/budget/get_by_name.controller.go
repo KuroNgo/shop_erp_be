@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// GetByNameBudget Get by name the budget's information
+// GetByName Get by name the budget's information
 // @Summary Get by name Budget Information
 // @Description Get by name the budget's information
 // @Tags Budget
@@ -14,10 +14,10 @@ import (
 // @Param name path string true "Budget name"
 // @Router /api/v1/budgets/get/name [get]
 // @Security CookieAuth
-func (b BudgetController) GetByNameBudget(ctx *gin.Context) {
+func (b BudgetController) GetByName(ctx *gin.Context) {
 	name := ctx.Query("name")
 
-	data, err := b.BudgetUseCase.GetBudgetByName(ctx, name)
+	data, err := b.BudgetUseCase.GetByName(ctx, name)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

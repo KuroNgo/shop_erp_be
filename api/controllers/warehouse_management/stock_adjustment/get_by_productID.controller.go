@@ -8,7 +8,7 @@ import (
 // GetByProductID godoc
 // @Summary Get stock adjustments by Product ID
 // @Description Retrieve stock adjustments related to a specific Product ID
-// @Tags stock_adjustments
+// @Tags StockAdjustment
 // @Accept json
 // @Produce json
 // @Param product_id path string true "Product ID"

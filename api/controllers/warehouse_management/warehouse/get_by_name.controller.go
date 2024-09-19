@@ -8,7 +8,7 @@ import (
 func (w *WarehouseController) GetByName(ctx *gin.Context) {
 	name := ctx.Query("name")
 
-	data, err := w.WarehouseUseCase.GetWarehouseByName(ctx, name)
+	data, err := w.WarehouseUseCase.GetByName(ctx, name)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
