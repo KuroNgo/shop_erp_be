@@ -12,7 +12,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param email path string true "Email"
-// @Router /api/v1/leave_requests/get/email [get]
+// @Router /api/v1/leave-requests/get/email [get]
 // @Security CookieAuth
 func (l *LeaveRequestController) GetByEmailEmployee(ctx *gin.Context) {
 	email := ctx.Query("email")

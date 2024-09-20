@@ -5,6 +5,14 @@ import (
 	"net/http"
 )
 
+// GetByStatus godoc
+// @Summary Get Sales Orders by Status
+// @Description Retrieve all sales orders associated with a specific status
+// @Tags SalesOrders
+// @Accept json
+// @Produce json
+// @Param status query string true "Sales Order Status"
+// @Router /api/v1/sales-orders/get/status [get]
 func (s *SalesOrderController) GetByStatus(ctx *gin.Context) {
 	status := ctx.Query("status")
 

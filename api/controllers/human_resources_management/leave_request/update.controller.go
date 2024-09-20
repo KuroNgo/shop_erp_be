@@ -13,7 +13,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param LeaveRequest body leave_request_domain.Input true "Leave Request data"
-// @Router /api/v1/leave_requests/update [put]
+// @Router /api/v1/leave-requests/update [put]
 // @Security CookieAuth
 func (l *LeaveRequestController) UpdateOne(ctx *gin.Context) {
 	var input leaverequestdomain.Input

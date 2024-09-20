@@ -12,9 +12,9 @@ import (
 // @Accept json
 // @Produce json
 // @Param purchaseOrder_id path string true "Purchase Order ID"
-// @Router /api/v1/purchase_order_details/get/by-order/{purchaseOrder_id} [get]
+// @Router /api/v1/purchase-order-details/get/purchase-order-id [get]
 func (p *PurchaseOrderDetailController) GetByIPurchaseOrderD(ctx *gin.Context) {
-	purchaseOrderId := ctx.Query("purchaseOrder_id")
+	purchaseOrderId := ctx.Query("purchase-order-id")
 
 	data, err := p.PurchaseOrderDetailUseCase.GetByPurchaseOrderID(ctx, purchaseOrderId)
 	if err != nil {

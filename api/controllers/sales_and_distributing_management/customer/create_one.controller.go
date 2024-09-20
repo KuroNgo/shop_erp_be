@@ -13,7 +13,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param customer body customer_domain.Input true "Customer data"
-// @Router /customers/create [post]
+// @Router /api/v1/customers/create [post]
 func (c *CustomerController) CreateOne(ctx *gin.Context) {
 	var customer customerdomain.Input
 	if err := ctx.ShouldBindJSON(&customer); err != nil {

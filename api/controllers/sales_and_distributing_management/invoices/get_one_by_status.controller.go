@@ -12,7 +12,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param status path string true "Invoice Status"
-// @Router /invoices/status/{status} [get]
+// @Router /api/v1/invoices/status [get]
 func (i *InvoiceController) GetByStatus(ctx *gin.Context) {
 	status := ctx.Query("status")
 

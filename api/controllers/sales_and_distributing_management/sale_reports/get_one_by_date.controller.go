@@ -5,6 +5,14 @@ import (
 	"net/http"
 )
 
+// GetByDate godoc
+// @Summary Get Sales Reports by Date
+// @Description Retrieve all sales reports associated with a specific report date
+// @Tags SalesReports
+// @Accept json
+// @Produce json
+// @Param report_date query string true "Report Date"
+// @Router /api/v1/sales-reports/get/report_date [get]
 func (s *SalesReportController) GetByDate(ctx *gin.Context) {
 	reportDate := ctx.Query("report_date")
 

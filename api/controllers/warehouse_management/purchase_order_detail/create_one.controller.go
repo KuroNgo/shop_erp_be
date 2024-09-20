@@ -13,7 +13,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param purchase_order_detail body purchase_order_detail_domain.Input true "Purchase Order Detail Input"
-// @Router /api/v1/purchase_order_details/create [post]
+// @Router /api/v1/purchase-order-details/create [post]
 func (p *PurchaseOrderDetailController) CreateOne(ctx *gin.Context) {
 	var input purchaseorderdetaildomain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {

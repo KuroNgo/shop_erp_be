@@ -21,7 +21,7 @@ func LeaveRequestRouter(env *bootstrap.Database, timeout time.Duration, db *mong
 		Database:            env,
 	}
 
-	router := group.Group("/leave_requests")
+	router := group.Group("/leave-requests")
 	router.GET("/get/_id", leaveRequest.GetByID)
 	router.GET("/get/email", leaveRequest.GetByEmailEmployee)
 	router.GET("/get/all", leaveRequest.GetAll)

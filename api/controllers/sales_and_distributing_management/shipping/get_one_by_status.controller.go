@@ -5,6 +5,14 @@ import (
 	"net/http"
 )
 
+// GetByStatus godoc
+// @Summary Get Shipping Entries by Status
+// @Description Retrieve shipping entries associated with a specific status
+// @Tags Shipping
+// @Accept json
+// @Produce json
+// @Param status query string true "Shipping Status"
+// @Router /api/v1/shipping/get/status [get]
 func (s *ShippingController) GetByStatus(ctx *gin.Context) {
 	status := ctx.Query("status")
 

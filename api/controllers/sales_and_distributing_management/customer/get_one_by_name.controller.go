@@ -12,7 +12,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param name path string true "Customer Name"
-// @Router /customers/get/name/{name} [get]
+// @Router /api/v1/customers/get/name [get]
 func (c *CustomerController) GetOneByName(ctx *gin.Context) {
 	name := ctx.Query("name")
 

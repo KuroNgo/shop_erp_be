@@ -6,6 +6,15 @@ import (
 	order_details_domain "shop_erp_mono/domain/sales_and_distribution_management/order_details"
 )
 
+// UpdateOne godoc
+// @Summary Update an Order Detail
+// @Description This API updates an existing Order Detail based on the provided ID and input data
+// @Tags OrderDetails
+// @Accept json
+// @Produce json
+// @Param _id query string true "Order Detail ID"
+// @Param orderDetail body order_details_domain.Input true "Updated Order Detail information"
+// @Router /api/v1/order-details/update [put]
 func (o *OrderDetailController) UpdateOne(ctx *gin.Context) {
 	var input order_details_domain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {

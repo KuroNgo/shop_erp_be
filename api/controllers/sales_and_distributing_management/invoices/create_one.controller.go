@@ -13,7 +13,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param invoice body invoice_domain.Input true "Invoice data"
-// @Router /invoices/create [post]
+// @Router /api/v1/invoices/create [post]
 func (i *InvoiceController) CreateOne(ctx *gin.Context) {
 	var invoice invoicesdomain.Input
 	if err := ctx.ShouldBindJSON(&invoice); err != nil {

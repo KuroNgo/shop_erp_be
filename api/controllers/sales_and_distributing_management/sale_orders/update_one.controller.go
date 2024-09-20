@@ -6,6 +6,15 @@ import (
 	sale_orders_domain "shop_erp_mono/domain/sales_and_distribution_management/sale_orders"
 )
 
+// UpdateOne godoc
+// @Summary Update a Sales Order
+// @Description This API updates an existing sales order based on the provided ID and input data
+// @Tags SalesOrders
+// @Accept json
+// @Produce json
+// @Param _id query string true "Sales Order ID"
+// @Param salesOrder body sale_orders_domain.Input true "Updated Sales Order information"
+// @Router /api/v1/sales-orders/update [put]
 func (s *SalesOrderController) UpdateOne(ctx *gin.Context) {
 	var input sale_orders_domain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {

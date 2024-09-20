@@ -13,8 +13,8 @@ import (
 // @Accept json
 // @Produce json
 // @Param _id path string true "Customer ID"
-// @Param customer body customerdomain.Input true "Customer data"
-// @Router /customers/update/{_id} [put]
+// @Param customer body customer_domain.Input true "Customer data"
+// @Router /api/v1/customers/update [put]
 func (c *CustomerController) UpdateOne(ctx *gin.Context) {
 	var customer customerdomain.Input
 	if err := ctx.ShouldBindJSON(&customer); err != nil {

@@ -13,7 +13,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param page query int false "Page number" default(1)
-// @Router /api/v1/purchase_order_details/pagination [get]
+// @Router /api/v1/purchase-order-details/pagination [get]
 func (p *PurchaseOrderDetailController) GetAllPagination(ctx *gin.Context) {
 	page := ctx.DefaultQuery("page", "1")
 	var paginate repository.Pagination

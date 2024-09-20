@@ -12,7 +12,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param name path string true "Invoice Name"
-// @Router /invoices/get/name/{name} [get]
+// @Router /api/v1/invoices/get/name [get]
 func (i *InvoiceController) GetByName(ctx *gin.Context) {
 	name := ctx.Query("name")
 

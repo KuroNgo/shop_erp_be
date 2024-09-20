@@ -12,7 +12,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param email path string true "Performance Review  ID"
-// @Router /api/v1/performance_reviews/get/email [get]
+// @Router /api/v1/performance-reviews/get/email [get]
 // @Security CookieAuth
 func (p *PerformanceReviewController) GetByEmailEmployee(ctx *gin.Context) {
 	email := ctx.Query("email")

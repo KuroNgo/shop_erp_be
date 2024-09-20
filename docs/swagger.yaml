@@ -186,6 +186,34 @@ definitions:
         example: Approved
         type: string
     type: object
+  order_details_domain.Input:
+    properties:
+      order_id:
+        type: string
+      product_id:
+        type: string
+      quantity:
+        type: integer
+      total_price:
+        type: number
+      unit_price:
+        type: number
+    type: object
+  payments_domain.Input:
+    properties:
+      amount_paid:
+        type: number
+      order_id:
+        type: string
+      payment_date:
+        type: string
+      payment_method:
+        description: 'Example: "Credit Card", "Bank Transfer", "Cash on Delivery"'
+        type: string
+      status:
+        description: 'Example: "Paid", "Unpaid"'
+        type: string
+    type: object
   performance_review_domain.Input1:
     properties:
       comments:
@@ -280,6 +308,59 @@ definitions:
       unit_currency:
         type: string
       updated_at:
+        type: string
+    type: object
+  sale_orders_domain.Input:
+    properties:
+      createdAt:
+        type: string
+      customerID:
+        type: string
+      orderDate:
+        type: string
+      orderNumber:
+        type: string
+      shippingAddress:
+        type: string
+      status:
+        type: string
+      totalAmount:
+        type: number
+      updatedAt:
+        type: string
+    type: object
+  sale_reports_domain.Input:
+    properties:
+      product:
+        type: string
+      product_name:
+        type: string
+      quantity_sold:
+        type: integer
+      report_date:
+        type: string
+      total_revenue:
+        type: number
+      total_sales:
+        type: number
+    type: object
+  shipping_domain.Input:
+    properties:
+      actual_delivery:
+        type: string
+      estimated_delivery:
+        type: string
+      order_id:
+        type: string
+      shipping_date:
+        type: string
+      shipping_method:
+        description: 'Example: "Standard", "Express", "International"'
+        type: string
+      status:
+        description: 'Example: "In Transit", "Delivered", "Returned"'
+        type: string
+      tracking_number:
         type: string
     type: object
   stock_adjustment_domain.Input:
@@ -1045,6 +1126,109 @@ paths:
       summary: Update Contract Information
       tags:
       - Contract
+  /api/v1/customers/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new customer in the system
+      parameters:
+      - description: Customer data
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/customer_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      summary: Create a new customer
+      tags:
+      - Customers
+  /api/v1/customers/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a customer from the system using their ID
+      parameters:
+      - description: Customer ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete a customer by ID
+      tags:
+      - Customers
+  /api/v1/customers/get/_id:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a customer from the system using their ID
+      parameters:
+      - description: Customer ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get a customer by ID
+      tags:
+      - Customers
+  /api/v1/customers/get/all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all customers from the system
+      produces:
+      - application/json
+      responses: {}
+      summary: Get all customers
+      tags:
+      - Customers
+  /api/v1/customers/get/name:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a customer from the system using their name
+      parameters:
+      - description: Customer Name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get a customer by name
+      tags:
+      - Customers
+  /api/v1/customers/update:
+    put:
+      consumes:
+      - application/json
+      description: Update a customer's information in the system using their ID
+      parameters:
+      - description: Customer ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      - description: Customer data
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/customer_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      summary: Update a customer by ID
+      tags:
+      - Customers
   /api/v1/departments/create:
     post:
       consumes:
@@ -1402,7 +1586,116 @@ paths:
       summary: Get inventory by warehouse ID
       tags:
       - Inventory
-  /api/v1/leave_requests/create:
+  /api/v1/invoices/create:
+    post:
+      consumes:
+      - application/json
+      description: Create a new invoice in the system
+      parameters:
+      - description: Invoice data
+        in: body
+        name: invoice
+        required: true
+        schema:
+          $ref: '#/definitions/invoice_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      summary: Create a new invoice
+      tags:
+      - Invoices
+  /api/v1/invoices/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an invoice from the system using its ID
+      parameters:
+      - description: Invoice ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete an invoice by ID
+      tags:
+      - Invoices
+  /api/v1/invoices/get/_id:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve an invoice from the system using its ID
+      parameters:
+      - description: Invoice ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get an invoice by ID
+      tags:
+      - Invoices
+  /api/v1/invoices/get/name:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve an invoice from the system using its name
+      parameters:
+      - description: Invoice Name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get an invoice by name
+      tags:
+      - Invoices
+  /api/v1/invoices/status:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve invoices from the system using their status
+      parameters:
+      - description: Invoice Status
+        in: path
+        name: status
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get invoices by status
+      tags:
+      - Invoices
+  /api/v1/invoices/update:
+    put:
+      consumes:
+      - application/json
+      description: Update an invoice's information in the system using its ID
+      parameters:
+      - description: Invoice ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      - description: Invoice data
+        in: body
+        name: invoice
+        required: true
+        schema:
+          $ref: '#/definitions/invoice_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      summary: Update an invoice by ID
+      tags:
+      - Invoices
+  /api/v1/leave-requests/create:
     post:
       consumes:
       - application/json
@@ -1422,7 +1715,7 @@ paths:
       summary: Create Leave Request Information
       tags:
       - Leave Request
-  /api/v1/leave_requests/delete:
+  /api/v1/leave-requests/delete:
     delete:
       consumes:
       - application/json
@@ -1441,7 +1734,7 @@ paths:
       summary: Delete Leave Request Information
       tags:
       - Leave Request
-  /api/v1/leave_requests/get/_id:
+  /api/v1/leave-requests/get/_id:
     get:
       consumes:
       - application/json
@@ -1460,7 +1753,7 @@ paths:
       summary: Get one by id Leave Request Information
       tags:
       - Leave Request
-  /api/v1/leave_requests/get/all:
+  /api/v1/leave-requests/get/all:
     get:
       consumes:
       - application/json
@@ -1473,7 +1766,7 @@ paths:
       summary: Get all Leave Request Information
       tags:
       - Leave Request
-  /api/v1/leave_requests/get/email:
+  /api/v1/leave-requests/get/email:
     get:
       consumes:
       - application/json
@@ -1492,7 +1785,7 @@ paths:
       summary: Get one by email Leave Request Information
       tags:
       - Leave Request
-  /api/v1/leave_requests/update:
+  /api/v1/leave-requests/update:
     put:
       consumes:
       - application/json
@@ -1512,7 +1805,238 @@ paths:
       summary: Update Leave Request Information
       tags:
       - Leave Request
-  /api/v1/performance_reviews/create:
+  /api/v1/order-details/create:
+    post:
+      consumes:
+      - application/json
+      description: This API creates a new Order Detail from the input data
+      parameters:
+      - description: Order Detail information
+        in: body
+        name: orderDetail
+        required: true
+        schema:
+          $ref: '#/definitions/order_details_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      summary: Create a new Order Detail
+      tags:
+      - OrderDetails
+  /api/v1/order-details/delete:
+    delete:
+      consumes:
+      - application/json
+      description: This API deletes an Order Detail based on the provided ID
+      parameters:
+      - description: Order Detail ID
+        in: query
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete an Order Detail
+      tags:
+      - OrderDetails
+  /api/v1/order-details/get/_id:
+    get:
+      consumes:
+      - application/json
+      description: This API retrieves an Order Detail based on the provided ID
+      parameters:
+      - description: Order Detail ID
+        in: query
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get an Order Detail by ID
+      tags:
+      - OrderDetails
+  /api/v1/order-details/get/order_id:
+    get:
+      consumes:
+      - application/json
+      description: This API retrieves all Order Details associated with a specific
+        Order ID
+      parameters:
+      - description: Order ID
+        in: query
+        name: order_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get Order Details by Order ID
+      tags:
+      - OrderDetails
+  /api/v1/order-details/get/product_id:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all order details associated with a given Product ID
+      parameters:
+      - description: Product ID
+        in: query
+        name: product_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'status: success, data: Retrieved Order Details'
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: 'status: error, message: Retrieval error'
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get Order Details by Product ID
+      tags:
+      - OrderDetails
+  /api/v1/order-details/update:
+    put:
+      consumes:
+      - application/json
+      description: This API updates an existing Order Detail based on the provided
+        ID and input data
+      parameters:
+      - description: Order Detail ID
+        in: query
+        name: _id
+        required: true
+        type: string
+      - description: Updated Order Detail information
+        in: body
+        name: orderDetail
+        required: true
+        schema:
+          $ref: '#/definitions/order_details_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      summary: Update an Order Detail
+      tags:
+      - OrderDetails
+  /api/v1/payments/create:
+    post:
+      consumes:
+      - application/json
+      description: This API creates a new payment from the input data
+      parameters:
+      - description: Payment information
+        in: body
+        name: payment
+        required: true
+        schema:
+          $ref: '#/definitions/payments_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      summary: Create a new Payment
+      tags:
+      - Payments
+  /api/v1/payments/delete:
+    delete:
+      consumes:
+      - application/json
+      description: This API deletes a payment based on the provided ID
+      parameters:
+      - description: Payment ID
+        in: query
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete a Payment
+      tags:
+      - Payments
+  /api/v1/payments/get/_id:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a payment based on the provided ID
+      parameters:
+      - description: Payment ID
+        in: query
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get a Payment by ID
+      tags:
+      - Payments
+  /api/v1/payments/get/order_id:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all payments associated with a specific Order ID
+      parameters:
+      - description: Order ID
+        in: query
+        name: order_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get Payments by Order ID
+      tags:
+      - Payments
+  /api/v1/payments/get/status:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all payments associated with a specific status
+      parameters:
+      - description: Payment Status
+        in: query
+        name: status
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get Payments by Status
+      tags:
+      - Payments
+  /api/v1/payments/update:
+    put:
+      consumes:
+      - application/json
+      description: This API updates an existing payment based on the provided ID and
+        input data
+      parameters:
+      - description: Payment ID
+        in: query
+        name: _id
+        required: true
+        type: string
+      - description: Updated Payment information
+        in: body
+        name: payment
+        required: true
+        schema:
+          $ref: '#/definitions/payments_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      summary: Update a Payment
+      tags:
+      - Payments
+  /api/v1/performance-reviews/create:
     post:
       consumes:
       - application/json
@@ -1532,7 +2056,7 @@ paths:
       summary: Create Performance Review Information
       tags:
       - Performance Review
-  /api/v1/performance_reviews/delete:
+  /api/v1/performance-reviews/delete:
     delete:
       consumes:
       - application/json
@@ -1551,7 +2075,7 @@ paths:
       summary: Delete Performance Review Information
       tags:
       - Performance Review
-  /api/v1/performance_reviews/get/_id:
+  /api/v1/performance-reviews/get/_id:
     get:
       consumes:
       - application/json
@@ -1570,7 +2094,7 @@ paths:
       summary: Get Performance Review Information
       tags:
       - Performance Review
-  /api/v1/performance_reviews/get/all:
+  /api/v1/performance-reviews/get/all:
     get:
       consumes:
       - application/json
@@ -1583,7 +2107,7 @@ paths:
       summary: Get all Performance Review Information
       tags:
       - Performance Review
-  /api/v1/performance_reviews/get/email:
+  /api/v1/performance-reviews/get/email:
     get:
       consumes:
       - application/json
@@ -1602,7 +2126,7 @@ paths:
       summary: Get Performance Review Information
       tags:
       - Performance Review
-  /api/v1/performance_reviews/update:
+  /api/v1/performance-reviews/update:
     put:
       consumes:
       - application/json
@@ -1737,42 +2261,7 @@ paths:
       summary: Update product
       tags:
       - Product
-  /api/v1/purchase-orders/get/{_id}:
-    get:
-      consumes:
-      - application/json
-      description: Retrieve a purchase order using its ID
-      parameters:
-      - description: Purchase Order ID
-        in: path
-        name: _id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses: {}
-      summary: Get a purchase order by ID
-      tags:
-      - PurchaseOrder
-  /api/v1/purchase-orders/get/{supplier_id}:
-    get:
-      consumes:
-      - application/json
-      description: Retrieve a list of purchase orders associated with a specific supplier
-        ID
-      parameters:
-      - description: Supplier ID
-        in: path
-        name: supplier_id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses: {}
-      summary: Get purchase orders by supplier ID
-      tags:
-      - PurchaseOrder
-  /api/v1/purchase_order_details/create:
+  /api/v1/purchase-order-details/create:
     post:
       consumes:
       - application/json
@@ -1790,7 +2279,7 @@ paths:
       summary: Create a new purchase order detail
       tags:
       - PurchaseOrderDetail
-  /api/v1/purchase_order_details/delete/{_id}:
+  /api/v1/purchase-order-details/delete/{_id}:
     delete:
       consumes:
       - application/json
@@ -1807,7 +2296,7 @@ paths:
       summary: Delete a purchase order detail by ID
       tags:
       - PurchaseOrderDetail
-  /api/v1/purchase_order_details/get/_id/{_id}:
+  /api/v1/purchase-order-details/get/_id:
     get:
       consumes:
       - application/json
@@ -1824,7 +2313,7 @@ paths:
       summary: Get a purchase order detail by ID
       tags:
       - PurchaseOrderDetail
-  /api/v1/purchase_order_details/get/all:
+  /api/v1/purchase-order-details/get/all:
     get:
       consumes:
       - application/json
@@ -1835,7 +2324,7 @@ paths:
       summary: Get all purchase order details
       tags:
       - PurchaseOrderDetail
-  /api/v1/purchase_order_details/get/by-order/{purchaseOrder_id}:
+  /api/v1/purchase-order-details/get/purchase-order-id:
     get:
       consumes:
       - application/json
@@ -1852,7 +2341,7 @@ paths:
       summary: Get purchase order details by Purchase Order ID
       tags:
       - PurchaseOrderDetail
-  /api/v1/purchase_order_details/pagination:
+  /api/v1/purchase-order-details/pagination:
     get:
       consumes:
       - application/json
@@ -1870,7 +2359,7 @@ paths:
       summary: Get all purchase order details with pagination
       tags:
       - PurchaseOrderDetail
-  /api/v1/purchase_order_details/update/{_id}:
+  /api/v1/purchase-order-details/update:
     put:
       consumes:
       - application/json
@@ -1893,6 +2382,64 @@ paths:
       summary: Update a purchase order detail
       tags:
       - PurchaseOrderDetail
+  /api/v1/purchase-orders/get/_id:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a purchase order using its ID
+      parameters:
+      - description: Purchase Order ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get a purchase order by ID
+      tags:
+      - PurchaseOrder
+  /api/v1/purchase-orders/get/supplier_id:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of purchase orders associated with a specific supplier
+        ID
+      parameters:
+      - description: Supplier ID
+        in: path
+        name: supplier_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get purchase orders by supplier ID
+      tags:
+      - PurchaseOrder
+  /api/v1/purchase-orders/update:
+    put:
+      consumes:
+      - application/json
+      description: Update the details of a purchase order using its ID
+      parameters:
+      - description: Purchase Order ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      - description: Purchase Order Input
+        in: body
+        name: purchase_order
+        required: true
+        schema:
+          $ref: '#/definitions/purchase_order_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      summary: Update a purchase order by ID
+      tags:
+      - PurchaseOrder
   /api/v1/purchase_orders/create:
     post:
       consumes:
@@ -1911,7 +2458,7 @@ paths:
       summary: Create a new purchase order
       tags:
       - PurchaseOrder
-  /api/v1/purchase_orders/delete{_id}:
+  /api/v1/purchase_orders/delete:
     delete:
       consumes:
       - application/json
@@ -1943,29 +2490,6 @@ paths:
       - application/json
       responses: {}
       summary: Get all purchase orders with pagination
-      tags:
-      - PurchaseOrder
-  /api/v1/purchase_orders/update/{_id}:
-    put:
-      consumes:
-      - application/json
-      description: Update the details of a purchase order using its ID
-      parameters:
-      - description: Purchase Order ID
-        in: path
-        name: _id
-        required: true
-        type: string
-      - description: Purchase Order Input
-        in: body
-        name: purchase_order
-        required: true
-        schema:
-          $ref: '#/definitions/purchase_order_domain.Input'
-      produces:
-      - application/json
-      responses: {}
-      summary: Update a purchase order by ID
       tags:
       - PurchaseOrder
   /api/v1/roles/create:
@@ -2186,6 +2710,361 @@ paths:
       summary: Update Salary Information
       tags:
       - Salary
+  /api/v1/sales-orders/create:
+    post:
+      consumes:
+      - application/json
+      description: This API creates a new sales order from the input data
+      parameters:
+      - description: Sales Order information
+        in: body
+        name: salesOrder
+        required: true
+        schema:
+          $ref: '#/definitions/sale_orders_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      summary: Create a new Sales Order
+      tags:
+      - SalesOrders
+  /api/v1/sales-orders/delete:
+    delete:
+      consumes:
+      - application/json
+      description: This API deletes a sales order based on the provided ID
+      parameters:
+      - description: Sales Order ID
+        in: query
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'status: success'
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: 'status: error, message: Deletion error'
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Delete a Sales Order
+      tags:
+      - SalesOrders
+  /api/v1/sales-orders/get/_id:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a sales order based on the provided ID
+      parameters:
+      - description: Sales Order ID
+        in: query
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get a Sales Order by ID
+      tags:
+      - SalesOrders
+  /api/v1/sales-orders/get/customer_id:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all sales orders associated with a specific Customer ID
+      parameters:
+      - description: Customer ID
+        in: query
+        name: customer_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get Sales Orders by Customer ID
+      tags:
+      - SalesOrders
+  /api/v1/sales-orders/get/status:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all sales orders associated with a specific status
+      parameters:
+      - description: Sales Order Status
+        in: query
+        name: status
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get Sales Orders by Status
+      tags:
+      - SalesOrders
+  /api/v1/sales-orders/update:
+    put:
+      consumes:
+      - application/json
+      description: This API updates an existing sales order based on the provided
+        ID and input data
+      parameters:
+      - description: Sales Order ID
+        in: query
+        name: _id
+        required: true
+        type: string
+      - description: Updated Sales Order information
+        in: body
+        name: salesOrder
+        required: true
+        schema:
+          $ref: '#/definitions/sale_orders_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      summary: Update a Sales Order
+      tags:
+      - SalesOrders
+  /api/v1/sales-reports/_id:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a sales report based on the provided ID
+      parameters:
+      - description: Sales Report ID
+        in: query
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get a Sales Report by ID
+      tags:
+      - SalesReports
+  /api/v1/sales-reports/create:
+    post:
+      consumes:
+      - application/json
+      description: This API creates a new sales report from the input data
+      parameters:
+      - description: Sales Report information
+        in: body
+        name: salesReport
+        required: true
+        schema:
+          $ref: '#/definitions/sale_reports_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      summary: Create a new Sales Report
+      tags:
+      - SalesReports
+  /api/v1/sales-reports/delete:
+    delete:
+      consumes:
+      - application/json
+      description: This API deletes a sales report based on the provided ID
+      parameters:
+      - description: Sales Report ID
+        in: query
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete a Sales Report
+      tags:
+      - SalesReports
+  /api/v1/sales-reports/get/report_date:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all sales reports associated with a specific report date
+      parameters:
+      - description: Report Date
+        in: query
+        name: report_date
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get Sales Reports by Date
+      tags:
+      - SalesReports
+  /api/v1/sales-reports/get/summary:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a summary of sales reports for a specified date range
+      parameters:
+      - description: Start Date
+        in: query
+        name: start_date
+        required: true
+        type: string
+      - description: End Date
+        in: query
+        name: end_date
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'status: success, data: Retrieved Sales Report Summary'
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: 'status: error, message: Retrieval error'
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get Sales Report Summary by Date Range
+      tags:
+      - SalesReports
+  /api/v1/sales-reports/update:
+    put:
+      consumes:
+      - application/json
+      description: This API updates an existing sales report based on the provided
+        ID and input data
+      parameters:
+      - description: Sales Report ID
+        in: query
+        name: _id
+        required: true
+        type: string
+      - description: Updated Sales Report information
+        in: body
+        name: salesReport
+        required: true
+        schema:
+          $ref: '#/definitions/sale_reports_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      summary: Update a Sales Report
+      tags:
+      - SalesReports
+  /api/v1/shipping/_id:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a shipping entry based on the provided ID
+      parameters:
+      - description: Shipping Entry ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get a Shipping Entry by ID
+      tags:
+      - Shipping
+  /api/v1/shipping/create:
+    post:
+      consumes:
+      - application/json
+      description: This API creates a new shipping entry from the input data
+      parameters:
+      - description: Shipping information
+        in: body
+        name: shipping
+        required: true
+        schema:
+          $ref: '#/definitions/shipping_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      summary: Create a new Shipping Entry
+      tags:
+      - Shipping
+  /api/v1/shipping/delete:
+    delete:
+      consumes:
+      - application/json
+      description: This API deletes a shipping entry based on the provided ID
+      parameters:
+      - description: Shipping Entry ID
+        in: query
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete a Shipping Entry
+      tags:
+      - Shipping
+  /api/v1/shipping/get/order_id:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve shipping entries associated with a specific order ID
+      parameters:
+      - description: Order ID
+        in: query
+        name: order_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get Shipping Entries by Order ID
+      tags:
+      - Shipping
+  /api/v1/shipping/get/status:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve shipping entries associated with a specific status
+      parameters:
+      - description: Shipping Status
+        in: query
+        name: status
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get Shipping Entries by Status
+      tags:
+      - Shipping
+  /api/v1/shipping/update:
+    put:
+      consumes:
+      - application/json
+      description: Update an existing shipping entry based on the provided ID and
+        input data
+      parameters:
+      - description: Shipping Entry ID
+        in: query
+        name: _id
+        required: true
+        type: string
+      - description: Updated Shipping information
+        in: body
+        name: shipping
+        required: true
+        schema:
+          $ref: '#/definitions/shipping_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      summary: Update a Shipping Entry
+      tags:
+      - Shipping
   /api/v1/suppliers/create:
     post:
       consumes:
@@ -2536,7 +3415,7 @@ paths:
       summary: Verify code for password change
       tags:
       - User
-  /api/v2/performance_reviews/create:
+  /api/v2/performance-reviews/create:
     post:
       consumes:
       - application/json
@@ -2556,7 +3435,7 @@ paths:
       summary: Create Performance Review Information
       tags:
       - Performance Review
-  /api/v2/performance_reviews/update:
+  /api/v2/performance-reviews/update:
     put:
       consumes:
       - application/json
@@ -2581,218 +3460,6 @@ paths:
       summary: Update Performance Review Information
       tags:
       - Performance Review
-  /customers/create:
-    post:
-      consumes:
-      - application/json
-      description: Create a new customer in the system
-      parameters:
-      - description: Customer data
-        in: body
-        name: customer
-        required: true
-        schema:
-          $ref: '#/definitions/customer_domain.Input'
-      produces:
-      - application/json
-      responses: {}
-      summary: Create a new customer
-      tags:
-      - Customers
-  /customers/delete/{_id}:
-    delete:
-      consumes:
-      - application/json
-      description: Delete a customer from the system using their ID
-      parameters:
-      - description: Customer ID
-        in: path
-        name: _id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses: {}
-      summary: Delete a customer by ID
-      tags:
-      - Customers
-  /customers/get/{_id}:
-    get:
-      consumes:
-      - application/json
-      description: Retrieve a customer from the system using their ID
-      parameters:
-      - description: Customer ID
-        in: path
-        name: _id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses: {}
-      summary: Get a customer by ID
-      tags:
-      - Customers
-  /customers/get/all:
-    get:
-      consumes:
-      - application/json
-      description: Retrieve all customers from the system
-      produces:
-      - application/json
-      responses: {}
-      summary: Get all customers
-      tags:
-      - Customers
-  /customers/get/name/{name}:
-    get:
-      consumes:
-      - application/json
-      description: Retrieve a customer from the system using their name
-      parameters:
-      - description: Customer Name
-        in: path
-        name: name
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses: {}
-      summary: Get a customer by name
-      tags:
-      - Customers
-  /customers/update/{_id}:
-    put:
-      consumes:
-      - application/json
-      description: Update a customer's information in the system using their ID
-      parameters:
-      - description: Customer ID
-        in: path
-        name: _id
-        required: true
-        type: string
-      - description: Customer data
-        in: body
-        name: customer
-        required: true
-        schema:
-          $ref: '#/definitions/customer_domain.Input'
-      produces:
-      - application/json
-      responses: {}
-      summary: Update a customer by ID
-      tags:
-      - Customers
-  /invoices/{_id}:
-    delete:
-      consumes:
-      - application/json
-      description: Delete an invoice from the system using its ID
-      parameters:
-      - description: Invoice ID
-        in: path
-        name: _id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses: {}
-      summary: Delete an invoice by ID
-      tags:
-      - Invoices
-  /invoices/create:
-    post:
-      consumes:
-      - application/json
-      description: Create a new invoice in the system
-      parameters:
-      - description: Invoice data
-        in: body
-        name: invoice
-        required: true
-        schema:
-          $ref: '#/definitions/invoice_domain.Input'
-      produces:
-      - application/json
-      responses: {}
-      summary: Create a new invoice
-      tags:
-      - Invoices
-  /invoices/get/{_id}:
-    get:
-      consumes:
-      - application/json
-      description: Retrieve an invoice from the system using its ID
-      parameters:
-      - description: Invoice ID
-        in: path
-        name: _id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses: {}
-      summary: Get an invoice by ID
-      tags:
-      - Invoices
-  /invoices/get/name/{name}:
-    get:
-      consumes:
-      - application/json
-      description: Retrieve an invoice from the system using its name
-      parameters:
-      - description: Invoice Name
-        in: path
-        name: name
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses: {}
-      summary: Get an invoice by name
-      tags:
-      - Invoices
-  /invoices/status/{status}:
-    get:
-      consumes:
-      - application/json
-      description: Retrieve invoices from the system using their status
-      parameters:
-      - description: Invoice Status
-        in: path
-        name: status
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses: {}
-      summary: Get invoices by status
-      tags:
-      - Invoices
-  /invoices/update/{_id}:
-    put:
-      consumes:
-      - application/json
-      description: Update an invoice's information in the system using its ID
-      parameters:
-      - description: Invoice ID
-        in: path
-        name: _id
-        required: true
-        type: string
-      - description: Invoice data
-        in: body
-        name: invoice
-        required: true
-        schema:
-          $ref: '#/definitions/invoice_domain.Input'
-      produces:
-      - application/json
-      responses: {}
-      summary: Update an invoice by ID
-      tags:
-      - Invoices
   /stock-adjustments/create:
     post:
       consumes:
@@ -2903,6 +3570,32 @@ paths:
       - StockAdjustment
 swagger: "2.0"
 tags:
+- description: Stores information about financial accounts like bank accounts or cash
+    wallets, tracking balance and account type.
+  name: Account
+- description: Manages financial transactions for accounts, tracking income and expenses,
+    amounts, and transaction dates.
+  name: Budget
+- description: Manages financial transactions for accounts, tracking income and expenses,
+    amounts, and transaction dates.
+  name: Budget
+- description: Generates financial reports over a specified date range for analysis
+    and tracking.
+  name: FinancialReport
+- description: Tracks issued invoices, including amounts, due dates, and payment status.
+  name: Invoices
+- description: Records payments made towards invoices, linking them to accounts and
+    payment methods.
+  name: Payments
+- description: Defines tax types and rates applicable to invoices, transactions, or
+    other financial elements.
+  name: Taxes
+- description: Categorizes transactions into types like income or expenses for better
+    organization.
+  name: TransactionCategory
+- description: Manages financial transactions for accounts, tracking income and expenses,
+    amounts, and transaction dates.
+  name: Transaction
 - description: represents the attendance information of an employee.
   name: Attendance
 - description: represents the benefits an employee receives.
@@ -2923,10 +3616,60 @@ tags:
   name: Salary
 - description: represents a user in the system.
   name: User
-- description: Stores information about financial accounts like bank accounts or cash
-    wallets, tracking balance and account type.
-  name: Account
+- description: Stores information about customers, including their contact details
+    (name, email, phone, address) and basic information for future reference and order
+    management.
+  name: Customer
+- description: Contains details of the products available for sale, such as product
+    name, description, price, and stock quantity. This helps track inventory and product
+    offerings.
+  name: Invoices
+- description: Contains information about individual items in each order. It tracks
+    the products, quantities, and unit prices associated with a specific order to
+    provide more detailed order history.
+  name: OrderDetails
+- name: Payments
+- description: Tracks customer orders, including customer details, shipping information,
+    total amount, and the status of the order (processing, shipped, or canceled).
+  name: SaleOrders
 - description: Manages financial transactions for accounts, tracking income and expenses,
     amounts, and transaction dates.
-  name: Budget
-- name: Product
+  name: SaleReport
+- description: Records shipment details, including the shipping method, dates, tracking
+    information, and the status of the delivery to monitor the progress of the shipping
+    process.
+  name: Shipping
+- description: Tracks the stock levels of products in different warehouses. It helps
+    monitor how much stock is available and where it is located.
+  name: Inventory
+- description: Contains details of products such as name, description, price, and
+    associated categories. It is central to managing what items are available for
+    sale and for inventory control.
+  name: Product
+- description: Organizes products into different categories for better product classification
+    and easier management. It allows for filtering and categorizing similar products.
+  name: ProductCategory
+- description: Manages purchase orders sent to suppliers. It includes order numbers,
+    supplier references, order dates, and status, ensuring that product orders are
+    properly tracked.
+  name: PurchaseOrder
+- description: Provides detailed information about the individual products in each
+    purchase order, including quantities and prices. It links the products ordered
+    from suppliers to their respective purchase orders.
+  name: PurchaseOrderDetail
+- description: Keeps records of stock adjustments, such as increases or decreases
+    in inventory due to reasons like damage, returns, or reallocation. This ensures
+    accurate stock levels are maintained.
+  name: StockAdjustment
+- description: Records the movements of products in and out of warehouses, such as
+    when items are received (Nhập kho) or dispatched (Xuất kho). This helps track
+    changes in inventory levels.
+  name: StockMovement
+- description: Stores supplier information, including contact details. This table
+    is crucial for managing relationships with vendors and tracking where products
+    are sourced.
+  name: Supplier
+- description: This table stores information about different warehouses, including
+    their location, capacity, and basic details. It helps manage the distribution
+    and storage of products across different facilities.
+  name: Warehouse

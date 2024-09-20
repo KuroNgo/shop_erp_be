@@ -5,6 +5,14 @@ import (
 	"net/http"
 )
 
+// GetByOrderID godoc
+// @Summary Get Order Details by Order ID
+// @Description This API retrieves all Order Details associated with a specific Order ID
+// @Tags OrderDetails
+// @Accept json
+// @Produce json
+// @Param order_id query string true "Order ID"
+// @Router /api/v1/order-details/get/order_id [get]
 func (o *OrderDetailController) GetByOrderID(ctx *gin.Context) {
 	orderId := ctx.Query("order_id")
 

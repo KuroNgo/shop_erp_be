@@ -13,7 +13,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param PerformanceReview body performance_review_domain.Input2 true "Performance Review data"
-// @Router /api/v2/performance_reviews/create [post]
+// @Router /api/v2/performance-reviews/create [post]
 // @Security CookieAuth
 func (p *PerformanceReviewController) CreateOneWithIDEmployee(ctx *gin.Context) {
 	var input performancereviewdomain.Input2

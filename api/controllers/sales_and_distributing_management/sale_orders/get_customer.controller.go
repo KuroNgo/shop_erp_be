@@ -5,6 +5,14 @@ import (
 	"net/http"
 )
 
+// GetByCustomerID godoc
+// @Summary Get Sales Orders by Customer ID
+// @Description Retrieve all sales orders associated with a specific Customer ID
+// @Tags SalesOrders
+// @Accept json
+// @Produce json
+// @Param customer_id query string true "Customer ID"
+// @Router /api/v1/sales-orders/get/customer_id [get]
 func (s *SalesOrderController) GetByCustomerID(ctx *gin.Context) {
 	customerId := ctx.Query("customer_id")
 

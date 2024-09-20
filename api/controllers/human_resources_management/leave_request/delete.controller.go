@@ -12,7 +12,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param _id path string true "Leave Request ID"
-// @Router /api/v1/leave_requests/delete [delete]
+// @Router /api/v1/leave-requests/delete [delete]
 // @Security CookieAuth
 func (l *LeaveRequestController) DeleteOne(ctx *gin.Context) {
 	id := ctx.Query("_id")

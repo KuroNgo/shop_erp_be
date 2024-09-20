@@ -12,7 +12,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param _id path string true "Performance Review  ID"
-// @Router /api/v1/performance_reviews/delete [delete]
+// @Router /api/v1/performance-reviews/delete [delete]
 // @Security CookieAuth
 func (p *PerformanceReviewController) DeleteOne(ctx *gin.Context) {
 	id := ctx.Query("_id")

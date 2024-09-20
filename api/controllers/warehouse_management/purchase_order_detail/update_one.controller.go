@@ -14,7 +14,7 @@ import (
 // @Produce json
 // @Param _id path string true "Purchase Order Detail ID"
 // @Param input body purchase_order_detail_domain.Input true "Purchase Order Detail Input"
-// @Router /api/v1/purchase_order_details/update/{_id} [put]
+// @Router /api/v1/purchase-order-details/update [put]
 func (p *PurchaseOrderDetailController) UpdateOne(ctx *gin.Context) {
 	var input purchaseorderdetaildomain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {

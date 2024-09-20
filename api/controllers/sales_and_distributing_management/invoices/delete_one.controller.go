@@ -12,7 +12,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param _id path string true "Invoice ID"
-// @Router /invoices/{_id} [delete]
+// @Router /api/v1/invoices/delete [delete]
 func (i *InvoiceController) DeleteOne(ctx *gin.Context) {
 	_id := ctx.Query("_id")
 

@@ -12,7 +12,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param _id path string true "Invoice ID"
-// @Router /invoices/get/{_id} [get]
+// @Router /api/v1/invoices/get/_id [get]
 func (i *InvoiceController) GetByID(ctx *gin.Context) {
 	_id := ctx.Query("_id")
 

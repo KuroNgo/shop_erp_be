@@ -5,6 +5,16 @@ import (
 	"net/http"
 )
 
+// GetByProductID godoc
+// @Summary Get Order Details by Product ID
+// @Description Retrieve all order details associated with a given Product ID
+// @Tags OrderDetails
+// @Accept json
+// @Produce json
+// @Param product_id query string true "Product ID"
+// @Success 200 {object} map[string]interface{} "status: success, data: Retrieved Order Details"
+// @Failure 400 {object} map[string]interface{} "status: error, message: Retrieval error"
+// @Router /api/v1/order-details/get/product_id [get]
 func (o *OrderDetailController) GetByProductID(ctx *gin.Context) {
 	productId := ctx.Query("product_id")
 

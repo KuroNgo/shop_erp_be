@@ -12,7 +12,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param supplier_id path string true "Supplier ID"
-// @Router /api/v1/purchase-orders/get/{supplier_id} [get]
+// @Router /api/v1/purchase-orders/get/supplier_id [get]
 func (p *PurchaseOrderController) GetBySupplierID(ctx *gin.Context) {
 	supplierId := ctx.Query("supplier_id")
 

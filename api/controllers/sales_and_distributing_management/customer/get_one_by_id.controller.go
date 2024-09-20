@@ -12,7 +12,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param _id path string true "Customer ID"
-// @Router /customers/get/{_id} [get]
+// @Router /api/v1/customers/get/_id [get]
 func (c *CustomerController) GetOneByID(ctx *gin.Context) {
 	_id := ctx.Query("_id")
 

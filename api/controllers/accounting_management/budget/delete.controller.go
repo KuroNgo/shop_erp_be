@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// DeleteBudget delete the budget's information
+// DeleteOne delete the budget's information
 // @Summary Delete Budget Information
 // @Description Delete the budget's information
 // @Tags Budget

@@ -11,7 +11,7 @@ import (
 // @Tags Leave Request
 // @Accept json
 // @Produce json
-// @Router /api/v1/leave_requests/get/all [get]
+// @Router /api/v1/leave-requests/get/all [get]
 // @Security CookieAuth
 func (l *LeaveRequestController) GetAll(ctx *gin.Context) {
 	data, err := l.LeaveRequestUseCase.GetAll(ctx)

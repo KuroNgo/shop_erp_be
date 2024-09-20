@@ -6,6 +6,15 @@ import (
 	salereportsdomain "shop_erp_mono/domain/sales_and_distribution_management/sale_reports"
 )
 
+// UpdateOne godoc
+// @Summary Update a Sales Report
+// @Description This API updates an existing sales report based on the provided ID and input data
+// @Tags SalesReports
+// @Accept json
+// @Produce json
+// @Param _id query string true "Sales Report ID"
+// @Param salesReport body sale_reports_domain.Input true "Updated Sales Report information"
+// @Router /api/v1/sales-reports/update [put]
 func (s *SalesReportController) UpdateOne(ctx *gin.Context) {
 	var input salereportsdomain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {

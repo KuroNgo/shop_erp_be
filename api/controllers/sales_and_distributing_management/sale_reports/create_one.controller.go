@@ -6,6 +6,14 @@ import (
 	salereportsdomain "shop_erp_mono/domain/sales_and_distribution_management/sale_reports"
 )
 
+// CreateOne godoc
+// @Summary Create a new Sales Report
+// @Description This API creates a new sales report from the input data
+// @Tags SalesReports
+// @Accept json
+// @Produce json
+// @Param salesReport body sale_reports_domain.Input true "Sales Report information"
+// @Router /api/v1/sales-reports/create [post]
 func (s *SalesReportController) CreateOne(ctx *gin.Context) {
 	var input salereportsdomain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {

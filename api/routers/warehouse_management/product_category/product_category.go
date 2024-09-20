@@ -21,7 +21,7 @@ func ProductCategoryRouter(env *bootstrap.Database, timeout time.Duration, db *m
 		Database:        env,
 	}
 
-	router := group.Group("/product_categories")
+	router := group.Group("/product-categories")
 	router.GET("/get/_id", category.GetByIDCategories)
 	router.GET("/get/name", category.GetByNameCategories)
 	router.GET("/get/all", category.GetAllCategories)

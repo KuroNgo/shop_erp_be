@@ -14,7 +14,7 @@ import (
 // @Produce json
 // @Param _id path string true "Performance Review  ID"
 // @Param PerformanceReview body performance_review_domain.Input1 true "Performance Review data"
-// @Router /api/v1/performance_reviews/update [put]
+// @Router /api/v1/performance-reviews/update [put]
 // @Security CookieAuth
 func (p *PerformanceReviewController) UpdateOneWithEmailEmployee(ctx *gin.Context) {
 	var input performancereviewdomain.Input1

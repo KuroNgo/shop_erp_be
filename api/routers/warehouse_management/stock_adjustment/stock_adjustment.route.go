@@ -24,7 +24,7 @@ func StockAdjustmentRouter(env *bootstrap.Database, timeout time.Duration, db *m
 		Database:               env,
 	}
 
-	router := group.Group("/stock_adjustments")
+	router := group.Group("/stock-adjustments")
 	router.GET("/get/_id", stockAdjustment.GetByID)
 	router.GET("/get/all", stockAdjustment.GetAll)
 	router.POST("/create", stockAdjustment.CreateOne)

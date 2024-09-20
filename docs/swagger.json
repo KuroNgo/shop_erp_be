@@ -1110,6 +1110,158 @@
                 "responses": {}
             }
         },
+        "/api/v1/customers/create": {
+            "post": {
+                "description": "Create a new customer in the system",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Create a new customer",
+                "parameters": [
+                    {
+                        "description": "Customer data",
+                        "name": "customer",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/customer_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/customers/delete": {
+            "delete": {
+                "description": "Delete a customer from the system using their ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Delete a customer by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Customer ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/customers/get/_id": {
+            "get": {
+                "description": "Retrieve a customer from the system using their ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Get a customer by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Customer ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/customers/get/all": {
+            "get": {
+                "description": "Retrieve all customers from the system",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Get all customers",
+                "responses": {}
+            }
+        },
+        "/api/v1/customers/get/name": {
+            "get": {
+                "description": "Retrieve a customer from the system using their name",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Get a customer by name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Customer Name",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/customers/update": {
+            "put": {
+                "description": "Update a customer's information in the system using their ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Update a customer by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Customer ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Customer data",
+                        "name": "customer",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/customer_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/api/v1/departments/create": {
             "post": {
                 "security": [
@@ -1658,7 +1810,168 @@
                 "responses": {}
             }
         },
-        "/api/v1/leave_requests/create": {
+        "/api/v1/invoices/create": {
+            "post": {
+                "description": "Create a new invoice in the system",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Invoices"
+                ],
+                "summary": "Create a new invoice",
+                "parameters": [
+                    {
+                        "description": "Invoice data",
+                        "name": "invoice",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/invoice_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/invoices/delete": {
+            "delete": {
+                "description": "Delete an invoice from the system using its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Invoices"
+                ],
+                "summary": "Delete an invoice by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Invoice ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/invoices/get/_id": {
+            "get": {
+                "description": "Retrieve an invoice from the system using its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Invoices"
+                ],
+                "summary": "Get an invoice by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Invoice ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/invoices/get/name": {
+            "get": {
+                "description": "Retrieve an invoice from the system using its name",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Invoices"
+                ],
+                "summary": "Get an invoice by name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Invoice Name",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/invoices/status": {
+            "get": {
+                "description": "Retrieve invoices from the system using their status",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Invoices"
+                ],
+                "summary": "Get invoices by status",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Invoice Status",
+                        "name": "status",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/invoices/update": {
+            "put": {
+                "description": "Update an invoice's information in the system using its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Invoices"
+                ],
+                "summary": "Update an invoice by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Invoice ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Invoice data",
+                        "name": "invoice",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/invoice_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/leave-requests/create": {
             "post": {
                 "security": [
                     {
@@ -1690,7 +2003,7 @@
                 "responses": {}
             }
         },
-        "/api/v1/leave_requests/delete": {
+        "/api/v1/leave-requests/delete": {
             "delete": {
                 "security": [
                     {
@@ -1720,7 +2033,7 @@
                 "responses": {}
             }
         },
-        "/api/v1/leave_requests/get/_id": {
+        "/api/v1/leave-requests/get/_id": {
             "get": {
                 "security": [
                     {
@@ -1750,7 +2063,7 @@
                 "responses": {}
             }
         },
-        "/api/v1/leave_requests/get/all": {
+        "/api/v1/leave-requests/get/all": {
             "get": {
                 "security": [
                     {
@@ -1771,7 +2084,7 @@
                 "responses": {}
             }
         },
-        "/api/v1/leave_requests/get/email": {
+        "/api/v1/leave-requests/get/email": {
             "get": {
                 "security": [
                     {
@@ -1801,7 +2114,7 @@
                 "responses": {}
             }
         },
-        "/api/v1/leave_requests/update": {
+        "/api/v1/leave-requests/update": {
             "put": {
                 "security": [
                     {
@@ -1833,7 +2146,344 @@
                 "responses": {}
             }
         },
-        "/api/v1/performance_reviews/create": {
+        "/api/v1/order-details/create": {
+            "post": {
+                "description": "This API creates a new Order Detail from the input data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OrderDetails"
+                ],
+                "summary": "Create a new Order Detail",
+                "parameters": [
+                    {
+                        "description": "Order Detail information",
+                        "name": "orderDetail",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/order_details_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/order-details/delete": {
+            "delete": {
+                "description": "This API deletes an Order Detail based on the provided ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OrderDetails"
+                ],
+                "summary": "Delete an Order Detail",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Order Detail ID",
+                        "name": "_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/order-details/get/_id": {
+            "get": {
+                "description": "This API retrieves an Order Detail based on the provided ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OrderDetails"
+                ],
+                "summary": "Get an Order Detail by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Order Detail ID",
+                        "name": "_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/order-details/get/order_id": {
+            "get": {
+                "description": "This API retrieves all Order Details associated with a specific Order ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OrderDetails"
+                ],
+                "summary": "Get Order Details by Order ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Order ID",
+                        "name": "order_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/order-details/get/product_id": {
+            "get": {
+                "description": "Retrieve all order details associated with a given Product ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OrderDetails"
+                ],
+                "summary": "Get Order Details by Product ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product ID",
+                        "name": "product_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "status: success, data: Retrieved Order Details",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "status: error, message: Retrieval error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/order-details/update": {
+            "put": {
+                "description": "This API updates an existing Order Detail based on the provided ID and input data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "OrderDetails"
+                ],
+                "summary": "Update an Order Detail",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Order Detail ID",
+                        "name": "_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated Order Detail information",
+                        "name": "orderDetail",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/order_details_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/payments/create": {
+            "post": {
+                "description": "This API creates a new payment from the input data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Create a new Payment",
+                "parameters": [
+                    {
+                        "description": "Payment information",
+                        "name": "payment",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/payments_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/payments/delete": {
+            "delete": {
+                "description": "This API deletes a payment based on the provided ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Delete a Payment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Payment ID",
+                        "name": "_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/payments/get/_id": {
+            "get": {
+                "description": "Retrieve a payment based on the provided ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Get a Payment by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Payment ID",
+                        "name": "_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/payments/get/order_id": {
+            "get": {
+                "description": "Retrieve all payments associated with a specific Order ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Get Payments by Order ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Order ID",
+                        "name": "order_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/payments/get/status": {
+            "get": {
+                "description": "Retrieve all payments associated with a specific status",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Get Payments by Status",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Payment Status",
+                        "name": "status",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/payments/update": {
+            "put": {
+                "description": "This API updates an existing payment based on the provided ID and input data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Payments"
+                ],
+                "summary": "Update a Payment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Payment ID",
+                        "name": "_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated Payment information",
+                        "name": "payment",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/payments_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/performance-reviews/create": {
             "post": {
                 "security": [
                     {
@@ -1865,7 +2515,7 @@
                 "responses": {}
             }
         },
-        "/api/v1/performance_reviews/delete": {
+        "/api/v1/performance-reviews/delete": {
             "delete": {
                 "security": [
                     {
@@ -1895,7 +2545,7 @@
                 "responses": {}
             }
         },
-        "/api/v1/performance_reviews/get/_id": {
+        "/api/v1/performance-reviews/get/_id": {
             "get": {
                 "security": [
                     {
@@ -1925,7 +2575,7 @@
                 "responses": {}
             }
         },
-        "/api/v1/performance_reviews/get/all": {
+        "/api/v1/performance-reviews/get/all": {
             "get": {
                 "security": [
                     {
@@ -1946,7 +2596,7 @@
                 "responses": {}
             }
         },
-        "/api/v1/performance_reviews/get/email": {
+        "/api/v1/performance-reviews/get/email": {
             "get": {
                 "security": [
                     {
@@ -1976,7 +2626,7 @@
                 "responses": {}
             }
         },
-        "/api/v1/performance_reviews/update": {
+        "/api/v1/performance-reviews/update": {
             "put": {
                 "security": [
                     {
@@ -2190,57 +2840,7 @@
                 "responses": {}
             }
         },
-        "/api/v1/purchase-orders/get/{_id}": {
-            "get": {
-                "description": "Retrieve a purchase order using its ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "PurchaseOrder"
-                ],
-                "summary": "Get a purchase order by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Purchase Order ID",
-                        "name": "_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {}
-            }
-        },
-        "/api/v1/purchase-orders/get/{supplier_id}": {
-            "get": {
-                "description": "Retrieve a list of purchase orders associated with a specific supplier ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "PurchaseOrder"
-                ],
-                "summary": "Get purchase orders by supplier ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Supplier ID",
-                        "name": "supplier_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {}
-            }
-        },
-        "/api/v1/purchase_order_details/create": {
+        "/api/v1/purchase-order-details/create": {
             "post": {
                 "description": "Create a new detail entry for a purchase order",
                 "consumes": [
@@ -2267,7 +2867,7 @@
                 "responses": {}
             }
         },
-        "/api/v1/purchase_order_details/delete/{_id}": {
+        "/api/v1/purchase-order-details/delete/{_id}": {
             "delete": {
                 "description": "Delete a purchase order detail from the system using its ID",
                 "consumes": [
@@ -2292,7 +2892,7 @@
                 "responses": {}
             }
         },
-        "/api/v1/purchase_order_details/get/_id/{_id}": {
+        "/api/v1/purchase-order-details/get/_id": {
             "get": {
                 "description": "Retrieve a purchase order detail from the system using its ID",
                 "consumes": [
@@ -2317,7 +2917,7 @@
                 "responses": {}
             }
         },
-        "/api/v1/purchase_order_details/get/all": {
+        "/api/v1/purchase-order-details/get/all": {
             "get": {
                 "description": "Retrieve all purchase order details from the system",
                 "consumes": [
@@ -2333,7 +2933,7 @@
                 "responses": {}
             }
         },
-        "/api/v1/purchase_order_details/get/by-order/{purchaseOrder_id}": {
+        "/api/v1/purchase-order-details/get/purchase-order-id": {
             "get": {
                 "description": "Retrieve purchase order details using the Purchase Order ID",
                 "consumes": [
@@ -2358,7 +2958,7 @@
                 "responses": {}
             }
         },
-        "/api/v1/purchase_order_details/pagination": {
+        "/api/v1/purchase-order-details/pagination": {
             "get": {
                 "description": "Retrieve all purchase order details from the system with pagination support",
                 "consumes": [
@@ -2383,7 +2983,7 @@
                 "responses": {}
             }
         },
-        "/api/v1/purchase_order_details/update/{_id}": {
+        "/api/v1/purchase-order-details/update": {
             "put": {
                 "description": "Update a purchase order detail using its ID",
                 "consumes": [
@@ -2417,6 +3017,90 @@
                 "responses": {}
             }
         },
+        "/api/v1/purchase-orders/get/_id": {
+            "get": {
+                "description": "Retrieve a purchase order using its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PurchaseOrder"
+                ],
+                "summary": "Get a purchase order by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Purchase Order ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/purchase-orders/get/supplier_id": {
+            "get": {
+                "description": "Retrieve a list of purchase orders associated with a specific supplier ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PurchaseOrder"
+                ],
+                "summary": "Get purchase orders by supplier ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Supplier ID",
+                        "name": "supplier_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/purchase-orders/update": {
+            "put": {
+                "description": "Update the details of a purchase order using its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PurchaseOrder"
+                ],
+                "summary": "Update a purchase order by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Purchase Order ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Purchase Order Input",
+                        "name": "purchase_order",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/purchase_order_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/api/v1/purchase_orders/create": {
             "post": {
                 "description": "Create a new purchase order with the given details",
@@ -2444,7 +3128,7 @@
                 "responses": {}
             }
         },
-        "/api/v1/purchase_orders/delete{_id}": {
+        "/api/v1/purchase_orders/delete": {
             "delete": {
                 "description": "Delete a purchase order using its ID",
                 "consumes": [
@@ -2489,40 +3173,6 @@
                         "description": "Page number",
                         "name": "page",
                         "in": "query"
-                    }
-                ],
-                "responses": {}
-            }
-        },
-        "/api/v1/purchase_orders/update/{_id}": {
-            "put": {
-                "description": "Update the details of a purchase order using its ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "PurchaseOrder"
-                ],
-                "summary": "Update a purchase order by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Purchase Order ID",
-                        "name": "_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Purchase Order Input",
-                        "name": "purchase_order",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/purchase_order_domain.Input"
-                        }
                     }
                 ],
                 "responses": {}
@@ -2869,6 +3519,526 @@
                         "name": "_id",
                         "in": "path",
                         "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/sales-orders/create": {
+            "post": {
+                "description": "This API creates a new sales order from the input data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SalesOrders"
+                ],
+                "summary": "Create a new Sales Order",
+                "parameters": [
+                    {
+                        "description": "Sales Order information",
+                        "name": "salesOrder",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/sale_orders_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/sales-orders/delete": {
+            "delete": {
+                "description": "This API deletes a sales order based on the provided ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SalesOrders"
+                ],
+                "summary": "Delete a Sales Order",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Sales Order ID",
+                        "name": "_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "status: success",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "status: error, message: Deletion error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sales-orders/get/_id": {
+            "get": {
+                "description": "Retrieve a sales order based on the provided ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SalesOrders"
+                ],
+                "summary": "Get a Sales Order by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Sales Order ID",
+                        "name": "_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/sales-orders/get/customer_id": {
+            "get": {
+                "description": "Retrieve all sales orders associated with a specific Customer ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SalesOrders"
+                ],
+                "summary": "Get Sales Orders by Customer ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Customer ID",
+                        "name": "customer_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/sales-orders/get/status": {
+            "get": {
+                "description": "Retrieve all sales orders associated with a specific status",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SalesOrders"
+                ],
+                "summary": "Get Sales Orders by Status",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Sales Order Status",
+                        "name": "status",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/sales-orders/update": {
+            "put": {
+                "description": "This API updates an existing sales order based on the provided ID and input data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SalesOrders"
+                ],
+                "summary": "Update a Sales Order",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Sales Order ID",
+                        "name": "_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated Sales Order information",
+                        "name": "salesOrder",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/sale_orders_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/sales-reports/_id": {
+            "get": {
+                "description": "Retrieve a sales report based on the provided ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SalesReports"
+                ],
+                "summary": "Get a Sales Report by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Sales Report ID",
+                        "name": "_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/sales-reports/create": {
+            "post": {
+                "description": "This API creates a new sales report from the input data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SalesReports"
+                ],
+                "summary": "Create a new Sales Report",
+                "parameters": [
+                    {
+                        "description": "Sales Report information",
+                        "name": "salesReport",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/sale_reports_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/sales-reports/delete": {
+            "delete": {
+                "description": "This API deletes a sales report based on the provided ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SalesReports"
+                ],
+                "summary": "Delete a Sales Report",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Sales Report ID",
+                        "name": "_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/sales-reports/get/report_date": {
+            "get": {
+                "description": "Retrieve all sales reports associated with a specific report date",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SalesReports"
+                ],
+                "summary": "Get Sales Reports by Date",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Report Date",
+                        "name": "report_date",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/sales-reports/get/summary": {
+            "get": {
+                "description": "Retrieve a summary of sales reports for a specified date range",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SalesReports"
+                ],
+                "summary": "Get Sales Report Summary by Date Range",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Start Date",
+                        "name": "start_date",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "End Date",
+                        "name": "end_date",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "status: success, data: Retrieved Sales Report Summary",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "status: error, message: Retrieval error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/sales-reports/update": {
+            "put": {
+                "description": "This API updates an existing sales report based on the provided ID and input data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SalesReports"
+                ],
+                "summary": "Update a Sales Report",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Sales Report ID",
+                        "name": "_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated Sales Report information",
+                        "name": "salesReport",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/sale_reports_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/shipping/_id": {
+            "get": {
+                "description": "Retrieve a shipping entry based on the provided ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Shipping"
+                ],
+                "summary": "Get a Shipping Entry by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Shipping Entry ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/shipping/create": {
+            "post": {
+                "description": "This API creates a new shipping entry from the input data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Shipping"
+                ],
+                "summary": "Create a new Shipping Entry",
+                "parameters": [
+                    {
+                        "description": "Shipping information",
+                        "name": "shipping",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/shipping_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/shipping/delete": {
+            "delete": {
+                "description": "This API deletes a shipping entry based on the provided ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Shipping"
+                ],
+                "summary": "Delete a Shipping Entry",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Shipping Entry ID",
+                        "name": "_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/shipping/get/order_id": {
+            "get": {
+                "description": "Retrieve shipping entries associated with a specific order ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Shipping"
+                ],
+                "summary": "Get Shipping Entries by Order ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Order ID",
+                        "name": "order_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/shipping/get/status": {
+            "get": {
+                "description": "Retrieve shipping entries associated with a specific status",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Shipping"
+                ],
+                "summary": "Get Shipping Entries by Status",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Shipping Status",
+                        "name": "status",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/shipping/update": {
+            "put": {
+                "description": "Update an existing shipping entry based on the provided ID and input data",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Shipping"
+                ],
+                "summary": "Update a Shipping Entry",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Shipping Entry ID",
+                        "name": "_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "Updated Shipping information",
+                        "name": "shipping",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/shipping_domain.Input"
+                        }
                     }
                 ],
                 "responses": {}
@@ -3412,7 +4582,7 @@
                 "responses": {}
             }
         },
-        "/api/v2/performance_reviews/create": {
+        "/api/v2/performance-reviews/create": {
             "post": {
                 "security": [
                     {
@@ -3444,7 +4614,7 @@
                 "responses": {}
             }
         },
-        "/api/v2/performance_reviews/update": {
+        "/api/v2/performance-reviews/update": {
             "put": {
                 "security": [
                     {
@@ -3478,319 +4648,6 @@
                         "schema": {
                             "$ref": "#/definitions/performance_review_domain.Input1"
                         }
-                    }
-                ],
-                "responses": {}
-            }
-        },
-        "/customers/create": {
-            "post": {
-                "description": "Create a new customer in the system",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Customers"
-                ],
-                "summary": "Create a new customer",
-                "parameters": [
-                    {
-                        "description": "Customer data",
-                        "name": "customer",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/customer_domain.Input"
-                        }
-                    }
-                ],
-                "responses": {}
-            }
-        },
-        "/customers/delete/{_id}": {
-            "delete": {
-                "description": "Delete a customer from the system using their ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Customers"
-                ],
-                "summary": "Delete a customer by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Customer ID",
-                        "name": "_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {}
-            }
-        },
-        "/customers/get/all": {
-            "get": {
-                "description": "Retrieve all customers from the system",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Customers"
-                ],
-                "summary": "Get all customers",
-                "responses": {}
-            }
-        },
-        "/customers/get/name/{name}": {
-            "get": {
-                "description": "Retrieve a customer from the system using their name",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Customers"
-                ],
-                "summary": "Get a customer by name",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Customer Name",
-                        "name": "name",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {}
-            }
-        },
-        "/customers/get/{_id}": {
-            "get": {
-                "description": "Retrieve a customer from the system using their ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Customers"
-                ],
-                "summary": "Get a customer by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Customer ID",
-                        "name": "_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {}
-            }
-        },
-        "/customers/update/{_id}": {
-            "put": {
-                "description": "Update a customer's information in the system using their ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Customers"
-                ],
-                "summary": "Update a customer by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Customer ID",
-                        "name": "_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Customer data",
-                        "name": "customer",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/customer_domain.Input"
-                        }
-                    }
-                ],
-                "responses": {}
-            }
-        },
-        "/invoices/create": {
-            "post": {
-                "description": "Create a new invoice in the system",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Invoices"
-                ],
-                "summary": "Create a new invoice",
-                "parameters": [
-                    {
-                        "description": "Invoice data",
-                        "name": "invoice",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/invoice_domain.Input"
-                        }
-                    }
-                ],
-                "responses": {}
-            }
-        },
-        "/invoices/get/name/{name}": {
-            "get": {
-                "description": "Retrieve an invoice from the system using its name",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Invoices"
-                ],
-                "summary": "Get an invoice by name",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Invoice Name",
-                        "name": "name",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {}
-            }
-        },
-        "/invoices/get/{_id}": {
-            "get": {
-                "description": "Retrieve an invoice from the system using its ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Invoices"
-                ],
-                "summary": "Get an invoice by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Invoice ID",
-                        "name": "_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {}
-            }
-        },
-        "/invoices/status/{status}": {
-            "get": {
-                "description": "Retrieve invoices from the system using their status",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Invoices"
-                ],
-                "summary": "Get invoices by status",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Invoice Status",
-                        "name": "status",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {}
-            }
-        },
-        "/invoices/update/{_id}": {
-            "put": {
-                "description": "Update an invoice's information in the system using its ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Invoices"
-                ],
-                "summary": "Update an invoice by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Invoice ID",
-                        "name": "_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Invoice data",
-                        "name": "invoice",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/invoice_domain.Input"
-                        }
-                    }
-                ],
-                "responses": {}
-            }
-        },
-        "/invoices/{_id}": {
-            "delete": {
-                "description": "Delete an invoice from the system using its ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Invoices"
-                ],
-                "summary": "Delete an invoice by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Invoice ID",
-                        "name": "_id",
-                        "in": "path",
-                        "required": true
                     }
                 ],
                 "responses": {}
@@ -4228,6 +5085,48 @@
                 }
             }
         },
+        "order_details_domain.Input": {
+            "type": "object",
+            "properties": {
+                "order_id": {
+                    "type": "string"
+                },
+                "product_id": {
+                    "type": "string"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "total_price": {
+                    "type": "number"
+                },
+                "unit_price": {
+                    "type": "number"
+                }
+            }
+        },
+        "payments_domain.Input": {
+            "type": "object",
+            "properties": {
+                "amount_paid": {
+                    "type": "number"
+                },
+                "order_id": {
+                    "type": "string"
+                },
+                "payment_date": {
+                    "type": "string"
+                },
+                "payment_method": {
+                    "description": "Example: \"Credit Card\", \"Bank Transfer\", \"Cash on Delivery\"",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "Example: \"Paid\", \"Unpaid\"",
+                    "type": "string"
+                }
+            }
+        },
         "performance_review_domain.Input1": {
             "type": "object",
             "properties": {
@@ -4374,6 +5273,86 @@
                 }
             }
         },
+        "sale_orders_domain.Input": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "customerID": {
+                    "type": "string"
+                },
+                "orderDate": {
+                    "type": "string"
+                },
+                "orderNumber": {
+                    "type": "string"
+                },
+                "shippingAddress": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "totalAmount": {
+                    "type": "number"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "sale_reports_domain.Input": {
+            "type": "object",
+            "properties": {
+                "product": {
+                    "type": "string"
+                },
+                "product_name": {
+                    "type": "string"
+                },
+                "quantity_sold": {
+                    "type": "integer"
+                },
+                "report_date": {
+                    "type": "string"
+                },
+                "total_revenue": {
+                    "type": "number"
+                },
+                "total_sales": {
+                    "type": "number"
+                }
+            }
+        },
+        "shipping_domain.Input": {
+            "type": "object",
+            "properties": {
+                "actual_delivery": {
+                    "type": "string"
+                },
+                "estimated_delivery": {
+                    "type": "string"
+                },
+                "order_id": {
+                    "type": "string"
+                },
+                "shipping_date": {
+                    "type": "string"
+                },
+                "shipping_method": {
+                    "description": "Example: \"Standard\", \"Express\", \"International\"",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "Example: \"In Transit\", \"Delivered\", \"Returned\"",
+                    "type": "string"
+                },
+                "tracking_number": {
+                    "type": "string"
+                }
+            }
+        },
         "stock_adjustment_domain.Input": {
             "type": "object",
             "properties": {
@@ -4468,6 +5447,42 @@
     },
     "tags": [
         {
+            "description": "Stores information about financial accounts like bank accounts or cash wallets, tracking balance and account type.",
+            "name": "Account"
+        },
+        {
+            "description": "Manages financial transactions for accounts, tracking income and expenses, amounts, and transaction dates.",
+            "name": "Budget"
+        },
+        {
+            "description": "Manages financial transactions for accounts, tracking income and expenses, amounts, and transaction dates.",
+            "name": "Budget"
+        },
+        {
+            "description": "Generates financial reports over a specified date range for analysis and tracking.",
+            "name": "FinancialReport"
+        },
+        {
+            "description": "Tracks issued invoices, including amounts, due dates, and payment status.",
+            "name": "Invoices"
+        },
+        {
+            "description": "Records payments made towards invoices, linking them to accounts and payment methods.",
+            "name": "Payments"
+        },
+        {
+            "description": "Defines tax types and rates applicable to invoices, transactions, or other financial elements.",
+            "name": "Taxes"
+        },
+        {
+            "description": "Categorizes transactions into types like income or expenses for better organization.",
+            "name": "TransactionCategory"
+        },
+        {
+            "description": "Manages financial transactions for accounts, tracking income and expenses, amounts, and transaction dates.",
+            "name": "Transaction"
+        },
+        {
             "description": "represents the attendance information of an employee.",
             "name": "Attendance"
         },
@@ -4508,15 +5523,67 @@
             "name": "User"
         },
         {
-            "description": "Stores information about financial accounts like bank accounts or cash wallets, tracking balance and account type.",
-            "name": "Account"
+            "description": "Stores information about customers, including their contact details (name, email, phone, address) and basic information for future reference and order management.",
+            "name": "Customer"
+        },
+        {
+            "description": "Contains details of the products available for sale, such as product name, description, price, and stock quantity. This helps track inventory and product offerings.",
+            "name": "Invoices"
+        },
+        {
+            "description": "Contains information about individual items in each order. It tracks the products, quantities, and unit prices associated with a specific order to provide more detailed order history.",
+            "name": "OrderDetails"
+        },
+        {
+            "name": "Payments"
+        },
+        {
+            "description": "Tracks customer orders, including customer details, shipping information, total amount, and the status of the order (processing, shipped, or canceled).",
+            "name": "SaleOrders"
         },
         {
             "description": "Manages financial transactions for accounts, tracking income and expenses, amounts, and transaction dates.",
-            "name": "Budget"
+            "name": "SaleReport"
         },
         {
+            "description": "Records shipment details, including the shipping method, dates, tracking information, and the status of the delivery to monitor the progress of the shipping process.",
+            "name": "Shipping"
+        },
+        {
+            "description": "Tracks the stock levels of products in different warehouses. It helps monitor how much stock is available and where it is located.",
+            "name": "Inventory"
+        },
+        {
+            "description": "Contains details of products such as name, description, price, and associated categories. It is central to managing what items are available for sale and for inventory control.",
             "name": "Product"
+        },
+        {
+            "description": "Organizes products into different categories for better product classification and easier management. It allows for filtering and categorizing similar products.",
+            "name": "ProductCategory"
+        },
+        {
+            "description": "Manages purchase orders sent to suppliers. It includes order numbers, supplier references, order dates, and status, ensuring that product orders are properly tracked.",
+            "name": "PurchaseOrder"
+        },
+        {
+            "description": "Provides detailed information about the individual products in each purchase order, including quantities and prices. It links the products ordered from suppliers to their respective purchase orders.",
+            "name": "PurchaseOrderDetail"
+        },
+        {
+            "description": "Keeps records of stock adjustments, such as increases or decreases in inventory due to reasons like damage, returns, or reallocation. This ensures accurate stock levels are maintained.",
+            "name": "StockAdjustment"
+        },
+        {
+            "description": "Records the movements of products in and out of warehouses, such as when items are received (Nhập kho) or dispatched (Xuất kho). This helps track changes in inventory levels.",
+            "name": "StockMovement"
+        },
+        {
+            "description": "Stores supplier information, including contact details. This table is crucial for managing relationships with vendors and tracking where products are sourced.",
+            "name": "Supplier"
+        },
+        {
+            "description": "This table stores information about different warehouses, including their location, capacity, and basic details. It helps manage the distribution and storage of products across different facilities.",
+            "name": "Warehouse"
         }
     ]
 }

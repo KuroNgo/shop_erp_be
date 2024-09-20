@@ -5,6 +5,14 @@ import (
 	"net/http"
 )
 
+// GetByOrder godoc
+// @Summary Get Payments by Order ID
+// @Description Retrieve all payments associated with a specific Order ID
+// @Tags Payments
+// @Accept json
+// @Produce json
+// @Param order_id query string true "Order ID"
+// @Router /api/v1/payments/get/order_id [get]
 func (p *PaymentController) GetByOrder(ctx *gin.Context) {
 	orderId := ctx.Query("order_id")
 

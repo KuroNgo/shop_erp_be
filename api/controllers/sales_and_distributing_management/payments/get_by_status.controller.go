@@ -5,6 +5,14 @@ import (
 	"net/http"
 )
 
+// GetByStatus godoc
+// @Summary Get Payments by Status
+// @Description Retrieve all payments associated with a specific status
+// @Tags Payments
+// @Accept json
+// @Produce json
+// @Param status query string true "Payment Status"
+// @Router /api/v1/payments/get/status [get]
 func (p *PaymentController) GetByStatus(ctx *gin.Context) {
 	status := ctx.Query("status")
 

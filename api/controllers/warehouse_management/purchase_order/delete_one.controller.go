@@ -12,7 +12,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param _id path string true "Purchase Order ID"
-// @Router /api/v1/purchase_orders/delete{_id} [delete]
+// @Router /api/v1/purchase_orders/delete [delete]
 func (p *PurchaseOrderController) DeleteOne(ctx *gin.Context) {
 	_id := ctx.Query("_id")
 

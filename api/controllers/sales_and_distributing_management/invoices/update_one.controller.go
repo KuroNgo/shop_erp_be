@@ -14,7 +14,7 @@ import (
 // @Produce json
 // @Param _id path string true "Invoice ID"
 // @Param invoice body invoice_domain.Input true "Invoice data"
-// @Router /invoices/update/{_id} [put]
+// @Router /api/v1/invoices/update [put]
 func (i *InvoiceController) UpdateOne(ctx *gin.Context) {
 	var invoice invoicesdomain.Input
 	if err := ctx.ShouldBindJSON(&invoice); err != nil {

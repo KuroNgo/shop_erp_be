@@ -21,7 +21,7 @@ func SaleReportRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.
 		Database:           env,
 	}
 
-	router := group.Group("/sales_reports")
+	router := group.Group("/sales-reports")
 	router.GET("/get/_id", salesReport.GetByID)
 	router.GET("/get/date", salesReport.GetByDate)
 	router.GET("/get/summary", salesReport.GetBySummary)

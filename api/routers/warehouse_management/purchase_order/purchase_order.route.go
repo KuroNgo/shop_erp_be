@@ -21,7 +21,7 @@ func PurchaseOrderRouter(env *bootstrap.Database, timeout time.Duration, db *mon
 		Database:             env,
 	}
 
-	router := group.Group("/purchase_orders")
+	router := group.Group("/purchase-orders")
 	router.GET("/get/_id", purchaseOrder.GetByID)
 	router.GET("/get/supplier_id", purchaseOrder.GetBySupplierID)
 	router.GET("/get/all", purchaseOrder.GetAll)

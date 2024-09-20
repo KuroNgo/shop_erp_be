@@ -5,6 +5,14 @@ import (
 	"net/http"
 )
 
+// DeleteOne godoc
+// @Summary Delete a Payment
+// @Description This API deletes a payment based on the provided ID
+// @Tags Payments
+// @Accept json
+// @Produce json
+// @Param _id query string true "Payment ID"
+// @Router /api/v1/payments/delete [delete]
 func (p *PaymentController) DeleteOne(ctx *gin.Context) {
 	_id := ctx.Query("_id")
 

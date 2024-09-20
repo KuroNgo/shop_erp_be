@@ -11,7 +11,7 @@ import (
 // @Tags PurchaseOrderDetail
 // @Accept json
 // @Produce json
-// @Router /api/v1/purchase_order_details/get/all [get]
+// @Router /api/v1/purchase-order-details/get/all [get]
 func (p *PurchaseOrderDetailController) GetAll(ctx *gin.Context) {
 	data, err := p.PurchaseOrderDetailUseCase.GetAll(ctx)
 	if err != nil {
