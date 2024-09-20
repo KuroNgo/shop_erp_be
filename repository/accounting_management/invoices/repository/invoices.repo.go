@@ -20,7 +20,7 @@ func NewInvoiceRepository(database *mongo.Database, invoiceCollection string) in
 	return &invoiceRepository{database: database, invoiceCollection: invoiceCollection}
 }
 
-func (i *invoiceRepository) CreateInvoice(ctx context.Context, invoice *invoicesdomain.Invoices) error {
+func (i *invoiceRepository) CreateOne(ctx context.Context, invoice *invoicesdomain.Invoices) error {
 	invoiceCollection := i.database.Collection(i.invoiceCollection)
 
 	_, err := invoiceCollection.InsertOne(ctx, invoice)
@@ -30,7 +30,7 @@ func (i *invoiceRepository) CreateInvoice(ctx context.Context, invoice *invoices
 	return nil
 }
 
-func (i *invoiceRepository) GetInvoiceByID(ctx context.Context, id primitive.ObjectID) (*invoicesdomain.Invoices, error) {
+func (i *invoiceRepository) GetOneByID(ctx context.Context, id primitive.ObjectID) (*invoicesdomain.Invoices, error) {
 	invoiceCollection := i.database.Collection(i.invoiceCollection)
 
 	filter := bson.M{"_id": id}
@@ -46,7 +46,7 @@ func (i *invoiceRepository) GetInvoiceByID(ctx context.Context, id primitive.Obj
 	return invoice, nil
 }
 
-func (i *invoiceRepository) GetInvoiceByName(ctx context.Context, name string) (*invoicesdomain.Invoices, error) {
+func (i *invoiceRepository) GetOneByName(ctx context.Context, name string) (*invoicesdomain.Invoices, error) {
 	invoiceCollection := i.database.Collection(i.invoiceCollection)
 
 	filter := bson.M{"name": name}
@@ -61,7 +61,7 @@ func (i *invoiceRepository) GetInvoiceByName(ctx context.Context, name string) (
 	return invoice, nil
 }
 
-func (i *invoiceRepository) UpdateInvoice(ctx context.Context, invoice *invoicesdomain.Invoices) error {
+func (i *invoiceRepository) UpdateOne(ctx context.Context, invoice *invoicesdomain.Invoices) error {
 	invoiceCollection := i.database.Collection(i.invoiceCollection)
 
 	filter := bson.M{"_id": invoice.ID}
@@ -83,7 +83,7 @@ func (i *invoiceRepository) UpdateInvoice(ctx context.Context, invoice *invoices
 	return nil
 }
 
-func (i *invoiceRepository) DeleteInvoice(ctx context.Context, id primitive.ObjectID) error {
+func (i *invoiceRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
 	invoiceCollection := i.database.Collection(i.invoiceCollection)
 
 	filter := bson.M{"_id": id}
@@ -96,7 +96,7 @@ func (i *invoiceRepository) DeleteInvoice(ctx context.Context, id primitive.Obje
 	return nil
 }
 
-func (i *invoiceRepository) ListInvoices(ctx context.Context) ([]invoicesdomain.Invoices, error) {
+func (i *invoiceRepository) GetAll(ctx context.Context) ([]invoicesdomain.Invoices, error) {
 	invoiceCollection := i.database.Collection(i.invoiceCollection)
 
 	filter := bson.M{}
@@ -129,7 +129,7 @@ func (i *invoiceRepository) ListInvoices(ctx context.Context) ([]invoicesdomain.
 	return invoices, nil
 }
 
-func (i *invoiceRepository) GetInvoicesByDateRange(ctx context.Context, startDate, endDate time.Time) ([]invoicesdomain.Invoices, error) {
+func (i *invoiceRepository) GetByDateRange(ctx context.Context, startDate, endDate time.Time) ([]invoicesdomain.Invoices, error) {
 	invoiceCollection := i.database.Collection(i.invoiceCollection)
 
 	filter := bson.M{

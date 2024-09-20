@@ -12,11 +12,7 @@ type transactionRepository struct {
 	transactionCollection string
 }
 
-func NewTransactionRepository(database *mongo.Database, transactionCollection string) transactions_domain.ITransactionsRepository {
-	return &transactionRepository{database: database, transactionCollection: transactionCollection}
-}
-
-func (t *transactionRepository) Create(ctx context.Context, transaction *transactions_domain.Transactions) error {
+func (t *transactionRepository) CreateOne(ctx context.Context, transaction *transactions_domain.Transactions) error {
 	//TODO implement me
 	panic("implement me")
 }
@@ -31,17 +27,21 @@ func (t *transactionRepository) GetByAccountID(ctx context.Context, accountID pr
 	panic("implement me")
 }
 
-func (t *transactionRepository) Update(ctx context.Context, transaction *transactions_domain.Transactions) error {
+func (t *transactionRepository) UpdateOne(ctx context.Context, transaction *transactions_domain.Transactions) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (t *transactionRepository) Delete(ctx context.Context, id primitive.ObjectID) error {
+func (t *transactionRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (t *transactionRepository) List(ctx context.Context) ([]transactions_domain.Transactions, error) {
+func (t *transactionRepository) GetAll(ctx context.Context) ([]transactions_domain.Transactions, error) {
 	//TODO implement me
 	panic("implement me")
+}
+
+func NewTransactionRepository(database *mongo.Database, transactionCollection string) transactions_domain.ITransactionsRepository {
+	return &transactionRepository{database: database, transactionCollection: transactionCollection}
 }

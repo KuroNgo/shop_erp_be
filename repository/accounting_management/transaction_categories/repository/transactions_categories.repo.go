@@ -16,7 +16,7 @@ func NewTransactionCategoryRepository(database *mongo.Database, transactionCateg
 	return &transactionCategoryRepository{database: database, transactionCategoryCollection: transactionCategoryCollection}
 }
 
-func (t *transactionCategoryRepository) Create(ctx context.Context, category *transaction_categories_domain.TransactionCategories) error {
+func (t *transactionCategoryRepository) CreateOne(ctx context.Context, category *transaction_categories_domain.TransactionCategories) error {
 	//TODO implement me
 	panic("implement me")
 }
@@ -31,17 +31,17 @@ func (t *transactionCategoryRepository) GetByName(ctx context.Context, name stri
 	panic("implement me")
 }
 
-func (t *transactionCategoryRepository) Update(ctx context.Context, category *transaction_categories_domain.TransactionCategories) error {
+func (t *transactionCategoryRepository) UpdateOne(ctx context.Context, category *transaction_categories_domain.TransactionCategories) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (t *transactionCategoryRepository) Delete(ctx context.Context, id primitive.ObjectID) error {
+func (t *transactionCategoryRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (t *transactionCategoryRepository) List(ctx context.Context) ([]transaction_categories_domain.TransactionCategories, error) {
+func (t *transactionCategoryRepository) GetAll(ctx context.Context) ([]transaction_categories_domain.TransactionCategories, error) {
 	//TODO implement me
 	panic("implement me")
 }

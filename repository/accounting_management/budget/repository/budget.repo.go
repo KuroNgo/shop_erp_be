@@ -19,7 +19,7 @@ func NewBudgetRepository(database *mongo.Database, collectionBudget string) budg
 	return &budgetRepository{database: database, collectionBudget: collectionBudget}
 }
 
-func (b *budgetRepository) CreateBudget(ctx context.Context, budget *budgetsdomain.Budget) error {
+func (b *budgetRepository) CreateOne(ctx context.Context, budget *budgetsdomain.Budget) error {
 	collectionBudget := b.database.Collection(b.collectionBudget)
 
 	_, err := collectionBudget.InsertOne(ctx, budget)
@@ -29,7 +29,7 @@ func (b *budgetRepository) CreateBudget(ctx context.Context, budget *budgetsdoma
 	return nil
 }
 
-func (b *budgetRepository) GetBudgetByID(ctx context.Context, id primitive.ObjectID) (budgetsdomain.Budget, error) {
+func (b *budgetRepository) GetByID(ctx context.Context, id primitive.ObjectID) (budgetsdomain.Budget, error) {
 	collectionBudget := b.database.Collection(b.collectionBudget)
 
 	filter := bson.M{"_id": id}
@@ -44,7 +44,7 @@ func (b *budgetRepository) GetBudgetByID(ctx context.Context, id primitive.Objec
 	return budget, nil
 }
 
-func (b *budgetRepository) GetBudgetByName(ctx context.Context, name string) (budgetsdomain.Budget, error) {
+func (b *budgetRepository) GetByName(ctx context.Context, name string) (budgetsdomain.Budget, error) {
 	collectionBudget := b.database.Collection(b.collectionBudget)
 
 	filter := bson.M{"name": name}
@@ -59,7 +59,7 @@ func (b *budgetRepository) GetBudgetByName(ctx context.Context, name string) (bu
 	return budget, nil
 }
 
-func (b *budgetRepository) UpdateBudget(ctx context.Context, budget *budgetsdomain.Budget) error {
+func (b *budgetRepository) UpdateOne(ctx context.Context, budget *budgetsdomain.Budget) error {
 	collectionBudget := b.database.Collection(b.collectionBudget)
 
 	filter := bson.M{"_id": budget.ID}
@@ -80,7 +80,7 @@ func (b *budgetRepository) UpdateBudget(ctx context.Context, budget *budgetsdoma
 	return nil
 }
 
-func (b *budgetRepository) DeleteBudget(ctx context.Context, id primitive.ObjectID) error {
+func (b *budgetRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
 	collectionBudget := b.database.Collection(b.collectionBudget)
 
 	filter := bson.M{"_id": id}
@@ -92,7 +92,7 @@ func (b *budgetRepository) DeleteBudget(ctx context.Context, id primitive.Object
 	return nil
 }
 
-func (b *budgetRepository) ListBudgets(ctx context.Context) ([]budgetsdomain.Budget, error) {
+func (b *budgetRepository) GetAll(ctx context.Context) ([]budgetsdomain.Budget, error) {
 	collectionBudget := b.database.Collection(b.collectionBudget)
 
 	filter := bson.M{}
@@ -121,7 +121,7 @@ func (b *budgetRepository) ListBudgets(ctx context.Context) ([]budgetsdomain.Bud
 	return budgets, nil
 }
 
-func (b *budgetRepository) GetBudgetsByDateRange(ctx context.Context, startDate, endDate time.Time) ([]budgetsdomain.Budget, error) {
+func (b *budgetRepository) GetByDateRange(ctx context.Context, startDate, endDate time.Time) ([]budgetsdomain.Budget, error) {
 	collectionBudget := b.database.Collection(b.collectionBudget)
 
 	filter := bson.M{
@@ -164,7 +164,7 @@ func (b *budgetRepository) GetBudgetsByDateRange(ctx context.Context, startDate,
 	return budgets, nil
 }
 
-func (b *budgetRepository) GetTotalBudgetAmount(ctx context.Context) (float64, error) {
+func (b *budgetRepository) GetTotalAmount(ctx context.Context) (float64, error) {
 	collectionBudget := b.database.Collection(b.collectionBudget)
 
 	filter := bson.M{}

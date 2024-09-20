@@ -17,42 +17,42 @@ func NewPaymentsRepository(database *mongo.Database, paymentsCollection string) 
 	return &paymentsRepository{database: database, paymentsCollection: paymentsCollection}
 }
 
-func (p *paymentsRepository) CreatePayment(ctx context.Context, payment *payment_domain.Payments) error {
+func (p *paymentsRepository) CreateOne(ctx context.Context, payment *payment_domain.Payments) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (p *paymentsRepository) GetPaymentByID(ctx context.Context, id primitive.ObjectID) (payment_domain.Payments, error) {
+func (p *paymentsRepository) GetByID(ctx context.Context, id primitive.ObjectID) (payment_domain.Payments, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (p *paymentsRepository) GetPaymentsByInvoiceID(ctx context.Context, invoiceID primitive.ObjectID) ([]payment_domain.Payments, error) {
+func (p *paymentsRepository) GetByInvoiceID(ctx context.Context, invoiceID primitive.ObjectID) ([]payment_domain.Payments, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (p *paymentsRepository) GetPaymentsByAccountID(ctx context.Context, accountID primitive.ObjectID) ([]payment_domain.Payments, error) {
+func (p *paymentsRepository) GetByAccountID(ctx context.Context, accountID primitive.ObjectID) ([]payment_domain.Payments, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (p *paymentsRepository) UpdatePayment(ctx context.Context, payment *payment_domain.Payments) error {
+func (p *paymentsRepository) UpdateOne(ctx context.Context, payment *payment_domain.Payments) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (p *paymentsRepository) DeletePayment(ctx context.Context, id primitive.ObjectID) error {
+func (p *paymentsRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (p *paymentsRepository) ListPayments(ctx context.Context) ([]payment_domain.Payments, error) {
+func (p *paymentsRepository) GetAll(ctx context.Context) ([]payment_domain.Payments, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (p *paymentsRepository) GetPaymentsByDateRange(ctx context.Context, startDate, endDate time.Time) ([]payment_domain.Payments, error) {
+func (p *paymentsRepository) GetByDateRange(ctx context.Context, startDate, endDate time.Time) ([]payment_domain.Payments, error) {
 	//TODO implement me
 	panic("implement me")
 }
