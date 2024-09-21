@@ -24,7 +24,7 @@ func RateLimiter() gin.HandlerFunc {
 		defer mutex.Unlock()
 		count := ipRequestsCounts[ip]
 		if count >= maxRequests {
-			ctx.JSON(http.StatusTooManyRequests, gin.H{
+			ctx.AbortWithStatusJSON(http.StatusTooManyRequests, gin.H{
 				"message": "Gửi quá nhiều request, vui lòng đợi 15 giây để thực hiện request tiếp theo!",
 				"status":  "fail",
 			})

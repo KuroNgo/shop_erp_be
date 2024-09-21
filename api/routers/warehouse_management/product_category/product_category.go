@@ -7,8 +7,8 @@ import (
 	"shop_erp_mono/bootstrap"
 	productdomain "shop_erp_mono/domain/warehouse_management/product"
 	categorydomain "shop_erp_mono/domain/warehouse_management/product_category"
-	productrepository "shop_erp_mono/repository/warehouse_management/product/repository"
 	categoryrepository "shop_erp_mono/repository/warehouse_management/product_category/repository"
+	productrepository "shop_erp_mono/repository/warehouse_management/wm_product/repository"
 	categoryusecase "shop_erp_mono/usecase/warehouse_management/product_category/usecase"
 	"time"
 )
@@ -21,7 +21,7 @@ func ProductCategoryRouter(env *bootstrap.Database, timeout time.Duration, db *m
 		Database:        env,
 	}
 
-	router := group.Group("/product-categories")
+	router := group.Group("/wm_product-categories")
 	router.GET("/get/_id", category.GetByIDCategories)
 	router.GET("/get/name", category.GetByNameCategories)
 	router.GET("/get/all", category.GetAllCategories)

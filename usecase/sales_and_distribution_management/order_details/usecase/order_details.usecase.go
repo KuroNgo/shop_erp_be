@@ -6,6 +6,7 @@ import (
 	orderdetailsdomain "shop_erp_mono/domain/sales_and_distribution_management/order_details"
 	saleordersdomain "shop_erp_mono/domain/sales_and_distribution_management/sale_orders"
 	productdomain "shop_erp_mono/domain/warehouse_management/product"
+	"shop_erp_mono/usecase/sales_and_distribution_management/order_details/validate"
 	"time"
 )
 
@@ -24,6 +25,10 @@ func NewOrderDetailUseCase(contextTimeout time.Duration, orderDetailRepository o
 func (o *orderDetailUseCase) CreateOne(ctx context.Context, input *orderdetailsdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, o.contextTimeout)
 	defer cancel()
+
+	if err := validate.OrderDetail(input); err != nil {
+		return err
+	}
 
 	idOrder, err := primitive.ObjectIDFromHex(input.OrderID)
 	if err != nil {
@@ -157,6 +162,10 @@ func (o *orderDetailUseCase) GetByProductID(ctx context.Context, productID strin
 func (o *orderDetailUseCase) UpdateOne(ctx context.Context, id string, input *orderdetailsdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, o.contextTimeout)
 	defer cancel()
+
+	if err := validate.OrderDetail(input); err != nil {
+		return err
+	}
 
 	idOrderDetail, err := primitive.ObjectIDFromHex(id)
 	if err != nil {

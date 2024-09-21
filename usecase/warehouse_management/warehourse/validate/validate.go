@@ -5,7 +5,7 @@ import (
 	warehousedomain "shop_erp_mono/domain/warehouse_management/warehouse"
 )
 
-func ValidateWarehouse(input *warehousedomain.Input) error {
+func Warehouse(input *warehousedomain.Input) error {
 	if input.WarehouseName == "" {
 		return errors.New("the warehouse's information is nil")
 	}

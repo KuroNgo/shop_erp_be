@@ -10,9 +10,9 @@ import (
 	warehousedomain "shop_erp_mono/domain/warehouse_management/warehouse"
 	"shop_erp_mono/infrastructor"
 	inventoryrepository "shop_erp_mono/repository/warehouse_management/inventory/repository"
-	productrepository "shop_erp_mono/repository/warehouse_management/product/repository"
 	category_repository "shop_erp_mono/repository/warehouse_management/product_category/repository"
 	warehouserepository "shop_erp_mono/repository/warehouse_management/warehourse/repository"
+	productrepository "shop_erp_mono/repository/warehouse_management/wm_product/repository"
 	"testing"
 	"time"
 )
@@ -42,7 +42,7 @@ func TestCreateOneInventory(t *testing.T) {
 		UpdatedAt:       time.Now(),
 	}
 
-	pr := productrepository.NewProductRepository(database, "product")
+	pr := productrepository.NewProductRepository(database, "wm_product")
 	err = pr.CreateProduct(context.Background(), mockProduct)
 	productData, err := pr.GetProductByName(context.Background(), "cà phê sữa")
 	if err != nil || productData == nil {

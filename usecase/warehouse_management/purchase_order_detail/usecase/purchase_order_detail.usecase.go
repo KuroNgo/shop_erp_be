@@ -100,7 +100,7 @@ func (p *purchaseOrderDetailUseCase) CreateOne(ctx context.Context, input *purch
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidatePurchaseOrderDetail(input); err != nil {
+	if err := validate.PurchaseOrderDetail(input); err != nil {
 		return err
 	}
 
@@ -129,7 +129,7 @@ func (p *purchaseOrderDetailUseCase) UpdateOne(ctx context.Context, id string, i
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidatePurchaseOrderDetail(input); err != nil {
+	if err := validate.PurchaseOrderDetail(input); err != nil {
 		return err
 	}
 

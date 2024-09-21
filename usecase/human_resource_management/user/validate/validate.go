@@ -41,7 +41,7 @@ func IsNilImage(avatarUrl string) error {
 	return nil
 }
 
-func ValidateUser(input *userdomain.Input) error {
+func User(input *userdomain.Input) error {
 	if input.PasswordHash == "" {
 		return errors.New("the user's information cannot be empty")
 	}

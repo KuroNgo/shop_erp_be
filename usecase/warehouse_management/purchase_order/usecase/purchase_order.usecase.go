@@ -45,7 +45,7 @@ func (p *purchaseOrderUseCase) CreateOne(ctx context.Context, input *purchaseord
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidatePurchaseOrder(input); err != nil {
+	if err := validate.PurchaseOrder(input); err != nil {
 		return err
 	}
 
@@ -71,7 +71,7 @@ func (p *purchaseOrderUseCase) UpdateOne(ctx context.Context, id string, input *
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidatePurchaseOrder(input); err != nil {
+	if err := validate.PurchaseOrder(input); err != nil {
 		return err
 	}
 

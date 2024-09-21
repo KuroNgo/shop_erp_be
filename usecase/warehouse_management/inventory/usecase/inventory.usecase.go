@@ -27,7 +27,7 @@ func (i *inventoryUseCase) CreateInventory(ctx context.Context, input *inventory
 	ctx, cancel := context.WithTimeout(ctx, i.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidateInventory(input); err != nil {
+	if err := validate.Inventory(input); err != nil {
 		return err
 	}
 
@@ -62,7 +62,7 @@ func (i *inventoryUseCase) UpdateInventory(ctx context.Context, id string, input
 		return err
 	}
 
-	if err := validate.ValidateInventory(input); err != nil {
+	if err := validate.Inventory(input); err != nil {
 		return err
 	}
 

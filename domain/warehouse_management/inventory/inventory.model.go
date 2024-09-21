@@ -11,7 +11,7 @@ const (
 	CollectionInventory = "inventory"
 )
 
-// Inventory represents the stock of a product in a warehouse.
+// Inventory represents the stock of a wm_product in a warehouse.
 type Inventory struct {
 	ID          primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
 	ProductID   primitive.ObjectID `bson:"product_id" json:"product_id"`
@@ -29,6 +29,6 @@ type Input struct {
 
 type InventoryResponse struct {
 	Inventory Inventory                 `bson:"inventory" json:"inventory"`
-	Product   productdomain.Product     `bson:"product" json:"product"`
+	Product   productdomain.Product     `bson:"wm_product" json:"wm_product"`
 	Warehouse warehousedomain.Warehouse `bson:"warehouse" json:"warehouse"`
 }

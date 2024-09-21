@@ -12,7 +12,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param product_id path string true "Product ID"
-// @Router /stock-adjustments/get/product/{product_id} [get]
+// @Router /stock-adjustments/get/wm_product/{product_id} [get]
 func (s *StockAdjustmentController) GetByProductID(ctx *gin.Context) {
 	productId := ctx.Query("product_id")
 

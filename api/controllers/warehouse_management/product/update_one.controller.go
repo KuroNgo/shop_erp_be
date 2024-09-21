@@ -6,9 +6,9 @@ import (
 	productdomain "shop_erp_mono/domain/warehouse_management/product"
 )
 
-// UpdateProduct Update a new product
-// @Summary Update product
-// @Description Update new product
+// UpdateProduct Update a new wm_product
+// @Summary Update wm_product
+// @Description Update new wm_product
 // @Tags Product
 // @Accept json
 // @Produce json

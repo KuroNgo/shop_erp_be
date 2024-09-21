@@ -4,6 +4,7 @@ import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	customerdomain "shop_erp_mono/domain/sales_and_distribution_management/customer"
+	"shop_erp_mono/usecase/sales_and_distribution_management/customer/validate"
 	"time"
 )
 
@@ -20,7 +21,9 @@ func (c *customerUseCase) CreateOne(ctx context.Context, input *customerdomain.I
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
-	// missing validate
+	if err := validate.Customer(input); err != nil {
+		return err
+	}
 
 	customer := &customerdomain.Customer{
 		ID:          primitive.NewObjectID(),
@@ -58,7 +61,9 @@ func (c *customerUseCase) UpdateOne(ctx context.Context, id string, input *custo
 		return err
 	}
 
-	// missing validate
+	if err = validate.Customer(input); err != nil {
+		return err
+	}
 
 	customer := &customerdomain.Customer{
 		ID:          customerID,

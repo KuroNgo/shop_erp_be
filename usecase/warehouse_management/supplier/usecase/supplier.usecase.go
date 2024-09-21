@@ -22,7 +22,7 @@ func (s *supplierUseCase) CreateOne(ctx context.Context, input *supplierdomain.I
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidateSupplier(input); err != nil {
+	if err := validate.Supplier(input); err != nil {
 		return err
 	}
 
@@ -125,7 +125,7 @@ func (s *supplierUseCase) UpdateOne(ctx context.Context, id string, input *suppl
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidateSupplier(input); err != nil {
+	if err := validate.Supplier(input); err != nil {
 		return err
 	}
 

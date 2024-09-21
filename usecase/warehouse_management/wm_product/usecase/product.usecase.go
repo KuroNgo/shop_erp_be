@@ -5,7 +5,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	productdomain "shop_erp_mono/domain/warehouse_management/product"
 	categorydomain "shop_erp_mono/domain/warehouse_management/product_category"
-	"shop_erp_mono/usecase/warehouse_management/product/validate"
+	"shop_erp_mono/usecase/warehouse_management/wm_product/validate"
 	"time"
 )
 
@@ -23,7 +23,7 @@ func (p *productUseCase) CreateOne(ctx context.Context, input *productdomain.Inp
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidateProduct(input); err != nil {
+	if err := validate.Product(input); err != nil {
 		return err
 	}
 
@@ -50,7 +50,7 @@ func (p *productUseCase) UpdateOne(ctx context.Context, id string, input *produc
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidateProduct(input); err != nil {
+	if err := validate.Product(input); err != nil {
 		return err
 	}
 

@@ -10,9 +10,9 @@ import (
 	stockmovementdomain "shop_erp_mono/domain/warehouse_management/stockmovement"
 	warehousedomain "shop_erp_mono/domain/warehouse_management/warehouse"
 	userrepository "shop_erp_mono/repository/human_resource_management/user/repository"
-	productrepository "shop_erp_mono/repository/warehouse_management/product/repository"
 	stockmovementrepository "shop_erp_mono/repository/warehouse_management/stockmovement/repository"
 	warehouserepository "shop_erp_mono/repository/warehouse_management/warehourse/repository"
+	productrepository "shop_erp_mono/repository/warehouse_management/wm_product/repository"
 	stockmovementusecase "shop_erp_mono/usecase/warehouse_management/stockmovement/usecase"
 	"time"
 )

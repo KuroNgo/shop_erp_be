@@ -6,10 +6,10 @@ import (
 )
 
 const (
-	CollectionProduct = "product"
+	CollectionProduct = "wm_product"
 )
 
-// Product represents a product in the inventory.
+// Product represents a wm_product in the inventory.
 type Product struct {
 	ID              primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
 	ProductName     string             `bson:"product_name" json:"product_name"`
@@ -30,5 +30,5 @@ type Input struct {
 }
 
 type ProductResponse struct {
-	Product Product `json:"product" bson:"product"`
+	Product Product `json:"wm_product" bson:"wm_product"`
 }

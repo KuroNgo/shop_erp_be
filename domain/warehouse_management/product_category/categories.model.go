@@ -9,7 +9,7 @@ const (
 	CollectionCategory = "product_category"
 )
 
-// Category represents a product product_category.
+// Category represents a wm_product product_category.
 type Category struct {
 	ID           primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
 	CategoryName string             `bson:"category_name" json:"category_name"`

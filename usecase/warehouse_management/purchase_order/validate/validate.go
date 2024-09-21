@@ -5,7 +5,7 @@ import (
 	purchaseorderdomain "shop_erp_mono/domain/warehouse_management/purchase_order"
 )
 
-func ValidatePurchaseOrder(input *purchaseorderdomain.Input) error {
+func PurchaseOrder(input *purchaseorderdomain.Input) error {
 	if input.Supplier == "" {
 		return errors.New("the purchase order's information do not nil")
 	}

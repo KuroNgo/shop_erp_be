@@ -5,6 +5,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	saleordersdomain "shop_erp_mono/domain/sales_and_distribution_management/sale_orders"
 	shippingdomain "shop_erp_mono/domain/sales_and_distribution_management/shipping"
+	"shop_erp_mono/usecase/sales_and_distribution_management/shipping/validate"
 	"time"
 )
 
@@ -21,6 +22,10 @@ func NewShippingUseCase(contextTimeout time.Duration, shippingRepository shippin
 func (s *shippingUseCase) CreateOne(ctx context.Context, input *shippingdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
+
+	if err := validate.Shipping(input); err != nil {
+		return err
+	}
 
 	orderID, err := primitive.ObjectIDFromHex(input.OrderID)
 	if err != nil {
@@ -98,6 +103,10 @@ func (s *shippingUseCase) GetByOrderID(ctx context.Context, orderID string) (*sh
 func (s *shippingUseCase) UpdateOne(ctx context.Context, id string, updatedShipping *shippingdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
+
+	if err := validate.Shipping(updatedShipping); err != nil {
+		return err
+	}
 
 	shippingID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {

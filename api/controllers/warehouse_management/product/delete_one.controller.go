@@ -5,9 +5,9 @@ import (
 	"net/http"
 )
 
-// DeleteOneProduct delete the product's information
+// DeleteOneProduct delete the wm_product's information
 // @Summary Delete Product Information
-// @Description Deletes the product's information
+// @Description Deletes the wm_product's information
 // @Tags Product
 // @Accept json
 // @Produce json

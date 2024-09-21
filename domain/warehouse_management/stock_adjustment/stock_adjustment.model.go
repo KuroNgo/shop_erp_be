@@ -25,7 +25,7 @@ type StockAdjustment struct {
 }
 
 type Input struct {
-	Product        string    `bson:"product" json:"product"`
+	Product        string    `bson:"wm_product" json:"wm_product"`
 	Warehouse      string    `bson:"warehouse" json:"warehouse"`
 	AdjustmentType string    `bson:"adjustment_type" json:"adjustment_type"` // Example: "Increase", "Decrease"
 	Quantity       int       `bson:"quantity" json:"quantity"`
@@ -35,6 +35,6 @@ type Input struct {
 
 type StockAdjustmentResponse struct {
 	StockAdjustment StockAdjustment            `bson:"stock_adjustment" json:"stock_adjustment"`
-	Product         product_domain.Product     `bson:"product" json:"product"`
+	Product         product_domain.Product     `bson:"wm_product" json:"wm_product"`
 	Warehouse       warehouse_domain.Warehouse `bson:"warehouse_id" json:"warehouse_id"`
 }

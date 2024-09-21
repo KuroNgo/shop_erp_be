@@ -9,8 +9,8 @@ import (
 	productdomain "shop_erp_mono/domain/warehouse_management/product"
 	warehousedomain "shop_erp_mono/domain/warehouse_management/warehouse"
 	inventoryrepository "shop_erp_mono/repository/warehouse_management/inventory/repository"
-	productrepository "shop_erp_mono/repository/warehouse_management/product/repository"
 	warehouserepository "shop_erp_mono/repository/warehouse_management/warehourse/repository"
+	productrepository "shop_erp_mono/repository/warehouse_management/wm_product/repository"
 	inventoryusecase "shop_erp_mono/usecase/warehouse_management/inventory/usecase"
 	"time"
 )

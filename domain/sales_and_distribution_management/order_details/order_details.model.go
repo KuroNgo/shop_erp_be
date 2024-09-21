@@ -11,7 +11,7 @@ const (
 	CollectionOrderDetail = "order_detail"
 )
 
-// OrderDetail represents details of a single product within an order.
+// OrderDetail represents details of a single wm_product within an order.
 type OrderDetail struct {
 	ID         primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
 	OrderID    primitive.ObjectID `bson:"order_id" json:"order_id"`
@@ -34,5 +34,5 @@ type Input struct {
 type OrderDetailResponse struct {
 	OrderDetail OrderDetail                   `bson:"order_detail" json:"order_detail"`
 	Order       sale_orders_domain.SalesOrder `bson:"order" json:"order"`
-	Product     productdomain.Product         `bson:"product" json:"product"`
+	Product     productdomain.Product         `bson:"wm_product" json:"wm_product"`
 }

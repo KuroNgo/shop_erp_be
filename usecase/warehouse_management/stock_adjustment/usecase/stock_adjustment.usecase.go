@@ -47,7 +47,7 @@ func (s *stockAdjustmentUseCase) CreateOne(ctx context.Context, input *stockadju
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidateStockAdjustment(input); err != nil {
+	if err := validate.StockAdjustment(input); err != nil {
 		return err
 	}
 
@@ -80,7 +80,7 @@ func (s *stockAdjustmentUseCase) UpdateOne(ctx context.Context, id string, input
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidateStockAdjustment(input); err != nil {
+	if err := validate.StockAdjustment(input); err != nil {
 		return err
 	}
 

@@ -5,6 +5,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	invoices_domain "shop_erp_mono/domain/sales_and_distribution_management/invoices"
 	sale_orders_domain "shop_erp_mono/domain/sales_and_distribution_management/sale_orders"
+	"shop_erp_mono/usecase/sales_and_distribution_management/invoices/validate"
 	"time"
 )
 
@@ -24,6 +25,10 @@ func (i *invoiceUseCase) CreateOne(ctx context.Context, input *invoices_domain.I
 
 	orderID, err := primitive.ObjectIDFromHex(input.OrderID)
 	if err != nil {
+		return err
+	}
+
+	if err = validate.Invoices(input); err != nil {
 		return err
 	}
 
@@ -133,6 +138,10 @@ func (i *invoiceUseCase) GetByStatus(ctx context.Context, status string) ([]invo
 func (i *invoiceUseCase) UpdateOne(ctx context.Context, id string, input *invoices_domain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, i.contextTimeout)
 	defer cancel()
+
+	if err := validate.Invoices(input); err != nil {
+		return err
+	}
 
 	invoiceID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {

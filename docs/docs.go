@@ -1620,7 +1620,7 @@ const docTemplate = `{
         },
         "/api/v1/inventory/check/{warehouse_id}/{product_id}/{required_quantity}": {
             "get": {
-                "description": "Check if the specified quantity of a product is available in a given warehouse",
+                "description": "Check if the specified quantity of a wm_product is available in a given warehouse",
                 "consumes": [
                     "application/json"
                 ],
@@ -1709,9 +1709,9 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/api/v1/inventory/product/{product_id}": {
+        "/api/v1/inventory/wm_product/{product_id}": {
             "get": {
-                "description": "Retrieve inventory details using the product ID",
+                "description": "Retrieve inventory details using the wm_product ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -1721,7 +1721,7 @@ const docTemplate = `{
                 "tags": [
                     "Inventory"
                 ],
-                "summary": "Get inventory by product ID",
+                "summary": "Get inventory by wm_product ID",
                 "parameters": [
                     {
                         "type": "string",
@@ -2678,7 +2678,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Create new product",
+                "description": "Create new wm_product",
                 "consumes": [
                     "application/json"
                 ],
@@ -2688,7 +2688,7 @@ const docTemplate = `{
                 "tags": [
                     "Product"
                 ],
-                "summary": "Create product",
+                "summary": "Create wm_product",
                 "parameters": [
                     {
                         "description": "Product data",
@@ -2710,7 +2710,7 @@ const docTemplate = `{
                         "CookieAuth": []
                     }
                 ],
-                "description": "Deletes the product's information",
+                "description": "Deletes the wm_product's information",
                 "consumes": [
                     "application/json"
                 ],
@@ -2740,7 +2740,7 @@ const docTemplate = `{
                         "CookieAuth": []
                     }
                 ],
-                "description": "Retrieves the product's information id",
+                "description": "Retrieves the wm_product's information id",
                 "consumes": [
                     "application/json"
                 ],
@@ -2770,7 +2770,7 @@ const docTemplate = `{
                         "CookieAuth": []
                     }
                 ],
-                "description": "Retrieves the product's information",
+                "description": "Retrieves the wm_product's information",
                 "consumes": [
                     "application/json"
                 ],
@@ -2791,7 +2791,7 @@ const docTemplate = `{
                         "CookieAuth": []
                     }
                 ],
-                "description": "Retrieves the product's information id",
+                "description": "Retrieves the wm_product's information id",
                 "consumes": [
                     "application/json"
                 ],
@@ -2821,7 +2821,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Update new product",
+                "description": "Update new wm_product",
                 "consumes": [
                     "application/json"
                 ],
@@ -2831,7 +2831,7 @@ const docTemplate = `{
                 "tags": [
                     "Product"
                 ],
-                "summary": "Update product",
+                "summary": "Update wm_product",
                 "parameters": [
                     {
                         "description": "Product data",
@@ -4793,7 +4793,7 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/stock-adjustments/get/product/{product_id}": {
+        "/stock-adjustments/get/wm_product/{product_id}": {
             "get": {
                 "description": "Retrieve stock adjustments related to a specific Product ID",
                 "consumes": [
@@ -5196,7 +5196,7 @@ const docTemplate = `{
         "purchase_order_detail_domain.Input": {
             "type": "object",
             "properties": {
-                "product": {
+                "wm_product": {
                     "type": "string"
                 },
                 "purchase_order_id": {
@@ -5311,7 +5311,7 @@ const docTemplate = `{
         "sale_reports_domain.Input": {
             "type": "object",
             "properties": {
-                "product": {
+                "wm_product": {
                     "type": "string"
                 },
                 "product_name": {
@@ -5369,7 +5369,7 @@ const docTemplate = `{
                     "description": "Example: \"Increase\", \"Decrease\"",
                     "type": "string"
                 },
-                "product": {
+                "wm_product": {
                     "type": "string"
                 },
                 "quantity": {

@@ -36,7 +36,7 @@ func (u *userUseCase) SignUp(ctx context.Context, file *multipart.FileHeader, in
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidateUser(input); err != nil {
+	if err := validate.User(input); err != nil {
 		return err
 	}
 
@@ -271,7 +271,7 @@ func (u *userUseCase) UpdateVerify(ctx context.Context, id string, input *userdo
 		return err
 	}
 
-	if err = validate.ValidateUser(input); err != nil {
+	if err = validate.User(input); err != nil {
 		return err
 	}
 

@@ -8,7 +8,7 @@ import (
 	salereportsdomain "shop_erp_mono/domain/sales_and_distribution_management/sale_reports"
 	productdomain "shop_erp_mono/domain/warehouse_management/product"
 	salesreportrepository "shop_erp_mono/repository/sales_and_distribution_management/sale_report/repository"
-	productrepository "shop_erp_mono/repository/warehouse_management/product/repository"
+	productrepository "shop_erp_mono/repository/warehouse_management/wm_product/repository"
 	salereportusecase "shop_erp_mono/usecase/sales_and_distribution_management/sale_report/usecase"
 	"time"
 )

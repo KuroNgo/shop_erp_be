@@ -29,8 +29,6 @@ type Input struct {
 	ShippingAddress string    `bson:"shipping_address"`
 	TotalAmount     float64   `bson:"total_amount"`
 	Status          string    `bson:"status"`
-	CreatedAt       time.Time `bson:"created_at"`
-	UpdatedAt       time.Time `bson:"updated_at"`
 }
 
 type SalesOrderResponse struct {

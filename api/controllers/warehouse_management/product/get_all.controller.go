@@ -5,9 +5,9 @@ import (
 	"net/http"
 )
 
-// GetAllProduct retrieves the product's information
+// GetAllProduct retrieves the wm_product's information
 // @Summary Get Product Information
-// @Description Retrieves the product's information
+// @Description Retrieves the wm_product's information
 // @Tags Product
 // @Accept  json
 // @Produce  json

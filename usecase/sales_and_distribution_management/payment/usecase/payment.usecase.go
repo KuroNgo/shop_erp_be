@@ -5,6 +5,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	paymentsdomain "shop_erp_mono/domain/sales_and_distribution_management/payments"
 	saleordersdomain "shop_erp_mono/domain/sales_and_distribution_management/sale_orders"
+	"shop_erp_mono/usecase/sales_and_distribution_management/payment/validate"
 	"time"
 )
 
@@ -22,6 +23,10 @@ func NewPaymentUseCase(contextTimeout time.Duration, paymentRepository paymentsd
 func (p *paymentUseCase) CreateOne(ctx context.Context, input *paymentsdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
+
+	if err := validate.Payment(input); err != nil {
+		return err
+	}
 
 	orderID, err := primitive.ObjectIDFromHex(input.OrderID)
 	if err != nil {
@@ -133,6 +138,10 @@ func (p *paymentUseCase) GetByStatus(ctx context.Context, status string) ([]paym
 func (p *paymentUseCase) UpdateOne(ctx context.Context, id string, input *paymentsdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
+
+	if err := validate.Payment(input); err != nil {
+		return err
+	}
 
 	idPayment, err := primitive.ObjectIDFromHex(id)
 	if err != nil {

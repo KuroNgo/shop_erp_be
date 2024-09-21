@@ -6,9 +6,9 @@ import (
 	"strconv"
 )
 
-// CheckInventoryAvailability checks if the required quantity of a product is available in a warehouse
+// CheckInventoryAvailability checks if the required quantity of a wm_product is available in a warehouse
 // @Summary Check inventory availability
-// @Description Check if the specified quantity of a product is available in a given warehouse
+// @Description Check if the specified quantity of a wm_product is available in a given warehouse
 // @Tags Inventory
 // @Accept json
 // @Produce json

@@ -5,7 +5,7 @@ import (
 	stockadjustmentdomain "shop_erp_mono/domain/warehouse_management/stock_adjustment"
 )
 
-func ValidateStockAdjustment(input *stockadjustmentdomain.Input) error {
+func StockAdjustment(input *stockadjustmentdomain.Input) error {
 	if input.Product == "" {
 		return errors.New("the stock adjustment's information do not nil")
 	}

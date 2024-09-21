@@ -5,7 +5,7 @@ import (
 	supplierdomain "shop_erp_mono/domain/warehouse_management/supplier"
 )
 
-func ValidateSupplier(input *supplierdomain.Input) error {
+func Supplier(input *supplierdomain.Input) error {
 	if input.Address == "" {
 		return errors.New("the supplier's information do not nil")
 	}

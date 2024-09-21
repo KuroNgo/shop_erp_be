@@ -5,7 +5,7 @@ import (
 	inventorydomain "shop_erp_mono/domain/warehouse_management/inventory"
 )
 
-func ValidateInventory(input *inventorydomain.Input) error {
+func Inventory(input *inventorydomain.Input) error {
 	if input.ProductName == "" {
 		return errors.New("the inventory's information do not nil")
 	}

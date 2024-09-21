@@ -24,7 +24,7 @@ func (c *categoryUseCase) CreateOne(ctx context.Context, input *categorydomain.I
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidateCategory(input); err != nil {
+	if err := validate.Category(input); err != nil {
 		return err
 	}
 
@@ -80,7 +80,7 @@ func (c *categoryUseCase) UpdateOne(ctx context.Context, id string, input *categ
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidateCategory(input); err != nil {
+	if err := validate.Category(input); err != nil {
 		return err
 	}
 

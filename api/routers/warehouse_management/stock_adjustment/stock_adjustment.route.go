@@ -8,9 +8,9 @@ import (
 	productdomain "shop_erp_mono/domain/warehouse_management/product"
 	stockadjustmentdomain "shop_erp_mono/domain/warehouse_management/stock_adjustment"
 	warehousedomain "shop_erp_mono/domain/warehouse_management/warehouse"
-	productrepository "shop_erp_mono/repository/warehouse_management/product/repository"
 	stockadjustmentrepository "shop_erp_mono/repository/warehouse_management/stock_adjustment/repository"
 	warehouserepository "shop_erp_mono/repository/warehouse_management/warehourse/repository"
+	productrepository "shop_erp_mono/repository/warehouse_management/wm_product/repository"
 	stockadjustmentusecase "shop_erp_mono/usecase/warehouse_management/stock_adjustment/usecase"
 	"time"
 )

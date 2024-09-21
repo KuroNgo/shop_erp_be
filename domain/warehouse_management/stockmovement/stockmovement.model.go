@@ -27,7 +27,7 @@ type StockMovement struct {
 }
 
 type Input struct {
-	Product      string    `bson:"product" json:"product"`
+	Product      string    `bson:"wm_product" json:"wm_product"`
 	Warehouse    string    `bson:"warehouse" json:"warehouse"`
 	MovementType string    `bson:"movement_type" json:"movement_type"`
 	Quantity     int       `bson:"quantity" json:"quantity"`
@@ -38,7 +38,7 @@ type Input struct {
 
 type StockMovementResponse struct {
 	StockMovement StockMovement             `bson:"stock_movement" json:"stock_movement"`
-	Product       productdomain.Product     `bson:"product" json:"product"`
+	Product       productdomain.Product     `bson:"wm_product" json:"wm_product"`
 	Warehouse     warehousedomain.Warehouse `bson:"warehouse" json:"warehouse"`
 	User          userdomain.User           `bson:"user" json:"user"`
 }

@@ -24,7 +24,7 @@ type SalesReport struct {
 type Input struct {
 	ReportDate   time.Time `bson:"report_date" json:"report_date"`
 	TotalSales   float64   `bson:"total_sales" json:"total_sales"`
-	Product      string    `bson:"product" json:"product"`
+	Product      string    `bson:"wm_product" json:"wm_product"`
 	ProductName  string    `bson:"product_name" json:"product_name"`
 	QuantitySold int       `bson:"quantity_sold" json:"quantity_sold"`
 	TotalRevenue float64   `bson:"total_revenue" json:"total_revenue"`

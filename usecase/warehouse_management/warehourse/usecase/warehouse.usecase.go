@@ -21,7 +21,7 @@ func (w *warehouseUseCase) CreateOne(ctx context.Context, input *warehousedomain
 	ctx, cancel := context.WithTimeout(ctx, w.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidateWarehouse(input); err != nil {
+	if err := validate.Warehouse(input); err != nil {
 		return err
 	}
 
@@ -41,7 +41,7 @@ func (w *warehouseUseCase) UpdateOne(ctx context.Context, id string, input *ware
 	ctx, cancel := context.WithTimeout(ctx, w.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidateWarehouse(input); err != nil {
+	if err := validate.Warehouse(input); err != nil {
 		return err
 	}
 

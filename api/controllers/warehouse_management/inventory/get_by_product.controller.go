@@ -5,14 +5,14 @@ import (
 	"net/http"
 )
 
-// GetByProductID retrieves inventory details by product ID
-// @Summary Get inventory by product ID
-// @Description Retrieve inventory details using the product ID
+// GetByProductID retrieves inventory details by wm_product ID
+// @Summary Get inventory by wm_product ID
+// @Description Retrieve inventory details using the wm_product ID
 // @Tags Inventory
 // @Accept json
 // @Produce json
 // @Param product_id path string true "Product ID"
-// @Router /api/v1/inventory/product/{product_id} [get]
+// @Router /api/v1/inventory/wm_product/{product_id} [get]
 func (i *InventoryController) GetByProductID(ctx *gin.Context) {
 	productId := ctx.Query("product_id")
 

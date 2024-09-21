@@ -5,6 +5,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	salereportsdomain "shop_erp_mono/domain/sales_and_distribution_management/sale_reports"
 	productdomain "shop_erp_mono/domain/warehouse_management/product"
+	"shop_erp_mono/usecase/sales_and_distribution_management/sale_report/validate"
 	"time"
 )
 
@@ -22,6 +23,10 @@ func NewSaleReportUseCase(contextTimeout time.Duration, saleReportRepository sal
 func (s *saleReportUseCase) CreateOne(ctx context.Context, input *salereportsdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
+
+	if err := validate.SaleReport(input); err != nil {
+		return err
+	}
 
 	productData, err := s.productRepository.GetByName(ctx, input.ProductName)
 	if err != nil {
@@ -101,6 +106,10 @@ func (s *saleReportUseCase) GetTopSellingProducts(ctx context.Context, startDate
 func (s *saleReportUseCase) UpdateOne(ctx context.Context, id string, updatedReport *salereportsdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
+
+	if err := validate.SaleReport(updatedReport); err != nil {
+		return err
+	}
 
 	reportID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {

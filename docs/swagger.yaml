@@ -1493,7 +1493,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Check if the specified quantity of a product is available in a
+      description: Check if the specified quantity of a wm_product is available in a
         given warehouse
       parameters:
       - description: Warehouse ID
@@ -1556,7 +1556,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Retrieve inventory details using the product ID
+      description: Retrieve inventory details using the wm_product ID
       parameters:
       - description: Product ID
         in: path
@@ -1566,7 +1566,7 @@ paths:
       produces:
       - application/json
       responses: {}
-      summary: Get inventory by product ID
+      summary: Get inventory by wm_product ID
       tags:
       - Inventory
   /api/v1/inventory/warehouse/{warehouse_id}:
@@ -2155,7 +2155,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Create new product
+      description: Create new wm_product
       parameters:
       - description: Product data
         in: body
@@ -2168,14 +2168,14 @@ paths:
       responses: {}
       security:
       - ApiKeyAuth: []
-      summary: Create product
+      summary: Create wm_product
       tags:
       - Product
   /api/v1/products/delete:
     delete:
       consumes:
       - application/json
-      description: Deletes the product's information
+      description: Deletes the wm_product's information
       parameters:
       - description: Product ID
         in: path
@@ -2194,7 +2194,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Retrieves the product's information id
+      description: Retrieves the wm_product's information id
       parameters:
       - description: Product ID
         in: path
@@ -2213,7 +2213,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Retrieves the product's information
+      description: Retrieves the wm_product's information
       produces:
       - application/json
       responses: {}
@@ -2226,7 +2226,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Retrieves the product's information id
+      description: Retrieves the wm_product's information id
       parameters:
       - description: Product ID
         in: path
@@ -2245,7 +2245,7 @@ paths:
     put:
       consumes:
       - application/json
-      description: Update new product
+      description: Update new wm_product
       parameters:
       - description: Product data
         in: body
@@ -2258,7 +2258,7 @@ paths:
       responses: {}
       security:
       - ApiKeyAuth: []
-      summary: Update product
+      summary: Update wm_product
       tags:
       - Product
   /api/v1/purchase-order-details/create:

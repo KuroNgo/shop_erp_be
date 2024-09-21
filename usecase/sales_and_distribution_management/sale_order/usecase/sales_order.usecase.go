@@ -5,6 +5,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	customerdomain "shop_erp_mono/domain/sales_and_distribution_management/customer"
 	saleordersdomain "shop_erp_mono/domain/sales_and_distribution_management/sale_orders"
+	"shop_erp_mono/usecase/sales_and_distribution_management/sale_order/validate"
 	"time"
 )
 
@@ -140,6 +141,10 @@ func (s *saleOrderUseCase) CreateOne(ctx context.Context, input *saleordersdomai
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
+	if err := validate.SaleOrder(input); err != nil {
+		return err
+	}
+
 	customerID, err := primitive.ObjectIDFromHex(input.CustomerID)
 	if err != nil {
 		return err
@@ -162,6 +167,10 @@ func (s *saleOrderUseCase) CreateOne(ctx context.Context, input *saleordersdomai
 func (s *saleOrderUseCase) UpdateOne(ctx context.Context, id string, input *saleordersdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
+
+	if err := validate.SaleOrder(input); err != nil {
+		return err
+	}
 
 	saleOrderID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {

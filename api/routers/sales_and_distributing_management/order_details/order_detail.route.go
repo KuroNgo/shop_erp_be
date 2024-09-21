@@ -10,7 +10,7 @@ import (
 	productdomain "shop_erp_mono/domain/warehouse_management/product"
 	orderdetailrepository "shop_erp_mono/repository/sales_and_distribution_management/order_details/repository"
 	salesorderrepository "shop_erp_mono/repository/sales_and_distribution_management/sale_order/repository"
-	productrepository "shop_erp_mono/repository/warehouse_management/product/repository"
+	productrepository "shop_erp_mono/repository/warehouse_management/wm_product/repository"
 	orderdetailusecase "shop_erp_mono/usecase/sales_and_distribution_management/order_details/usecase"
 	"time"
 )
