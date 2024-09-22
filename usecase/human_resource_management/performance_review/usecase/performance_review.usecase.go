@@ -24,7 +24,7 @@ func (p *performanceReviewUseCase) CreateOneWithEmailEmployee(ctx context.Contex
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidatePerformanceReviewV1(input); err != nil {
+	if err := validate.PerformanceReviewV1(input); err != nil {
 		return err
 	}
 

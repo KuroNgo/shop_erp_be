@@ -5,7 +5,7 @@ import (
 	salarydomain "shop_erp_mono/domain/human_resource_management/salary"
 )
 
-func IsNilSalary(salary *salarydomain.Input) error {
+func Salary(salary *salarydomain.Input) error {
 	if salary.BaseSalary < 0 {
 		return errors.New("the salary's information is invalid")
 	}

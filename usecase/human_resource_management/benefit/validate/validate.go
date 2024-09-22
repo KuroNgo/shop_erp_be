@@ -5,7 +5,7 @@ import (
 	benefitsdomain "shop_erp_mono/domain/human_resource_management/benefits"
 )
 
-func ValidateBenefit(input *benefitsdomain.Input) error {
+func Benefit(input *benefitsdomain.Input) error {
 	if input.EmployeeEmail == "" {
 		return errors.New("email of employee do not nil")
 	}

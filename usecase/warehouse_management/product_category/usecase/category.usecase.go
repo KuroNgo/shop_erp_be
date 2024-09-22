@@ -16,7 +16,8 @@ type categoryUseCase struct {
 	productRepository  productdomain.IProductRepository
 }
 
-func NewCategoryUseCase(contextTimeout time.Duration, categoryRepository categorydomain.ICategoryRepository, productRepository productdomain.IProductRepository) categorydomain.ICategoryUseCase {
+func NewCategoryUseCase(contextTimeout time.Duration, categoryRepository categorydomain.ICategoryRepository,
+	productRepository productdomain.IProductRepository) categorydomain.ICategoryUseCase {
 	return &categoryUseCase{contextTimeout: contextTimeout, categoryRepository: categoryRepository, productRepository: productRepository}
 }
 

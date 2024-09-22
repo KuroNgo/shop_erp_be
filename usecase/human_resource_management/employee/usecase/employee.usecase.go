@@ -30,7 +30,7 @@ func (e *employeeUseCase) CreateOne(ctx context.Context, input *employeesdomain.
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidateEmployee(input); err != nil {
+	if err := validate.Employee(input); err != nil {
 		return err
 	}
 
@@ -87,7 +87,7 @@ func (e *employeeUseCase) UpdateOne(ctx context.Context, id string, input *emplo
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidateEmployee(input); err != nil {
+	if err := validate.Employee(input); err != nil {
 		return err
 	}
 
@@ -128,6 +128,18 @@ func (e *employeeUseCase) UpdateOne(ctx context.Context, id string, input *emplo
 	}
 
 	return e.employeeRepository.UpdateOne(ctx, employeeID, employee)
+}
+
+func (e *employeeUseCase) UpdateStatus(ctx context.Context, id string, isActive bool) error {
+	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
+	defer cancel()
+
+	employeeID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+
+	return e.employeeRepository.UpdateStatus(ctx, employeeID, isActive)
 }
 
 func (e *employeeUseCase) GetByID(ctx context.Context, id string) (employeesdomain.Output, error) {

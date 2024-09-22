@@ -15,6 +15,7 @@ type Product struct {
 	ProductName     string             `bson:"product_name" json:"product_name"`
 	Description     string             `bson:"description" json:"description"`
 	Price           float64            `bson:"price" json:"price"`
+	ExpiryDate      *time.Time         `bson:"expiry_date" json:"expiry_date"`
 	QuantityInStock int                `bson:"quantity_in_stock" json:"quantity_in_stock"`
 	CategoryID      primitive.ObjectID `bson:"category_id" json:"category_id"`
 	CreatedAt       time.Time          `bson:"created_at" json:"created_at"`
@@ -22,11 +23,12 @@ type Product struct {
 }
 
 type Input struct {
-	ProductName     string  `bson:"product_name" json:"product_name"`
-	Description     string  `bson:"description" json:"description"`
-	QuantityInStock int     `bson:"quantity_in_stock" json:"quantity_in_stock"`
-	Price           float64 `bson:"price" json:"price"`
-	Category        string  `bson:"product_category" json:"product_category"`
+	ProductName     string     `bson:"product_name" json:"product_name"`
+	Description     string     `bson:"description" json:"description"`
+	ExpiryDate      *time.Time `bson:"expiry_date" json:"expiry_date"`
+	QuantityInStock int        `bson:"quantity_in_stock" json:"quantity_in_stock"`
+	Price           float64    `bson:"price" json:"price"`
+	Category        string     `bson:"product_category" json:"product_category"`
 }
 
 type ProductResponse struct {

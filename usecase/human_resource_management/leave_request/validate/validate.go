@@ -5,7 +5,7 @@ import (
 	leave_request_domain "shop_erp_mono/domain/human_resource_management/leave_request"
 )
 
-func ValidateLeaveRequest(input *leave_request_domain.Input) error {
+func LeaveRequest(input *leave_request_domain.Input) error {
 	if input.EmployeeEmail == "" {
 		return errors.New("email employee do not nil")
 	}

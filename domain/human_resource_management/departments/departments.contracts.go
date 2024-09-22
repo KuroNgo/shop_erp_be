@@ -12,6 +12,7 @@ type IDepartmentRepository interface {
 	GetByID(ctx context.Context, id primitive.ObjectID) (Department, error)
 	GetByName(ctx context.Context, name string) (Department, error)
 	GetAll(ctx context.Context) ([]Department, error)
+	CountManagerExist(ctx context.Context, managerID primitive.ObjectID) (int64, error)
 }
 
 type IDepartmentUseCase interface {

@@ -5,7 +5,7 @@ import (
 	contracts_domain "shop_erp_mono/domain/human_resource_management/contracts"
 )
 
-func ValidateContract(input *contracts_domain.Input) error {
+func Contract(input *contracts_domain.Input) error {
 	if input.ContractType == "" {
 		return errors.New("contract type do not nil")
 	}

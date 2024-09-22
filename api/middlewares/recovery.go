@@ -10,7 +10,7 @@ func Recover() gin.HandlerFunc {
 		defer func() {
 			if err := recover(); err != nil {
 				c.Header("Content-Type", "application/json")
-				c.JSON(http.StatusInternalServerError, gin.H{
+				c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 					"error":   "there are some internal error",
 					"message": err,
 				})

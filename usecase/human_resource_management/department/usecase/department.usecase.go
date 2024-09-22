@@ -2,6 +2,7 @@ package department_usecase
 
 import (
 	"context"
+	"errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	departmentsdomain "shop_erp_mono/domain/human_resource_management/departments"
 	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
@@ -24,13 +25,22 @@ func (d *departmentUseCase) CreateOne(ctx context.Context, input *departmentsdom
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidateDepartment(input); err != nil {
+	if err := validate.Department(input); err != nil {
 		return err
 	}
 
 	managerData, err := d.employeeRepository.GetByEmail(ctx, input.ManagerEmail)
 	if err != nil {
 		return err
+	}
+
+	count, err := d.departmentRepository.CountManagerExist(ctx, managerData.ID)
+	if err != nil {
+		return err
+	}
+
+	if count > 0 {
+		return errors.New("the employee is managing in other department")
 	}
 
 	department := &departmentsdomain.Department{
@@ -61,8 +71,22 @@ func (d *departmentUseCase) UpdateOne(ctx context.Context, id string, input *dep
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidateDepartment(input); err != nil {
+	if err := validate.Department(input); err != nil {
 		return err
+	}
+
+	managerData, err := d.employeeRepository.GetByEmail(ctx, input.ManagerEmail)
+	if err != nil {
+		return err
+	}
+
+	count, err := d.departmentRepository.CountManagerExist(ctx, managerData.ID)
+	if err != nil {
+		return err
+	}
+
+	if count > 0 {
+		return errors.New("the employee is managing in other department")
 	}
 
 	departmentID, err := primitive.ObjectIDFromHex(id)

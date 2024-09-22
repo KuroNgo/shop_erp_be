@@ -23,7 +23,7 @@ func (s *salaryUseCase) CreateOne(ctx context.Context, input *salarydomain.Input
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
-	if err := validate.IsNilSalary(input); err != nil {
+	if err := validate.Salary(input); err != nil {
 		return err
 	}
 
@@ -66,7 +66,7 @@ func (s *salaryUseCase) UpdateOne(ctx context.Context, id string, input *salaryd
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
-	if err := validate.IsNilSalary(input); err != nil {
+	if err := validate.Salary(input); err != nil {
 		return err
 	}
 

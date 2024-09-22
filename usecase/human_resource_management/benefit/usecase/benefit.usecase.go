@@ -15,7 +15,8 @@ type benefitUseCase struct {
 	employeeRepository employeesdomain.IEmployeeRepository
 }
 
-func NewBenefitUseCase(contextTimeout time.Duration, benefitRepository benefitsdomain.IBenefitRepository, employeeRepository employeesdomain.IEmployeeRepository) benefitsdomain.IBenefitUseCase {
+func NewBenefitUseCase(contextTimeout time.Duration, benefitRepository benefitsdomain.IBenefitRepository,
+	employeeRepository employeesdomain.IEmployeeRepository) benefitsdomain.IBenefitUseCase {
 	return &benefitUseCase{contextTimeout: contextTimeout, benefitRepository: benefitRepository, employeeRepository: employeeRepository}
 }
 
@@ -23,7 +24,7 @@ func (b *benefitUseCase) CreateOne(ctx context.Context, input *benefitsdomain.In
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidateBenefit(input); err != nil {
+	if err := validate.Benefit(input); err != nil {
 		return err
 	}
 
@@ -64,7 +65,7 @@ func (b *benefitUseCase) UpdateOne(ctx context.Context, id string, input *benefi
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidateBenefit(input); err != nil {
+	if err := validate.Benefit(input); err != nil {
 		return err
 	}
 

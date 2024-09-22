@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
 	"sync"
+	"time"
 )
 
 type employeeRepository struct {
@@ -79,6 +80,31 @@ func (e *employeeRepository) UpdateOne(ctx context.Context, id primitive.ObjectI
 		"salary_id":     employee.SalaryID,
 		"updated_at":    employee.UpdatedAt,
 		"is_active":     employee.IsActive,
+	}}
+
+	// Sử dụng defer để đảm bảo mutex luôn được mở khóa
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	_, err := collectionEmployee.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return errors.New(err.Error() + "error in the updating role's information into database ")
+	}
+
+	return nil
+}
+
+func (e *employeeRepository) UpdateStatus(ctx context.Context, id primitive.ObjectID, isActive bool) error {
+	collectionEmployee := e.database.Collection(e.collectionEmployee)
+
+	if id == primitive.NilObjectID {
+		return errors.New("id do not nil")
+	}
+
+	filter := bson.M{"_id": id}
+	update := bson.M{"$set": bson.M{
+		"updated_at": time.Now(),
+		"is_active":  isActive,
 	}}
 
 	// Sử dụng defer để đảm bảo mutex luôn được mở khóa

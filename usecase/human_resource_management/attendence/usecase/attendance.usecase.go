@@ -16,7 +16,8 @@ type attendanceUseCase struct {
 	employeeRepository   employeesdomain.IEmployeeRepository
 }
 
-func NewAttendanceUseCase(contextTimeout time.Duration, attendanceRepository attendancedomain.IAttendanceRepository, employeeRepository employeesdomain.IEmployeeRepository) attendancedomain.IAttendanceUseCase {
+func NewAttendanceUseCase(contextTimeout time.Duration, attendanceRepository attendancedomain.IAttendanceRepository,
+	employeeRepository employeesdomain.IEmployeeRepository) attendancedomain.IAttendanceUseCase {
 	return &attendanceUseCase{contextTimeout: contextTimeout, attendanceRepository: attendanceRepository, employeeRepository: employeeRepository}
 }
 
@@ -24,7 +25,7 @@ func (a *attendanceUseCase) CreateOne(ctx context.Context, input *attendancedoma
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
-	if err := validate.IsNilAttendance(input); err != nil {
+	if err := validate.Attendance(input); err != nil {
 		return err
 	}
 
@@ -69,7 +70,7 @@ func (a *attendanceUseCase) UpdateOne(ctx context.Context, id string, input *att
 		return errors.New("check-out time cannot be before check-in time")
 	}
 
-	if err := validate.IsNilAttendance(input); err != nil {
+	if err := validate.Attendance(input); err != nil {
 		return err
 	}
 

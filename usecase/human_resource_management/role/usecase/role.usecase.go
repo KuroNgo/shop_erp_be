@@ -21,7 +21,7 @@ func (r *roleUseCase) CreateOne(ctx context.Context, input *roledomain.Input) er
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidateRole(input); err != nil {
+	if err := validate.Role(input); err != nil {
 		return err
 	}
 
@@ -98,7 +98,7 @@ func (r *roleUseCase) UpdateOne(ctx context.Context, id string, input *roledomai
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
 
-	if err := validate.ValidateRole(input); err != nil {
+	if err := validate.Role(input); err != nil {
 		return err
 	}
 

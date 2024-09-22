@@ -22,11 +22,11 @@ func NewBudgetUseCase(contextTimeout time.Duration, budgetRepository budgetsdoma
 	return &budgetUseCase{contextTimeout: contextTimeout, budgetRepository: budgetRepository, transactionCategoryRepository: transactionCategoryRepository}
 }
 
-func (b *budgetUseCase) CreateBudget(ctx context.Context, input *budgetsdomain.Input) error {
+func (b *budgetUseCase) CreateOne(ctx context.Context, input *budgetsdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
-	if err := validate.IsNilBudget(input); err != nil {
+	if err := validate.Budget(input); err != nil {
 		return err
 	}
 
@@ -46,10 +46,10 @@ func (b *budgetUseCase) CreateBudget(ctx context.Context, input *budgetsdomain.I
 		UpdatedAt:  time.Now(),
 	}
 
-	return b.budgetRepository.CreateBudget(ctx, budget)
+	return b.budgetRepository.CreateOne(ctx, budget)
 }
 
-func (b *budgetUseCase) GetBudget(ctx context.Context, id string) (budgetsdomain.BudgetResponse, error) {
+func (b *budgetUseCase) GetByID(ctx context.Context, id string) (budgetsdomain.BudgetResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
@@ -58,26 +58,19 @@ func (b *budgetUseCase) GetBudget(ctx context.Context, id string) (budgetsdomain
 		return budgetsdomain.BudgetResponse{}, err
 	}
 
-	budgetData, err := b.budgetRepository.GetBudgetByID(ctx, budgetID)
+	budgetData, err := b.budgetRepository.GetByID(ctx, budgetID)
 	if err != nil {
 		return budgetsdomain.BudgetResponse{}, err
 	}
 
 	budgetResponse := budgetsdomain.BudgetResponse{
-		ID:         budgetData.ID,
-		BudgetName: budgetData.BudgetName,
-		CategoryID: budgetData.CategoryID,
-		Amount:     budgetData.Amount,
-		StartDate:  budgetData.StartDate,
-		EndDate:    budgetData.EndDate,
-		CreatedAt:  budgetData.CreatedAt,
-		UpdatedAt:  budgetData.UpdatedAt,
+		Budget: budgetData,
 	}
 
 	return budgetResponse, nil
 }
 
-func (b *budgetUseCase) GetBudgetByName(ctx context.Context, name string) (budgetsdomain.BudgetResponse, error) {
+func (b *budgetUseCase) GetByName(ctx context.Context, name string) (budgetsdomain.BudgetResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
@@ -85,26 +78,19 @@ func (b *budgetUseCase) GetBudgetByName(ctx context.Context, name string) (budge
 		return budgetsdomain.BudgetResponse{}, nil
 	}
 
-	budgetData, err := b.budgetRepository.GetBudgetByName(ctx, name)
+	budgetData, err := b.budgetRepository.GetByName(ctx, name)
 	if err != nil {
 		return budgetsdomain.BudgetResponse{}, err
 	}
 
 	budgetResponse := budgetsdomain.BudgetResponse{
-		ID:         budgetData.ID,
-		BudgetName: budgetData.BudgetName,
-		CategoryID: budgetData.CategoryID,
-		Amount:     budgetData.Amount,
-		StartDate:  budgetData.StartDate,
-		EndDate:    budgetData.EndDate,
-		CreatedAt:  budgetData.CreatedAt,
-		UpdatedAt:  budgetData.UpdatedAt,
+		Budget: budgetData,
 	}
 
 	return budgetResponse, nil
 }
 
-func (b *budgetUseCase) UpdateBudget(ctx context.Context, id string, input *budgetsdomain.Input) error {
+func (b *budgetUseCase) UpdateOne(ctx context.Context, id string, input *budgetsdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
@@ -113,7 +99,7 @@ func (b *budgetUseCase) UpdateBudget(ctx context.Context, id string, input *budg
 		return err
 	}
 
-	if err = validate.IsNilBudget(input); err != nil {
+	if err = validate.Budget(input); err != nil {
 		return err
 	}
 
@@ -133,10 +119,10 @@ func (b *budgetUseCase) UpdateBudget(ctx context.Context, id string, input *budg
 		UpdatedAt:  time.Now(),
 	}
 
-	return b.budgetRepository.UpdateBudget(ctx, budget)
+	return b.budgetRepository.UpdateOne(ctx, budget)
 }
 
-func (b *budgetUseCase) DeleteBudget(ctx context.Context, id string) error {
+func (b *budgetUseCase) DeleteOne(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
@@ -145,14 +131,14 @@ func (b *budgetUseCase) DeleteBudget(ctx context.Context, id string) error {
 		return err
 	}
 
-	return b.budgetRepository.DeleteBudget(ctx, budgetID)
+	return b.budgetRepository.DeleteOne(ctx, budgetID)
 }
 
-func (b *budgetUseCase) ListBudgets(ctx context.Context) ([]budgetsdomain.BudgetResponse, error) {
+func (b *budgetUseCase) GetAll(ctx context.Context) ([]budgetsdomain.BudgetResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
-	budgetData, err := b.budgetRepository.ListBudgets(ctx)
+	budgetData, err := b.budgetRepository.GetAll(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -161,14 +147,7 @@ func (b *budgetUseCase) ListBudgets(ctx context.Context) ([]budgetsdomain.Budget
 	budgetResponses = make([]budgetsdomain.BudgetResponse, 0, len(budgetData))
 	for _, budget := range budgetData {
 		budgetResponse := budgetsdomain.BudgetResponse{
-			ID:         budget.ID,
-			BudgetName: budget.BudgetName,
-			CategoryID: budget.CategoryID,
-			Amount:     budget.Amount,
-			StartDate:  budget.StartDate,
-			EndDate:    budget.EndDate,
-			CreatedAt:  budget.CreatedAt,
-			UpdatedAt:  budget.UpdatedAt,
+			Budget: budget,
 		}
 
 		budgetResponses = append(budgetResponses, budgetResponse)
@@ -177,7 +156,7 @@ func (b *budgetUseCase) ListBudgets(ctx context.Context) ([]budgetsdomain.Budget
 	return budgetResponses, nil
 }
 
-func (b *budgetUseCase) GetBudgetsByDateRange(ctx context.Context, startDate, endDate string) ([]budgetsdomain.BudgetResponse, error) {
+func (b *budgetUseCase) GetByDateRange(ctx context.Context, startDate, endDate string) ([]budgetsdomain.BudgetResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
@@ -196,7 +175,7 @@ func (b *budgetUseCase) GetBudgetsByDateRange(ctx context.Context, startDate, en
 		fmt.Println("Lỗi khi parse:", err)
 	}
 
-	budgetData, err := b.budgetRepository.GetBudgetsByDateRange(ctx, startDated, endDated)
+	budgetData, err := b.budgetRepository.GetByDateRange(ctx, startDated, endDated)
 	if err != nil {
 		return nil, err
 	}
@@ -205,14 +184,7 @@ func (b *budgetUseCase) GetBudgetsByDateRange(ctx context.Context, startDate, en
 	budgetResponses = make([]budgetsdomain.BudgetResponse, 0, len(budgetData))
 	for _, budget := range budgetData {
 		budgetResponse := budgetsdomain.BudgetResponse{
-			ID:         budget.ID,
-			BudgetName: budget.BudgetName,
-			CategoryID: budget.CategoryID,
-			Amount:     budget.Amount,
-			StartDate:  budget.StartDate,
-			EndDate:    budget.EndDate,
-			CreatedAt:  budget.CreatedAt,
-			UpdatedAt:  budget.UpdatedAt,
+			Budget: budget,
 		}
 
 		budgetResponses = append(budgetResponses, budgetResponse)
@@ -221,7 +193,7 @@ func (b *budgetUseCase) GetBudgetsByDateRange(ctx context.Context, startDate, en
 	return budgetResponses, nil
 }
 
-func (b *budgetUseCase) GetTotalBudgetAmount(ctx context.Context) (float64, error) {
+func (b *budgetUseCase) GetTotalAmount(ctx context.Context) (float64, error) {
 	//TODO implement me
 	panic("implement me")
 }

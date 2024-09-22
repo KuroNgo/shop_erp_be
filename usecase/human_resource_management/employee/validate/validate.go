@@ -6,7 +6,7 @@ import (
 	"shop_erp_mono/pkg/helper"
 )
 
-func ValidateEmployee(employee *employeesdomain.Input) error {
+func Employee(employee *employeesdomain.Input) error {
 	if employee.FirstName == "" {
 		return errors.New("the employee's information do not nil")
 	}
@@ -15,8 +15,13 @@ func ValidateEmployee(employee *employeesdomain.Input) error {
 		return errors.New("the employee's information do not nil")
 	}
 
-	if employee.Gender == "" {
-		return errors.New("the employee's information do not nil")
+	genderMap := map[string]bool{
+		"male":   true,
+		"female": true,
+	}
+
+	if !genderMap[employee.Gender] {
+		return errors.New("the employee's information is not valid")
 	}
 
 	if employee.Email == "" {
@@ -29,6 +34,10 @@ func ValidateEmployee(employee *employeesdomain.Input) error {
 
 	if employee.Phone == "" {
 		return errors.New("the employee's information do not nil")
+	}
+
+	if !helper.PhoneValid(employee.Phone) {
+		return errors.New("the employee's information do not valid")
 	}
 
 	if employee.Address == "" {

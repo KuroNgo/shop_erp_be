@@ -14,7 +14,7 @@ func BudgetRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Data
 	//	Database:      env,
 	//}
 	//
-	//router := group.Group("/accounts")
+	//router := group.Group("/budgets")
 	//router.GET("/get/_id", account.GetByIDAccount)
 	//router.GET("/get/name", account.GetByNameAccount)
 	//router.GET("/get/all", account.GetAll)

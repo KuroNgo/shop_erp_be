@@ -136,3 +136,15 @@ func (d *departmentRepository) GetAll(ctx context.Context) ([]departmentsdomain.
 
 	return departments, nil
 }
+
+func (d *departmentRepository) CountManagerExist(ctx context.Context, managerID primitive.ObjectID) (int64, error) {
+	collectionDepartment := d.database.Collection(d.collectionDepartment)
+
+	filter := bson.M{"manager_id": managerID}
+	count, err := collectionDepartment.CountDocuments(ctx, filter)
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}

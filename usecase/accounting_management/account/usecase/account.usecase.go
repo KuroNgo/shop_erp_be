@@ -22,7 +22,7 @@ func (a *accountUseCase) CreateOne(ctx context.Context, input *accountdomain.Inp
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
-	if err := validate.IsNilAccount(input); err != nil {
+	if err := validate.Account(input); err != nil {
 		return err
 	}
 
@@ -79,6 +79,10 @@ func (a *accountUseCase) GetByName(ctx context.Context, name string) (accountdom
 func (a *accountUseCase) UpdateOne(ctx context.Context, id string, input *accountdomain.Input) error {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
+
+	if err := validate.Account(input); err != nil {
+		return err
+	}
 
 	accountID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {

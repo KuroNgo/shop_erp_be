@@ -5,7 +5,7 @@ import (
 	departmentsdomain "shop_erp_mono/domain/human_resource_management/departments"
 )
 
-func ValidateDepartment(department *departmentsdomain.Input) error {
+func Department(department *departmentsdomain.Input) error {
 	if department.Name == "" {
 		return errors.New("the department's information do not null")
 	}

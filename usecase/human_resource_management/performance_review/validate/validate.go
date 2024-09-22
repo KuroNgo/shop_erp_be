@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func ValidatePerformanceReviewV1(input *performancereviewdomain.Input1) error {
+func PerformanceReviewV1(input *performancereviewdomain.Input1) error {
 	if input.ReviewerEmail == "" {
 		return errors.New("the performance review's information do not nil ")
 	}

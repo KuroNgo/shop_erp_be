@@ -2,6 +2,7 @@ package budgets_domain
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	transaction_categories_domain "shop_erp_mono/domain/accounting_management/transaction_categories"
 	"time"
 )
 
@@ -25,17 +26,10 @@ type Input struct {
 	Amount     int32     `bson:"amount" json:"amount"`
 	StartDate  time.Time `bson:"start_date" json:"start_date"`
 	EndDate    time.Time `bson:"end_date" json:"end_date"`
-	Category   string    `bson:"product_category" json:"product_category"`
+	Category   string    `bson:"transaction_category" json:"transaction_category"`
 }
 
-// BudgetResponse represents the response structure for a budget
 type BudgetResponse struct {
-	ID         primitive.ObjectID `json:"id"`
-	BudgetName string             `json:"budgetName"`
-	Amount     int32              `json:"amount"`
-	StartDate  time.Time          `json:"startDate"`
-	EndDate    time.Time          `json:"endDate"`
-	CategoryID primitive.ObjectID `json:"categoryID"`
-	CreatedAt  time.Time          `json:"createdAt"`
-	UpdatedAt  time.Time          `json:"updatedAt"`
+	Budget              Budget
+	TransactionCategory transaction_categories_domain.TransactionCategories
 }

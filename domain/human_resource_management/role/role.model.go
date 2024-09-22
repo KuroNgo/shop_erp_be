@@ -11,11 +11,12 @@ const (
 
 // Role struct represents a role or job role.
 type Role struct {
-	ID          primitive.ObjectID `bson:"_id,omitempty"`
-	Title       string             `bson:"title"`
-	Description string             `bson:"description"`
-	CreatedAt   time.Time          `bson:"created_at"`
-	UpdatedAt   time.Time          `bson:"updated_at"`
+	ID             primitive.ObjectID `bson:"_id,omitempty"`
+	Title          string             `bson:"title"`
+	Description    string             `bson:"description"`
+	NumberOfPeople int16              `bson:"number_of_people"`
+	CreatedAt      time.Time          `bson:"created_at"`
+	UpdatedAt      time.Time          `bson:"updated_at"`
 }
 
 type Input struct {
