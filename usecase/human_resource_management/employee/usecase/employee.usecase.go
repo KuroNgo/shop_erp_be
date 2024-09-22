@@ -2,6 +2,7 @@ package employee_usecase
 
 import (
 	"context"
+	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	departmentsdomain "shop_erp_mono/domain/human_resource_management/departments"
 	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
@@ -17,13 +18,26 @@ type employeeUseCase struct {
 	departmentRepository departmentsdomain.IDepartmentRepository
 	salaryRepository     salarydomain.ISalaryRepository
 	roleRepository       roledomain.IRoleRepository
+	cache                *bigcache.BigCache
 }
 
 func NewEmployeeUseCase(contextTimout time.Duration, employeeRepository employeesdomain.IEmployeeRepository,
 	departmentRepository departmentsdomain.IDepartmentRepository, salaryRepository salarydomain.ISalaryRepository,
-	roleRepository roledomain.IRoleRepository) employeesdomain.IEmployeeUseCase {
+	roleRepository roledomain.IRoleRepository, cacheTTL time.Duration) employeesdomain.IEmployeeUseCase {
+	config := bigcache.Config{
+		Shards:           1024,
+		LifeWindow:       cacheTTL,
+		MaxEntrySize:     512,
+		CleanWindow:      1 * time.Minute,
+		HardMaxCacheSize: 8192,
+	}
+
+	cache, err := bigcache.New(context.Background(), config)
+	if err != nil {
+		return nil
+	}
 	return &employeeUseCase{contextTimeout: contextTimout, employeeRepository: employeeRepository,
-		departmentRepository: departmentRepository, salaryRepository: salaryRepository, roleRepository: roleRepository}
+		departmentRepository: departmentRepository, cache: cache, salaryRepository: salaryRepository, roleRepository: roleRepository}
 }
 
 func (e *employeeUseCase) CreateOne(ctx context.Context, input *employeesdomain.Input) error {

@@ -6,6 +6,14 @@ import (
 	"shop_erp_mono/pkg/casbin/principle"
 )
 
+// DeleteRoleForUser godoc
+// @Summary Delete role for a user
+// @Description Remove a specific role from a user
+// @Tags Casbin
+// @Accept json
+// @Produce json
+// @Param data body UserRole true "User ID and Role data"
+// @Router /api/v1/casbin/delete/user [delete]
 func DeleteRoleForUser(ctx *gin.Context) {
 	var data UserRole
 	if err := ctx.ShouldBindJSON(&data); err != nil {
@@ -31,6 +39,14 @@ func DeleteRoleForUser(ctx *gin.Context) {
 	})
 }
 
+// DeleteRole godoc
+// @Summary Delete a role
+// @Description Delete a role from the system
+// @Tags Casbin
+// @Accept json
+// @Produce json
+// @Param data body Role true "Role data"
+// @Router /api/v1/casbin/delete [delete]
 func DeleteRole(ctx *gin.Context) {
 	var data Role
 
@@ -66,6 +82,14 @@ func DeleteRole(ctx *gin.Context) {
 	})
 }
 
+// DeleteRoleForAPI godoc
+// @Summary Delete role permissions for an API
+// @Description Remove role-based permissions for an API and method
+// @Tags Casbin
+// @Accept json
+// @Produce json
+// @Param data body APIRole true "API and Role data"
+// @Router /api/v1/casbin/delete/api/role [delete]
 func DeleteRoleForAPI(ctx *gin.Context) {
 	var data APIRole
 	if err := ctx.ShouldBindJSON(&data); err != nil {
@@ -102,6 +126,14 @@ func DeleteRoleForAPI(ctx *gin.Context) {
 	})
 }
 
+// DeleteAPIForRole godoc
+// @Summary Delete API for a role
+// @Description Remove APIs with specific methods for a role
+// @Tags Casbin
+// @Accept json
+// @Produce json
+// @Param data body RoleAPI true "Role and API data"
+// @Router /api/v1/casbin/delete/role/api [delete]
 func DeleteAPIForRole(ctx *gin.Context) {
 	var data RoleAPI
 

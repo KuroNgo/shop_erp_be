@@ -13,11 +13,11 @@ import (
 	"time"
 )
 
-func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, gin *gin.Engine) {
+func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, gin *gin.Engine, cacheTTL time.Duration) {
 	swaggerroute.SwaggerRouter(env, timeout, db, gin.Group(""))
-	human_resources_management.SetUp(env, timeout, db, gin)
+	human_resources_management.SetUp(env, timeout, db, gin, cacheTTL)
 	accounting_management.SetUp(env, timeout, db, gin)
-	sales_and_distributing_management.SetUp(env, timeout, db, gin)
+	sales_and_distributing_management.SetUp(env, timeout, db, gin, cacheTTL)
 	warehouse_management.SetUp(env, timeout, db, gin)
 
 	// Đếm các route

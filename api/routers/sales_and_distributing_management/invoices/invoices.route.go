@@ -13,11 +13,11 @@ import (
 	"time"
 )
 
-func InvoiceRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func InvoiceRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	in := invoicerepository.NewInvoiceRepository(db, invoicesdomain.CollectionInvoice)
 	so := salesorderrepository.NewSaleOrderRepository(db, saleordersdomain.CollectionSalesOrder)
 	invoice := &invoicecontroller.InvoiceController{
-		InvoiceUseCase: invoiceusecase.NewInvoiceUseCase(timeout, in, so),
+		InvoiceUseCase: invoiceusecase.NewInvoiceUseCase(timeout, in, so, cacheTTL),
 		Database:       env,
 	}
 

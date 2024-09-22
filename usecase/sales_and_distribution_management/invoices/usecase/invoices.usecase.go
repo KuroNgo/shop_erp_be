@@ -2,10 +2,13 @@ package invoice_usecase
 
 import (
 	"context"
+	"encoding/json"
+	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	invoices_domain "shop_erp_mono/domain/sales_and_distribution_management/invoices"
 	sale_orders_domain "shop_erp_mono/domain/sales_and_distribution_management/sale_orders"
 	"shop_erp_mono/usecase/sales_and_distribution_management/invoices/validate"
+	"sync"
 	"time"
 )
 
@@ -13,10 +16,29 @@ type invoiceUseCase struct {
 	contextTimeout       time.Duration
 	invoiceRepository    invoices_domain.InvoiceRepository
 	salesOrderRepository sale_orders_domain.ISalesOrderRepository
+	cache                *bigcache.BigCache
 }
 
-func NewInvoiceUseCase(contextTimeout time.Duration, invoiceRepository invoices_domain.InvoiceRepository, salesOrderRepository sale_orders_domain.ISalesOrderRepository) invoices_domain.InvoiceUseCase {
-	return &invoiceUseCase{contextTimeout: contextTimeout, invoiceRepository: invoiceRepository, salesOrderRepository: salesOrderRepository}
+var (
+	wg sync.WaitGroup
+	mu sync.Mutex
+)
+
+func NewInvoiceUseCase(contextTimeout time.Duration, invoiceRepository invoices_domain.InvoiceRepository,
+	salesOrderRepository sale_orders_domain.ISalesOrderRepository, cacheTTL time.Duration) invoices_domain.InvoiceUseCase {
+	config := bigcache.Config{
+		Shards:           1024,
+		LifeWindow:       cacheTTL,
+		MaxEntrySize:     512,
+		CleanWindow:      1 * time.Minute,
+		HardMaxCacheSize: 8192,
+	}
+
+	cache, err := bigcache.New(context.Background(), config)
+	if err != nil {
+		return nil
+	}
+	return &invoiceUseCase{contextTimeout: contextTimeout, cache: cache, invoiceRepository: invoiceRepository, salesOrderRepository: salesOrderRepository}
 }
 
 func (i *invoiceUseCase) CreateOne(ctx context.Context, input *invoices_domain.Input) error {
@@ -44,12 +66,30 @@ func (i *invoiceUseCase) CreateOne(ctx context.Context, input *invoices_domain.I
 		UpdatedAt:   time.Now(),
 	}
 
+	err = i.cache.Delete("invoices")
+	if err != nil {
+		return err
+	}
+
+	mu.Lock()
+	defer mu.Unlock()
+
 	return i.invoiceRepository.CreateOne(ctx, invoice)
 }
 
 func (i *invoiceUseCase) GetByID(ctx context.Context, id string) (*invoices_domain.InvoiceResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, i.contextTimeout)
 	defer cancel()
+
+	data, err := i.cache.Get(id)
+	if err != nil {
+		return nil, err
+	}
+	if data != nil {
+		var response *invoices_domain.InvoiceResponse
+		err = json.Unmarshal(data, response)
+		return response, nil
+	}
 
 	invoiceID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -71,12 +111,28 @@ func (i *invoiceUseCase) GetByID(ctx context.Context, id string) (*invoices_doma
 		Order:   *orderData,
 	}
 
+	data, err = json.Marshal(response)
+	err = i.cache.Set(id, data)
+	if err != nil {
+		return nil, err
+	}
+
 	return response, nil
 }
 
 func (i *invoiceUseCase) GetByOrderID(ctx context.Context, orderID string) ([]invoices_domain.InvoiceResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, i.contextTimeout)
 	defer cancel()
+
+	data, err := i.cache.Get(orderID)
+	if err != nil {
+		return nil, err
+	}
+	if data != nil {
+		var response []invoices_domain.InvoiceResponse
+		err = json.Unmarshal(data, &response)
+		return response, nil
+	}
 
 	idOrder, err := primitive.ObjectIDFromHex(orderID)
 	if err != nil {
@@ -104,12 +160,27 @@ func (i *invoiceUseCase) GetByOrderID(ctx context.Context, orderID string) ([]in
 		responses = append(responses, response)
 	}
 
+	data, err = json.Marshal(responses)
+	err = i.cache.Set("invoices", data)
+	if err != nil {
+		return nil, err
+	}
 	return responses, nil
 }
 
 func (i *invoiceUseCase) GetByStatus(ctx context.Context, status string) ([]invoices_domain.InvoiceResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, i.contextTimeout)
 	defer cancel()
+
+	data, err := i.cache.Get(status)
+	if err != nil {
+		return nil, err
+	}
+	if data != nil {
+		var response []invoices_domain.InvoiceResponse
+		err = json.Unmarshal(data, &response)
+		return response, nil
+	}
 
 	invoiceData, err := i.invoiceRepository.GetByStatus(ctx, status)
 	if err != nil {
@@ -132,6 +203,11 @@ func (i *invoiceUseCase) GetByStatus(ctx context.Context, status string) ([]invo
 		responses = append(responses, response)
 	}
 
+	data, err = json.Marshal(responses)
+	err = i.cache.Set("invoices", data)
+	if err != nil {
+		return nil, err
+	}
 	return responses, nil
 }
 
@@ -164,6 +240,23 @@ func (i *invoiceUseCase) UpdateOne(ctx context.Context, id string, input *invoic
 		UpdatedAt:   time.Now(),
 	}
 
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		err = i.cache.Delete(id)
+		if err != nil {
+			return
+		}
+	}()
+	go func() {
+		defer wg.Done()
+		err = i.cache.Delete("invoices")
+		if err != nil {
+			return
+		}
+	}()
+	wg.Wait()
+
 	return i.invoiceRepository.UpdateOne(ctx, invoice)
 }
 
@@ -176,6 +269,22 @@ func (i *invoiceUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		err = i.cache.Delete(id)
+		if err != nil {
+			return
+		}
+	}()
+	go func() {
+		defer wg.Done()
+		err = i.cache.Delete("invoices")
+		if err != nil {
+			return
+		}
+	}()
+	wg.Wait()
 	return i.invoiceRepository.DeleteOne(ctx, invoiceID)
 }
 
@@ -183,6 +292,19 @@ func (i *invoiceUseCase) GetAll(ctx context.Context) ([]invoices_domain.InvoiceR
 	ctx, cancel := context.WithTimeout(ctx, i.contextTimeout)
 	defer cancel()
 
+	data, err := i.cache.Get("invoices")
+	if err != nil {
+		return nil, err
+	}
+
+	if data != nil {
+		var response []invoices_domain.InvoiceResponse
+		err = json.Unmarshal(data, &response)
+		if err != nil {
+			return nil, err
+		}
+		return response, nil
+	}
 	invoiceData, err := i.invoiceRepository.GetAll(ctx)
 	if err != nil {
 		return nil, err
@@ -202,6 +324,15 @@ func (i *invoiceUseCase) GetAll(ctx context.Context) ([]invoices_domain.InvoiceR
 		}
 
 		responses = append(responses, response)
+	}
+
+	data, err = json.Marshal(responses)
+	if err != nil {
+		return nil, err
+	}
+	err = i.cache.Set("invoices", data)
+	if err != nil {
+		return nil, err
 	}
 
 	return responses, nil

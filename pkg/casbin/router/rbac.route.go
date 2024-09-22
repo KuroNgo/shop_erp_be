@@ -15,8 +15,8 @@ func CasbinRouter(group *gin.RouterGroup) {
 	cbGroup.POST("/add/api/role", handler.AddAPIForRole)
 	cbGroup.DELETE("/delete", handler.DeleteRole)
 	cbGroup.DELETE("/delete/user", handler.DeleteRoleForUser)
-	cbGroup.DELETE("/delete/role/api", handler.AddRoleForAPI)
-	cbGroup.DELETE("/delete/api/role", handler.AddAPIForRole)
+	cbGroup.DELETE("/delete/role/api", handler.DeleteAPIForRole)
+	cbGroup.DELETE("/delete/api/role", handler.DeleteRoleForAPI)
 	err := r.SavePolicy()
 	if err != nil {
 		return

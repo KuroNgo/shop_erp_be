@@ -17,13 +17,13 @@ import (
 	"time"
 )
 
-func EmployeeRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func EmployeeRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	em := employeerepository.NewEmployeeRepository(db, employeesdomain.CollectionEmployee)
 	de := departmentrepository.NewDepartmentRepository(db, departmentsdomain.CollectionDepartment)
 	sa := salaryrepository.NewSalaryRepository(db, salarydomain.CollectionSalary)
 	ro := rolerepository.NewRoleRepository(db, roledomain.CollectionRole)
 	employee := &employeecontroller.EmployeeController{
-		EmployeeUseCase: employeeusecase.NewEmployeeUseCase(timeout, em, de, sa, ro),
+		EmployeeUseCase: employeeusecase.NewEmployeeUseCase(timeout, em, de, sa, ro, cacheTTL),
 		Database:        env,
 	}
 

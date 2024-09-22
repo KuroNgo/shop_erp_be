@@ -47,9 +47,9 @@ definitions:
         type: string
       end_date:
         type: string
-      product_category:
-        type: string
       start_date:
+        type: string
+      transaction_category:
         type: string
     type: object
   category_domain.Input:
@@ -140,6 +140,64 @@ definitions:
       role:
         example: developer
         type: string
+    type: object
+  handler.APIData:
+    properties:
+      api:
+        type: string
+      method:
+        items:
+          type: string
+        type: array
+      role:
+        items:
+          type: string
+        type: array
+    type: object
+  handler.APIRole:
+    properties:
+      api:
+        type: string
+      role:
+        items:
+          type: string
+        type: array
+    type: object
+  handler.Role:
+    properties:
+      role:
+        type: string
+    type: object
+  handler.RoleAPI:
+    properties:
+      api:
+        items:
+          type: string
+        type: array
+      role:
+        type: string
+    type: object
+  handler.RoleData:
+    properties:
+      api:
+        items:
+          type: string
+        type: array
+      method:
+        items:
+          type: string
+        type: array
+      role:
+        type: string
+    type: object
+  handler.UserRole:
+    properties:
+      role:
+        type: string
+      user_id:
+        items:
+          type: string
+        type: array
     type: object
   inventory_domain.Input:
     properties:
@@ -244,6 +302,8 @@ definitions:
     properties:
       description:
         type: string
+      expiry_date:
+        type: string
       price:
         type: number
       product_category:
@@ -255,8 +315,6 @@ definitions:
     type: object
   purchase_order_detail_domain.Input:
     properties:
-      product:
-        type: string
       purchase_order_id:
         type: string
       quantity:
@@ -265,6 +323,8 @@ definitions:
         type: number
       unit_price:
         type: number
+      wm_product:
+        type: string
     type: object
   purchase_order_domain.Input:
     properties:
@@ -312,8 +372,6 @@ definitions:
     type: object
   sale_orders_domain.Input:
     properties:
-      createdAt:
-        type: string
       customerID:
         type: string
       orderDate:
@@ -326,13 +384,9 @@ definitions:
         type: string
       totalAmount:
         type: number
-      updatedAt:
-        type: string
     type: object
   sale_reports_domain.Input:
     properties:
-      product:
-        type: string
       product_name:
         type: string
       quantity_sold:
@@ -343,6 +397,8 @@ definitions:
         type: number
       total_sales:
         type: number
+      wm_product:
+        type: string
     type: object
   shipping_domain.Input:
     properties:
@@ -370,13 +426,13 @@ definitions:
       adjustment_type:
         description: 'Example: "Increase", "Decrease"'
         type: string
-      product:
-        type: string
       quantity:
         type: integer
       reason:
         type: string
       warehouse:
+        type: string
+      wm_product:
         type: string
     type: object
   supplier_domain.Input:
@@ -902,6 +958,150 @@ paths:
       summary: Get by name Budget Information
       tags:
       - Budget
+  /api/v1/casbin/add/api/role:
+    post:
+      consumes:
+      - application/json
+      description: Add APIs with specific methods to a role
+      parameters:
+      - description: Role and API data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/handler.RoleData'
+      produces:
+      - application/json
+      responses: {}
+      summary: Assign API permissions to a role
+      tags:
+      - Casbin
+  /api/v1/casbin/add/role:
+    post:
+      consumes:
+      - application/json
+      description: Add a new role with API and method to the system
+      parameters:
+      - description: Role data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/handler.RoleData'
+      produces:
+      - application/json
+      responses: {}
+      summary: Add a role to the system
+      tags:
+      - Casbin
+  /api/v1/casbin/add/role/api:
+    post:
+      consumes:
+      - application/json
+      description: Add role-based permissions for a specific API and method
+      parameters:
+      - description: API data with Role and Methods
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/handler.APIData'
+      produces:
+      - application/json
+      responses: {}
+      summary: Add role permissions for an API
+      tags:
+      - Casbin
+  /api/v1/casbin/add/user:
+    post:
+      consumes:
+      - application/json
+      description: Assign a role to a user
+      parameters:
+      - description: User and Role data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/handler.UserRole'
+      produces:
+      - application/json
+      responses: {}
+      summary: Add a role to a user
+      tags:
+      - Casbin
+  /api/v1/casbin/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a role from the system
+      parameters:
+      - description: Role data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/handler.Role'
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete a role
+      tags:
+      - Casbin
+  /api/v1/casbin/delete/api/role:
+    delete:
+      consumes:
+      - application/json
+      description: Remove role-based permissions for an API and method
+      parameters:
+      - description: API and Role data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/handler.APIRole'
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete role permissions for an API
+      tags:
+      - Casbin
+  /api/v1/casbin/delete/role/api:
+    delete:
+      consumes:
+      - application/json
+      description: Remove APIs with specific methods for a role
+      parameters:
+      - description: Role and API data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/handler.RoleAPI'
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete API for a role
+      tags:
+      - Casbin
+  /api/v1/casbin/delete/user:
+    delete:
+      consumes:
+      - application/json
+      description: Remove a specific role from a user
+      parameters:
+      - description: User ID and Role data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/handler.UserRole'
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete role for a user
+      tags:
+      - Casbin
   /api/v1/categories/create:
     post:
       consumes:
@@ -1493,8 +1693,8 @@ paths:
     get:
       consumes:
       - application/json
-      description: Check if the specified quantity of a wm_product is available in a
-        given warehouse
+      description: Check if the specified quantity of a wm_product is available in
+        a given warehouse
       parameters:
       - description: Warehouse ID
         in: path
@@ -1552,23 +1752,6 @@ paths:
       summary: Delete inventory
       tags:
       - Inventory
-  /api/v1/inventory/product/{product_id}:
-    get:
-      consumes:
-      - application/json
-      description: Retrieve inventory details using the wm_product ID
-      parameters:
-      - description: Product ID
-        in: path
-        name: product_id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses: {}
-      summary: Get inventory by wm_product ID
-      tags:
-      - Inventory
   /api/v1/inventory/warehouse/{warehouse_id}:
     get:
       consumes:
@@ -1584,6 +1767,23 @@ paths:
       - application/json
       responses: {}
       summary: Get inventory by warehouse ID
+      tags:
+      - Inventory
+  /api/v1/inventory/wm_product/{product_id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve inventory details using the wm_product ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: product_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get inventory by wm_product ID
       tags:
       - Inventory
   /api/v1/invoices/create:
@@ -3551,7 +3751,7 @@ paths:
       summary: Get stock adjustments by date range
       tags:
       - StockAdjustment
-  /stock-adjustments/get/product/{product_id}:
+  /stock-adjustments/get/wm_product/{product_id}:
     get:
       consumes:
       - application/json

@@ -2,19 +2,40 @@ package customer_usecase
 
 import (
 	"context"
+	"encoding/json"
+	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	customerdomain "shop_erp_mono/domain/sales_and_distribution_management/customer"
 	"shop_erp_mono/usecase/sales_and_distribution_management/customer/validate"
+	"sync"
 	"time"
 )
 
 type customerUseCase struct {
 	contextTimeout     time.Duration
 	customerRepository customerdomain.ICustomerRepository
+	cache              *bigcache.BigCache
 }
 
-func NewCustomerUseCase(contextTimeout time.Duration, customerRepository customerdomain.ICustomerRepository) customerdomain.ICustomerUseCase {
-	return &customerUseCase{contextTimeout: contextTimeout, customerRepository: customerRepository}
+var (
+	wg sync.WaitGroup
+	mu sync.Mutex
+)
+
+func NewCustomerUseCase(contextTimeout time.Duration, customerRepository customerdomain.ICustomerRepository, cacheTTL time.Duration) customerdomain.ICustomerUseCase {
+	config := bigcache.Config{
+		Shards:           1024,
+		LifeWindow:       cacheTTL,
+		MaxEntrySize:     512,
+		CleanWindow:      1 * time.Minute,
+		HardMaxCacheSize: 8192,
+	}
+
+	cache, err := bigcache.New(context.Background(), config)
+	if err != nil {
+		return nil
+	}
+	return &customerUseCase{contextTimeout: contextTimeout, cache: cache, customerRepository: customerRepository}
 }
 
 func (c *customerUseCase) CreateOne(ctx context.Context, input *customerdomain.Input) error {
@@ -37,6 +58,14 @@ func (c *customerUseCase) CreateOne(ctx context.Context, input *customerdomain.I
 		UpdatedAt:   time.Now(),
 	}
 
+	err := c.cache.Delete("customers")
+	if err != nil {
+		return err
+	}
+
+	mu.Lock()
+	defer mu.Unlock()
+
 	return c.customerRepository.CreateOne(ctx, customer)
 }
 
@@ -48,6 +77,14 @@ func (c *customerUseCase) DeleteOne(ctx context.Context, id string) error {
 	if err != nil {
 		return err
 	}
+
+	err = c.cache.Delete(id)
+	if err != nil {
+		return err
+	}
+
+	mu.Lock()
+	defer mu.Unlock()
 
 	return c.customerRepository.DeleteOne(ctx, customerID)
 }
@@ -77,6 +114,27 @@ func (c *customerUseCase) UpdateOne(ctx context.Context, id string, input *custo
 		UpdatedAt:   time.Now(),
 	}
 
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		err = c.cache.Delete(id)
+		if err != nil {
+			return
+		}
+	}()
+
+	go func() {
+		defer wg.Done()
+		err = c.cache.Delete("customers")
+		if err != nil {
+			return
+		}
+	}()
+	wg.Wait()
+
+	mu.Lock()
+	defer mu.Unlock()
+
 	return c.customerRepository.UpdateOne(ctx, customer)
 
 }
@@ -84,6 +142,19 @@ func (c *customerUseCase) UpdateOne(ctx context.Context, id string, input *custo
 func (c *customerUseCase) GetOneByID(ctx context.Context, id string) (*customerdomain.CustomerResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
+
+	data, err := c.cache.Get(id)
+	if err != nil {
+		return nil, err
+	}
+	if data != nil {
+		var responseData *customerdomain.CustomerResponse
+		err = json.Unmarshal(data, responseData)
+		if err != nil {
+			return nil, err
+		}
+		return responseData, nil
+	}
 
 	customerID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -99,12 +170,30 @@ func (c *customerUseCase) GetOneByID(ctx context.Context, id string) (*customerd
 		Customer: *customerData,
 	}
 
+	// use Marshal for convert response to []byte
+	responseData, err := json.Marshal(response)
+	err = c.cache.Set(id, responseData)
+	if err != nil {
+		return nil, err
+	}
+
 	return response, nil
 }
 
 func (c *customerUseCase) GetOneByName(ctx context.Context, name string) (*customerdomain.CustomerResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
+
+	data, err := c.cache.Get(name)
+	if err != nil {
+		return nil, err
+	}
+
+	if data != nil {
+		var response *customerdomain.CustomerResponse
+		err = json.Unmarshal(data, response)
+		return response, nil
+	}
 
 	customerData, err := c.customerRepository.GetOneByName(ctx, name)
 	if err != nil {
@@ -115,12 +204,30 @@ func (c *customerUseCase) GetOneByName(ctx context.Context, name string) (*custo
 		Customer: *customerData,
 	}
 
+	// use Marshal for convert response to []byte
+	responseData, err := json.Marshal(response)
+	err = c.cache.Set(name, responseData)
+	if err != nil {
+		return nil, err
+	}
+
 	return response, nil
 }
 
 func (c *customerUseCase) GetAll(ctx context.Context) ([]customerdomain.CustomerResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
+
+	data, err := c.cache.Get("customers")
+	if err != nil {
+		return nil, err
+	}
+
+	if data != nil {
+		var response []customerdomain.CustomerResponse
+		err = json.Unmarshal(data, &response)
+		return response, nil
+	}
 
 	customerData, err := c.customerRepository.GetAll(ctx)
 	if err != nil {
@@ -137,5 +244,11 @@ func (c *customerUseCase) GetAll(ctx context.Context) ([]customerdomain.Customer
 		responses = append(responses, response)
 	}
 
+	// use Marshal for convert response to []byte
+	responsesData, err := json.Marshal(responses)
+	err = c.cache.Set("customers", responsesData)
+	if err != nil {
+		return nil, err
+	}
 	return responses, nil
 }

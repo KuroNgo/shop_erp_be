@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, gin *gin.Engine) {
+func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, gin *gin.Engine, cacheTTL time.Duration) {
 	publicRouter := gin.Group("/api/v1")
 
 	// Middleware
@@ -29,8 +29,8 @@ func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, g
 	)
 
 	// All Public APIs
-	customerroute.CustomerRouter(env, timeout, db, publicRouter)
-	invoicesroute.InvoiceRouter(env, timeout, db, publicRouter)
+	customerroute.CustomerRouter(env, timeout, db, publicRouter, cacheTTL)
+	invoicesroute.InvoiceRouter(env, timeout, db, publicRouter, cacheTTL)
 	orderdetailsroute.OrderDetailRouter(env, timeout, db, publicRouter)
 	paymentsroute.PaymentRouter(env, timeout, db, publicRouter)
 	saleordersroute.SaleOrderRouter(env, timeout, db, publicRouter)

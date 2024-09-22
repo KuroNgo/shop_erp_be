@@ -11,10 +11,10 @@ import (
 	"time"
 )
 
-func CustomerRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func CustomerRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	cu := customerrepository.NewCustomerRepository(db, customerdomain.CollectionCustomer)
 	customer := &customercontroller.CustomerController{
-		CustomerUseCase: customerusecase.NewCustomerUseCase(timeout, cu),
+		CustomerUseCase: customerusecase.NewCustomerUseCase(timeout, cu, cacheTTL),
 		Database:        env,
 	}
 

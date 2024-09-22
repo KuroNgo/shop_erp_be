@@ -15,11 +15,16 @@ import (
 	supplier_route "shop_erp_mono/api/routers/warehouse_management/supplier"
 	warehouse_route "shop_erp_mono/api/routers/warehouse_management/warehouse"
 	"shop_erp_mono/bootstrap"
+	casbin "shop_erp_mono/pkg/casbin/middlewares"
+	"shop_erp_mono/pkg/casbin/principle"
 	"time"
 )
 
 func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, gin *gin.Engine) {
 	publicRouter := gin.Group("/api/v1")
+
+	// Khởi tạo Casbin enforcer
+	enforcer := principle.SetUp()
 
 	// Middleware
 	publicRouter.Use(
@@ -27,6 +32,7 @@ func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, g
 		middlewares.Recover(),
 		gzip.Gzip(gzip.DefaultCompression,
 			gzip.WithExcludedPaths([]string{",*"})),
+		casbin.Authorize(enforcer),
 		//middlewares.StructuredLogger(&log.Logger, value),
 	)
 

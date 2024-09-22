@@ -761,6 +761,222 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/api/v1/casbin/add/api/role": {
+            "post": {
+                "description": "Add APIs with specific methods to a role",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Casbin"
+                ],
+                "summary": "Assign API permissions to a role",
+                "parameters": [
+                    {
+                        "description": "Role and API data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.RoleData"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/casbin/add/role": {
+            "post": {
+                "description": "Add a new role with API and method to the system",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Casbin"
+                ],
+                "summary": "Add a role to the system",
+                "parameters": [
+                    {
+                        "description": "Role data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.RoleData"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/casbin/add/role/api": {
+            "post": {
+                "description": "Add role-based permissions for a specific API and method",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Casbin"
+                ],
+                "summary": "Add role permissions for an API",
+                "parameters": [
+                    {
+                        "description": "API data with Role and Methods",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIData"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/casbin/add/user": {
+            "post": {
+                "description": "Assign a role to a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Casbin"
+                ],
+                "summary": "Add a role to a user",
+                "parameters": [
+                    {
+                        "description": "User and Role data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.UserRole"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/casbin/delete": {
+            "delete": {
+                "description": "Delete a role from the system",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Casbin"
+                ],
+                "summary": "Delete a role",
+                "parameters": [
+                    {
+                        "description": "Role data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.Role"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/casbin/delete/api/role": {
+            "delete": {
+                "description": "Remove role-based permissions for an API and method",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Casbin"
+                ],
+                "summary": "Delete role permissions for an API",
+                "parameters": [
+                    {
+                        "description": "API and Role data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.APIRole"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/casbin/delete/role/api": {
+            "delete": {
+                "description": "Remove APIs with specific methods for a role",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Casbin"
+                ],
+                "summary": "Delete API for a role",
+                "parameters": [
+                    {
+                        "description": "Role and API data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.RoleAPI"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/casbin/delete/user": {
+            "delete": {
+                "description": "Remove a specific role from a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Casbin"
+                ],
+                "summary": "Delete role for a user",
+                "parameters": [
+                    {
+                        "description": "User ID and Role data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handler.UserRole"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/api/v1/categories/create": {
             "post": {
                 "security": [
@@ -1709,31 +1925,6 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/api/v1/inventory/wm_product/{product_id}": {
-            "get": {
-                "description": "Retrieve inventory details using the wm_product ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Inventory"
-                ],
-                "summary": "Get inventory by wm_product ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Product ID",
-                        "name": "product_id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {}
-            }
-        },
         "/api/v1/inventory/warehouse/{warehouse_id}": {
             "get": {
                 "description": "Retrieve inventory details using the warehouse ID",
@@ -1752,6 +1943,31 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Warehouse ID",
                         "name": "warehouse_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/inventory/wm_product/{product_id}": {
+            "get": {
+                "description": "Retrieve inventory details using the wm_product ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Inventory"
+                ],
+                "summary": "Get inventory by wm_product ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product ID",
+                        "name": "product_id",
                         "in": "path",
                         "required": true
                     }
@@ -4891,10 +5107,10 @@ const docTemplate = `{
                 "end_date": {
                     "type": "string"
                 },
-                "product_category": {
+                "start_date": {
                     "type": "string"
                 },
-                "start_date": {
+                "transaction_category": {
                     "type": "string"
                 }
             }
@@ -5023,6 +5239,96 @@ const docTemplate = `{
                 "role": {
                     "type": "string",
                     "example": "developer"
+                }
+            }
+        },
+        "handler.APIData": {
+            "type": "object",
+            "properties": {
+                "api": {
+                    "type": "string"
+                },
+                "method": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "role": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "handler.APIRole": {
+            "type": "object",
+            "properties": {
+                "api": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "handler.Role": {
+            "type": "object",
+            "properties": {
+                "role": {
+                    "type": "string"
+                }
+            }
+        },
+        "handler.RoleAPI": {
+            "type": "object",
+            "properties": {
+                "api": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "role": {
+                    "type": "string"
+                }
+            }
+        },
+        "handler.RoleData": {
+            "type": "object",
+            "properties": {
+                "api": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "method": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "role": {
+                    "type": "string"
+                }
+            }
+        },
+        "handler.UserRole": {
+            "type": "object",
+            "properties": {
+                "role": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
@@ -5179,6 +5485,9 @@ const docTemplate = `{
                 "description": {
                     "type": "string"
                 },
+                "expiry_date": {
+                    "type": "string"
+                },
                 "price": {
                     "type": "number"
                 },
@@ -5196,9 +5505,6 @@ const docTemplate = `{
         "purchase_order_detail_domain.Input": {
             "type": "object",
             "properties": {
-                "wm_product": {
-                    "type": "string"
-                },
                 "purchase_order_id": {
                     "type": "string"
                 },
@@ -5210,6 +5516,9 @@ const docTemplate = `{
                 },
                 "unit_price": {
                     "type": "number"
+                },
+                "wm_product": {
+                    "type": "string"
                 }
             }
         },
@@ -5282,9 +5591,6 @@ const docTemplate = `{
         "sale_orders_domain.Input": {
             "type": "object",
             "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
                 "customerID": {
                     "type": "string"
                 },
@@ -5302,18 +5608,12 @@ const docTemplate = `{
                 },
                 "totalAmount": {
                     "type": "number"
-                },
-                "updatedAt": {
-                    "type": "string"
                 }
             }
         },
         "sale_reports_domain.Input": {
             "type": "object",
             "properties": {
-                "wm_product": {
-                    "type": "string"
-                },
                 "product_name": {
                     "type": "string"
                 },
@@ -5328,6 +5628,9 @@ const docTemplate = `{
                 },
                 "total_sales": {
                     "type": "number"
+                },
+                "wm_product": {
+                    "type": "string"
                 }
             }
         },
@@ -5369,9 +5672,6 @@ const docTemplate = `{
                     "description": "Example: \"Increase\", \"Decrease\"",
                     "type": "string"
                 },
-                "wm_product": {
-                    "type": "string"
-                },
                 "quantity": {
                     "type": "integer"
                 },
@@ -5379,6 +5679,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "warehouse": {
+                    "type": "string"
+                },
+                "wm_product": {
                     "type": "string"
                 }
             }

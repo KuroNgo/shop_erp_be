@@ -6,6 +6,14 @@ import (
 	"shop_erp_mono/pkg/casbin/principle"
 )
 
+// AddRole godoc
+// @Summary Add a role to the system
+// @Description Add a new role with API and method to the system
+// @Tags Casbin
+// @Accept json
+// @Produce json
+// @Param data body RoleData true "Role data"
+// @Router /api/v1/casbin/add/role [post]
 func AddRole(ctx *gin.Context) {
 	var data RoleData
 	if err := ctx.ShouldBindJSON(&data); err != nil {
@@ -32,6 +40,14 @@ func AddRole(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, "success added role: "+data.Role)
 }
 
+// AddRoleForUser godoc
+// @Summary Add a role to a user
+// @Description Assign a role to a user
+// @Tags Casbin
+// @Accept json
+// @Produce json
+// @Param data body UserRole true "User and Role data"
+// @Router /api/v1/casbin/add/user [post]
 func AddRoleForUser(ctx *gin.Context) {
 	var data UserRole
 
@@ -57,6 +73,14 @@ func AddRoleForUser(ctx *gin.Context) {
 	})
 }
 
+// AddRoleForAPI godoc
+// @Summary Add role permissions for an API
+// @Description Add role-based permissions for a specific API and method
+// @Tags Casbin
+// @Accept json
+// @Produce json
+// @Param data body APIData true "API data with Role and Methods"
+// @Router /api/v1/casbin/add/role/api [post]
 func AddRoleForAPI(ctx *gin.Context) {
 	var data APIData
 
@@ -84,6 +108,14 @@ func AddRoleForAPI(ctx *gin.Context) {
 	})
 }
 
+// AddAPIForRole godoc
+// @Summary Assign API permissions to a role
+// @Description Add APIs with specific methods to a role
+// @Tags Casbin
+// @Accept json
+// @Produce json
+// @Param data body RoleData true "Role and API data"
+// @Router /api/v1/casbin/add/api/role [post]
 func AddAPIForRole(ctx *gin.Context) {
 	var data RoleData
 
