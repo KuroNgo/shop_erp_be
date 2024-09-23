@@ -7,6 +7,7 @@ import (
 	"shop_erp_mono/api/middlewares"
 	attendanceroute "shop_erp_mono/api/routers/human_resources_management/attendance"
 	benefitroute "shop_erp_mono/api/routers/human_resources_management/benefit"
+	candidateroute "shop_erp_mono/api/routers/human_resources_management/candidate"
 	contractroute "shop_erp_mono/api/routers/human_resources_management/contract"
 	departmentroute "shop_erp_mono/api/routers/human_resources_management/department"
 	employeeroute "shop_erp_mono/api/routers/human_resources_management/employee"
@@ -48,6 +49,7 @@ func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, g
 	contractroute.ContractRouter(env, timeout, db, publicRouterV1)
 	leaverequestroute.LeaveRequestRouter(env, timeout, db, publicRouterV1)
 	performancereviewroute.PerformanceReviewRouterV1(env, timeout, db, publicRouterV1)
+	candidateroute.CandidateRouter(env, timeout, db, publicRouter)
 
 	// All Public APIs v2
 	performancereviewroute.PerformanceReviewRouterV2(env, timeout, db, publicRouterV2)
