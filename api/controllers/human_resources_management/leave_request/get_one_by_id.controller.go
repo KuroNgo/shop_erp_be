@@ -11,7 +11,7 @@ import (
 // @Tags Leave Request
 // @Accept json
 // @Produce json
-// @Param _id path string true "Employee ID"
+// @Param _id query string true "Employee ID"
 // @Router /api/v1/leave-requests/get/_id [get]
 // @Security CookieAuth
 func (l *LeaveRequestController) GetByID(ctx *gin.Context) {

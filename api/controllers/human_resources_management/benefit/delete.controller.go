@@ -10,7 +10,7 @@ import (
 // @Description Deletes the benefit's information by ID
 // @Tags Benefit
 // @Produce json
-// @Param _id path string true "Benefit ID"
+// @Param _id query string true "Benefit ID"
 // @Router /api/v1/benefits/_id [delete]
 // @Security CookieAuth
 func (b *BenefitController) DeleteOne(ctx *gin.Context) {

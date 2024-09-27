@@ -11,7 +11,7 @@ import (
 // @Description Create the employee's information
 // @Tags Employee
 // @Produce json
-// @Param _id path string true "Employee ID"
+// @Param _id query string true "Employee ID"
 // @Param attendance body employees_domain.Input true "Employee data"
 // @Router /api/v1/employees/update [put]
 // @Security CookieAuth

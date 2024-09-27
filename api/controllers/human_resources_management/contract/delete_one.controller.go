@@ -10,7 +10,7 @@ import (
 // @Description Deletes the contract's information by ID
 // @Tags Contract
 // @Produce json
-// @Param _id path string true "Contract ID"
+// @Param _id query string true "Contract ID"
 // @Router /api/v1/contracts/delete/_id [delete]
 // @Security CookieAuth
 func (c *ContractController) DeleteOne(ctx *gin.Context) {

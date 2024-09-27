@@ -11,8 +11,8 @@ import (
 // @Tags Department
 // @Accept json
 // @Produce json
-// @Param _id path string true "Department ID"
-// @Router /api/v1/departments/delete [delete]
+// @Param _id query string true "Department ID"
+// @Router /api/v1/departments/delete/_id [delete]
 // @Security CookieAuth
 func (d *DepartmentController) DeleteOne(ctx *gin.Context) {
 	departmentID := ctx.Query("_id")

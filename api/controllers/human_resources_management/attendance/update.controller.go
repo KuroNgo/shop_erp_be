@@ -11,7 +11,7 @@ import (
 // @Description Updates the attendance's information
 // @Tags Attendance
 // @Produce json
-// @Param _id path string true "Attendance ID"
+// @Param _id query string true "Attendance ID"
 // @Param attendance body attendance_domain.Input true "Attendance data"
 // @Router /api/v1/attendances/_id [put]
 // @Security CookieAuth

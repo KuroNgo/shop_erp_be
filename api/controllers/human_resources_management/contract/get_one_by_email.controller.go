@@ -10,7 +10,7 @@ import (
 // @Description Get one the contract's information by ID
 // @Tags Contract
 // @Produce json
-// @Param email path string true "Contract ID"
+// @Param email query string true "Contract ID"
 // @Router /api/v1/contracts/get/email [get]
 // @Security CookieAuth
 func (c *ContractController) GetByEmail(ctx *gin.Context) {

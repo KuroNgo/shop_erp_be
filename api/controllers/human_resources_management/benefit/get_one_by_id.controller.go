@@ -11,7 +11,7 @@ import (
 // @Tags Benefit
 // @Accept  json
 // @Produce  json
-// @Param _id path string true "Benefit ID"
+// @Param _id query string true "Benefit ID"
 // @Router /api/v1/benefits/get/_id [get]
 // @Security CookieAuth
 func (b *BenefitController) GetByID(ctx *gin.Context) {

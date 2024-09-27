@@ -257,7 +257,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Attendance ID",
                         "name": "_id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     },
                     {
@@ -291,7 +291,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Attendance ID",
                         "name": "_id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -353,7 +353,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Attendance ID",
                         "name": "_id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -401,7 +401,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Attendance ID",
                         "name": "email",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -428,7 +428,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Benefit ID",
                         "name": "_id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     },
                     {
@@ -462,7 +462,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Benefit ID",
                         "name": "_id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -524,7 +524,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Benefit ID",
                         "name": "_id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -572,7 +572,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Benefit ID",
                         "name": "email",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -1211,7 +1211,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Contract ID",
                         "name": "_id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -1238,7 +1238,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Contract ID",
                         "name": "_id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -1286,7 +1286,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Contract ID",
                         "name": "email",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -1516,7 +1516,7 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/api/v1/departments/delete": {
+        "/api/v1/departments/delete/_id": {
             "delete": {
                 "security": [
                     {
@@ -1539,14 +1539,14 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Department ID",
                         "name": "_id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
                 "responses": {}
             }
         },
-        "/api/v1/departments/get/_id": {
+        "/api/v1/departments/get": {
             "get": {
                 "security": [
                     {
@@ -1569,7 +1569,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Contract ID",
                         "name": "_id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -1620,7 +1620,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Contract ID",
                         "name": "name",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -1700,7 +1700,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Employee ID",
                         "name": "_id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -1727,7 +1727,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Employee ID",
                         "name": "_id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -1775,7 +1775,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Employee",
                         "name": "name",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -1802,7 +1802,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Employee ID",
                         "name": "_id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     },
                     {
@@ -2248,7 +2248,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Leave Request ID",
                         "name": "_id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -2278,7 +2278,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Employee ID",
                         "name": "_id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -2329,7 +2329,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Email",
                         "name": "email",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -2760,7 +2760,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Performance Review  ID",
                         "name": "_id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -2790,7 +2790,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Performance Review  ID",
                         "name": "_id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -2841,7 +2841,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Performance Review  ID",
                         "name": "email",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -2871,7 +2871,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Performance Review  ID",
                         "name": "_id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     },
                     {
@@ -4859,7 +4859,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Performance Review  ID",
                         "name": "_id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     },
                     {

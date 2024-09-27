@@ -10,7 +10,7 @@ import (
 // @Description Deletes the employee's information
 // @Tags Employee
 // @Produce json
-// @Param _id path string true "Employee ID"
+// @Param _id query string true "Employee ID"
 // @Router /api/v1/employees/delete [delete]
 // @Security CookieAuth
 func (e *EmployeeController) DeleteOne(ctx *gin.Context) {

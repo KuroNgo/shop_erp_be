@@ -11,7 +11,7 @@ import (
 // @Tags Performance Review
 // @Accept json
 // @Produce json
-// @Param _id path string true "Performance Review  ID"
+// @Param _id query string true "Performance Review  ID"
 // @Router /api/v1/performance-reviews/get/_id [get]
 // @Security CookieAuth
 func (p *PerformanceReviewController) GetByID(ctx *gin.Context) {

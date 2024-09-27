@@ -41,7 +41,7 @@ func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, g
 	// All Public APIs v1
 	userroute.UserRouter(env, timeout, db, publicRouterV1)
 	roleroute.RoleRouter(env, timeout, db, publicRouterV1)
-	departmentroute.DepartmentRouter(env, timeout, db, publicRouterV1)
+	departmentroute.DepartmentRouter(env, timeout, db, publicRouterV1, cacheTTL)
 	salaryroute.SalaryRouter(env, timeout, db, publicRouterV1)
 	attendanceroute.AttendanceRouter(env, timeout, db, publicRouterV1)
 	employeeroute.EmployeeRouter(env, timeout, db, publicRouterV1, cacheTTL)

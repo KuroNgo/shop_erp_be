@@ -10,7 +10,7 @@ import (
 // @Description Retrieves the employee's information
 // @Tags Employee
 // @Produce  json
-// @Param _id path string true "Employee ID"
+// @Param _id query string true "Employee ID"
 // @Router /api/v1/employees/get/_id [get]
 // @Security CookieAuth
 func (e *EmployeeController) GetByID(ctx *gin.Context) {

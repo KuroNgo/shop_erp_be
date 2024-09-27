@@ -11,7 +11,7 @@ import (
 // @Tags Leave Request
 // @Accept json
 // @Produce json
-// @Param _id path string true "Leave Request ID"
+// @Param _id query string true "Leave Request ID"
 // @Router /api/v1/leave-requests/delete [delete]
 // @Security CookieAuth
 func (l *LeaveRequestController) DeleteOne(ctx *gin.Context) {

@@ -10,7 +10,7 @@ import (
 // @Description Retrieves the benefit's information name
 // @Tags Benefit
 // @Produce  json
-// @Param email path string true "Benefit ID"
+// @Param email query string true "Benefit ID"
 // @Router /api/v1/benefits/get/email [get]
 // @Security CookieAuth
 func (b *BenefitController) GetByEmail(ctx *gin.Context) {

@@ -10,7 +10,7 @@ import (
 // @Description Retrieves the employee's information
 // @Tags Employee
 // @Produce  json
-// @Param name path string true "Employee"
+// @Param name query string true "Employee"
 // @Router /api/v1/employees/get/name [get]
 // @Security CookieAuth
 func (e *EmployeeController) GetByEmail(ctx *gin.Context) {

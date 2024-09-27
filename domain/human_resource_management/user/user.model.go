@@ -12,6 +12,7 @@ const (
 // User represents a user in the system.
 type User struct {
 	ID               primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
+	EmployeeID       primitive.ObjectID `bson:"employee_id" json:"employee_id"`
 	Username         string             `bson:"username" json:"username"`
 	PasswordHash     string             `bson:"password_hash" json:"password_hash"` // Hash of the password
 	Email            string             `bson:"email" json:"email"`
@@ -28,6 +29,7 @@ type User struct {
 
 type Input struct {
 	ID               string `bson:"_id" json:"id,omitempty"`
+	EmployeeID       string `bson:"employee_id" json:"employee_id"`
 	Username         string `bson:"username" json:"username"`
 	PasswordHash     string `bson:"password_hash" json:"password_hash"` // Hash of the password
 	AvatarURL        string `bson:"avatar_url"  json:"avatar_url"`

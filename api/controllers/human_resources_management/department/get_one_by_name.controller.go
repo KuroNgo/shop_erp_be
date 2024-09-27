@@ -11,7 +11,7 @@ import (
 // @Tags Department
 // @Accept  json
 // @Produce  json
-// @Param name path string true "Contract ID"
+// @Param name query string true "Contract ID"
 // @Router /api/v1/departments/get/name [get]
 // @Security CookieAuth
 func (d *DepartmentController) GetByName(ctx *gin.Context) {

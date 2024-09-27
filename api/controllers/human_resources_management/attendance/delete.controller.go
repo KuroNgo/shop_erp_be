@@ -10,7 +10,7 @@ import (
 // @Description Deletes the attendance's information by ID
 // @Tags Attendance
 // @Produce json
-// @Param _id path string true "Attendance ID"
+// @Param _id query string true "Attendance ID"
 // @Router /api/v1/attendances/_id [delete]
 // @Security CookieAuth
 func (a *AttendanceController) DeleteOne(ctx *gin.Context) {

@@ -11,7 +11,7 @@ import (
 // @Tags Attendance
 // @Accept  json
 // @Produce  json
-// @Param _id path string true "Attendance ID"
+// @Param _id query string true "Attendance ID"
 // @Router /api/v1/attendances/get/_id [get]
 // @Security CookieAuth
 func (a *AttendanceController) GetByID(ctx *gin.Context) {

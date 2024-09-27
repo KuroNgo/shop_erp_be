@@ -11,7 +11,7 @@ import (
 // @Description Updates the benefit's information
 // @Tags Benefit
 // @Produce json
-// @Param _id path string true "Benefit ID"
+// @Param _id query string true "Benefit ID"
 // @Param attendance body benefits_domain.Input true "Benefit data"
 // @Router /api/v1/benefits/_id [put]
 // @Security CookieAuth

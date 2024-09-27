@@ -11,8 +11,8 @@ import (
 // @Tags Department
 // @Accept  json
 // @Produce  json
-// @Param _id path string true "Contract ID"
-// @Router /api/v1/departments/get/_id [get]
+// @Param _id query string true "Contract ID"
+// @Router /api/v1/departments/get [get]
 // @Security CookieAuth
 func (d *DepartmentController) GetByID(ctx *gin.Context) {
 	departmentID := ctx.Query("_id")

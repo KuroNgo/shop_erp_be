@@ -10,7 +10,7 @@ import (
 // @Description Retrieves the attendance's information name
 // @Tags Attendance
 // @Produce  json
-// @Param email path string true "Attendance ID"
+// @Param email query string true "Attendance ID"
 // @Router /api/v1/attendances/get/email [get]
 // @Security CookieAuth
 func (a *AttendanceController) GetByEmail(ctx *gin.Context) {

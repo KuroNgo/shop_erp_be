@@ -12,7 +12,7 @@ import (
 // @Tags Performance Review
 // @Accept json
 // @Produce json
-// @Param _id path string true "Performance Review  ID"
+// @Param _id query string true "Performance Review  ID"
 // @Param PerformanceReview body performance_review_domain.Input1 true "Performance Review data"
 // @Router /api/v2/performance-reviews/update [put]
 // @Security CookieAuth

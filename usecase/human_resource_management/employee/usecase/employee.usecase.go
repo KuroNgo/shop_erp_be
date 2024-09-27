@@ -9,6 +9,7 @@ import (
 	roledomain "shop_erp_mono/domain/human_resource_management/role"
 	salarydomain "shop_erp_mono/domain/human_resource_management/salary"
 	"shop_erp_mono/usecase/human_resource_management/employee/validate"
+	"sync"
 	"time"
 )
 
@@ -29,7 +30,7 @@ func NewEmployeeUseCase(contextTimout time.Duration, employeeRepository employee
 		LifeWindow:       cacheTTL,
 		MaxEntrySize:     512,
 		CleanWindow:      1 * time.Minute,
-		HardMaxCacheSize: 8192,
+		HardMaxCacheSize: 1024 * 2, // 2MB
 	}
 
 	cache, err := bigcache.New(context.Background(), config)
@@ -82,6 +83,11 @@ func (e *employeeUseCase) CreateOne(ctx context.Context, input *employeesdomain.
 		UpdatedAt:    time.Now(),
 	}
 
+	err = e.cache.Delete("employees")
+	if err != nil {
+		return err
+	}
+
 	return e.employeeRepository.CreateOne(ctx, employeeData)
 }
 
@@ -89,9 +95,49 @@ func (e *employeeUseCase) DeleteOne(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
 
+	errCh := make(chan error, 1)
+	var wg sync.WaitGroup
+	var once sync.Once
+
 	employeeID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return err
+	}
+
+	// Helper function to send error to errCh
+	sendError := func(err error) {
+		once.Do(func() {
+			errCh <- err
+		})
+	}
+
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		if err = e.cache.Delete(id); err != nil {
+			sendError(err)
+		}
+	}()
+
+	go func() {
+		defer wg.Done()
+		if err = e.cache.Delete("employees"); err != nil {
+			sendError(err)
+		}
+	}()
+
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	select {
+	case err = <-errCh:
+		if err != nil {
+			return err
+		}
+	case <-ctx.Done():
+		return ctx.Err()
 	}
 
 	return e.employeeRepository.DeleteOne(ctx, employeeID)

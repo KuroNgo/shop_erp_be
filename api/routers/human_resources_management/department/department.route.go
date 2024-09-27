@@ -13,11 +13,11 @@ import (
 	"time"
 )
 
-func DepartmentRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func DepartmentRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	de := departmentrepository.NewDepartmentRepository(db, departmentsdomain.CollectionDepartment)
 	em := employeerepository.NewEmployeeRepository(db, employees_domain.CollectionEmployee)
 	department := &departmentcontroller.DepartmentController{
-		DepartmentUseCase: departmentusecase.NewDepartmentUseCase(timeout, de, em),
+		DepartmentUseCase: departmentusecase.NewDepartmentUseCase(timeout, de, em, cacheTTL),
 		Database:          env,
 	}
 
@@ -27,5 +27,5 @@ func DepartmentRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.
 	router.GET("/get/all", department.GetAll)
 	router.POST("/create", department.CreateOne)
 	router.PUT("/update", department.UpdateOne)
-	router.DELETE("/delete", department.DeleteOne)
+	router.DELETE("/delete/_id", department.DeleteOne)
 }

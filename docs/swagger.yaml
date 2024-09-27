@@ -632,7 +632,7 @@ paths:
       description: Deletes the attendance's information by ID
       parameters:
       - description: Attendance ID
-        in: path
+        in: query
         name: _id
         required: true
         type: string
@@ -648,7 +648,7 @@ paths:
       description: Updates the attendance's information
       parameters:
       - description: Attendance ID
-        in: path
+        in: query
         name: _id
         required: true
         type: string
@@ -693,7 +693,7 @@ paths:
       description: Retrieves the attendance's information name
       parameters:
       - description: Attendance ID
-        in: path
+        in: query
         name: _id
         required: true
         type: string
@@ -723,7 +723,7 @@ paths:
       description: Retrieves the attendance's information name
       parameters:
       - description: Attendance ID
-        in: path
+        in: query
         name: email
         required: true
         type: string
@@ -740,7 +740,7 @@ paths:
       description: Deletes the benefit's information by ID
       parameters:
       - description: Benefit ID
-        in: path
+        in: query
         name: _id
         required: true
         type: string
@@ -756,7 +756,7 @@ paths:
       description: Updates the benefit's information
       parameters:
       - description: Benefit ID
-        in: path
+        in: query
         name: _id
         required: true
         type: string
@@ -801,7 +801,7 @@ paths:
       description: Retrieves the benefit's information name
       parameters:
       - description: Benefit ID
-        in: path
+        in: query
         name: _id
         required: true
         type: string
@@ -831,7 +831,7 @@ paths:
       description: Retrieves the benefit's information name
       parameters:
       - description: Benefit ID
-        in: path
+        in: query
         name: email
         required: true
         type: string
@@ -1242,7 +1242,7 @@ paths:
       description: Deletes the contract's information by ID
       parameters:
       - description: Contract ID
-        in: path
+        in: query
         name: _id
         required: true
         type: string
@@ -1259,7 +1259,7 @@ paths:
       description: Deletes the contract's information by ID
       parameters:
       - description: Contract ID
-        in: path
+        in: query
         name: _id
         required: true
         type: string
@@ -1289,7 +1289,7 @@ paths:
       description: Get one the contract's information by ID
       parameters:
       - description: Contract ID
-        in: path
+        in: query
         name: email
         required: true
         type: string
@@ -1449,14 +1449,14 @@ paths:
       summary: Create Department Information
       tags:
       - Department
-  /api/v1/departments/delete:
+  /api/v1/departments/delete/_id:
     delete:
       consumes:
       - application/json
       description: Deletes the department's information
       parameters:
       - description: Department ID
-        in: path
+        in: query
         name: _id
         required: true
         type: string
@@ -1468,14 +1468,14 @@ paths:
       summary: Delete Department Information
       tags:
       - Department
-  /api/v1/departments/get/_id:
+  /api/v1/departments/get:
     get:
       consumes:
       - application/json
       description: Retrieves the department's information name
       parameters:
       - description: Contract ID
-        in: path
+        in: query
         name: _id
         required: true
         type: string
@@ -1507,7 +1507,7 @@ paths:
       description: Retrieves the department's information name
       parameters:
       - description: Contract ID
-        in: path
+        in: query
         name: name
         required: true
         type: string
@@ -1557,7 +1557,7 @@ paths:
       description: Deletes the employee's information
       parameters:
       - description: Employee ID
-        in: path
+        in: query
         name: _id
         required: true
         type: string
@@ -1574,7 +1574,7 @@ paths:
       description: Retrieves the employee's information
       parameters:
       - description: Employee ID
-        in: path
+        in: query
         name: _id
         required: true
         type: string
@@ -1604,7 +1604,7 @@ paths:
       description: Retrieves the employee's information
       parameters:
       - description: Employee
-        in: path
+        in: query
         name: name
         required: true
         type: string
@@ -1621,7 +1621,7 @@ paths:
       description: Create the employee's information
       parameters:
       - description: Employee ID
-        in: path
+        in: query
         name: _id
         required: true
         type: string
@@ -1922,7 +1922,7 @@ paths:
       description: Delete the leave request's information
       parameters:
       - description: Leave Request ID
-        in: path
+        in: query
         name: _id
         required: true
         type: string
@@ -1941,7 +1941,7 @@ paths:
       description: Get one by email the leave request's information
       parameters:
       - description: Employee ID
-        in: path
+        in: query
         name: _id
         required: true
         type: string
@@ -1973,7 +1973,7 @@ paths:
       description: Get one by email the leave request's information
       parameters:
       - description: Email
-        in: path
+        in: query
         name: email
         required: true
         type: string
@@ -2263,7 +2263,7 @@ paths:
       description: Delete the performance review's information
       parameters:
       - description: Performance Review  ID
-        in: path
+        in: query
         name: _id
         required: true
         type: string
@@ -2282,7 +2282,7 @@ paths:
       description: Get the performance review's information
       parameters:
       - description: Performance Review  ID
-        in: path
+        in: query
         name: _id
         required: true
         type: string
@@ -2314,7 +2314,7 @@ paths:
       description: Get the performance review's information
       parameters:
       - description: Performance Review  ID
-        in: path
+        in: query
         name: email
         required: true
         type: string
@@ -2333,7 +2333,7 @@ paths:
       description: Update the performance review's information
       parameters:
       - description: Performance Review  ID
-        in: path
+        in: query
         name: _id
         required: true
         type: string
@@ -3642,7 +3642,7 @@ paths:
       description: Update the performance review's information
       parameters:
       - description: Performance Review  ID
-        in: path
+        in: query
         name: _id
         required: true
         type: string
