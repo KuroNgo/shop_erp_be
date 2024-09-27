@@ -2,6 +2,7 @@ package employee_usecase
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	departmentsdomain "shop_erp_mono/domain/human_resource_management/departments"
@@ -25,15 +26,7 @@ type employeeUseCase struct {
 func NewEmployeeUseCase(contextTimout time.Duration, employeeRepository employeesdomain.IEmployeeRepository,
 	departmentRepository departmentsdomain.IDepartmentRepository, salaryRepository salarydomain.ISalaryRepository,
 	roleRepository roledomain.IRoleRepository, cacheTTL time.Duration) employeesdomain.IEmployeeUseCase {
-	config := bigcache.Config{
-		Shards:           1024,
-		LifeWindow:       cacheTTL,
-		MaxEntrySize:     512,
-		CleanWindow:      1 * time.Minute,
-		HardMaxCacheSize: 1024 * 2, // 2MB
-	}
-
-	cache, err := bigcache.New(context.Background(), config)
+	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
 	if err != nil {
 		return nil
 	}
@@ -83,12 +76,32 @@ func (e *employeeUseCase) CreateOne(ctx context.Context, input *employeesdomain.
 		UpdatedAt:    time.Now(),
 	}
 
-	err = e.cache.Delete("employees")
-	if err != nil {
-		return err
-	}
+	errCh := make(chan error, 1)
+	var wg sync.WaitGroup
 
-	return e.employeeRepository.CreateOne(ctx, employeeData)
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		err = e.cache.Delete("employees")
+		if err != nil {
+			errCh <- err
+			return
+		}
+	}()
+
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	select {
+	case err = <-errCh:
+		return err
+	case <-ctx.Done():
+		return ctx.Err()
+	default:
+		return e.employeeRepository.CreateOne(ctx, employeeData)
+	}
 }
 
 func (e *employeeUseCase) DeleteOne(ctx context.Context, id string) error {
@@ -133,14 +146,12 @@ func (e *employeeUseCase) DeleteOne(ctx context.Context, id string) error {
 
 	select {
 	case err = <-errCh:
-		if err != nil {
-			return err
-		}
+		return err
 	case <-ctx.Done():
 		return ctx.Err()
+	default:
+		return e.employeeRepository.DeleteOne(ctx, employeeID)
 	}
-
-	return e.employeeRepository.DeleteOne(ctx, employeeID)
 }
 
 func (e *employeeUseCase) UpdateOne(ctx context.Context, id string, input *employeesdomain.Input) error {
@@ -187,7 +198,39 @@ func (e *employeeUseCase) UpdateOne(ctx context.Context, id string, input *emplo
 		UpdatedAt:    time.Now(),
 	}
 
-	return e.employeeRepository.UpdateOne(ctx, employeeID, employee)
+	errCh := make(chan error, 1)
+	var wg sync.WaitGroup
+
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		if err = e.cache.Delete(id); err != nil {
+			errCh <- err
+			return
+		}
+	}()
+
+	go func() {
+		defer wg.Done()
+		if err = e.cache.Delete("employees"); err != nil {
+			errCh <- err
+			return
+		}
+	}()
+
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	select {
+	case err = <-errCh:
+		return err
+	case <-ctx.Done():
+		return ctx.Err()
+	default:
+		return e.employeeRepository.UpdateOne(ctx, employeeID, employee)
+	}
 }
 
 func (e *employeeUseCase) UpdateStatus(ctx context.Context, id string, isActive bool) error {
@@ -199,12 +242,54 @@ func (e *employeeUseCase) UpdateStatus(ctx context.Context, id string, isActive 
 		return err
 	}
 
-	return e.employeeRepository.UpdateStatus(ctx, employeeID, isActive)
+	errCh := make(chan error, 1)
+	var wg sync.WaitGroup
+
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		if err = e.cache.Delete(id); err != nil {
+			errCh <- err
+			return
+		}
+	}()
+
+	go func() {
+		defer wg.Done()
+		if err = e.cache.Delete("employees"); err != nil {
+			errCh <- err
+			return
+		}
+	}()
+
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	select {
+	case err = <-errCh:
+		return err
+	case <-ctx.Done():
+		return ctx.Err()
+	default:
+		return e.employeeRepository.UpdateStatus(ctx, employeeID, isActive)
+	}
 }
 
 func (e *employeeUseCase) GetByID(ctx context.Context, id string) (employeesdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
+
+	data, _ := e.cache.Get(id)
+	if data != nil {
+		var response employeesdomain.Output
+		err := json.Unmarshal(data, &response)
+		if err != nil {
+			return employeesdomain.Output{}, err
+		}
+		return response, nil
+	}
 
 	employeeID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -219,12 +304,33 @@ func (e *employeeUseCase) GetByID(ctx context.Context, id string) (employeesdoma
 	output := employeesdomain.Output{
 		Employee: employeeData,
 	}
+
+	data, err = json.Marshal(output)
+	if err != nil {
+		return employeesdomain.Output{}, err
+	}
+
+	err = e.cache.Set(id, data)
+	if err != nil {
+		return employeesdomain.Output{}, err
+	}
+
 	return output, nil
 }
 
 func (e *employeeUseCase) GetByEmail(ctx context.Context, name string) (employeesdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
+
+	data, _ := e.cache.Get(name)
+	if data != nil {
+		var response employeesdomain.Output
+		err := json.Unmarshal(data, &response)
+		if err != nil {
+			return employeesdomain.Output{}, err
+		}
+		return response, nil
+	}
 
 	employeeData, err := e.employeeRepository.GetByEmail(ctx, name)
 	if err != nil {
@@ -234,12 +340,33 @@ func (e *employeeUseCase) GetByEmail(ctx context.Context, name string) (employee
 	output := employeesdomain.Output{
 		Employee: employeeData,
 	}
+
+	data, err = json.Marshal(output)
+	if err != nil {
+		return employeesdomain.Output{}, err
+	}
+
+	err = e.cache.Set(name, data)
+	if err != nil {
+		return employeesdomain.Output{}, err
+	}
+
 	return output, nil
 }
 
 func (e *employeeUseCase) GetAll(ctx context.Context) ([]employeesdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
+
+	data, _ := e.cache.Get("employees")
+	if data != nil {
+		var response []employeesdomain.Output
+		err := json.Unmarshal(data, &response)
+		if err != nil {
+			return nil, err
+		}
+		return response, nil
+	}
 
 	employeeData, err := e.employeeRepository.GetAll(ctx)
 	if err != nil {
@@ -254,6 +381,16 @@ func (e *employeeUseCase) GetAll(ctx context.Context) ([]employeesdomain.Output,
 		}
 
 		outputs = append(outputs, output)
+	}
+
+	data, err = json.Marshal(outputs)
+	if err != nil {
+		return nil, err
+	}
+
+	err = e.cache.Set("employees", data)
+	if err != nil {
+		return nil, err
 	}
 
 	return outputs, nil
