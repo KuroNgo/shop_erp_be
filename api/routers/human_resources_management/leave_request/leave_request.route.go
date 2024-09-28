@@ -13,11 +13,11 @@ import (
 	"time"
 )
 
-func LeaveRequestRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func LeaveRequestRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	lr := leaverequestrepository.NewLeaveRequestRepository(db, leaverequestdomain.CollectionLeaveRequest)
 	em := employeerepository.NewEmployeeRepository(db, employees_domain.CollectionEmployee)
 	leaveRequest := &leaverequestcontroller.LeaveRequestController{
-		LeaveRequestUseCase: leave_request_usecase.NewLeaveRequestUseCase(timeout, lr, em),
+		LeaveRequestUseCase: leave_request_usecase.NewLeaveRequestUseCase(timeout, lr, em, cacheTTL),
 		Database:            env,
 	}
 

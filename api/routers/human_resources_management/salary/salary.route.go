@@ -13,11 +13,11 @@ import (
 	"time"
 )
 
-func SalaryRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func SalaryRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	sa := salaryrepository.NewSalaryRepository(db, salarydomain.CollectionSalary)
 	ro := rolerepository.NewRoleRepository(db, roledomain.CollectionRole)
 	salary := &salarycontroller.SalaryController{
-		SalaryUseCase: salaryusecase.NewSalaryUseCase(timeout, sa, ro),
+		SalaryUseCase: salaryusecase.NewSalaryUseCase(timeout, sa, ro, cacheTTL),
 		Database:      env,
 	}
 

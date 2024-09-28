@@ -13,12 +13,12 @@ import (
 	"time"
 )
 
-func AttendanceRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func AttendanceRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	at := attendancerepository.NewAttendanceRepository(db, attendancedomain.CollectionAttendance)
 	em := employeerepository.NewEmployeeRepository(db, employeesdomain.CollectionEmployee)
 
 	attendance := &attendancecontroller.AttendanceController{
-		AttendanceUseCase: attendanceusecase.NewAttendanceUseCase(timeout, at, em),
+		AttendanceUseCase: attendanceusecase.NewAttendanceUseCase(timeout, at, em, cacheTTL),
 		Database:          env,
 	}
 

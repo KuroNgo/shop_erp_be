@@ -2,6 +2,7 @@ package role_usecase
 
 import (
 	"context"
+	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	roledomain "shop_erp_mono/domain/human_resource_management/role"
 	"shop_erp_mono/usecase/human_resource_management/role/validate"
@@ -11,10 +12,15 @@ import (
 type roleUseCase struct {
 	contextTimeout time.Duration
 	roleRepository roledomain.IRoleRepository
+	cache          *bigcache.BigCache
 }
 
-func NewRoleUseCase(contextTimeout time.Duration, roleRepository roledomain.IRoleRepository) roledomain.IRoleUseCase {
-	return &roleUseCase{contextTimeout: contextTimeout, roleRepository: roleRepository}
+func NewRoleUseCase(contextTimeout time.Duration, roleRepository roledomain.IRoleRepository, cacheTTL time.Duration) roledomain.IRoleUseCase {
+	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
+	if err != nil {
+		return nil
+	}
+	return &roleUseCase{contextTimeout: contextTimeout, cache: cache, roleRepository: roleRepository}
 }
 
 func (r *roleUseCase) CreateOne(ctx context.Context, input *roledomain.Input) error {

@@ -13,11 +13,11 @@ import (
 	"time"
 )
 
-func ShippingRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func ShippingRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	sh := shipping_repository.NewShippingRepository(db, shippingdomain.CollectionShipping)
 	so := sales_order_repository.NewSaleOrderRepository(db, sale_orders_domain.CollectionSalesOrder)
 	shipping := &shipping_controller.ShippingController{
-		ShippingUseCase: shipping_usecase.NewShippingUseCase(timeout, sh, so),
+		ShippingUseCase: shipping_usecase.NewShippingUseCase(timeout, sh, so, cacheTTL),
 		Database:        env,
 	}
 

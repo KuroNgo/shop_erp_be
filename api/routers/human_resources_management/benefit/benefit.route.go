@@ -13,11 +13,11 @@ import (
 	"time"
 )
 
-func BenefitRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func BenefitRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	be := benefitrepository.NewBenefitRepository(db, benefitsdomain.CollectionBenefit)
 	em := employeerepository.NewEmployeeRepository(db, employeesdomain.CollectionEmployee)
 	benefit := &benefitcontroller.BenefitController{
-		BenefitUseCase: benefitusecase.NewBenefitUseCase(timeout, be, em),
+		BenefitUseCase: benefitusecase.NewBenefitUseCase(timeout, be, em, cacheTTL),
 		Database:       env,
 	}
 

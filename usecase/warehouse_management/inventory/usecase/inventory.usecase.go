@@ -2,6 +2,7 @@ package inventory_usecase
 
 import (
 	"context"
+	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	inventory_domain "shop_erp_mono/domain/warehouse_management/inventory"
 	productdomain "shop_erp_mono/domain/warehouse_management/product"
@@ -15,11 +16,17 @@ type inventoryUseCase struct {
 	inventoryRepository inventory_domain.InventoryRepository
 	productRepository   productdomain.IProductRepository
 	warehouseRepository warehousedomain.IWarehouseRepository
+	cache               *bigcache.BigCache
 }
 
 func NewInventoryRepository(contextTimeout time.Duration, inventoryRepository inventory_domain.InventoryRepository,
-	productRepository productdomain.IProductRepository, warehouseRepository warehousedomain.IWarehouseRepository) inventory_domain.InventoryUseCase {
-	return &inventoryUseCase{contextTimeout: contextTimeout, inventoryRepository: inventoryRepository,
+	productRepository productdomain.IProductRepository, warehouseRepository warehousedomain.IWarehouseRepository,
+	cacheTTL time.Duration) inventory_domain.InventoryUseCase {
+	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
+	if err != nil {
+		return nil
+	}
+	return &inventoryUseCase{contextTimeout: contextTimeout, inventoryRepository: inventoryRepository, cache: cache,
 		productRepository: productRepository, warehouseRepository: warehouseRepository}
 }
 

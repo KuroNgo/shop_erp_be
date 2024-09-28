@@ -3,6 +3,7 @@ package category_usecase
 import (
 	"context"
 	"errors"
+	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	productdomain "shop_erp_mono/domain/warehouse_management/product"
 	categorydomain "shop_erp_mono/domain/warehouse_management/product_category"
@@ -14,11 +15,16 @@ type categoryUseCase struct {
 	contextTimeout     time.Duration
 	categoryRepository categorydomain.ICategoryRepository
 	productRepository  productdomain.IProductRepository
+	cache              *bigcache.BigCache
 }
 
 func NewCategoryUseCase(contextTimeout time.Duration, categoryRepository categorydomain.ICategoryRepository,
-	productRepository productdomain.IProductRepository) categorydomain.ICategoryUseCase {
-	return &categoryUseCase{contextTimeout: contextTimeout, categoryRepository: categoryRepository, productRepository: productRepository}
+	productRepository productdomain.IProductRepository, cacheTTL time.Duration) categorydomain.ICategoryUseCase {
+	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
+	if err != nil {
+		return nil
+	}
+	return &categoryUseCase{contextTimeout: contextTimeout, cache: cache, categoryRepository: categoryRepository, productRepository: productRepository}
 }
 
 func (c *categoryUseCase) CreateOne(ctx context.Context, input *categorydomain.Input) error {

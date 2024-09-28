@@ -13,11 +13,11 @@ import (
 	"time"
 )
 
-func ProductCategoryRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func ProductCategoryRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	pr := productrepository.NewProductRepository(db, productdomain.CollectionProduct)
 	ca := categoryrepository.NewCategoryRepository(db, categorydomain.CollectionCategory)
 	category := &categorycontroller.CategoryController{
-		CategoryUseCase: categoryusecase.NewCategoryUseCase(timeout, ca, pr),
+		CategoryUseCase: categoryusecase.NewCategoryUseCase(timeout, ca, pr, cacheTTL),
 		Database:        env,
 	}
 

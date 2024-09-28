@@ -15,12 +15,12 @@ import (
 	"time"
 )
 
-func OrderDetailRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func OrderDetailRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	od := orderdetailrepository.NewOrderDetailRepository(db, orderdetailsdomain.CollectionOrderDetail)
 	so := salesorderrepository.NewSaleOrderRepository(db, saleordersdomain.CollectionSalesOrder)
 	pr := productrepository.NewProductRepository(db, productdomain.CollectionProduct)
 	orderDetail := &orderdetailcontroller.OrderDetailController{
-		OrderDetailUseCase: orderdetailusecase.NewOrderDetailUseCase(timeout, od, so, pr),
+		OrderDetailUseCase: orderdetailusecase.NewOrderDetailUseCase(timeout, od, so, pr, cacheTTL),
 		Database:           env,
 	}
 

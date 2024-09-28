@@ -31,9 +31,9 @@ func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, g
 	// All Public APIs
 	customerroute.CustomerRouter(env, timeout, db, publicRouter, cacheTTL)
 	invoicesroute.InvoiceRouter(env, timeout, db, publicRouter, cacheTTL)
-	orderdetailsroute.OrderDetailRouter(env, timeout, db, publicRouter)
-	paymentsroute.PaymentRouter(env, timeout, db, publicRouter)
-	saleordersroute.SaleOrderRouter(env, timeout, db, publicRouter)
-	salereportsroute.SaleReportRouter(env, timeout, db, publicRouter)
-	shippingroute.ShippingRouter(env, timeout, db, publicRouter)
+	orderdetailsroute.OrderDetailRouter(env, timeout, db, publicRouter, cacheTTL)
+	paymentsroute.PaymentRouter(env, timeout, db, publicRouter, cacheTTL)
+	saleordersroute.SaleOrderRouter(env, timeout, db, publicRouter, cacheTTL)
+	salereportsroute.SaleReportRouter(env, timeout, db, publicRouter, cacheTTL)
+	shippingroute.ShippingRouter(env, timeout, db, publicRouter, cacheTTL)
 }

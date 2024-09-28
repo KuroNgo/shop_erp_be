@@ -13,11 +13,11 @@ import (
 	"time"
 )
 
-func PerformanceReviewRouterV1(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func PerformanceReviewRouterV1(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	pr := performancereviewrepository.NewPerformanceReviewRepository(db, performancereviewdomain.CollectionPerformanceReview)
 	em := employeerepository.NewEmployeeRepository(db, employeesdomain.CollectionEmployee)
 	performanceReview := &performancereviewcontroller.PerformanceReviewController{
-		PerformanceReviewUseCase: performancereviewusecase.NewPerformanceReviewUseCase(timeout, pr, em),
+		PerformanceReviewUseCase: performancereviewusecase.NewPerformanceReviewUseCase(timeout, pr, em, cacheTTL),
 		Database:                 env,
 	}
 

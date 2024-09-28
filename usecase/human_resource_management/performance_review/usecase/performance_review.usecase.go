@@ -2,6 +2,7 @@ package performance_review_usecase
 
 import (
 	"context"
+	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	employees_domain "shop_erp_mono/domain/human_resource_management/employees"
 	performancereviewdomain "shop_erp_mono/domain/human_resource_management/performance_review"
@@ -13,11 +14,16 @@ type performanceReviewUseCase struct {
 	contextTimeout              time.Duration
 	performanceReviewRepository performancereviewdomain.IPerformanceReviewRepository
 	employeeRepository          employees_domain.IEmployeeRepository
+	cache                       *bigcache.BigCache
 }
 
 func NewPerformanceReviewUseCase(contextTimeout time.Duration, performanceReviewRepository performancereviewdomain.IPerformanceReviewRepository,
-	employeeRepository employees_domain.IEmployeeRepository) performancereviewdomain.IPerformanceReviewUseCase {
-	return &performanceReviewUseCase{contextTimeout: contextTimeout, performanceReviewRepository: performanceReviewRepository, employeeRepository: employeeRepository}
+	employeeRepository employees_domain.IEmployeeRepository, cacheTTL time.Duration) performancereviewdomain.IPerformanceReviewUseCase {
+	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
+	if err != nil {
+		return nil
+	}
+	return &performanceReviewUseCase{contextTimeout: contextTimeout, cache: cache, performanceReviewRepository: performanceReviewRepository, employeeRepository: employeeRepository}
 }
 
 func (p *performanceReviewUseCase) CreateOneWithEmailEmployee(ctx context.Context, input *performancereviewdomain.Input1) error {

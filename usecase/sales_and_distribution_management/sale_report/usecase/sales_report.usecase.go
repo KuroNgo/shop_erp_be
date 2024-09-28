@@ -2,6 +2,7 @@ package sale_report_usecase
 
 import (
 	"context"
+	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	salereportsdomain "shop_erp_mono/domain/sales_and_distribution_management/sale_reports"
 	productdomain "shop_erp_mono/domain/warehouse_management/product"
@@ -13,11 +14,16 @@ type saleReportUseCase struct {
 	contextTimeout       time.Duration
 	saleReportRepository salereportsdomain.ISalesReportRepository
 	productRepository    productdomain.IProductRepository
+	cache                *bigcache.BigCache
 }
 
 func NewSaleReportUseCase(contextTimeout time.Duration, saleReportRepository salereportsdomain.ISalesReportRepository,
-	productRepository productdomain.IProductRepository) salereportsdomain.ISalesReportUseCase {
-	return &saleReportUseCase{contextTimeout: contextTimeout, saleReportRepository: saleReportRepository, productRepository: productRepository}
+	productRepository productdomain.IProductRepository, cacheTTL time.Duration) salereportsdomain.ISalesReportUseCase {
+	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
+	if err != nil {
+		return nil
+	}
+	return &saleReportUseCase{contextTimeout: contextTimeout, cache: cache, saleReportRepository: saleReportRepository, productRepository: productRepository}
 }
 
 func (s *saleReportUseCase) CreateOne(ctx context.Context, input *salereportsdomain.Input) error {

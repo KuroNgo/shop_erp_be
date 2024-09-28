@@ -2,6 +2,7 @@ package shipping_usecase
 
 import (
 	"context"
+	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	saleordersdomain "shop_erp_mono/domain/sales_and_distribution_management/sale_orders"
 	shippingdomain "shop_erp_mono/domain/sales_and_distribution_management/shipping"
@@ -13,10 +14,16 @@ type shippingUseCase struct {
 	contextTimeout      time.Duration
 	shippingRepository  shippingdomain.IShippingRepository
 	saleOrderRepository saleordersdomain.ISalesOrderRepository
+	cache               *bigcache.BigCache
 }
 
-func NewShippingUseCase(contextTimeout time.Duration, shippingRepository shippingdomain.IShippingRepository, saleOrderRepository saleordersdomain.ISalesOrderRepository) shippingdomain.IShippingUseCase {
-	return &shippingUseCase{contextTimeout: contextTimeout, shippingRepository: shippingRepository, saleOrderRepository: saleOrderRepository}
+func NewShippingUseCase(contextTimeout time.Duration, shippingRepository shippingdomain.IShippingRepository,
+	saleOrderRepository saleordersdomain.ISalesOrderRepository, cacheTTL time.Duration) shippingdomain.IShippingUseCase {
+	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
+	if err != nil {
+		return nil
+	}
+	return &shippingUseCase{contextTimeout: contextTimeout, cache: cache, shippingRepository: shippingRepository, saleOrderRepository: saleOrderRepository}
 }
 
 func (s *shippingUseCase) CreateOne(ctx context.Context, input *shippingdomain.Input) error {

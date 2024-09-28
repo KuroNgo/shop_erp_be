@@ -17,21 +17,8 @@ type customerUseCase struct {
 	cache              *bigcache.BigCache
 }
 
-var (
-	wg sync.WaitGroup
-	mu sync.Mutex
-)
-
 func NewCustomerUseCase(contextTimeout time.Duration, customerRepository customerdomain.ICustomerRepository, cacheTTL time.Duration) customerdomain.ICustomerUseCase {
-	config := bigcache.Config{
-		Shards:           1024,
-		LifeWindow:       cacheTTL,
-		MaxEntrySize:     512,
-		CleanWindow:      1 * time.Minute,
-		HardMaxCacheSize: 8192,
-	}
-
-	cache, err := bigcache.New(context.Background(), config)
+	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
 	if err != nil {
 		return nil
 	}
@@ -63,6 +50,7 @@ func (c *customerUseCase) CreateOne(ctx context.Context, input *customerdomain.I
 		return err
 	}
 
+	var mu sync.Mutex
 	mu.Lock()
 	defer mu.Unlock()
 
@@ -83,6 +71,7 @@ func (c *customerUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
+	var mu sync.Mutex
 	mu.Lock()
 	defer mu.Unlock()
 
@@ -114,6 +103,7 @@ func (c *customerUseCase) UpdateOne(ctx context.Context, id string, input *custo
 		UpdatedAt:   time.Now(),
 	}
 
+	var wg sync.WaitGroup
 	wg.Add(2)
 	go func() {
 		defer wg.Done()
@@ -132,6 +122,7 @@ func (c *customerUseCase) UpdateOne(ctx context.Context, id string, input *custo
 	}()
 	wg.Wait()
 
+	var mu sync.Mutex
 	mu.Lock()
 	defer mu.Unlock()
 

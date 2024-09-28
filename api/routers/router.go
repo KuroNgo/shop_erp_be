@@ -18,7 +18,7 @@ func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, g
 	human_resources_management.SetUp(env, timeout, db, gin, cacheTTL)
 	accounting_management.SetUp(env, timeout, db, gin)
 	sales_and_distributing_management.SetUp(env, timeout, db, gin, cacheTTL)
-	warehouse_management.SetUp(env, timeout, db, gin)
+	warehouse_management.SetUp(env, timeout, db, gin, cacheTTL)
 
 	// Đếm các route
 	routeCount := countRoutes(gin)

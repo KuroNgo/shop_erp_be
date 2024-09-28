@@ -68,7 +68,7 @@ func SendEmail(data *EmailData, emailTo string, templateName string) error {
 	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 
 	// Send Email
-	if err := d.DialAndSend(m); err != nil {
+	if err = d.DialAndSend(m); err != nil {
 		return err
 	}
 	return nil

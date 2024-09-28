@@ -2,6 +2,7 @@ package sales_order_usecase
 
 import (
 	"context"
+	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	customerdomain "shop_erp_mono/domain/sales_and_distribution_management/customer"
 	saleordersdomain "shop_erp_mono/domain/sales_and_distribution_management/sale_orders"
@@ -13,11 +14,16 @@ type saleOrderUseCase struct {
 	contextTimeout      time.Duration
 	saleOrderRepository saleordersdomain.ISalesOrderRepository
 	customerRepository  customerdomain.ICustomerRepository
+	cache               *bigcache.BigCache
 }
 
 func NewSaleOrderUseCase(contextTimeout time.Duration, saleOrderRepository saleordersdomain.ISalesOrderRepository,
-	customerRepository customerdomain.ICustomerRepository) saleordersdomain.ISalesOrderUseCase {
-	return &saleOrderUseCase{contextTimeout: contextTimeout, saleOrderRepository: saleOrderRepository, customerRepository: customerRepository}
+	customerRepository customerdomain.ICustomerRepository, cacheTTL time.Duration) saleordersdomain.ISalesOrderUseCase {
+	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
+	if err != nil {
+		return nil
+	}
+	return &saleOrderUseCase{contextTimeout: contextTimeout, cache: cache, saleOrderRepository: saleOrderRepository, customerRepository: customerRepository}
 }
 
 func (s *saleOrderUseCase) GetByID(ctx context.Context, id string) (*saleordersdomain.SalesOrderResponse, error) {

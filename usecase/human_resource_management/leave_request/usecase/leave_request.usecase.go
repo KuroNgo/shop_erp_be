@@ -2,10 +2,13 @@ package leave_request_usecase
 
 import (
 	"context"
+	"encoding/json"
+	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
 	leaverequestdomain "shop_erp_mono/domain/human_resource_management/leave_request"
 	"shop_erp_mono/usecase/human_resource_management/leave_request/validate"
+	"sync"
 	"time"
 )
 
@@ -13,11 +16,16 @@ type leaveRequestUseCase struct {
 	contextTimeout         time.Duration
 	leaveRequestRepository leaverequestdomain.ILeaveRequestRepository
 	employeeRepository     employeesdomain.IEmployeeRepository
+	cache                  *bigcache.BigCache
 }
 
 func NewLeaveRequestUseCase(contextTimeout time.Duration, leaveRequestRepository leaverequestdomain.ILeaveRequestRepository,
-	employeeRepository employeesdomain.IEmployeeRepository) leaverequestdomain.ILeaveRequestUseCase {
-	return &leaveRequestUseCase{contextTimeout: contextTimeout, leaveRequestRepository: leaveRequestRepository, employeeRepository: employeeRepository}
+	employeeRepository employeesdomain.IEmployeeRepository, cacheTTL time.Duration) leaverequestdomain.ILeaveRequestUseCase {
+	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
+	if err != nil {
+		return nil
+	}
+	return &leaveRequestUseCase{contextTimeout: contextTimeout, cache: cache, leaveRequestRepository: leaveRequestRepository, employeeRepository: employeeRepository}
 }
 
 func (l *leaveRequestUseCase) CreateOne(ctx context.Context, input *leaverequestdomain.Input) error {
@@ -44,6 +52,32 @@ func (l *leaveRequestUseCase) CreateOne(ctx context.Context, input *leaverequest
 		UpdatedAt:  time.Now(),
 	}
 
+	errCh := make(chan error, 1)
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		err = l.cache.Delete("leaveRequests")
+		if err != nil {
+			errCh <- err
+			return
+		}
+	}()
+
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	select {
+	case err = <-errCh:
+		if err != nil {
+			return err
+		}
+	case <-ctx.Done():
+		return ctx.Err()
+	}
 	return l.leaveRequestRepository.CreateOne(ctx, leaveRequest)
 }
 
@@ -54,6 +88,43 @@ func (l *leaveRequestUseCase) DeleteOne(ctx context.Context, id string) error {
 	leaveRequestID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return err
+	}
+
+	errCh := make(chan error, 1)
+	var wg sync.WaitGroup
+
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		err = l.cache.Delete(id)
+		if err != nil {
+			errCh <- err
+			return
+		}
+	}()
+
+	go func() {
+		defer wg.Done()
+		err = l.cache.Delete("leaveRequests")
+		if err != nil {
+			errCh <- err
+			return
+		}
+	}()
+
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	select {
+	case err = <-errCh:
+		if err != nil {
+			return err
+		}
+
+	case <-ctx.Done():
+		return ctx.Err()
 	}
 
 	return l.leaveRequestRepository.DeleteOne(ctx, leaveRequestID)
@@ -88,12 +159,59 @@ func (l *leaveRequestUseCase) UpdateOne(ctx context.Context, id string, input *l
 		UpdatedAt:  time.Now(),
 	}
 
+	errCh := make(chan error, 1)
+	var wg sync.WaitGroup
+
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		err = l.cache.Delete(id)
+		if err != nil {
+			errCh <- err
+			return
+		}
+	}()
+
+	go func() {
+		defer wg.Done()
+		err = l.cache.Delete("leaveRequests")
+		if err != nil {
+			errCh <- err
+			return
+		}
+	}()
+
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	select {
+	case err = <-errCh:
+		if err != nil {
+			return err
+		}
+
+	case <-ctx.Done():
+		return ctx.Err()
+	}
+
 	return l.leaveRequestRepository.UpdateOne(ctx, leaveRequestID, leaveRequest)
 }
 
 func (l *leaveRequestUseCase) GetByID(ctx context.Context, id string) (leaverequestdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, l.contextTimeout)
 	defer cancel()
+
+	data, _ := l.cache.Get(id)
+	if data != nil {
+		var response leaverequestdomain.Output
+		err := json.Unmarshal(data, &response)
+		if err != nil {
+			return leaverequestdomain.Output{}, err
+		}
+		return response, nil
+	}
 
 	leaveRequestID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -115,12 +233,32 @@ func (l *leaveRequestUseCase) GetByID(ctx context.Context, id string) (leaverequ
 		Employee:     employeeData,
 	}
 
+	data, err = json.Marshal(output)
+	if err != nil {
+		return leaverequestdomain.Output{}, err
+	}
+
+	err = l.cache.Set(id, data)
+	if err != nil {
+		return leaverequestdomain.Output{}, err
+	}
+
 	return output, nil
 }
 
 func (l *leaveRequestUseCase) GetByEmailEmployee(ctx context.Context, email string) (leaverequestdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, l.contextTimeout)
 	defer cancel()
+
+	data, _ := l.cache.Get(email)
+	if data != nil {
+		var response leaverequestdomain.Output
+		err := json.Unmarshal(data, &response)
+		if err != nil {
+			return leaverequestdomain.Output{}, err
+		}
+		return response, nil
+	}
 
 	employeeData, err := l.employeeRepository.GetByEmail(ctx, email)
 	if err != nil {
@@ -137,12 +275,32 @@ func (l *leaveRequestUseCase) GetByEmailEmployee(ctx context.Context, email stri
 		Employee:     employeeData,
 	}
 
+	data, err = json.Marshal(output)
+	if err != nil {
+		return leaverequestdomain.Output{}, err
+	}
+
+	err = l.cache.Set(email, data)
+	if err != nil {
+		return leaverequestdomain.Output{}, err
+	}
+
 	return output, nil
 }
 
 func (l *leaveRequestUseCase) GetAll(ctx context.Context) ([]leaverequestdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, l.contextTimeout)
 	defer cancel()
+
+	data, _ := l.cache.Get("leaveRequests")
+	if data != nil {
+		var response []leaverequestdomain.Output
+		err := json.Unmarshal(data, &response)
+		if err != nil {
+			return nil, err
+		}
+		return response, nil
+	}
 
 	leaveRequestData, err := l.leaveRequestRepository.GetAll(ctx)
 	if err != nil {
@@ -163,6 +321,16 @@ func (l *leaveRequestUseCase) GetAll(ctx context.Context) ([]leaverequestdomain.
 		}
 
 		outputs = append(outputs, output)
+	}
+
+	data, err = json.Marshal(outputs)
+	if err != nil {
+		return nil, err
+	}
+
+	err = l.cache.Set("leaveRequests", data)
+	if err != nil {
+		return nil, err
 	}
 
 	return outputs, nil

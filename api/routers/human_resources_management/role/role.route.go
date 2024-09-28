@@ -11,10 +11,10 @@ import (
 	"time"
 )
 
-func RoleRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func RoleRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	ro := role_repository.NewRoleRepository(db, roledomain.CollectionRole)
 	role := &role_controller.RoleController{
-		RoleUseCase: role_usecase.NewRoleUseCase(timeout, ro),
+		RoleUseCase: role_usecase.NewRoleUseCase(timeout, ro, cacheTTL),
 		Database:    env,
 	}
 

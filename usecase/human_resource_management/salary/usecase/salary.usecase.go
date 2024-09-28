@@ -2,6 +2,7 @@ package salary_usecase
 
 import (
 	"context"
+	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	roledomain "shop_erp_mono/domain/human_resource_management/role"
 	salarydomain "shop_erp_mono/domain/human_resource_management/salary"
@@ -13,10 +14,16 @@ type salaryUseCase struct {
 	contextTimeout   time.Duration
 	salaryRepository salarydomain.ISalaryRepository
 	roleRepository   roledomain.IRoleRepository
+	cache            *bigcache.BigCache
 }
 
-func NewSalaryUseCase(contextTimout time.Duration, salaryRepository salarydomain.ISalaryRepository, roleRepository roledomain.IRoleRepository) salarydomain.ISalaryUseCase {
-	return &salaryUseCase{contextTimeout: contextTimout, salaryRepository: salaryRepository, roleRepository: roleRepository}
+func NewSalaryUseCase(contextTimout time.Duration, salaryRepository salarydomain.ISalaryRepository,
+	roleRepository roledomain.IRoleRepository, cacheTTL time.Duration) salarydomain.ISalaryUseCase {
+	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
+	if err != nil {
+		return nil
+	}
+	return &salaryUseCase{contextTimeout: contextTimout, cache: cache, salaryRepository: salaryRepository, roleRepository: roleRepository}
 }
 
 func (s *salaryUseCase) CreateOne(ctx context.Context, input *salarydomain.Input) error {

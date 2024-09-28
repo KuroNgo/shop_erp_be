@@ -15,12 +15,12 @@ import (
 	"time"
 )
 
-func InventoryRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func InventoryRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	inv := inventoryrepository.NewInventoryRepository(db, inventorydomain.CollectionInventory)
 	pr := productrepository.NewProductRepository(db, productdomain.CollectionProduct)
 	wa := warehouserepository.NewWarehouseRepository(db, warehousedomain.CollectionWareHouse)
 	inventory := &inventorycontroller.InventoryController{
-		InventoryUseCase: inventoryusecase.NewInventoryRepository(timeout, inv, pr, wa),
+		InventoryUseCase: inventoryusecase.NewInventoryRepository(timeout, inv, pr, wa, cacheTTL),
 		Database:         env,
 	}
 

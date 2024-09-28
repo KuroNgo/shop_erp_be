@@ -80,12 +80,13 @@ func (d *departmentUseCase) CreateOne(ctx context.Context, input *departmentsdom
 
 	select {
 	case err = <-errCh:
-		return err
+		if err != nil {
+			return err
+		}
 	case <-ctx.Done():
 		return ctx.Err()
-	default:
-		return d.departmentRepository.CreateOne(ctx, department)
 	}
+	return d.departmentRepository.CreateOne(ctx, department)
 }
 
 func (d *departmentUseCase) DeleteOne(ctx context.Context, id string) error {
@@ -123,12 +124,13 @@ func (d *departmentUseCase) DeleteOne(ctx context.Context, id string) error {
 
 	select {
 	case err = <-errCh:
-		return err
+		if err != nil {
+			return err
+		}
 	case <-ctx.Done():
 		return ctx.Err()
-	default:
-		return d.departmentRepository.DeleteOne(ctx, departmentID)
 	}
+	return d.departmentRepository.DeleteOne(ctx, departmentID)
 }
 
 func (d *departmentUseCase) UpdateOne(ctx context.Context, id string, input *departmentsdomain.Input) error {
@@ -191,12 +193,13 @@ func (d *departmentUseCase) UpdateOne(ctx context.Context, id string, input *dep
 
 	select {
 	case err = <-errCh:
-		return err
+		if err != nil {
+			return err
+		}
 	case <-ctx.Done():
 		return ctx.Err()
-	default:
-		return d.departmentRepository.UpdateOne(ctx, departmentID, department)
 	}
+	return d.departmentRepository.UpdateOne(ctx, departmentID, department)
 }
 
 func (d *departmentUseCase) GetByID(ctx context.Context, id string) (departmentsdomain.Output, error) {

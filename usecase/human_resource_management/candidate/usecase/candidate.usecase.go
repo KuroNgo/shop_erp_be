@@ -57,12 +57,14 @@ func (c *candidateUseCase) CreateOne(ctx context.Context, candidate *candidatedo
 
 	select {
 	case err := <-errCh:
-		return err
+		if err != nil {
+			return err
+		}
 	case <-ctx.Done():
 		return ctx.Err()
-	default:
-		return c.candidateRepository.CreateOne(ctx, candidate)
 	}
+
+	return c.candidateRepository.CreateOne(ctx, candidate)
 }
 
 func (c *candidateUseCase) DeleteOne(ctx context.Context, id string) error {
@@ -103,13 +105,14 @@ func (c *candidateUseCase) DeleteOne(ctx context.Context, id string) error {
 
 	select {
 	case err = <-errCh:
-		return err
+		if err != nil {
+			return err
+		}
 	case <-ctx.Done():
 		return ctx.Err()
-	default:
-		return c.candidateRepository.DeleteOne(ctx, candidateID)
 	}
 
+	return c.candidateRepository.DeleteOne(ctx, candidateID)
 }
 
 func (c *candidateUseCase) UpdateOne(ctx context.Context, id string, candidate *candidatedomain.Candidate) error {
@@ -150,12 +153,13 @@ func (c *candidateUseCase) UpdateOne(ctx context.Context, id string, candidate *
 
 	select {
 	case err = <-errCh:
-		return err
+		if err != nil {
+			return err
+		}
 	case <-ctx.Done():
 		return ctx.Err()
-	default:
-		return c.candidateRepository.UpdateOne(ctx, candidateID, candidate)
 	}
+	return c.candidateRepository.UpdateOne(ctx, candidateID, candidate)
 }
 
 func (c *candidateUseCase) UpdateStatus(ctx context.Context, id string, status string) error {
@@ -196,12 +200,13 @@ func (c *candidateUseCase) UpdateStatus(ctx context.Context, id string, status s
 
 	select {
 	case err = <-errCh:
-		return err
+		if err != nil {
+			return err
+		}
 	case <-ctx.Done():
 		return ctx.Err()
-	default:
-		return c.candidateRepository.UpdateStatus(ctx, candidateID, status)
 	}
+	return c.candidateRepository.UpdateStatus(ctx, candidateID, status)
 }
 
 func (c *candidateUseCase) GetByID(ctx context.Context, id string) (*candidatedomain.Candidate, error) {

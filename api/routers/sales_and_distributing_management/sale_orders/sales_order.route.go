@@ -13,11 +13,11 @@ import (
 	"time"
 )
 
-func SaleOrderRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func SaleOrderRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	so := salesorderrepository.NewSaleOrderRepository(db, saleordersdomain.CollectionSalesOrder)
 	cu := customerrepository.NewCustomerRepository(db, customerdomain.CollectionCustomer)
 	salesOrder := &salesordercontroller.SalesOrderController{
-		SalesOrderUseCase: salesorderusecase.NewSaleOrderUseCase(timeout, so, cu),
+		SalesOrderUseCase: salesorderusecase.NewSaleOrderUseCase(timeout, so, cu, cacheTTL),
 		Database:          env,
 	}
 

@@ -40,19 +40,19 @@ func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, g
 
 	// All Public APIs v1
 	userroute.UserRouter(env, timeout, db, publicRouterV1)
-	roleroute.RoleRouter(env, timeout, db, publicRouterV1)
+	roleroute.RoleRouter(env, timeout, db, publicRouterV1, cacheTTL)
 	departmentroute.DepartmentRouter(env, timeout, db, publicRouterV1, cacheTTL)
-	salaryroute.SalaryRouter(env, timeout, db, publicRouterV1)
-	attendanceroute.AttendanceRouter(env, timeout, db, publicRouterV1)
+	salaryroute.SalaryRouter(env, timeout, db, publicRouterV1, cacheTTL)
+	attendanceroute.AttendanceRouter(env, timeout, db, publicRouterV1, cacheTTL)
 	employeeroute.EmployeeRouter(env, timeout, db, publicRouterV1, cacheTTL)
-	benefitroute.BenefitRouter(env, timeout, db, publicRouterV1)
-	contractroute.ContractRouter(env, timeout, db, publicRouterV1)
-	leaverequestroute.LeaveRequestRouter(env, timeout, db, publicRouterV1)
-	performancereviewroute.PerformanceReviewRouterV1(env, timeout, db, publicRouterV1)
-	candidateroute.CandidateRouter(env, timeout, db, publicRouter)
+	benefitroute.BenefitRouter(env, timeout, db, publicRouterV1, cacheTTL)
+	contractroute.ContractRouter(env, timeout, db, publicRouterV1, cacheTTL)
+	leaverequestroute.LeaveRequestRouter(env, timeout, db, publicRouterV1, cacheTTL)
+	performancereviewroute.PerformanceReviewRouterV1(env, timeout, db, publicRouterV1, cacheTTL)
+	candidateroute.CandidateRouter(env, timeout, db, publicRouter, cacheTTL)
 
 	// All Public APIs v2
-	performancereviewroute.PerformanceReviewRouterV2(env, timeout, db, publicRouterV2)
+	performancereviewroute.PerformanceReviewRouterV2(env, timeout, db, publicRouterV2, cacheTTL)
 
 	// All Public APIs
 	userroute.UserGoogleRouter(env, timeout, db, publicRouter)

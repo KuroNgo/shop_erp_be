@@ -13,11 +13,11 @@ import (
 	"time"
 )
 
-func SaleReportRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func SaleReportRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	sr := salesreportrepository.NewSaleReportRepository(db, salereportsdomain.CollectionSalesReport)
 	pr := productrepository.NewProductRepository(db, productdomain.CollectionProduct)
 	salesReport := &salesreportcontroller.SalesReportController{
-		SalesReportUseCase: salereportusecase.NewSaleReportUseCase(timeout, sr, pr),
+		SalesReportUseCase: salereportusecase.NewSaleReportUseCase(timeout, sr, pr, cacheTTL),
 		Database:           env,
 	}
 

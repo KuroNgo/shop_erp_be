@@ -20,7 +20,7 @@ import (
 	"time"
 )
 
-func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, gin *gin.Engine) {
+func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, gin *gin.Engine, cacheTTL time.Duration) {
 	publicRouter := gin.Group("/api/v1")
 
 	// Khởi tạo Casbin enforcer
@@ -38,10 +38,10 @@ func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, g
 
 	// All Public APIs
 	product_route.ProductRouter(env, timeout, db, publicRouter)
-	product_category_route.ProductCategoryRouter(env, timeout, db, publicRouter)
+	product_category_route.ProductCategoryRouter(env, timeout, db, publicRouter, cacheTTL)
 	purchase_order_detail_route.PurchaseOrderDetailRouter(env, timeout, db, publicRouter)
 	supplier_route.SupplierRouter(env, timeout, db, publicRouter)
-	inventory_route.InventoryRouter(env, timeout, db, publicRouter)
+	inventory_route.InventoryRouter(env, timeout, db, publicRouter, cacheTTL)
 	purchase_order_route.PurchaseOrderRouter(env, timeout, db, publicRouter)
 	warehouse_route.WarehouseRouter(env, timeout, db, publicRouter)
 	stock_adjustment_route.StockAdjustmentRouter(env, timeout, db, publicRouter)

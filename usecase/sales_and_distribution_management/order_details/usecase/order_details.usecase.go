@@ -2,6 +2,7 @@ package order_detail_usecase
 
 import (
 	"context"
+	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	orderdetailsdomain "shop_erp_mono/domain/sales_and_distribution_management/order_details"
 	saleordersdomain "shop_erp_mono/domain/sales_and_distribution_management/sale_orders"
@@ -15,11 +16,17 @@ type orderDetailUseCase struct {
 	orderDetailRepository orderdetailsdomain.IOrderDetailRepository
 	saleOrderRepository   saleordersdomain.ISalesOrderRepository
 	productRepository     productdomain.IProductRepository
+	cache                 *bigcache.BigCache
 }
 
 func NewOrderDetailUseCase(contextTimeout time.Duration, orderDetailRepository orderdetailsdomain.IOrderDetailRepository,
-	saleOrderRepository saleordersdomain.ISalesOrderRepository, productRepository productdomain.IProductRepository) orderdetailsdomain.IOrderDetailUseCase {
-	return &orderDetailUseCase{contextTimeout: contextTimeout, orderDetailRepository: orderDetailRepository, saleOrderRepository: saleOrderRepository, productRepository: productRepository}
+	saleOrderRepository saleordersdomain.ISalesOrderRepository, productRepository productdomain.IProductRepository,
+	cacheTTL time.Duration) orderdetailsdomain.IOrderDetailUseCase {
+	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
+	if err != nil {
+		return nil
+	}
+	return &orderDetailUseCase{contextTimeout: contextTimeout, cache: cache, orderDetailRepository: orderDetailRepository, saleOrderRepository: saleOrderRepository, productRepository: productRepository}
 }
 
 func (o *orderDetailUseCase) CreateOne(ctx context.Context, input *orderdetailsdomain.Input) error {

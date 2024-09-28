@@ -13,11 +13,11 @@ import (
 	"time"
 )
 
-func CandidateRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func CandidateRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	ca := candidaterepository.NewCandidateRepository(db, candidatedomain.CollectionCandidate)
 	em := employeerepository.NewEmployeeRepository(db, employeesdomain.CollectionEmployee)
 	candidate := &candidatecontroller.CandidateController{
-		CandidateUseCase: candidateusecase.NewCandidateUseCase(timeout, ca, em),
+		CandidateUseCase: candidateusecase.NewCandidateUseCase(timeout, ca, em, cacheTTL),
 		Database:         env,
 	}
 

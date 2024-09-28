@@ -13,11 +13,11 @@ import (
 	"time"
 )
 
-func PaymentRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func PaymentRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	pa := payment_repository.NewPaymentRepository(db, payments_domain.CollectionPayment)
 	so := sales_order_repository.NewSaleOrderRepository(db, sale_orders_domain.CollectionSalesOrder)
 	payment := &payment_controller.PaymentController{
-		PaymentUseCase: payment_usecase.NewPaymentUseCase(timeout, pa, so),
+		PaymentUseCase: payment_usecase.NewPaymentUseCase(timeout, pa, so, cacheTTL),
 		Database:       env,
 	}
 

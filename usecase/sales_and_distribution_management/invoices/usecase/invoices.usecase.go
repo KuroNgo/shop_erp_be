@@ -19,22 +19,9 @@ type invoiceUseCase struct {
 	cache                *bigcache.BigCache
 }
 
-var (
-	wg sync.WaitGroup
-	mu sync.Mutex
-)
-
 func NewInvoiceUseCase(contextTimeout time.Duration, invoiceRepository invoices_domain.InvoiceRepository,
 	salesOrderRepository sale_orders_domain.ISalesOrderRepository, cacheTTL time.Duration) invoices_domain.InvoiceUseCase {
-	config := bigcache.Config{
-		Shards:           1024,
-		LifeWindow:       cacheTTL,
-		MaxEntrySize:     512,
-		CleanWindow:      1 * time.Minute,
-		HardMaxCacheSize: 8192,
-	}
-
-	cache, err := bigcache.New(context.Background(), config)
+	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
 	if err != nil {
 		return nil
 	}
@@ -71,6 +58,7 @@ func (i *invoiceUseCase) CreateOne(ctx context.Context, input *invoices_domain.I
 		return err
 	}
 
+	var mu sync.Mutex
 	mu.Lock()
 	defer mu.Unlock()
 
@@ -240,6 +228,7 @@ func (i *invoiceUseCase) UpdateOne(ctx context.Context, id string, input *invoic
 		UpdatedAt:   time.Now(),
 	}
 
+	var wg sync.WaitGroup
 	wg.Add(2)
 	go func() {
 		defer wg.Done()
@@ -269,6 +258,7 @@ func (i *invoiceUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
+	var wg sync.WaitGroup
 	wg.Add(2)
 	go func() {
 		defer wg.Done()

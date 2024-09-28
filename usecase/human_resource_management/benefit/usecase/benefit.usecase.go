@@ -2,10 +2,13 @@ package benefit_usecase
 
 import (
 	"context"
+	"encoding/json"
+	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	benefitsdomain "shop_erp_mono/domain/human_resource_management/benefits"
 	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
 	"shop_erp_mono/usecase/human_resource_management/benefit/validate"
+	"sync"
 	"time"
 )
 
@@ -13,11 +16,16 @@ type benefitUseCase struct {
 	contextTimeout     time.Duration
 	benefitRepository  benefitsdomain.IBenefitRepository
 	employeeRepository employeesdomain.IEmployeeRepository
+	cache              *bigcache.BigCache
 }
 
 func NewBenefitUseCase(contextTimeout time.Duration, benefitRepository benefitsdomain.IBenefitRepository,
-	employeeRepository employeesdomain.IEmployeeRepository) benefitsdomain.IBenefitUseCase {
-	return &benefitUseCase{contextTimeout: contextTimeout, benefitRepository: benefitRepository, employeeRepository: employeeRepository}
+	employeeRepository employeesdomain.IEmployeeRepository, cacheTTL time.Duration) benefitsdomain.IBenefitUseCase {
+	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
+	if err != nil {
+		return nil
+	}
+	return &benefitUseCase{contextTimeout: contextTimeout, cache: cache, benefitRepository: benefitRepository, employeeRepository: employeeRepository}
 }
 
 func (b *benefitUseCase) CreateOne(ctx context.Context, input *benefitsdomain.Input) error {
@@ -44,6 +52,31 @@ func (b *benefitUseCase) CreateOne(ctx context.Context, input *benefitsdomain.In
 		UpdatedAt:   time.Now(),
 	}
 
+	errCh := make(chan error, 1)
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		err = b.cache.Delete("benefits")
+		if err != nil {
+			return
+		}
+	}()
+
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	select {
+	case err = <-errCh:
+		if err != nil {
+			return err
+		}
+	case <-ctx.Done():
+		return ctx.Err()
+	}
 	return b.benefitRepository.CreateOne(ctx, &benefit)
 }
 
@@ -51,14 +84,51 @@ func (b *benefitUseCase) DeleteOne(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
-	benefitID, _ := primitive.ObjectIDFromHex(id)
-
-	err := b.benefitRepository.DeleteOne(ctx, benefitID)
+	benefitID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return err
 	}
 
-	return nil
+	err = b.benefitRepository.DeleteOne(ctx, benefitID)
+	if err != nil {
+		return err
+	}
+
+	errCh := make(chan error, 1)
+	var wg sync.WaitGroup
+
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		err = b.cache.Delete("benefits")
+		if err != nil {
+			return
+		}
+	}()
+
+	go func() {
+		defer wg.Done()
+		err = b.cache.Delete(id)
+		if err != nil {
+			return
+		}
+	}()
+
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	select {
+	case err = <-errCh:
+		if err != nil {
+			return err
+		}
+	case <-ctx.Done():
+		return ctx.Err()
+	}
+
+	return b.benefitRepository.DeleteOne(ctx, benefitID)
 }
 
 func (b *benefitUseCase) UpdateOne(ctx context.Context, id string, input *benefitsdomain.Input) error {
@@ -87,12 +157,55 @@ func (b *benefitUseCase) UpdateOne(ctx context.Context, id string, input *benefi
 		EndDate:     input.EndDate,
 	}
 
+	errCh := make(chan error, 1)
+	var wg sync.WaitGroup
+
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		err = b.cache.Delete("benefits")
+		if err != nil {
+			return
+		}
+	}()
+
+	go func() {
+		defer wg.Done()
+		err = b.cache.Delete(id)
+		if err != nil {
+			return
+		}
+	}()
+
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	select {
+	case err = <-errCh:
+		if err != nil {
+			return err
+		}
+	case <-ctx.Done():
+		return ctx.Err()
+	}
 	return b.benefitRepository.UpdateOne(ctx, benefitID, &benefit)
 }
 
 func (b *benefitUseCase) GetByID(ctx context.Context, id string) (benefitsdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
+
+	data, _ := b.cache.Get(id)
+	if data != nil {
+		var response benefitsdomain.Output
+		err := json.Unmarshal(data, &response)
+		if err != nil {
+			return benefitsdomain.Output{}, err
+		}
+		return response, nil
+	}
 
 	benefitID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -114,12 +227,32 @@ func (b *benefitUseCase) GetByID(ctx context.Context, id string) (benefitsdomain
 		Employee: employeeData,
 	}
 
+	data, err = json.Marshal(output)
+	if err != nil {
+		return benefitsdomain.Output{}, err
+	}
+
+	err = b.cache.Set(id, data)
+	if err != nil {
+		return benefitsdomain.Output{}, err
+	}
+
 	return output, nil
 }
 
 func (b *benefitUseCase) GetByEmail(ctx context.Context, email string) (benefitsdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
+
+	data, _ := b.cache.Get(email)
+	if data != nil {
+		var response benefitsdomain.Output
+		err := json.Unmarshal(data, &response)
+		if err != nil {
+			return benefitsdomain.Output{}, err
+		}
+		return response, nil
+	}
 
 	employeeData, err := b.employeeRepository.GetByEmail(ctx, email)
 	if err != nil {
@@ -136,12 +269,32 @@ func (b *benefitUseCase) GetByEmail(ctx context.Context, email string) (benefits
 		Employee: employeeData,
 	}
 
+	data, err = json.Marshal(output)
+	if err != nil {
+		return benefitsdomain.Output{}, err
+	}
+
+	err = b.cache.Set(email, data)
+	if err != nil {
+		return benefitsdomain.Output{}, err
+	}
+
 	return output, nil
 }
 
 func (b *benefitUseCase) GetAll(ctx context.Context) ([]benefitsdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
+
+	data, _ := b.cache.Get("benefits")
+	if data != nil {
+		var response []benefitsdomain.Output
+		err := json.Unmarshal(data, &response)
+		if err != nil {
+			return nil, err
+		}
+		return response, nil
+	}
 
 	benefitData, err := b.benefitRepository.GetAll(ctx)
 	if err != nil {
@@ -163,5 +316,16 @@ func (b *benefitUseCase) GetAll(ctx context.Context) ([]benefitsdomain.Output, e
 
 		outputs = append(outputs, output)
 	}
+
+	data, err = json.Marshal(outputs)
+	if err != nil {
+		return nil, err
+	}
+
+	err = b.cache.Set("benefits", data)
+	if err != nil {
+		return nil, err
+	}
+
 	return outputs, nil
 }

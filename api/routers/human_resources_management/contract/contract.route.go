@@ -13,11 +13,11 @@ import (
 	"time"
 )
 
-func ContractRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func ContractRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	co := contractrepository.NewContractRepository(db, contractsdomain.CollectionContract)
 	em := employeerepository.NewEmployeeRepository(db, employeesdomain.CollectionEmployee)
 	contract := &contractcontroller.ContractController{
-		ContractUseCase: contractusecase.NewContractUseCase(timeout, co, em),
+		ContractUseCase: contractusecase.NewContractUseCase(timeout, co, em, cacheTTL),
 		Database:        env,
 	}
 

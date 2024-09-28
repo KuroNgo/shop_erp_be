@@ -2,6 +2,7 @@ package payment_usecase
 
 import (
 	"context"
+	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	paymentsdomain "shop_erp_mono/domain/sales_and_distribution_management/payments"
 	saleordersdomain "shop_erp_mono/domain/sales_and_distribution_management/sale_orders"
@@ -13,11 +14,16 @@ type paymentUseCase struct {
 	contextTimeout       time.Duration
 	paymentRepository    paymentsdomain.IPaymentRepository
 	salesOrderRepository saleordersdomain.ISalesOrderRepository
+	cache                *bigcache.BigCache
 }
 
 func NewPaymentUseCase(contextTimeout time.Duration, paymentRepository paymentsdomain.IPaymentRepository,
-	salesOrderRepository saleordersdomain.ISalesOrderRepository) paymentsdomain.IPaymentUseCase {
-	return &paymentUseCase{contextTimeout: contextTimeout, paymentRepository: paymentRepository, salesOrderRepository: salesOrderRepository}
+	salesOrderRepository saleordersdomain.ISalesOrderRepository, cacheTTL time.Duration) paymentsdomain.IPaymentUseCase {
+	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
+	if err != nil {
+		return nil
+	}
+	return &paymentUseCase{contextTimeout: contextTimeout, cache: cache, paymentRepository: paymentRepository, salesOrderRepository: salesOrderRepository}
 }
 
 func (p *paymentUseCase) CreateOne(ctx context.Context, input *paymentsdomain.Input) error {
