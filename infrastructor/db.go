@@ -26,9 +26,9 @@ func NewMongoDatabase(env *bootstrap.Database) *mongo_driven.Client {
 
 	mongodbURI := fmt.Sprintf("mongodb+srv://%s:%s@andrew.8ulkv.mongodb.net/?retryWrites=true&w=majority&appName=Andrew", dbUser, dbPass)
 
-	//if dbUser == "" || dbPass == "" {
-	//	mongodbURI = fmt.Sprintf("mongodb://%s:%s", dbHost, dbPort)
-	//}
+	// if dbUser == "" || dbPass == "" {
+	// 	mongodbURI = fmt.Sprintf("mongodb://%s:%s", dbHost, dbPort)
+	// }
 
 	mongoCon := options.Client().ApplyURI(mongodbURI)
 	client, err := mongo_driven.Connect(ctx, mongoCon)
