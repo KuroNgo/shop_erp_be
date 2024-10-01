@@ -17,13 +17,13 @@ import (
 	"time"
 )
 
-func StockMovementRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func StockMovementRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	st := stockmovementrepository.NewStockMovementRepository(db, stockmovementdomain.CollectionStockMovement)
 	pr := productrepository.NewProductRepository(db, productdomain.CollectionProduct)
 	ur := userrepository.NewUserRepository(db, userdomain.CollectionUser)
 	wa := warehouserepository.NewWarehouseRepository(db, warehousedomain.CollectionWareHouse)
 	stockMovement := &stockmovementcontroller.StockMovementController{
-		StockMovementUseCase: stockmovementusecase.NewStockMovementUseCase(timeout, st, pr, ur, wa),
+		StockMovementUseCase: stockmovementusecase.NewStockMovementUseCase(timeout, st, pr, ur, wa, cacheTTL),
 		Database:             env,
 	}
 

@@ -29,10 +29,11 @@ func main() {
 	defer app.CloseDBConnection()
 
 	timeout := time.Duration(env.ContextTimeout) * time.Second
+	cacheTTL := time.Minute * 5
 
 	_gin := gin.Default()
 
-	routers.SetUp(env, timeout, db, _gin)
+	routers.SetUp(env, timeout, db, _gin, cacheTTL)
 	fmt.Println("Location Server Web of us: http://localhost:8080")
 	err := _gin.Run(env.ServerAddress)
 	if err != nil {

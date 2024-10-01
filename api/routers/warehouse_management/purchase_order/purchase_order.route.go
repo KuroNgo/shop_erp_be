@@ -13,11 +13,11 @@ import (
 	"time"
 )
 
-func PurchaseOrderRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func PurchaseOrderRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	po := purchaseorderrepository.NewPurchaseOrderRepository(db, purchaseorderdomain.CollectionPurchaseOrder)
 	su := supplierrepository.NewSupplierRepository(db, supplierdomain.CollectionSupplier)
 	purchaseOrder := &purchaseordercontroller.PurchaseOrderController{
-		PurchaseOrderUseCase: purchaseorderusecase.NewPurchaseOrderUseCase(timeout, po, su),
+		PurchaseOrderUseCase: purchaseorderusecase.NewPurchaseOrderUseCase(timeout, po, su, cacheTTL),
 		Database:             env,
 	}
 

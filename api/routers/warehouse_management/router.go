@@ -37,13 +37,13 @@ func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, g
 	)
 
 	// All Public APIs
-	product_route.ProductRouter(env, timeout, db, publicRouter)
+	product_route.ProductRouter(env, timeout, db, publicRouter, cacheTTL)
 	product_category_route.ProductCategoryRouter(env, timeout, db, publicRouter, cacheTTL)
-	purchase_order_detail_route.PurchaseOrderDetailRouter(env, timeout, db, publicRouter)
-	supplier_route.SupplierRouter(env, timeout, db, publicRouter)
+	purchase_order_detail_route.PurchaseOrderDetailRouter(env, timeout, db, publicRouter, cacheTTL)
+	supplier_route.SupplierRouter(env, timeout, db, publicRouter, cacheTTL)
 	inventory_route.InventoryRouter(env, timeout, db, publicRouter, cacheTTL)
-	purchase_order_route.PurchaseOrderRouter(env, timeout, db, publicRouter)
-	warehouse_route.WarehouseRouter(env, timeout, db, publicRouter)
-	stock_adjustment_route.StockAdjustmentRouter(env, timeout, db, publicRouter)
-	stockmovement_route.StockMovementRouter(env, timeout, db, publicRouter)
+	purchase_order_route.PurchaseOrderRouter(env, timeout, db, publicRouter, cacheTTL)
+	warehouse_route.WarehouseRouter(env, timeout, db, publicRouter, cacheTTL)
+	stock_adjustment_route.StockAdjustmentRouter(env, timeout, db, publicRouter, cacheTTL)
+	stockmovement_route.StockMovementRouter(env, timeout, db, publicRouter, cacheTTL)
 }

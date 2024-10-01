@@ -2,11 +2,13 @@ package performance_review_usecase
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	employees_domain "shop_erp_mono/domain/human_resource_management/employees"
 	performancereviewdomain "shop_erp_mono/domain/human_resource_management/performance_review"
 	"shop_erp_mono/usecase/human_resource_management/performance_review/validate"
+	"sync"
 	"time"
 )
 
@@ -54,6 +56,34 @@ func (p *performanceReviewUseCase) CreateOneWithEmailEmployee(ctx context.Contex
 		UpdatedAt:        time.Now(),
 	}
 
+	errCh := make(chan error, 1)
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		err = p.cache.Delete("performanceReviews")
+		if err != nil {
+			errCh <- err
+			return
+		}
+	}()
+
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	select {
+
+	case err = <-errCh:
+		if err != nil {
+			return err
+		}
+	case <-ctx.Done():
+		return ctx.Err()
+	}
+
 	return p.performanceReviewRepository.CreateOne(ctx, performanceReview)
 }
 
@@ -95,6 +125,34 @@ func (p *performanceReviewUseCase) CreateOneWithIDEmployee(ctx context.Context, 
 		UpdatedAt:        time.Now(),
 	}
 
+	errCh := make(chan error, 1)
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		err = p.cache.Delete("performanceReviews")
+		if err != nil {
+			errCh <- err
+			return
+		}
+	}()
+
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	select {
+
+	case err = <-errCh:
+		if err != nil {
+			return err
+		}
+	case <-ctx.Done():
+		return ctx.Err()
+	}
+
 	return p.performanceReviewRepository.CreateOne(ctx, performanceReview)
 }
 
@@ -105,6 +163,43 @@ func (p *performanceReviewUseCase) DeleteOne(ctx context.Context, id string) err
 	performanceReviewID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return err
+	}
+
+	errCh := make(chan error, 1)
+	var wg sync.WaitGroup
+
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		err = p.cache.Delete("performanceReviews")
+		if err != nil {
+			errCh <- err
+			return
+		}
+	}()
+
+	go func() {
+		defer wg.Done()
+		err = p.cache.Delete(id)
+		if err != nil {
+			errCh <- err
+			return
+		}
+	}()
+
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	select {
+
+	case err = <-errCh:
+		if err != nil {
+			return err
+		}
+	case <-ctx.Done():
+		return ctx.Err()
 	}
 
 	return p.performanceReviewRepository.DeleteOne(ctx, performanceReviewID)
@@ -136,6 +231,43 @@ func (p *performanceReviewUseCase) UpdateOneWithEmailEmployee(ctx context.Contex
 		PerformanceScore: input.PerformanceScore,
 		CreatedAt:        time.Now(),
 		UpdatedAt:        time.Now(),
+	}
+
+	errCh := make(chan error, 1)
+	var wg sync.WaitGroup
+
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		err = p.cache.Delete("performanceReviews")
+		if err != nil {
+			errCh <- err
+			return
+		}
+	}()
+
+	go func() {
+		defer wg.Done()
+		err = p.cache.Delete(id)
+		if err != nil {
+			errCh <- err
+			return
+		}
+	}()
+
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	select {
+
+	case err = <-errCh:
+		if err != nil {
+			return err
+		}
+	case <-ctx.Done():
+		return ctx.Err()
 	}
 
 	return p.performanceReviewRepository.UpdateOne(ctx, performanceReviewID, performanceReview)
@@ -179,12 +311,59 @@ func (p *performanceReviewUseCase) UpdateOneWithIDEmployee(ctx context.Context, 
 		UpdatedAt:        time.Now(),
 	}
 
+	errCh := make(chan error, 1)
+	var wg sync.WaitGroup
+
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		err = p.cache.Delete("performanceReviews")
+		if err != nil {
+			errCh <- err
+			return
+		}
+	}()
+
+	go func() {
+		defer wg.Done()
+		err = p.cache.Delete(id)
+		if err != nil {
+			errCh <- err
+			return
+		}
+	}()
+
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	select {
+
+	case err = <-errCh:
+		if err != nil {
+			return err
+		}
+	case <-ctx.Done():
+		return ctx.Err()
+	}
+
 	return p.performanceReviewRepository.UpdateOne(ctx, performanceReviewID, performanceReview)
 }
 
 func (p *performanceReviewUseCase) GetByID(ctx context.Context, id string) (performancereviewdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
+
+	data, _ := p.cache.Get(id)
+	if data != nil {
+		var response performancereviewdomain.Output
+		err := json.Unmarshal(data, &response)
+		if err != nil {
+			return performancereviewdomain.Output{}, err
+		}
+		return response, nil
+	}
 
 	performanceReviewID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -212,12 +391,32 @@ func (p *performanceReviewUseCase) GetByID(ctx context.Context, id string) (perf
 		Reviewer:          reviewerData,
 	}
 
+	data, err = json.Marshal(id)
+	if err != nil {
+		return performancereviewdomain.Output{}, err
+	}
+
+	err = p.cache.Set(id, data)
+	if err != nil {
+		return performancereviewdomain.Output{}, err
+	}
+
 	return output, nil
 }
 
 func (p *performanceReviewUseCase) GetByEmailEmployee(ctx context.Context, email string) (performancereviewdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
+
+	data, _ := p.cache.Get(email)
+	if data != nil {
+		var response performancereviewdomain.Output
+		err := json.Unmarshal(data, &response)
+		if err != nil {
+			return performancereviewdomain.Output{}, err
+		}
+		return response, nil
+	}
 
 	employeeData, err := p.employeeRepository.GetByEmail(ctx, email)
 	if err != nil {
@@ -240,12 +439,32 @@ func (p *performanceReviewUseCase) GetByEmailEmployee(ctx context.Context, email
 		Reviewer:          reviewerData,
 	}
 
+	data, err = json.Marshal(email)
+	if err != nil {
+		return performancereviewdomain.Output{}, err
+	}
+
+	err = p.cache.Set(email, data)
+	if err != nil {
+		return performancereviewdomain.Output{}, err
+	}
+
 	return output, nil
 }
 
 func (p *performanceReviewUseCase) GetAll(ctx context.Context) ([]performancereviewdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
+
+	data, _ := p.cache.Get("performanceReviews")
+	if data != nil {
+		var response []performancereviewdomain.Output
+		err := json.Unmarshal(data, &response)
+		if err != nil {
+			return nil, err
+		}
+		return response, nil
+	}
 
 	performanceReviewData, err := p.performanceReviewRepository.GetAll(ctx)
 	if err != nil {
@@ -273,5 +492,16 @@ func (p *performanceReviewUseCase) GetAll(ctx context.Context) ([]performancerev
 
 		outputs = append(outputs, output)
 	}
+
+	data, err = json.Marshal(outputs)
+	if err != nil {
+		return nil, err
+	}
+
+	err = p.cache.Set("performanceReviews", data)
+	if err != nil {
+		return nil, err
+	}
+
 	return outputs, nil
 }

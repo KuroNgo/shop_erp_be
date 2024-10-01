@@ -11,10 +11,10 @@ import (
 	"time"
 )
 
-func WarehouseRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func WarehouseRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	wa := warehouserepository.NewWarehouseRepository(db, warehousedomain.CollectionWareHouse)
 	warehouse := &warehousecontroller.WarehouseController{
-		WarehouseUseCase: warehouseusecase.NewWarehouseUseCase(timeout, wa),
+		WarehouseUseCase: warehouseusecase.NewWarehouseUseCase(timeout, wa, cacheTTL),
 		Database:         env,
 	}
 

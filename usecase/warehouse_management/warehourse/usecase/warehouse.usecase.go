@@ -2,6 +2,7 @@ package warehouse_usecase
 
 import (
 	"context"
+	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	warehousedomain "shop_erp_mono/domain/warehouse_management/warehouse"
 	"shop_erp_mono/usecase/warehouse_management/warehourse/validate"
@@ -11,10 +12,15 @@ import (
 type warehouseUseCase struct {
 	contextTimeout      time.Duration
 	warehouseRepository warehousedomain.IWarehouseRepository
+	cache               *bigcache.BigCache
 }
 
-func NewWarehouseUseCase(contextTimeout time.Duration, warehouseRepository warehousedomain.IWarehouseRepository) warehousedomain.IWarehouseUseCase {
-	return &warehouseUseCase{contextTimeout: contextTimeout, warehouseRepository: warehouseRepository}
+func NewWarehouseUseCase(contextTimeout time.Duration, warehouseRepository warehousedomain.IWarehouseRepository, cacheTTL time.Duration) warehousedomain.IWarehouseUseCase {
+	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
+	if err != nil {
+		return nil
+	}
+	return &warehouseUseCase{contextTimeout: contextTimeout, cache: cache, warehouseRepository: warehouseRepository}
 }
 
 func (w *warehouseUseCase) CreateOne(ctx context.Context, input *warehousedomain.Input) error {

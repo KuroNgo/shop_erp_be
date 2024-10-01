@@ -2,6 +2,7 @@ package stockmovement_usecase
 
 import (
 	"context"
+	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	userdomain "shop_erp_mono/domain/human_resource_management/user"
 	productdomain "shop_erp_mono/domain/warehouse_management/product"
@@ -17,12 +18,17 @@ type stockMovementUseCase struct {
 	productRepository       productdomain.IProductRepository
 	warehouseRepository     warehousedomain.IWarehouseRepository
 	userRepository          userdomain.IUserRepository
+	cache                   *bigcache.BigCache
 }
 
 func NewStockMovementUseCase(contextTimeout time.Duration, stockMovementRepository stockmovementdomain.IStockMovementRepository,
-	productRepository productdomain.IProductRepository, userRepository userdomain.IUserRepository,
-	warehouseRepository warehousedomain.IWarehouseRepository) stockmovementdomain.IStockMovementUseCase {
-	return &stockMovementUseCase{contextTimeout: contextTimeout, stockMovementRepository: stockMovementRepository,
+	productRepository productdomain.IProductRepository, userRepository userdomain.IUserRepository, warehouseRepository warehousedomain.IWarehouseRepository,
+	cacheTTL time.Duration) stockmovementdomain.IStockMovementUseCase {
+	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
+	if err != nil {
+		return nil
+	}
+	return &stockMovementUseCase{contextTimeout: contextTimeout, cache: cache, stockMovementRepository: stockMovementRepository,
 		productRepository: productRepository, userRepository: userRepository, warehouseRepository: warehouseRepository}
 }
 

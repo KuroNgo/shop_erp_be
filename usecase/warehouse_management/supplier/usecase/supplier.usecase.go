@@ -2,6 +2,7 @@ package supplier_usecase
 
 import (
 	"context"
+	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	supplierdomain "shop_erp_mono/domain/warehouse_management/supplier"
 	"shop_erp_mono/repository"
@@ -12,10 +13,15 @@ import (
 type supplierUseCase struct {
 	contextTimeout     time.Duration
 	supplierRepository supplierdomain.ISupplierRepository
+	cache              *bigcache.BigCache
 }
 
-func NewSupplierUseCase(contextTimeout time.Duration, supplierRepository supplierdomain.ISupplierRepository) supplierdomain.ISupplierUseCase {
-	return &supplierUseCase{contextTimeout: contextTimeout, supplierRepository: supplierRepository}
+func NewSupplierUseCase(contextTimeout time.Duration, supplierRepository supplierdomain.ISupplierRepository, cacheTTL time.Duration) supplierdomain.ISupplierUseCase {
+	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
+	if err != nil {
+		return nil
+	}
+	return &supplierUseCase{contextTimeout: contextTimeout, cache: cache, supplierRepository: supplierRepository}
 }
 
 func (s *supplierUseCase) CreateOne(ctx context.Context, input *supplierdomain.Input) error {

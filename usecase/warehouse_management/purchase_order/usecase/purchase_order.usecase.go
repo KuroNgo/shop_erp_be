@@ -2,6 +2,7 @@ package purchase_order_usecase
 
 import (
 	"context"
+	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	purchaseorderdomain "shop_erp_mono/domain/warehouse_management/purchase_order"
 	supplierdomain "shop_erp_mono/domain/warehouse_management/supplier"
@@ -14,10 +15,16 @@ type purchaseOrderUseCase struct {
 	contextTimeout          time.Duration
 	purchaseOrderRepository purchaseorderdomain.IPurchaseOrderRepository
 	supplierRepository      supplierdomain.ISupplierRepository
+	cache                   *bigcache.BigCache
 }
 
-func NewPurchaseOrderUseCase(contextTimeout time.Duration, purchaseOrderRepository purchaseorderdomain.IPurchaseOrderRepository, supplierRepository supplierdomain.ISupplierRepository) purchaseorderdomain.IPurchaseOrderUseCase {
-	return &purchaseOrderUseCase{contextTimeout: contextTimeout, purchaseOrderRepository: purchaseOrderRepository, supplierRepository: supplierRepository}
+func NewPurchaseOrderUseCase(contextTimeout time.Duration, purchaseOrderRepository purchaseorderdomain.IPurchaseOrderRepository,
+	supplierRepository supplierdomain.ISupplierRepository, cacheTTL time.Duration) purchaseorderdomain.IPurchaseOrderUseCase {
+	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
+	if err != nil {
+		return nil
+	}
+	return &purchaseOrderUseCase{contextTimeout: contextTimeout, cache: cache, purchaseOrderRepository: purchaseOrderRepository, supplierRepository: supplierRepository}
 }
 
 func (p *purchaseOrderUseCase) GetByID(ctx context.Context, id string) (*purchaseorderdomain.PurchaseOrderResponse, error) {

@@ -11,11 +11,11 @@ import (
 	"time"
 )
 
-func SupplierRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func SupplierRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	su := supplierrepository.NewSupplierRepository(db, supplierdomain.CollectionSupplier)
 
 	supplier := &suppliercontroller.SupplierController{
-		SupplierUseCase: supplierusecase.NewSupplierUseCase(timeout, su),
+		SupplierUseCase: supplierusecase.NewSupplierUseCase(timeout, su, cacheTTL),
 		Database:        env,
 	}
 

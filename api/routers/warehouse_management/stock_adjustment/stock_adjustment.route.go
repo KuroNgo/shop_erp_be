@@ -15,12 +15,12 @@ import (
 	"time"
 )
 
-func StockAdjustmentRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func StockAdjustmentRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	st := stockadjustmentrepository.NewStockAdjustmentRepository(db, stockadjustmentdomain.CollectionStockAdjustment)
 	pr := productrepository.NewProductRepository(db, productdomain.CollectionProduct)
 	wa := warehouserepository.NewWarehouseRepository(db, warehousedomain.CollectionWareHouse)
 	stockAdjustment := &stockadjustmentcontroller.StockAdjustmentController{
-		StockAdjustmentUseCase: stockadjustmentusecase.NewStockAdjustmentUseCase(timeout, st, pr, wa),
+		StockAdjustmentUseCase: stockadjustmentusecase.NewStockAdjustmentUseCase(timeout, st, pr, wa, cacheTTL),
 		Database:               env,
 	}
 

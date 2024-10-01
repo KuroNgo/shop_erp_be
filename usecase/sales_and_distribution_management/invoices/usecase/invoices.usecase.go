@@ -53,14 +53,30 @@ func (i *invoiceUseCase) CreateOne(ctx context.Context, input *invoices_domain.I
 		UpdatedAt:   time.Now(),
 	}
 
-	err = i.cache.Delete("invoices")
-	if err != nil {
-		return err
-	}
+	errCh := make(chan error, 1)
+	var wg sync.WaitGroup
 
-	var mu sync.Mutex
-	mu.Lock()
-	defer mu.Unlock()
+	wg.Add(1)
+	go func() {
+		err = i.cache.Delete("invoices")
+		if err != nil {
+			return
+		}
+	}()
+
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	select {
+	case err = <-errCh:
+		if err != nil {
+			return err
+		}
+	case <-ctx.Done():
+		return ctx.Err()
+	}
 
 	return i.invoiceRepository.CreateOne(ctx, invoice)
 }
@@ -228,12 +244,15 @@ func (i *invoiceUseCase) UpdateOne(ctx context.Context, id string, input *invoic
 		UpdatedAt:   time.Now(),
 	}
 
+	errCh := make(chan error, 1)
 	var wg sync.WaitGroup
+
 	wg.Add(2)
 	go func() {
 		defer wg.Done()
 		err = i.cache.Delete(id)
 		if err != nil {
+			errCh <- err
 			return
 		}
 	}()
@@ -241,11 +260,25 @@ func (i *invoiceUseCase) UpdateOne(ctx context.Context, id string, input *invoic
 		defer wg.Done()
 		err = i.cache.Delete("invoices")
 		if err != nil {
+			errCh <- err
 			return
 		}
 	}()
-	wg.Wait()
 
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	select {
+	case err = <-errCh:
+		if err != nil {
+			return err
+		}
+
+	case <-ctx.Done():
+		return ctx.Err()
+	}
 	return i.invoiceRepository.UpdateOne(ctx, invoice)
 }
 
@@ -258,12 +291,15 @@ func (i *invoiceUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
+	errCh := make(chan error, 1)
 	var wg sync.WaitGroup
+
 	wg.Add(2)
 	go func() {
 		defer wg.Done()
 		err = i.cache.Delete(id)
 		if err != nil {
+			errCh <- err
 			return
 		}
 	}()
@@ -271,10 +307,26 @@ func (i *invoiceUseCase) DeleteOne(ctx context.Context, id string) error {
 		defer wg.Done()
 		err = i.cache.Delete("invoices")
 		if err != nil {
+			errCh <- err
 			return
 		}
 	}()
-	wg.Wait()
+
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	select {
+	case err = <-errCh:
+		if err != nil {
+			return err
+		}
+
+	case <-ctx.Done():
+		return ctx.Err()
+	}
+
 	return i.invoiceRepository.DeleteOne(ctx, invoiceID)
 }
 
@@ -282,14 +334,10 @@ func (i *invoiceUseCase) GetAll(ctx context.Context) ([]invoices_domain.InvoiceR
 	ctx, cancel := context.WithTimeout(ctx, i.contextTimeout)
 	defer cancel()
 
-	data, err := i.cache.Get("invoices")
-	if err != nil {
-		return nil, err
-	}
-
+	data, _ := i.cache.Get("invoices")
 	if data != nil {
 		var response []invoices_domain.InvoiceResponse
-		err = json.Unmarshal(data, &response)
+		err := json.Unmarshal(data, &response)
 		if err != nil {
 			return nil, err
 		}

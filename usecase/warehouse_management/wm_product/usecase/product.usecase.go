@@ -2,6 +2,7 @@ package product_usecase
 
 import (
 	"context"
+	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	productdomain "shop_erp_mono/domain/warehouse_management/product"
 	categorydomain "shop_erp_mono/domain/warehouse_management/product_category"
@@ -13,11 +14,16 @@ type productUseCase struct {
 	contextTimeout     time.Duration
 	productRepository  productdomain.IProductRepository
 	categoryRepository categorydomain.ICategoryRepository
+	cache              *bigcache.BigCache
 }
 
 func NewProductUseCase(contextTimeout time.Duration, productRepository productdomain.IProductRepository,
-	categoryRepository categorydomain.ICategoryRepository) productdomain.IProductUseCase {
-	return &productUseCase{contextTimeout: contextTimeout, productRepository: productRepository, categoryRepository: categoryRepository}
+	categoryRepository categorydomain.ICategoryRepository, cacheTTL time.Duration) productdomain.IProductUseCase {
+	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
+	if err != nil {
+		return nil
+	}
+	return &productUseCase{contextTimeout: contextTimeout, cache: cache, productRepository: productRepository, categoryRepository: categoryRepository}
 }
 
 func (p *productUseCase) CreateOne(ctx context.Context, input *productdomain.Input) error {

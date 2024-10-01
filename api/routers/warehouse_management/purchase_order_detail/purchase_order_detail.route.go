@@ -15,12 +15,12 @@ import (
 	"time"
 )
 
-func PurchaseOrderDetailRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup) {
+func PurchaseOrderDetailRouter(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, group *gin.RouterGroup, cacheTTL time.Duration) {
 	po := purchaseorderdetailrepository.NewPurchaseOrderDetailRepository(db, purchaseorderdetaildomain.CollectionPurchaseOrderDetail)
 	p := purchaseorderrepository.NewPurchaseOrderRepository(db, purchaseorderdomain.CollectionPurchaseOrder)
 	pr := productrepository.NewProductRepository(db, productdomain.CollectionProduct)
 	purchaseOrderDetail := &purchaseorderdetailcontroller.PurchaseOrderDetailController{
-		PurchaseOrderDetailUseCase: purchaseorderdetailusecase.NewProductOrderDetailRepository(timeout, po, p, pr),
+		PurchaseOrderDetailUseCase: purchaseorderdetailusecase.NewProductOrderDetailRepository(timeout, po, p, pr, cacheTTL),
 		Database:                   env,
 	}
 

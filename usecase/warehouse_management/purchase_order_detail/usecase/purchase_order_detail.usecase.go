@@ -2,6 +2,7 @@ package purchase_order_detail_usecase
 
 import (
 	"context"
+	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	productdomain "shop_erp_mono/domain/warehouse_management/product"
 	purchaseorderdomain "shop_erp_mono/domain/warehouse_management/purchase_order"
@@ -16,11 +17,17 @@ type purchaseOrderDetailUseCase struct {
 	purchaseOrderDetailRepository purchaseorderdetaildomain.IPurchaseOrderDetailRepository
 	purchaseOrderRepository       purchaseorderdomain.IPurchaseOrderRepository
 	productRepository             productdomain.IProductRepository
+	cache                         *bigcache.BigCache
 }
 
 func NewProductOrderDetailRepository(contextTimeout time.Duration, purchaseOrderDetailRepository purchaseorderdetaildomain.IPurchaseOrderDetailRepository,
-	purchaseOrderRepository purchaseorderdomain.IPurchaseOrderRepository, productRepository productdomain.IProductRepository) purchaseorderdetaildomain.IPurchaseOrderDetailUseCase {
-	return &purchaseOrderDetailUseCase{contextTimeout: contextTimeout, purchaseOrderDetailRepository: purchaseOrderDetailRepository,
+	purchaseOrderRepository purchaseorderdomain.IPurchaseOrderRepository, productRepository productdomain.IProductRepository,
+	cacheTTL time.Duration) purchaseorderdetaildomain.IPurchaseOrderDetailUseCase {
+	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
+	if err != nil {
+		return nil
+	}
+	return &purchaseOrderDetailUseCase{contextTimeout: contextTimeout, cache: cache, purchaseOrderDetailRepository: purchaseOrderDetailRepository,
 		purchaseOrderRepository: purchaseOrderRepository, productRepository: productRepository}
 }
 

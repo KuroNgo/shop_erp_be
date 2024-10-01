@@ -45,14 +45,32 @@ func (c *customerUseCase) CreateOne(ctx context.Context, input *customerdomain.I
 		UpdatedAt:   time.Now(),
 	}
 
-	err := c.cache.Delete("customers")
-	if err != nil {
-		return err
-	}
+	errCh := make(chan error, 1)
+	var wg sync.WaitGroup
 
-	var mu sync.Mutex
-	mu.Lock()
-	defer mu.Unlock()
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		err := c.cache.Delete("customers")
+		if err != nil {
+			errCh <- err
+			return
+		}
+	}()
+
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	select {
+	case err := <-errCh:
+		if err != nil {
+			return err
+		}
+	case <-ctx.Done():
+		return ctx.Err()
+	}
 
 	return c.customerRepository.CreateOne(ctx, customer)
 }
@@ -71,9 +89,41 @@ func (c *customerUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
-	var mu sync.Mutex
-	mu.Lock()
-	defer mu.Unlock()
+	errCh := make(chan error, 1)
+	var wg sync.WaitGroup
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		err = c.cache.Delete("customers")
+		if err != nil {
+			errCh <- err
+			return
+		}
+	}()
+
+	go func() {
+		defer wg.Done()
+		err = c.cache.Delete(id)
+		if err != nil {
+			errCh <- err
+			return
+		}
+	}()
+
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	select {
+	case err = <-errCh:
+		if err != nil {
+			return err
+		}
+	case <-ctx.Done():
+		return ctx.Err()
+	}
 
 	return c.customerRepository.DeleteOne(ctx, customerID)
 }
@@ -103,7 +153,9 @@ func (c *customerUseCase) UpdateOne(ctx context.Context, id string, input *custo
 		UpdatedAt:   time.Now(),
 	}
 
+	errCh := make(chan error, 1)
 	var wg sync.WaitGroup
+
 	wg.Add(2)
 	go func() {
 		defer wg.Done()
@@ -120,14 +172,22 @@ func (c *customerUseCase) UpdateOne(ctx context.Context, id string, input *custo
 			return
 		}
 	}()
-	wg.Wait()
 
-	var mu sync.Mutex
-	mu.Lock()
-	defer mu.Unlock()
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	select {
+	case err = <-errCh:
+		if err != nil {
+			return err
+		}
+	case <-ctx.Done():
+		return ctx.Err()
+	}
 
 	return c.customerRepository.UpdateOne(ctx, customer)
-
 }
 
 func (c *customerUseCase) GetOneByID(ctx context.Context, id string) (*customerdomain.CustomerResponse, error) {
@@ -161,7 +221,6 @@ func (c *customerUseCase) GetOneByID(ctx context.Context, id string) (*customerd
 		Customer: *customerData,
 	}
 
-	// use Marshal for convert response to []byte
 	responseData, err := json.Marshal(response)
 	err = c.cache.Set(id, responseData)
 	if err != nil {
@@ -195,7 +254,6 @@ func (c *customerUseCase) GetOneByName(ctx context.Context, name string) (*custo
 		Customer: *customerData,
 	}
 
-	// use Marshal for convert response to []byte
 	responseData, err := json.Marshal(response)
 	err = c.cache.Set(name, responseData)
 	if err != nil {
@@ -235,7 +293,6 @@ func (c *customerUseCase) GetAll(ctx context.Context) ([]customerdomain.Customer
 		responses = append(responses, response)
 	}
 
-	// use Marshal for convert response to []byte
 	responsesData, err := json.Marshal(responses)
 	err = c.cache.Set("customers", responsesData)
 	if err != nil {

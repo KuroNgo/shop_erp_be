@@ -2,6 +2,7 @@ package stock_adjustment_usecase
 
 import (
 	"context"
+	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	productdomain "shop_erp_mono/domain/warehouse_management/product"
 	stockadjustmentdomain "shop_erp_mono/domain/warehouse_management/stock_adjustment"
@@ -16,10 +17,16 @@ type stockAdjustmentUseCase struct {
 	stockAdjustmentRepository stockadjustmentdomain.IStockAdjustmentRepository
 	productRepository         productdomain.IProductRepository
 	warehouseRepository       warehousedomain.IWarehouseRepository
+	cache                     *bigcache.BigCache
 }
 
-func NewStockAdjustmentUseCase(contextTimeout time.Duration, stockAdjustmentRepository stockadjustmentdomain.IStockAdjustmentRepository, productRepository productdomain.IProductRepository, warehouseRepository warehousedomain.IWarehouseRepository) stockadjustmentdomain.IStockAdjustmentUseCase {
-	return &stockAdjustmentUseCase{contextTimeout: contextTimeout, stockAdjustmentRepository: stockAdjustmentRepository, productRepository: productRepository, warehouseRepository: warehouseRepository}
+func NewStockAdjustmentUseCase(contextTimeout time.Duration, stockAdjustmentRepository stockadjustmentdomain.IStockAdjustmentRepository,
+	productRepository productdomain.IProductRepository, warehouseRepository warehousedomain.IWarehouseRepository, cacheTTL time.Duration) stockadjustmentdomain.IStockAdjustmentUseCase {
+	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
+	if err != nil {
+		return nil
+	}
+	return &stockAdjustmentUseCase{contextTimeout: contextTimeout, cache: cache, stockAdjustmentRepository: stockAdjustmentRepository, productRepository: productRepository, warehouseRepository: warehouseRepository}
 }
 
 func (s *stockAdjustmentUseCase) GetByID(ctx context.Context, id string) (*stockadjustmentdomain.StockAdjustmentResponse, error) {
