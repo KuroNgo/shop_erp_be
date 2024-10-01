@@ -32,9 +32,11 @@ func main() {
 	cacheTTL := time.Minute * 5
 
 	_gin := gin.Default()
+	gin.SetMode(gin.ReleaseMode)
 
 	routers.SetUp(env, timeout, db, _gin, cacheTTL)
 	fmt.Println("Location Server Web of us: http://localhost:8080")
+	fmt.Println("MongoDB URL: ", env.DBName+env.DBUser)
 	err := _gin.Run(env.ServerAddress)
 	if err != nil {
 		return
