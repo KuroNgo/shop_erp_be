@@ -1,6 +1,7 @@
 package bootstrap
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"log"
 	"time"
@@ -65,8 +66,9 @@ func NewEnv() *Database {
 
 	if env.AppEnv == "development" {
 		log.Println("The App is running in development env")
-	} else {
-		log.Println("The App is running in deployment env")
+	} else if env.AppEnv == "production" {
+		gin.SetMode(gin.ReleaseMode)
+		log.Println("The App is running in production env")
 	}
 	return &env
 }

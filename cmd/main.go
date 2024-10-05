@@ -31,7 +31,6 @@ func main() {
 	timeout := time.Duration(env.ContextTimeout) * time.Second
 	cacheTTL := time.Minute * 5
 
-	gin.SetMode(gin.ReleaseMode)
 	_gin := gin.Default()
 
 	routers.SetUp(env, timeout, db, _gin, cacheTTL)
