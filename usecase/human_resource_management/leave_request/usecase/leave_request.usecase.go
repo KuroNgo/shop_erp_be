@@ -8,7 +8,6 @@ import (
 	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
 	leaverequestdomain "shop_erp_mono/domain/human_resource_management/leave_request"
 	"shop_erp_mono/usecase/human_resource_management/leave_request/validate"
-	"sync"
 	"time"
 )
 
@@ -52,32 +51,8 @@ func (l *leaveRequestUseCase) CreateOne(ctx context.Context, input *leaverequest
 		UpdatedAt:  time.Now(),
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
+	_ = l.cache.Delete("leaveRequests")
 
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		err = l.cache.Delete("leaveRequests")
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
 	return l.leaveRequestRepository.CreateOne(ctx, leaveRequest)
 }
 
@@ -90,42 +65,8 @@ func (l *leaveRequestUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
-
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		err = l.cache.Delete(id)
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		defer wg.Done()
-		err = l.cache.Delete("leaveRequests")
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-
-	case <-ctx.Done():
-		return ctx.Err()
-	}
+	_ = l.cache.Delete(id)
+	_ = l.cache.Delete("leaveRequests")
 
 	return l.leaveRequestRepository.DeleteOne(ctx, leaveRequestID)
 }
@@ -159,42 +100,8 @@ func (l *leaveRequestUseCase) UpdateOne(ctx context.Context, id string, input *l
 		UpdatedAt:  time.Now(),
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
-
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		err = l.cache.Delete(id)
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		defer wg.Done()
-		err = l.cache.Delete("leaveRequests")
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-
-	case <-ctx.Done():
-		return ctx.Err()
-	}
+	_ = l.cache.Delete(id)
+	_ = l.cache.Delete("leaveRequests")
 
 	return l.leaveRequestRepository.UpdateOne(ctx, leaveRequestID, leaveRequest)
 }

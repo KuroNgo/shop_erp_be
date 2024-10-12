@@ -7,7 +7,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	customerdomain "shop_erp_mono/domain/sales_and_distribution_management/customer"
 	"shop_erp_mono/usecase/sales_and_distribution_management/customer/validate"
-	"sync"
 	"time"
 )
 
@@ -45,32 +44,7 @@ func (c *customerUseCase) CreateOne(ctx context.Context, input *customerdomain.I
 		UpdatedAt:   time.Now(),
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
-
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		err := c.cache.Delete("customers")
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err := <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
+	_ = c.cache.Delete("customers")
 
 	return c.customerRepository.CreateOne(ctx, customer)
 }
@@ -84,46 +58,8 @@ func (c *customerUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
-	err = c.cache.Delete(id)
-	if err != nil {
-		return err
-	}
-
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
-
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		err = c.cache.Delete("customers")
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		defer wg.Done()
-		err = c.cache.Delete(id)
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
+	_ = c.cache.Delete(id)
+	_ = c.cache.Delete("customers")
 
 	return c.customerRepository.DeleteOne(ctx, customerID)
 }
@@ -153,39 +89,8 @@ func (c *customerUseCase) UpdateOne(ctx context.Context, id string, input *custo
 		UpdatedAt:   time.Now(),
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
-
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		err = c.cache.Delete(id)
-		if err != nil {
-			return
-		}
-	}()
-
-	go func() {
-		defer wg.Done()
-		err = c.cache.Delete("customers")
-		if err != nil {
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
+	_ = c.cache.Delete(id)
+	_ = c.cache.Delete("customers")
 
 	return c.customerRepository.UpdateOne(ctx, customer)
 }

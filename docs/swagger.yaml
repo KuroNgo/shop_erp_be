@@ -113,11 +113,11 @@ definitions:
         type: string
       avatarURL:
         type: string
-      dateOfBirth:
-        example: 01/01/2002
+      date_of_birth:
+        example: "2002-01-01T00:00:00Z"
         type: string
-      dayOfWork:
-        example: 30/8/2024
+      day_of_work:
+        example: "2024-08-30T00:00:00Z"
         type: string
       department:
         example: marketing

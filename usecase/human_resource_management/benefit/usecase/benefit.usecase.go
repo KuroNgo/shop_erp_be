@@ -8,7 +8,6 @@ import (
 	benefitsdomain "shop_erp_mono/domain/human_resource_management/benefits"
 	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
 	"shop_erp_mono/usecase/human_resource_management/benefit/validate"
-	"sync"
 	"time"
 )
 
@@ -52,31 +51,8 @@ func (b *benefitUseCase) CreateOne(ctx context.Context, input *benefitsdomain.In
 		UpdatedAt:   time.Now(),
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
+	_ = b.cache.Delete("benefits")
 
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		err = b.cache.Delete("benefits")
-		if err != nil {
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
 	return b.benefitRepository.CreateOne(ctx, &benefit)
 }
 
@@ -94,39 +70,8 @@ func (b *benefitUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
-
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		err = b.cache.Delete("benefits")
-		if err != nil {
-			return
-		}
-	}()
-
-	go func() {
-		defer wg.Done()
-		err = b.cache.Delete(id)
-		if err != nil {
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
+	_ = b.cache.Delete("benefits")
+	_ = b.cache.Delete(id)
 
 	return b.benefitRepository.DeleteOne(ctx, benefitID)
 }
@@ -157,39 +102,9 @@ func (b *benefitUseCase) UpdateOne(ctx context.Context, id string, input *benefi
 		EndDate:     input.EndDate,
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
+	_ = b.cache.Delete("benefits")
+	_ = b.cache.Delete(id)
 
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		err = b.cache.Delete("benefits")
-		if err != nil {
-			return
-		}
-	}()
-
-	go func() {
-		defer wg.Done()
-		err = b.cache.Delete(id)
-		if err != nil {
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
 	return b.benefitRepository.UpdateOne(ctx, benefitID, &benefit)
 }
 

@@ -8,7 +8,6 @@ import (
 	employees_domain "shop_erp_mono/domain/human_resource_management/employees"
 	performancereviewdomain "shop_erp_mono/domain/human_resource_management/performance_review"
 	"shop_erp_mono/usecase/human_resource_management/performance_review/validate"
-	"sync"
 	"time"
 )
 
@@ -56,33 +55,7 @@ func (p *performanceReviewUseCase) CreateOneWithEmailEmployee(ctx context.Contex
 		UpdatedAt:        time.Now(),
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
-
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		err = p.cache.Delete("performanceReviews")
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
+	_ = p.cache.Delete("performanceReviews")
 
 	return p.performanceReviewRepository.CreateOne(ctx, performanceReview)
 }
@@ -125,33 +98,7 @@ func (p *performanceReviewUseCase) CreateOneWithIDEmployee(ctx context.Context, 
 		UpdatedAt:        time.Now(),
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
-
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		err = p.cache.Delete("performanceReviews")
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
+	_ = p.cache.Delete("performanceReviews")
 
 	return p.performanceReviewRepository.CreateOne(ctx, performanceReview)
 }
@@ -165,42 +112,8 @@ func (p *performanceReviewUseCase) DeleteOne(ctx context.Context, id string) err
 		return err
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
-
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		err = p.cache.Delete("performanceReviews")
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		defer wg.Done()
-		err = p.cache.Delete(id)
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
+	_ = p.cache.Delete("performanceReviews")
+	_ = p.cache.Delete(id)
 
 	return p.performanceReviewRepository.DeleteOne(ctx, performanceReviewID)
 }
@@ -233,42 +146,8 @@ func (p *performanceReviewUseCase) UpdateOneWithEmailEmployee(ctx context.Contex
 		UpdatedAt:        time.Now(),
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
-
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		err = p.cache.Delete("performanceReviews")
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		defer wg.Done()
-		err = p.cache.Delete(id)
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
+	_ = p.cache.Delete("performanceReviews")
+	_ = p.cache.Delete(id)
 
 	return p.performanceReviewRepository.UpdateOne(ctx, performanceReviewID, performanceReview)
 }
@@ -311,42 +190,8 @@ func (p *performanceReviewUseCase) UpdateOneWithIDEmployee(ctx context.Context, 
 		UpdatedAt:        time.Now(),
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
-
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		err = p.cache.Delete("performanceReviews")
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		defer wg.Done()
-		err = p.cache.Delete(id)
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
+	_ = p.cache.Delete("performanceReviews")
+	_ = p.cache.Delete(id)
 
 	return p.performanceReviewRepository.UpdateOne(ctx, performanceReviewID, performanceReview)
 }

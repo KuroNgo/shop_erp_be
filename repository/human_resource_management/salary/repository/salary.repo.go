@@ -137,3 +137,15 @@ func (s *salaryRepository) GetAll(ctx context.Context) ([]salarydomain.Salary, e
 
 	return salaries, nil
 }
+
+func (s *salaryRepository) CountSalary(ctx context.Context) (int64, error) {
+	collectionSalary := s.database.Collection(s.collectionSalary)
+
+	filter := bson.M{}
+	count, err := collectionSalary.CountDocuments(ctx, filter)
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}

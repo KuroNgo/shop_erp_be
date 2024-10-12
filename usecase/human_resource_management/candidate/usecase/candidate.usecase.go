@@ -9,7 +9,6 @@ import (
 	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
 	"shop_erp_mono/repository"
 	"shop_erp_mono/usecase/human_resource_management/candidate/validate"
-	"sync"
 	"time"
 )
 
@@ -37,32 +36,7 @@ func (c *candidateUseCase) CreateOne(ctx context.Context, candidate *candidatedo
 		return err
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
-
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		err := c.cache.Delete("candidates")
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err := <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
+	_ = c.cache.Delete("candidates")
 
 	return c.candidateRepository.CreateOne(ctx, candidate)
 }
@@ -76,41 +50,8 @@ func (c *candidateUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
-
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		err = c.cache.Delete("candidates")
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		defer wg.Done()
-		err = c.cache.Delete(id)
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
+	_ = c.cache.Delete("candidates")
+	_ = c.cache.Delete(id)
 
 	return c.candidateRepository.DeleteOne(ctx, candidateID)
 }
@@ -124,41 +65,9 @@ func (c *candidateUseCase) UpdateOne(ctx context.Context, id string, candidate *
 		return err
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
+	_ = c.cache.Delete("candidates")
+	_ = c.cache.Delete(id)
 
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		err = c.cache.Delete("candidates")
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		defer wg.Done()
-		err = c.cache.Delete(id)
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
 	return c.candidateRepository.UpdateOne(ctx, candidateID, candidate)
 }
 
@@ -171,41 +80,9 @@ func (c *candidateUseCase) UpdateStatus(ctx context.Context, id string, status s
 		return err
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
+	_ = c.cache.Delete("candidates")
+	_ = c.cache.Delete(id)
 
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		err = c.cache.Delete("candidates")
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		defer wg.Done()
-		err = c.cache.Delete(id)
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
 	return c.candidateRepository.UpdateStatus(ctx, candidateID, status)
 }
 

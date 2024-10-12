@@ -202,3 +202,27 @@ func (e *employeeRepository) GetAll(ctx context.Context) ([]employeesdomain.Empl
 
 	return employees, nil
 }
+
+func (e *employeeRepository) CountEmployeeByEmail(ctx context.Context, email string) (int64, error) {
+	collectionEmployee := e.database.Collection(e.collectionEmployee)
+
+	filter := bson.M{"email": email}
+	count, err := collectionEmployee.CountDocuments(ctx, filter)
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}
+
+func (e *employeeRepository) CountEmployee(ctx context.Context) (int64, error) {
+	collectionEmployee := e.database.Collection(e.collectionEmployee)
+
+	filter := bson.M{}
+	count, err := collectionEmployee.CountDocuments(ctx, filter)
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}

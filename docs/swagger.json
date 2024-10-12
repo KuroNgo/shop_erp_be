@@ -5198,13 +5198,13 @@
                 "avatarURL": {
                     "type": "string"
                 },
-                "dateOfBirth": {
+                "date_of_birth": {
                     "type": "string",
-                    "example": "01/01/2002"
+                    "example": "2002-01-01T00:00:00Z"
                 },
-                "dayOfWork": {
+                "day_of_work": {
                     "type": "string",
-                    "example": "30/8/2024"
+                    "example": "2024-08-30T00:00:00Z"
                 },
                 "department": {
                     "type": "string",

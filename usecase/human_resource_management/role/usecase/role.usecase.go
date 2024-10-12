@@ -135,3 +135,10 @@ func (r *roleUseCase) DeleteOne(ctx context.Context, id string) error {
 
 	return r.roleRepository.DeleteOne(ctx, roleID)
 }
+
+func (r *roleUseCase) CountRole(ctx context.Context) (int64, error) {
+	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
+	defer cancel()
+
+	return r.roleRepository.CountRole(ctx)
+}

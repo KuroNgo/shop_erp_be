@@ -179,3 +179,9 @@ func (s *salaryUseCase) GetAll(ctx context.Context) ([]salarydomain.Output, erro
 
 	return outputs, nil
 }
+
+func (s *salaryUseCase) CountSalary(ctx context.Context) (int64, error) {
+	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
+	defer cancel()
+	return s.salaryRepository.CountSalary(ctx)
+}

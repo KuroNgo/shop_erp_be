@@ -12,6 +12,7 @@ type IRoleRepository interface {
 	GetAll(ctx context.Context) ([]Role, error)
 	UpdateOne(ctx context.Context, id primitive.ObjectID, role *Role) error
 	DeleteOne(ctx context.Context, id primitive.ObjectID) error
+	CountRole(ctx context.Context) (int64, error)
 }
 
 type IRoleUseCase interface {
@@ -21,4 +22,5 @@ type IRoleUseCase interface {
 	GetAll(ctx context.Context) ([]Output, error)
 	UpdateOne(ctx context.Context, id string, input *Input) error
 	DeleteOne(ctx context.Context, id string) error
+	CountRole(ctx context.Context) (int64, error)
 }

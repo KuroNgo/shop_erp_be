@@ -9,7 +9,6 @@ import (
 	attendancedomain "shop_erp_mono/domain/human_resource_management/attendance"
 	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
 	"shop_erp_mono/usecase/human_resource_management/attendence/validate"
-	"sync"
 	"time"
 )
 
@@ -55,32 +54,8 @@ func (a *attendanceUseCase) CreateOne(ctx context.Context, input *attendancedoma
 		UpdatedAt:    time.Now(),
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
+	_ = a.cache.Delete("attendances")
 
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		err = a.cache.Delete("attendances")
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
 	return a.attendanceRepository.CreateOne(ctx, &attendance)
 }
 
@@ -93,41 +68,9 @@ func (a *attendanceUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
+	_ = a.cache.Delete(id)
+	_ = a.cache.Delete("attendances")
 
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		err = a.cache.Delete(id)
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		defer wg.Done()
-		err = a.cache.Delete("attendances")
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
 	return a.attendanceRepository.DeleteOne(ctx, attendanceID)
 }
 
@@ -164,41 +107,8 @@ func (a *attendanceUseCase) UpdateOne(ctx context.Context, id string, input *att
 		UpdatedAt:    time.Now(),
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
-
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		err = a.cache.Delete(id)
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		defer wg.Done()
-		err = a.cache.Delete("attendances")
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
+	_ = a.cache.Delete(id)
+	_ = a.cache.Delete("attendances")
 
 	return a.attendanceRepository.UpdateOne(ctx, &attendance)
 }

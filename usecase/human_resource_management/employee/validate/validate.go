@@ -4,6 +4,7 @@ import (
 	"errors"
 	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
 	"shop_erp_mono/pkg/helper"
+	"strings"
 )
 
 func Employee(employee *employeesdomain.Input) error {
@@ -18,9 +19,11 @@ func Employee(employee *employeesdomain.Input) error {
 	genderMap := map[string]bool{
 		"male":   true,
 		"female": true,
+		"nam":    true,
+		"nữ":     true,
 	}
 
-	if !genderMap[employee.Gender] {
+	if !genderMap[strings.ToLower(employee.Gender)] {
 		return errors.New("the employee's information is not valid")
 	}
 

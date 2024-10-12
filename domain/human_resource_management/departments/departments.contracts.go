@@ -13,6 +13,7 @@ type IDepartmentRepository interface {
 	GetByName(ctx context.Context, name string) (Department, error)
 	GetAll(ctx context.Context) ([]Department, error)
 	CountManagerExist(ctx context.Context, managerID primitive.ObjectID) (int64, error)
+	CountDepartment(ctx context.Context) (int64, error)
 }
 
 type IDepartmentUseCase interface {
@@ -22,4 +23,6 @@ type IDepartmentUseCase interface {
 	GetByID(ctx context.Context, id string) (Output, error)
 	GetByName(ctx context.Context, name string) (Output, error)
 	GetAll(ctx context.Context) ([]Output, error)
+	CountManagerExist(ctx context.Context, managerID primitive.ObjectID) (int64, error)
+	CountDepartment(ctx context.Context) (int64, error)
 }

@@ -13,6 +13,8 @@ type IEmployeeRepository interface {
 	GetByID(ctx context.Context, id primitive.ObjectID) (Employee, error)
 	GetByEmail(ctx context.Context, email string) (Employee, error)
 	GetAll(ctx context.Context) ([]Employee, error)
+	CountEmployeeByEmail(ctx context.Context, email string) (int64, error)
+	CountEmployee(ctx context.Context) (int64, error)
 }
 
 type IEmployeeUseCase interface {
@@ -23,4 +25,5 @@ type IEmployeeUseCase interface {
 	GetByID(ctx context.Context, id string) (Output, error)
 	GetByEmail(ctx context.Context, email string) (Output, error)
 	GetAll(ctx context.Context) ([]Output, error)
+	CountEmployee(ctx context.Context) (int64, error)
 }

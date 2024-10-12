@@ -126,3 +126,15 @@ func (r *roleRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) e
 
 	return nil
 }
+
+func (r *roleRepository) CountRole(ctx context.Context) (int64, error) {
+	collectionRole := r.database.Collection(r.collectionRole)
+
+	filter := bson.M{}
+	count, err := collectionRole.CountDocuments(ctx, filter)
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}

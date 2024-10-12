@@ -9,7 +9,6 @@ import (
 	departmentsdomain "shop_erp_mono/domain/human_resource_management/departments"
 	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
 	"shop_erp_mono/usecase/human_resource_management/department/validate"
-	"sync"
 	"time"
 )
 
@@ -37,55 +36,31 @@ func (d *departmentUseCase) CreateOne(ctx context.Context, input *departmentsdom
 		return err
 	}
 
-	managerData, err := d.employeeRepository.GetByEmail(ctx, input.ManagerEmail)
-	if err != nil {
-		return err
-	}
+	//managerData, err := d.employeeRepository.GetByEmail(ctx, input.ManagerEmail)
+	//if err != nil {
+	//	return err
+	//}
 
-	count, err := d.departmentRepository.CountManagerExist(ctx, managerData.ID)
-	if err != nil {
-		return err
-	}
-
-	if count > 0 {
-		return errors.New("the employee is managing in other department")
-	}
+	//count, err := d.departmentRepository.CountManagerExist(ctx, managerData.ID)
+	//if err != nil {
+	//	return err
+	//}
+	//
+	//if count > 0 {
+	//	return errors.New("the employee is managing in other department")
+	//}
 
 	department := &departmentsdomain.Department{
-		ID:          primitive.NewObjectID(),
-		ManagerID:   managerData.ID,
+		ID: primitive.NewObjectID(),
+		//ManagerID:   managerData.ID,
 		Name:        input.Name,
 		Description: input.Description,
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
+	_ = d.cache.Delete("departments")
 
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		err = d.cache.Delete("departments")
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
 	return d.departmentRepository.CreateOne(ctx, department)
 }
 
@@ -98,38 +73,9 @@ func (d *departmentUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
+	_ = d.cache.Delete("departments")
+	_ = d.cache.Delete("departments")
 
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		if err = d.cache.Delete("departments"); err != nil {
-			errCh <- err
-			return
-		}
-	}()
-	go func() {
-		defer wg.Done()
-		if err = d.cache.Delete("departments"); err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
 	return d.departmentRepository.DeleteOne(ctx, departmentID)
 }
 
@@ -167,38 +113,9 @@ func (d *departmentUseCase) UpdateOne(ctx context.Context, id string, input *dep
 		UpdatedAt:   time.Now(),
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
+	_ = d.cache.Delete("departments")
+	_ = d.cache.Delete("departments")
 
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		if err = d.cache.Delete("departments"); err != nil {
-			errCh <- err
-			return
-		}
-	}()
-	go func() {
-		defer wg.Done()
-		if err = d.cache.Delete("departments"); err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
 	return d.departmentRepository.UpdateOne(ctx, departmentID, department)
 }
 
@@ -324,4 +241,18 @@ func (d *departmentUseCase) GetAll(ctx context.Context) ([]departmentsdomain.Out
 	}
 
 	return outputs, nil
+}
+
+func (d *departmentUseCase) CountManagerExist(ctx context.Context, managerID primitive.ObjectID) (int64, error) {
+	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
+	defer cancel()
+
+	return d.departmentRepository.CountManagerExist(ctx, managerID)
+}
+
+func (d *departmentUseCase) CountDepartment(ctx context.Context) (int64, error) {
+	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
+	defer cancel()
+
+	return d.departmentRepository.CountDepartment(ctx)
 }

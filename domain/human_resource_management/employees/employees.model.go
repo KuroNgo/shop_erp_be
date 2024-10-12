@@ -39,8 +39,8 @@ type Input struct {
 	Phone       string    `bson:"phone" example:"0329245971"`
 	Address     string    `bson:"address" example:"Bình Thuận"`
 	AvatarURL   string    `bson:"avatar_url"`
-	DateOfBirth time.Time `bson:"date_of_birth" example:"01/01/2002"`
-	DayOfWork   time.Time `bson:"date_of_work" example:"30/8/2024"`
+	DateOfBirth time.Time `bson:"date_of_birth" json:"date_of_birth" example:"2002-01-01T00:00:00Z"`
+	DayOfWork   time.Time `bson:"day_of_work" json:"day_of_work" example:"2024-08-30T00:00:00Z"`
 	Department  string    `bson:"department" example:"marketing"`
 	Role        string    `bson:"role" example:"developer"`
 }

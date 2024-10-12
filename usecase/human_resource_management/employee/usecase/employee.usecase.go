@@ -3,6 +3,7 @@ package employee_usecase
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	departmentsdomain "shop_erp_mono/domain/human_resource_management/departments"
@@ -10,7 +11,6 @@ import (
 	roledomain "shop_erp_mono/domain/human_resource_management/role"
 	salarydomain "shop_erp_mono/domain/human_resource_management/salary"
 	"shop_erp_mono/usecase/human_resource_management/employee/validate"
-	"sync"
 	"time"
 )
 
@@ -76,32 +76,17 @@ func (e *employeeUseCase) CreateOne(ctx context.Context, input *employeesdomain.
 		UpdatedAt:    time.Now(),
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
-
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		err = e.cache.Delete("employees")
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
+	countEmployee, err := e.employeeRepository.CountEmployeeByEmail(ctx, employeeData.Email)
+	if err != nil {
+		return err
 	}
+
+	if countEmployee > 0 {
+		return errors.New("the employee's data is exist")
+	}
+
+	_ = e.cache.Delete("employees")
+
 	return e.employeeRepository.CreateOne(ctx, employeeData)
 }
 
@@ -109,50 +94,14 @@ func (e *employeeUseCase) DeleteOne(ctx context.Context, id string) error {
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
-	var once sync.Once
-
 	employeeID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return err
 	}
 
-	// Helper function to send error to errCh
-	sendError := func(err error) {
-		once.Do(func() {
-			errCh <- err
-		})
-	}
+	_ = e.cache.Delete(id)
+	_ = e.cache.Delete("employees")
 
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		if err = e.cache.Delete(id); err != nil {
-			sendError(err)
-		}
-	}()
-
-	go func() {
-		defer wg.Done()
-		if err = e.cache.Delete("employees"); err != nil {
-			sendError(err)
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
 	return e.employeeRepository.DeleteOne(ctx, employeeID)
 }
 
@@ -200,39 +149,9 @@ func (e *employeeUseCase) UpdateOne(ctx context.Context, id string, input *emplo
 		UpdatedAt:    time.Now(),
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
+	_ = e.cache.Delete(id)
+	_ = e.cache.Delete("employees")
 
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		if err = e.cache.Delete(id); err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		defer wg.Done()
-		if err = e.cache.Delete("employees"); err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
 	return e.employeeRepository.UpdateOne(ctx, employeeID, employee)
 }
 
@@ -245,39 +164,9 @@ func (e *employeeUseCase) UpdateStatus(ctx context.Context, id string, isActive 
 		return err
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
+	_ = e.cache.Delete(id)
+	_ = e.cache.Delete("employees")
 
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		if err = e.cache.Delete(id); err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		defer wg.Done()
-		if err = e.cache.Delete("employees"); err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
 	return e.employeeRepository.UpdateStatus(ctx, employeeID, isActive)
 }
 
@@ -398,4 +287,11 @@ func (e *employeeUseCase) GetAll(ctx context.Context) ([]employeesdomain.Output,
 	}
 
 	return outputs, nil
+}
+
+func (e *employeeUseCase) CountEmployee(ctx context.Context) (int64, error) {
+	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
+	defer cancel()
+
+	return e.employeeRepository.CountEmployee(ctx)
 }

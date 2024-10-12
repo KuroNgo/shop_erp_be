@@ -148,3 +148,15 @@ func (d *departmentRepository) CountManagerExist(ctx context.Context, managerID 
 
 	return count, nil
 }
+
+func (d *departmentRepository) CountDepartment(ctx context.Context) (int64, error) {
+	collectionDepartment := d.database.Collection(d.collectionDepartment)
+
+	filter := bson.M{}
+	count, err := collectionDepartment.CountDocuments(ctx, filter)
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}

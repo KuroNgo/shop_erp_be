@@ -8,7 +8,6 @@ import (
 	invoices_domain "shop_erp_mono/domain/sales_and_distribution_management/invoices"
 	sale_orders_domain "shop_erp_mono/domain/sales_and_distribution_management/sale_orders"
 	"shop_erp_mono/usecase/sales_and_distribution_management/invoices/validate"
-	"sync"
 	"time"
 )
 
@@ -53,30 +52,7 @@ func (i *invoiceUseCase) CreateOne(ctx context.Context, input *invoices_domain.I
 		UpdatedAt:   time.Now(),
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
-
-	wg.Add(1)
-	go func() {
-		err = i.cache.Delete("invoices")
-		if err != nil {
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-	case <-ctx.Done():
-		return ctx.Err()
-	}
+	_ = i.cache.Delete("invoices")
 
 	return i.invoiceRepository.CreateOne(ctx, invoice)
 }
@@ -244,41 +220,9 @@ func (i *invoiceUseCase) UpdateOne(ctx context.Context, id string, input *invoic
 		UpdatedAt:   time.Now(),
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
+	_ = i.cache.Delete(id)
+	_ = i.cache.Delete("invoices")
 
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		err = i.cache.Delete(id)
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-	go func() {
-		defer wg.Done()
-		err = i.cache.Delete("invoices")
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-
-	case <-ctx.Done():
-		return ctx.Err()
-	}
 	return i.invoiceRepository.UpdateOne(ctx, invoice)
 }
 
@@ -291,41 +235,8 @@ func (i *invoiceUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
-
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		err = i.cache.Delete(id)
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-	go func() {
-		defer wg.Done()
-		err = i.cache.Delete("invoices")
-		if err != nil {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		wg.Wait()
-		close(errCh)
-	}()
-
-	select {
-	case err = <-errCh:
-		if err != nil {
-			return err
-		}
-
-	case <-ctx.Done():
-		return ctx.Err()
-	}
+	_ = i.cache.Delete(id)
+	_ = i.cache.Delete("invoices")
 
 	return i.invoiceRepository.DeleteOne(ctx, invoiceID)
 }
