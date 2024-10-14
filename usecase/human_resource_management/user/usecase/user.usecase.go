@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/thanhpk/randstr"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	mongo_driven "go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"mime/multipart"
@@ -25,10 +26,11 @@ type userUseCase struct {
 	database       *bootstrap.Database
 	contextTimeout time.Duration
 	userRepository userdomain.IUserRepository
+	client         *mongo_driven.Client
 }
 
-func NewUserUseCase(database *bootstrap.Database, contextTimeout time.Duration, userRepository userdomain.IUserRepository) userdomain.IUserUseCase {
-	return &userUseCase{database: database, contextTimeout: contextTimeout, userRepository: userRepository}
+func NewUserUseCase(database *bootstrap.Database, contextTimeout time.Duration, userRepository userdomain.IUserRepository, client *mongo_driven.Client) userdomain.IUserUseCase {
+	return &userUseCase{database: database, contextTimeout: contextTimeout, userRepository: userRepository, client: client}
 }
 
 // SignUp Create a new user
@@ -36,106 +38,122 @@ func (u *userUseCase) SignUp(ctx context.Context, file *multipart.FileHeader, in
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
 
-	if err := validate.User(input); err != nil {
-		return err
-	}
-
-	// Bên phía client sẽ phải so sánh password thêm một lần nữa đã đúng chưa
-	if !helper.PasswordStrong(input.PasswordHash) {
-		return errors.New("password must have at least 8 characters including uppercase letters, lowercase letters and numbers")
-	}
-
-	// Băm mật khẩu
-	hashedPassword, err := password.HashPassword(input.PasswordHash)
+	session, err := u.client.StartSession()
 	if err != nil {
 		return err
 	}
+	defer session.EndSession(ctx)
 
-	if file == nil {
-		newUser := &userdomain.User{
+	callback := func(sessionCtx mongo_driven.SessionContext) (interface{}, error) {
+		if err := validate.User(input); err != nil {
+			return nil, err
+		}
+
+		// Bên phía client sẽ phải so sánh password thêm một lần nữa đã đúng chưa
+		if !helper.PasswordStrong(input.PasswordHash) {
+			return nil, errors.New("password must have at least 8 characters including uppercase letters, lowercase letters and numbers")
+		}
+
+		// Băm mật khẩu
+		hashedPassword, err := password.HashPassword(input.PasswordHash)
+		if err != nil {
+			return nil, err
+		}
+
+		if file == nil {
+			newUser := &userdomain.User{
+				ID:           primitive.NewObjectID(),
+				Username:     input.Username,
+				Email:        input.Email,
+				PasswordHash: hashedPassword,
+				Verified:     false,
+				Provider:     "fe-it",
+				CreatedAt:    time.Now(),
+				UpdatedAt:    time.Now(),
+			}
+
+			err = u.userRepository.CreateOne(sessionCtx, newUser)
+			if err != nil {
+				return nil, err
+			}
+
+			var code string
+			code = randstr.Dec(6)
+
+			updUser := userdomain.User{
+				ID:               newUser.ID,
+				VerificationCode: code,
+				Verified:         false,
+				UpdatedAt:        time.Now(),
+			}
+
+			// Update User in Database
+			err = u.userRepository.UpdateVerify(sessionCtx, &updUser)
+			if err != nil {
+				return nil, err
+			}
+
+			emailData := mail.EmailData{
+				Code:      code,
+				FirstName: newUser.Username,
+				Subject:   "Your account verification code",
+			}
+
+			err = mail.SendEmail(&emailData, newUser.Email, "sign_in_first_time.html")
+			if err != nil {
+				return nil, err
+			}
+
+			return nil, nil
+		}
+
+		// Kiểm tra xem file có phải là hình ảnh không
+		if !helper.IsImage(file.Filename) {
+			return nil, err
+		}
+
+		f, err := file.Open()
+		if err != nil {
+			return nil, err
+		}
+		defer f.Close()
+
+		imageURL, err := imagescloudinary.UploadImageToCloudinary(f, file.Filename, u.database.CloudinaryUploadFolderUser)
+		if err != nil {
+			return nil, err
+		}
+
+		newUser := userdomain.User{
 			ID:           primitive.NewObjectID(),
 			Username:     input.Username,
+			AvatarURL:    imageURL.ImageURL,
+			AssetURL:     imageURL.AssetID,
 			Email:        input.Email,
 			PasswordHash: hashedPassword,
 			Verified:     false,
 			Provider:     "fe-it",
+			Role:         "user",
+			Phone:        input.Phone,
 			CreatedAt:    time.Now(),
 			UpdatedAt:    time.Now(),
 		}
 
-		err = u.userRepository.CreateOne(ctx, newUser)
+		// thực hiện đăng ký người dùng
+		err = u.userRepository.CreateOne(sessionCtx, &newUser)
 		if err != nil {
-			return err
+			return nil, err
 		}
 
-		var code string
-		code = randstr.Dec(6)
-
-		updUser := userdomain.User{
-			ID:               newUser.ID,
-			VerificationCode: code,
-			Verified:         false,
-			UpdatedAt:        time.Now(),
-		}
-
-		// Update User in Database
-		err = u.userRepository.UpdateVerify(ctx, &updUser)
-		if err != nil {
-			return err
-		}
-
-		emailData := mail.EmailData{
-			Code:      code,
-			FirstName: newUser.Username,
-			Subject:   "Your account verification code",
-		}
-
-		err = mail.SendEmail(&emailData, newUser.Email, "sign_in_first_time.html")
-		if err != nil {
-			return err
-		}
-
-		return nil
+		return nil, nil
 	}
 
-	// Kiểm tra xem file có phải là hình ảnh không
-	if !helper.IsImage(file.Filename) {
-		return err
-	}
-
-	f, err := file.Open()
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
-	imageURL, err := imagescloudinary.UploadImageToCloudinary(f, file.Filename, u.database.CloudinaryUploadFolderUser)
+	// Run the transaction
+	_, err = session.WithTransaction(ctx, callback)
 	if err != nil {
 		return err
 	}
 
-	newUser := userdomain.User{
-		ID:           primitive.NewObjectID(),
-		Username:     input.Username,
-		AvatarURL:    imageURL.ImageURL,
-		AssetURL:     imageURL.AssetID,
-		Email:        input.Email,
-		PasswordHash: hashedPassword,
-		Verified:     false,
-		Provider:     "fe-it",
-		Role:         "user",
-		Phone:        input.Phone,
-		CreatedAt:    time.Now(),
-		UpdatedAt:    time.Now(),
-	}
-
-	// thực hiện đăng ký người dùng
-	err = u.userRepository.CreateOne(ctx, &newUser)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return session.CommitTransaction(ctx)
 }
 
 // GetByVerificationCode authentication for Create a new user
@@ -337,37 +355,53 @@ func (u *userUseCase) ForgetPassword(ctx context.Context, email string) error {
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
 
-	user, err := u.userRepository.GetByEmail(ctx, email)
+	session, err := u.client.StartSession()
+	if err != nil {
+		return err
+	}
+	defer session.EndSession(ctx)
+
+	callback := func(sessionCtx mongo_driven.SessionContext) (interface{}, error) {
+		user, err := u.userRepository.GetByEmail(sessionCtx, email)
+		if err != nil {
+			return nil, err
+		}
+
+		var code string
+		code = randstr.Dec(6)
+
+		updUser := &userdomain.User{
+			ID:       user.ID,
+			Verified: true,
+		}
+
+		// Update User in Database
+		err = u.userRepository.UpdateVerify(sessionCtx, updUser)
+		if err != nil {
+			return nil, err
+		}
+
+		emailData := mail.EmailData{
+			Code:      code,
+			FirstName: user.Username,
+			Subject:   "Khôi phục mật khẩu",
+		}
+
+		err = mail.SendEmail(&emailData, user.Email, "forget_password.html")
+		if err != nil {
+			return nil, err
+		}
+
+		return nil, nil
+	}
+
+	// Run the transaction
+	_, err = session.WithTransaction(ctx, callback)
 	if err != nil {
 		return err
 	}
 
-	var code string
-	code = randstr.Dec(6)
-
-	updUser := &userdomain.User{
-		ID:       user.ID,
-		Verified: true,
-	}
-
-	// Update User in Database
-	err = u.userRepository.UpdateVerify(ctx, updUser)
-	if err != nil {
-		return err
-	}
-
-	emailData := mail.EmailData{
-		Code:      code,
-		FirstName: user.Username,
-		Subject:   "Khôi phục mật khẩu",
-	}
-
-	err = mail.SendEmail(&emailData, user.Email, "forget_password.html")
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return session.CommitTransaction(ctx)
 }
 
 func (u *userUseCase) LoginGoogle(ctx context.Context, code string) (*userdomain.Output, *userdomain.OutputLoginGoogle, error) {
