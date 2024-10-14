@@ -6,6 +6,7 @@ import (
 	"errors"
 	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 	departmentsdomain "shop_erp_mono/domain/human_resource_management/departments"
 	employeesdomain "shop_erp_mono/domain/human_resource_management/employees"
 	"shop_erp_mono/usecase/human_resource_management/department/validate"
@@ -16,16 +17,17 @@ type departmentUseCase struct {
 	contextTimeout       time.Duration
 	departmentRepository departmentsdomain.IDepartmentRepository
 	employeeRepository   employeesdomain.IEmployeeRepository
+	client               *mongo.Client
 	cache                *bigcache.BigCache
 }
 
 func NewDepartmentUseCase(contextTimeout time.Duration, departmentRepository departmentsdomain.IDepartmentRepository,
-	employeeRepository employeesdomain.IEmployeeRepository, cacheTTL time.Duration) departmentsdomain.IDepartmentUseCase {
+	employeeRepository employeesdomain.IEmployeeRepository, cacheTTL time.Duration, client *mongo.Client) departmentsdomain.IDepartmentUseCase {
 	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
 	if err != nil {
 		return nil
 	}
-	return &departmentUseCase{contextTimeout: contextTimeout, cache: cache, departmentRepository: departmentRepository, employeeRepository: employeeRepository}
+	return &departmentUseCase{contextTimeout: contextTimeout, cache: cache, departmentRepository: departmentRepository, employeeRepository: employeeRepository, client: client}
 }
 
 func (d *departmentUseCase) CreateOne(ctx context.Context, input *departmentsdomain.Input) error {
@@ -36,23 +38,17 @@ func (d *departmentUseCase) CreateOne(ctx context.Context, input *departmentsdom
 		return err
 	}
 
-	//managerData, err := d.employeeRepository.GetByEmail(ctx, input.ManagerEmail)
-	//if err != nil {
-	//	return err
-	//}
+	count, err := d.departmentRepository.CountDepartmentWithName(ctx, input.Name)
+	if err != nil {
+		return err
+	}
 
-	//count, err := d.departmentRepository.CountManagerExist(ctx, managerData.ID)
-	//if err != nil {
-	//	return err
-	//}
-	//
-	//if count > 0 {
-	//	return errors.New("the employee is managing in other department")
-	//}
+	if count > 0 {
+		return errors.New("name of department is exist")
+	}
 
 	department := &departmentsdomain.Department{
-		ID: primitive.NewObjectID(),
-		//ManagerID:   managerData.ID,
+		ID:          primitive.NewObjectID(),
 		Name:        input.Name,
 		Description: input.Description,
 		CreatedAt:   time.Now(),
@@ -62,6 +58,108 @@ func (d *departmentUseCase) CreateOne(ctx context.Context, input *departmentsdom
 	_ = d.cache.Delete("departments")
 
 	return d.departmentRepository.CreateOne(ctx, department)
+}
+
+func (d *departmentUseCase) CreateDepartmentWithManager(ctx context.Context, departmentInput *departmentsdomain.Input,
+	employeeInput *employeesdomain.Input) error {
+
+	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
+	defer cancel()
+
+	session, err := d.client.StartSession()
+	if err != nil {
+		return err
+	}
+	defer session.EndSession(ctx)
+
+	callback := func(sessionCtx mongo.SessionContext) (interface{}, error) {
+		// Step 1: Create department
+		department := &departmentsdomain.Department{
+			ID:          primitive.NewObjectID(),
+			Name:        departmentInput.Name,
+			Description: departmentInput.Description,
+			CreatedAt:   time.Now(),
+			UpdatedAt:   time.Now(),
+		}
+
+		count, err := d.departmentRepository.CountDepartmentWithName(sessionCtx, departmentInput.Name)
+		if err != nil {
+			return nil, err
+		}
+
+		if count > 0 {
+			return nil, errors.New("name of department is exist")
+		}
+
+		err = d.departmentRepository.CreateOne(sessionCtx, department)
+		if err != nil {
+			return nil, err
+		}
+
+		// Step 2: Check if employee exists
+		managerData, err := d.employeeRepository.GetByEmail(sessionCtx, employeeInput.Email)
+		if err != nil && !errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, err
+		}
+
+		var employeeID primitive.ObjectID
+
+		if managerData != nil {
+			// If employee exists, check if they are managing another department
+			count, err := d.departmentRepository.CountManagerExist(sessionCtx, managerData.ID)
+			if err != nil {
+				return nil, err
+			}
+
+			if count > 0 {
+				return nil, errors.New("the employee is managing in another department")
+			}
+
+			employeeID = managerData.ID
+		} else {
+			// If employee does not exist, create a new employee
+			employee := employeesdomain.Employee{
+				ID:           primitive.NewObjectID(),
+				FirstName:    employeeInput.FirstName,
+				LastName:     employeeInput.LastName,
+				Gender:       employeeInput.Gender,
+				Email:        employeeInput.Email,
+				Phone:        employeeInput.Phone,
+				Address:      employeeInput.Address,
+				AvatarURL:    employeeInput.AvatarURL,
+				DateOfBirth:  employeeInput.DateOfBirth,
+				DayOfWork:    employeeInput.DayOfWork,
+				DepartmentID: department.ID,
+				IsActive:     true,
+				CreatedAt:    time.Now(),
+				UpdatedAt:    time.Now(),
+			}
+
+			err = d.employeeRepository.CreateOne(sessionCtx, &employee)
+			if err != nil {
+				return nil, err
+			}
+			employeeID = employee.ID
+		}
+
+		// Step 3: Update department with ManagerID
+		err = d.departmentRepository.UpdateManager(sessionCtx, department.ID, employeeID)
+		if err != nil {
+			return nil, err
+		}
+
+		return nil, nil
+	}
+
+	// Run the transaction
+	_, err = session.WithTransaction(ctx, callback)
+	if err != nil {
+		return err
+	}
+
+	_ = d.cache.Delete("departments")
+
+	return session.CommitTransaction(ctx)
 }
 
 func (d *departmentUseCase) DeleteOne(ctx context.Context, id string) error {
@@ -87,36 +185,57 @@ func (d *departmentUseCase) UpdateOne(ctx context.Context, id string, input *dep
 		return err
 	}
 
-	managerData, err := d.employeeRepository.GetByEmail(ctx, input.ManagerEmail)
+	session, err := d.client.StartSession()
 	if err != nil {
 		return err
 	}
+	defer session.EndSession(ctx)
 
-	count, err := d.departmentRepository.CountManagerExist(ctx, managerData.ID)
+	callback := func(sessionCtx mongo.SessionContext) (interface{}, error) {
+		managerData, err := d.employeeRepository.GetByEmail(ctx, input.ManagerEmail)
+		if err != nil {
+			return nil, err
+		}
+
+		count, err := d.departmentRepository.CountManagerExist(ctx, managerData.ID)
+		if err != nil {
+			return nil, err
+		}
+
+		if count > 0 {
+			return nil, errors.New("the employee is managing in other department")
+		}
+
+		departmentID, err := primitive.ObjectIDFromHex(id)
+		if err != nil {
+			return nil, err
+		}
+
+		department := &departmentsdomain.Department{
+			ID:          primitive.NewObjectID(),
+			Name:        input.Name,
+			Description: input.Description,
+			UpdatedAt:   time.Now(),
+		}
+
+		err = d.departmentRepository.UpdateOne(ctx, departmentID, department)
+		if err != nil {
+			return nil, err
+		}
+
+		return nil, nil
+	}
+
+	// Run the transaction
+	_, err = session.WithTransaction(ctx, callback)
 	if err != nil {
 		return err
-	}
-
-	if count > 0 {
-		return errors.New("the employee is managing in other department")
-	}
-
-	departmentID, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return err
-	}
-
-	department := &departmentsdomain.Department{
-		ID:          primitive.NewObjectID(),
-		Name:        input.Name,
-		Description: input.Description,
-		UpdatedAt:   time.Now(),
 	}
 
 	_ = d.cache.Delete("departments")
 	_ = d.cache.Delete("departments")
 
-	return d.departmentRepository.UpdateOne(ctx, departmentID, department)
+	return session.CommitTransaction(ctx)
 }
 
 func (d *departmentUseCase) GetByID(ctx context.Context, id string) (departmentsdomain.Output, error) {
@@ -224,7 +343,7 @@ func (d *departmentUseCase) GetAll(ctx context.Context) ([]departmentsdomain.Out
 
 		output := departmentsdomain.Output{
 			Department: departmentData,
-			Manager:    managerData,
+			Manager:    *managerData,
 		}
 
 		outputs = append(outputs, output)

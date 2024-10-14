@@ -1510,6 +1510,38 @@
                 "responses": {}
             }
         },
+        "/api/v1/departments/create/manager": {
+            "post": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Create the department's information along with a manager",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Department"
+                ],
+                "summary": "Create Department Information",
+                "parameters": [
+                    {
+                        "description": "Department and Manager data",
+                        "name": "Input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/department_controller.DepartmentWithManagerInput"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
         "/api/v1/departments/delete/_id": {
             "delete": {
                 "security": [
@@ -5168,6 +5200,17 @@
                 },
                 "phone_number": {
                     "type": "string"
+                }
+            }
+        },
+        "department_controller.DepartmentWithManagerInput": {
+            "type": "object",
+            "properties": {
+                "department": {
+                    "$ref": "#/definitions/departments_domain.Input"
+                },
+                "manager": {
+                    "$ref": "#/definitions/employees_domain.Input"
                 }
             }
         },

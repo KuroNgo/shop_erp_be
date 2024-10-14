@@ -195,7 +195,7 @@ func (e *employeeUseCase) GetByID(ctx context.Context, id string) (employeesdoma
 	}
 
 	output := employeesdomain.Output{
-		Employee: employeeData,
+		Employee: *employeeData,
 	}
 
 	data, err = json.Marshal(output)
@@ -231,7 +231,7 @@ func (e *employeeUseCase) GetByEmail(ctx context.Context, name string) (employee
 	}
 
 	output := employeesdomain.Output{
-		Employee: employeeData,
+		Employee: *employeeData,
 	}
 
 	data, err = json.Marshal(output)

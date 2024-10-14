@@ -73,6 +73,27 @@ func (d *departmentRepository) UpdateOne(ctx context.Context, id primitive.Objec
 	return nil
 }
 
+func (d *departmentRepository) UpdateManager(ctx context.Context, id primitive.ObjectID, managerID primitive.ObjectID) error {
+	collectionDepartment := d.database.Collection(d.collectionDepartment)
+
+	if id == primitive.NilObjectID {
+		return errors.New("id do not nil")
+	}
+
+	filter := bson.M{"_id": id}
+	update := bson.M{"$set": bson.M{
+		"manager_id": managerID,
+		"updated_at": time.Now(),
+	}}
+
+	_, err := collectionDepartment.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (d *departmentRepository) GetByID(ctx context.Context, id primitive.ObjectID) (departmentsdomain.Department, error) {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
@@ -153,6 +174,18 @@ func (d *departmentRepository) CountDepartment(ctx context.Context) (int64, erro
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
 	filter := bson.M{}
+	count, err := collectionDepartment.CountDocuments(ctx, filter)
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}
+
+func (d *departmentRepository) CountDepartmentWithName(ctx context.Context, name string) (int64, error) {
+	collectionDepartment := d.database.Collection(d.collectionDepartment)
+
+	filter := bson.M{"name": name}
 	count, err := collectionDepartment.CountDocuments(ctx, filter)
 	if err != nil {
 		return 0, err

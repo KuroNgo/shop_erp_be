@@ -10,8 +10,8 @@ type IEmployeeRepository interface {
 	DeleteOne(ctx context.Context, id primitive.ObjectID) error
 	UpdateOne(ctx context.Context, id primitive.ObjectID, employee *Employee) error
 	UpdateStatus(ctx context.Context, id primitive.ObjectID, isActive bool) error
-	GetByID(ctx context.Context, id primitive.ObjectID) (Employee, error)
-	GetByEmail(ctx context.Context, email string) (Employee, error)
+	GetByID(ctx context.Context, id primitive.ObjectID) (*Employee, error)
+	GetByEmail(ctx context.Context, email string) (*Employee, error)
 	GetAll(ctx context.Context) ([]Employee, error)
 	CountEmployeeByEmail(ctx context.Context, email string) (int64, error)
 	CountEmployee(ctx context.Context) (int64, error)

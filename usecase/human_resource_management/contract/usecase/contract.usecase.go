@@ -149,7 +149,7 @@ func (c *contractUseCase) GetByID(ctx context.Context, id string) (contractsdoma
 
 	output := contractsdomain.Output{
 		Contract: contractData,
-		Employee: employeeData,
+		Employee: *employeeData,
 	}
 
 	data, err = json.Marshal(output)
@@ -194,7 +194,7 @@ func (c *contractUseCase) GetByEmail(ctx context.Context, email string) (contrac
 
 	output := contractsdomain.Output{
 		Contract: contractData,
-		Employee: employeeData,
+		Employee: *employeeData,
 	}
 
 	data, err = json.Marshal(output)
@@ -239,7 +239,7 @@ func (c *contractUseCase) GetAll(ctx context.Context) ([]contractsdomain.Output,
 
 		output := contractsdomain.Output{
 			Contract: contractData,
-			Employee: employeeData,
+			Employee: *employeeData,
 		}
 
 		outputs = append(outputs, output)

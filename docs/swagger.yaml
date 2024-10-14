@@ -93,6 +93,13 @@ definitions:
       phone_number:
         type: string
     type: object
+  department_controller.DepartmentWithManagerInput:
+    properties:
+      department:
+        $ref: '#/definitions/departments_domain.Input'
+      manager:
+        $ref: '#/definitions/employees_domain.Input'
+    type: object
   departments_domain.Input:
     properties:
       description:
@@ -1441,6 +1448,26 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/departments_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Create Department Information
+      tags:
+      - Department
+  /api/v1/departments/create/manager:
+    post:
+      consumes:
+      - application/json
+      description: Create the department's information along with a manager
+      parameters:
+      - description: Department and Manager data
+        in: body
+        name: Input
+        required: true
+        schema:
+          $ref: '#/definitions/department_controller.DepartmentWithManagerInput'
       produces:
       - application/json
       responses: {}

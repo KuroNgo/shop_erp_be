@@ -21,11 +21,12 @@ import (
 // @BasePath /api/v1
 func main() {
 
-	app := infrastructor.App()
+	app, client := infrastructor.App()
 
 	env := app.Env
 
 	db := app.MongoDB.Database(env.DBName)
+
 	defer app.CloseDBConnection()
 
 	timeout := time.Duration(env.ContextTimeout) * time.Second
@@ -33,7 +34,7 @@ func main() {
 
 	_gin := gin.Default()
 
-	routers.SetUp(env, timeout, db, _gin, cacheTTL)
+	routers.SetUp(env, timeout, db, client, _gin, cacheTTL)
 	fmt.Println("Location Server Web of us: http://localhost:8080")
 	err := _gin.Run(env.ServerAddress)
 	if err != nil {

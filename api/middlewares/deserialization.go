@@ -31,7 +31,7 @@ func DeserializeUser() gin.HandlerFunc {
 			return
 		}
 
-		app := infrastructor.App()
+		app, _ := infrastructor.App()
 		env := app.Env
 
 		sub, err := token.ValidateToken(accessToken, env.AccessTokenPublicKey)

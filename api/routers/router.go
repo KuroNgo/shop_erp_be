@@ -13,9 +13,9 @@ import (
 	"time"
 )
 
-func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, gin *gin.Engine, cacheTTL time.Duration) {
+func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, client *mongo.Client, gin *gin.Engine, cacheTTL time.Duration) {
 	swaggerroute.SwaggerRouter(env, timeout, db, gin.Group(""))
-	human_resources_management.SetUp(env, timeout, db, gin, cacheTTL)
+	human_resources_management.SetUp(env, timeout, db, client, gin, cacheTTL)
 	accounting_management.SetUp(env, timeout, db, gin)
 	sales_and_distributing_management.SetUp(env, timeout, db, gin, cacheTTL)
 	warehouse_management.SetUp(env, timeout, db, gin, cacheTTL)

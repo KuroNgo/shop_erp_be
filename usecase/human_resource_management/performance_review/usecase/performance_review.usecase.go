@@ -232,8 +232,8 @@ func (p *performanceReviewUseCase) GetByID(ctx context.Context, id string) (perf
 
 	output := performancereviewdomain.Output{
 		PerformanceReview: performanceReviewData,
-		Employee:          employeeData,
-		Reviewer:          reviewerData,
+		Employee:          *employeeData,
+		Reviewer:          *reviewerData,
 	}
 
 	data, err = json.Marshal(id)
@@ -280,8 +280,8 @@ func (p *performanceReviewUseCase) GetByEmailEmployee(ctx context.Context, email
 
 	output := performancereviewdomain.Output{
 		PerformanceReview: performanceReviewData,
-		Employee:          employeeData,
-		Reviewer:          reviewerData,
+		Employee:          *employeeData,
+		Reviewer:          *reviewerData,
 	}
 
 	data, err = json.Marshal(email)
@@ -331,8 +331,8 @@ func (p *performanceReviewUseCase) GetAll(ctx context.Context) ([]performancerev
 
 		output := performancereviewdomain.Output{
 			PerformanceReview: performanceReview,
-			Employee:          employeeData,
-			Reviewer:          reviewerData,
+			Employee:          *employeeData,
+			Reviewer:          *reviewerData,
 		}
 
 		outputs = append(outputs, output)

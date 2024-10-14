@@ -20,7 +20,7 @@ import (
 	"time"
 )
 
-func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, gin *gin.Engine, cacheTTL time.Duration) {
+func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, client *mongo.Client, gin *gin.Engine, cacheTTL time.Duration) {
 	publicRouterV1 := gin.Group("/api/v1")
 	publicRouterV2 := gin.Group("/api/v2")
 	publicRouter := gin.Group("/api")
@@ -41,7 +41,7 @@ func SetUp(env *bootstrap.Database, timeout time.Duration, db *mongo.Database, g
 	// All Public APIs v1
 	userroute.UserRouter(env, timeout, db, publicRouterV1)
 	roleroute.RoleRouter(env, timeout, db, publicRouterV1, cacheTTL)
-	departmentroute.DepartmentRouter(env, timeout, db, publicRouterV1, cacheTTL)
+	departmentroute.DepartmentRouter(env, timeout, db, client, publicRouterV1, cacheTTL)
 	salaryroute.SalaryRouter(env, timeout, db, publicRouterV1, cacheTTL)
 	attendanceroute.AttendanceRouter(env, timeout, db, publicRouterV1, cacheTTL)
 	employeeroute.EmployeeRouter(env, timeout, db, publicRouterV1, cacheTTL)

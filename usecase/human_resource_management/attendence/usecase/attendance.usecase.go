@@ -144,7 +144,7 @@ func (a *attendanceUseCase) GetByID(ctx context.Context, id string) (attendanced
 
 	output := attendancedomain.Output{
 		Attendance: attendanceData,
-		Employee:   employeeData,
+		Employee:   *employeeData,
 	}
 
 	data, err = json.Marshal(output)
@@ -185,7 +185,7 @@ func (a *attendanceUseCase) GetByEmail(ctx context.Context, email string) (atten
 
 	output := attendancedomain.Output{
 		Attendance: attendanceData,
-		Employee:   employeeData,
+		Employee:   *employeeData,
 	}
 
 	data, err = json.Marshal(output)
@@ -231,9 +231,9 @@ func (a *attendanceUseCase) GetAll(ctx context.Context) ([]attendancedomain.Outp
 
 		output := attendancedomain.Output{
 			Attendance: i,
-			Employee:   employeeData,
+			Employee:   *employeeData,
 		}
-		employeesData = append(employeesData, employeeData)
+		employeesData = append(employeesData, *employeeData)
 		outputs = append(outputs, output)
 	}
 
