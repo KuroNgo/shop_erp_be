@@ -13,10 +13,10 @@ import (
 	"shop_erp_mono/internal/config"
 	userdomain "shop_erp_mono/internal/domain/human_resource_management/user"
 	"shop_erp_mono/internal/usecase/human_resource_management/user/validate"
-	imagescloudinary "shop_erp_mono/pkg/interface/cloudinary/utils/images"
+	imagescloudinary "shop_erp_mono/pkg/interface/cloud/cloudinary/utils/images"
 	"shop_erp_mono/pkg/interface/oauth2/google"
 	helper2 "shop_erp_mono/pkg/shared/helper"
-	"shop_erp_mono/pkg/shared/mail"
+	"shop_erp_mono/pkg/shared/mail/handles"
 	"shop_erp_mono/pkg/shared/password"
 	"shop_erp_mono/pkg/shared/token"
 	"time"
@@ -93,13 +93,13 @@ func (u *userUseCase) SignUp(ctx context.Context, file *multipart.FileHeader, in
 				return nil, err
 			}
 
-			emailData := mail.EmailData{
+			emailData := handles.EmailData{
 				Code:      code,
 				FirstName: newUser.Username,
 				Subject:   "Your account verification code",
 			}
 
-			err = mail.SendEmail(&emailData, newUser.Email, "sign_in_first_time.html")
+			err = handles.SendEmail(&emailData, newUser.Email, "sign_in_first_time.html")
 			if err != nil {
 				return nil, err
 			}
@@ -381,13 +381,13 @@ func (u *userUseCase) ForgetPassword(ctx context.Context, email string) error {
 			return nil, err
 		}
 
-		emailData := mail.EmailData{
+		emailData := handles.EmailData{
 			Code:      code,
 			FirstName: user.Username,
 			Subject:   "Khôi phục mật khẩu",
 		}
 
-		err = mail.SendEmail(&emailData, user.Email, "forget_password.html")
+		err = handles.SendEmail(&emailData, user.Email, "forget_password.html")
 		if err != nil {
 			return nil, err
 		}
