@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "net/http/pprof"
 	"shop_erp_mono/internal/api/routers"
-	"shop_erp_mono/internal/infrastructor"
+	"shop_erp_mono/internal/infrastructor/mongo"
 	"time"
 )
 
@@ -21,12 +21,9 @@ import (
 // @BasePath /api/v1
 func main() {
 
-	app, client := infrastructor.App()
-
+	app, client := mongo.App()
 	env := app.Env
-
 	db := app.MongoDB.Database(env.DBName)
-
 	defer app.CloseDBConnection()
 
 	timeout := time.Duration(env.ContextTimeout) * time.Second

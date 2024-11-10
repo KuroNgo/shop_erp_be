@@ -5,7 +5,7 @@ import (
 	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"shop_erp_mono/internal/infrastructor"
+	"shop_erp_mono/internal/infrastructor/mongo"
 	"shop_erp_mono/pkg/shared/token"
 )
 
@@ -20,7 +20,7 @@ func Authorize(enforcer *casbin.Enforcer) gin.HandlerFunc {
 			return
 		}
 
-		app, _ := infrastructor.App()
+		app, _ := mongo.App()
 		env := app.Env
 
 		sub, err := token.ValidateToken(cookie, env.AccessTokenPublicKey)

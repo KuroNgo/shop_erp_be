@@ -64,6 +64,38 @@ func (l *leaveRequestRepository) UpdateOne(ctx context.Context, id primitive.Obj
 	return nil
 }
 
+func (l *leaveRequestRepository) UpdateRemainingLeaveDays(ctx context.Context, employeeID primitive.ObjectID, remainingDays int) error {
+	collectionLeaveRequest := l.database.Collection(l.collectionLeaveRequest)
+
+	filter := bson.M{"employee_id": employeeID}
+	update := bson.M{"$set": bson.M{
+		"remaining_days": remainingDays,
+	}}
+
+	_, err := collectionLeaveRequest.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (l *leaveRequestRepository) UpdateStatus(ctx context.Context, employeeID primitive.ObjectID, status string) error {
+	collectionLeaveRequest := l.database.Collection(l.collectionLeaveRequest)
+
+	filter := bson.M{"employee_id": employeeID}
+	update := bson.M{"$set": bson.M{
+		"status": status,
+	}}
+
+	_, err := collectionLeaveRequest.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (l *leaveRequestRepository) GetByID(ctx context.Context, id primitive.ObjectID) (leaverequestdomain.LeaveRequest, error) {
 	collectionLeaveRequest := l.database.Collection(l.collectionLeaveRequest)
 
@@ -96,6 +128,23 @@ func (l *leaveRequestRepository) GetByEmployeeID(ctx context.Context, employeeID
 	}
 
 	return leaveRequest, nil
+}
+
+func (l *leaveRequestRepository) GetRemainingLeaveDays(ctx context.Context, employeeID primitive.ObjectID) (int, error) {
+	collectionLeaveRequest := l.database.Collection(l.collectionLeaveRequest)
+
+	var leaveRequest leaverequestdomain.LeaveRequest
+	filter := bson.M{"employee_id": employeeID}
+
+	err := collectionLeaveRequest.FindOne(ctx, filter).Decode(&leaveRequest)
+	if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return 0, nil
+		}
+		return 0, err
+	}
+
+	return leaveRequest.RemainingDays, nil
 }
 
 func (l *leaveRequestRepository) GetAll(ctx context.Context) ([]leaverequestdomain.LeaveRequest, error) {

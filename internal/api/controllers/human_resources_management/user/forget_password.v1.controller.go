@@ -83,7 +83,7 @@ func (u *UserController) VerificationCodeForChangePassword(ctx *gin.Context) {
 // @Tags User
 // @Accept  json
 // @Produce  json
-// @Param changePasswordInput body userdomain.ChangePasswordInput true "Change password input"
+// @Param changePasswordInput body user_domain.ChangePasswordInput true "Change password input"
 // @Router /api/v1/users/password/forget [patch]
 func (u *UserController) ChangePassword(ctx *gin.Context) {
 	cookie, err := ctx.Cookie("verification_code")

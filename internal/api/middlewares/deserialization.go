@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"shop_erp_mono/internal/infrastructor"
+	"shop_erp_mono/internal/infrastructor/mongo"
 	"shop_erp_mono/pkg/shared/token"
 	"strings"
 )
@@ -31,7 +31,7 @@ func DeserializeUser() gin.HandlerFunc {
 			return
 		}
 
-		app, _ := infrastructor.App()
+		app, _ := mongo.App()
 		env := app.Env
 
 		sub, err := token.ValidateToken(accessToken, env.AccessTokenPublicKey)

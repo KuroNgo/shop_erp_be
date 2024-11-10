@@ -2400,6 +2400,27 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/api/v1/leave-requests/update/remaining": {
+            "put": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Delete the leave request's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Leave Request"
+                ],
+                "summary": "Delete Leave Request Information",
+                "responses": {}
+            }
+        },
         "/api/v1/order-details/create": {
             "post": {
                 "description": "This API creates a new Order Detail from the input data",
@@ -5416,6 +5437,9 @@ const docTemplate = `{
         "leave_request_domain.Input": {
             "type": "object",
             "properties": {
+                "approves": {
+                    "type": "string"
+                },
                 "employee": {
                     "type": "string",
                     "example": "admin@admin.com"
@@ -5428,6 +5452,9 @@ const docTemplate = `{
                     "description": "Example: \"Sick Leave\", \"Annual Leave\", \"Unpaid Leave\"",
                     "type": "string",
                     "example": "Sick Leave"
+                },
+                "remaining_days": {
+                    "type": "integer"
                 },
                 "start_date": {
                     "type": "string",
@@ -5525,6 +5552,12 @@ const docTemplate = `{
         "product_domain.Input": {
             "type": "object",
             "properties": {
+                "asset_url": {
+                    "type": "string"
+                },
+                "avatar_url": {
+                    "type": "string"
+                },
                 "description": {
                     "type": "string"
                 },

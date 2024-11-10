@@ -12,16 +12,18 @@ const (
 
 // LeaveRequest represents a leave request by an employee.
 type LeaveRequest struct {
-	ID            primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
-	EmployeeID    primitive.ObjectID `bson:"employee_id" json:"employee_id"`
-	ApprovesID    primitive.ObjectID `bson:"approves_id" json:"approves_id"`
-	LeaveType     string             `bson:"leave_type" json:"leave_type"` // Example: "Sick Leave", "Annual Leave", "Unpaid Leave"
-	StartDate     time.Time          `bson:"start_date" json:"start_date"`
-	EndDate       time.Time          `bson:"end_date" json:"end_date"`
-	RemainingDays int                `bson:"remaining_days" json:"remaining_days"`
-	Status        string             `bson:"status" json:"status"` // Example: "Approved", "Pending", "Rejected"
-	CreatedAt     time.Time          `bson:"created_at" json:"created_at"`
-	UpdatedAt     time.Time          `bson:"updated_at" json:"updated_at"`
+	ID             primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
+	EmployeeID     primitive.ObjectID `bson:"employee_id" json:"employee_id"`
+	ApprovesID     primitive.ObjectID `bson:"approves_id" json:"approves_id"`
+	LeaveType      string             `bson:"leave_type" json:"leave_type"` // Example: "Sick Leave", "Annual Leave", "Unpaid Leave"
+	StartDate      time.Time          `bson:"start_date" json:"start_date"`
+	EndDate        time.Time          `bson:"end_date" json:"end_date"`
+	RequestDays    int                `bson:"request_days" json:"request_days"`
+	RemainingDays  int                `bson:"remaining_days" json:"remaining_days"`
+	TotalLeaveDays int                `bson:"total_leave_days" json:"total_leave_days"`
+	Status         string             `bson:"status" json:"status"` // Example: "Approved", "Pending", "Rejected"
+	CreatedAt      time.Time          `bson:"created_at" json:"created_at"`
+	UpdatedAt      time.Time          `bson:"updated_at" json:"updated_at"`
 }
 
 type Input struct {

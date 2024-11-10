@@ -22,7 +22,7 @@ func UpdateToCloud(publicID string, filename string) (interface{}, error) {
 		return "", err
 	}
 
-	resultRes := models_cloudinary.models_cloudinary{
+	resultRes := models_cloudinary.Update{
 		URL:       result.URL,
 		SecureURL: result.SecureURL,
 		CreateAt:  result.CreatedAt.String(),

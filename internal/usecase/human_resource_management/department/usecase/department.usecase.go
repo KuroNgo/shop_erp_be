@@ -38,6 +38,7 @@ func (d *departmentUseCase) CreateOne(ctx context.Context, input *departmentsdom
 		return err
 	}
 
+	// không được trùng tên department
 	count, err := d.departmentRepository.CountDepartmentWithName(ctx, input.Name)
 	if err != nil {
 		return err
@@ -82,6 +83,7 @@ func (d *departmentUseCase) CreateDepartmentWithManager(ctx context.Context, dep
 			UpdatedAt:   time.Now(),
 		}
 
+		// Không được trùng tên department
 		count, err := d.departmentRepository.CountDepartmentWithName(sessionCtx, departmentInput.Name)
 		if err != nil {
 			return nil, err

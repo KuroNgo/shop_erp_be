@@ -27,5 +27,6 @@ func LeaveRequestRouter(env *config.Database, timeout time.Duration, db *mongo.D
 	router.GET("/get/all", leaveRequest.GetAll)
 	router.POST("/create", leaveRequest.CreateOne)
 	router.PUT("/update", leaveRequest.UpdateOne)
+	router.PUT("/update/remaining", leaveRequest.UpdateRemainingLeaveDays)
 	router.DELETE("/delete", leaveRequest.DeleteOne)
 }

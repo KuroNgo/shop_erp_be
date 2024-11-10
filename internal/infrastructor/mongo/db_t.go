@@ -1,4 +1,4 @@
-package infrastructor
+package mongo
 
 import (
 	"context"

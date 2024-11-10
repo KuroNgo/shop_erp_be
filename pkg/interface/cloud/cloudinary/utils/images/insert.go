@@ -8,7 +8,7 @@ import (
 	"shop_erp_mono/pkg/interface/cloud/cloudinary/models"
 )
 
-func UploadImageToCloudinary(file multipart.File, filePath string, folder string) (models_cloudinary.models_cloudinary, error) {
+func UploadImageToCloudinary(file multipart.File, filePath string, folder string) (models_cloudinary.UploadImage, error) {
 	ctx := context.Background()
 	cld, err := cloudinary.SetupCloudinary()
 	if err != nil {

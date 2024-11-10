@@ -1,4 +1,4 @@
-package infrastructor
+package mongo
 
 import (
 	mongodriven "go.mongodb.org/mongo-driver/mongo"

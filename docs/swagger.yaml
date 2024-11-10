@@ -233,6 +233,8 @@ definitions:
     type: object
   leave_request_domain.Input:
     properties:
+      approves:
+        type: string
       employee:
         example: admin@admin.com
         type: string
@@ -243,6 +245,8 @@ definitions:
         description: 'Example: "Sick Leave", "Annual Leave", "Unpaid Leave"'
         example: Sick Leave
         type: string
+      remaining_days:
+        type: integer
       start_date:
         example: 20/07/2024
         type: string
@@ -307,6 +311,10 @@ definitions:
     type: object
   product_domain.Input:
     properties:
+      asset_url:
+        type: string
+      avatar_url:
+        type: string
       description:
         type: string
       expiry_date:
@@ -2030,6 +2038,19 @@ paths:
       security:
       - CookieAuth: []
       summary: Update Leave Request Information
+      tags:
+      - Leave Request
+  /api/v1/leave-requests/update/remaining:
+    put:
+      consumes:
+      - application/json
+      description: Delete the leave request's information
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Delete Leave Request Information
       tags:
       - Leave Request
   /api/v1/order-details/create:

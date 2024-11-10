@@ -12,7 +12,7 @@ import (
 // @Tags Inventory
 // @Accept json
 // @Produce json
-// @Param input body inventorydomain.Input true "Inventory input data"
+// @Param input body inventory_domain.Input true "Inventory input data"
 // @Router /api/v1/inventory/create [post]
 func (i *InventoryController) CreateInventory(ctx *gin.Context) {
 	var input inventorydomain.Input

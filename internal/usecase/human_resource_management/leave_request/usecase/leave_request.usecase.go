@@ -3,9 +3,11 @@ package leave_request_usecase
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"log"
 	employeesdomain "shop_erp_mono/internal/domain/human_resource_management/employees"
 	leaverequestdomain "shop_erp_mono/internal/domain/human_resource_management/leave_request"
 	"shop_erp_mono/internal/usecase/human_resource_management/leave_request/validate"
@@ -39,6 +41,12 @@ func (l *leaveRequestUseCase) CreateOne(ctx context.Context, input *leaverequest
 
 	employeeData, err := l.employeeRepository.GetByEmail(ctx, input.EmployeeEmail)
 	if err != nil {
+		return err
+	}
+
+	result, err := l.submitLeaveRequest(ctx, employeeData.ID.String(), input.StartDate, input.EndDate)
+	if err != nil {
+		log.Printf("%s", result)
 		return err
 	}
 
@@ -98,7 +106,7 @@ func (l *leaveRequestUseCase) UpdateOne(ctx context.Context, id string, input *l
 	}
 
 	leaveRequest := &leaverequestdomain.LeaveRequest{
-		ID:         primitive.NewObjectID(),
+		ID:         leaveRequestID,
 		EmployeeID: employeeData.ID,
 		LeaveType:  input.LeaveType,
 		StartDate:  input.StartDate,
@@ -112,6 +120,64 @@ func (l *leaveRequestUseCase) UpdateOne(ctx context.Context, id string, input *l
 	_ = l.cache.Delete("leaveRequests")
 
 	return l.leaveRequestRepository.UpdateOne(ctx, leaveRequestID, leaveRequest)
+}
+
+func (l *leaveRequestUseCase) UpdateOneWithApproved(ctx context.Context, requestID string) error {
+	err := l.approvedLeaveRequest(ctx, requestID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (l *leaveRequestUseCase) UpdateRemainingLeaveDays(ctx context.Context) error {
+	const batchSize = 100 // Kích thước batch processing
+
+	employees, err := l.employeeRepository.GetAll(ctx)
+	if err != nil {
+		return err
+	}
+
+	session, err := l.client.StartSession()
+	if err != nil {
+		return err
+	}
+	defer session.EndSession(ctx)
+
+	for i := 0; i < len(employees); i += batchSize {
+		end := i + batchSize
+		if end > len(employees) {
+			end = len(employees)
+		}
+		batch := employees[i:end]
+
+		// Transaction callback cho mỗi batch
+		callback := func(sessionCtx mongo.SessionContext) (interface{}, error) {
+			for _, employee := range batch {
+				// Lấy dữ liệu yêu cầu nghỉ phép cho mỗi nhân viên
+				leaveRequestData, err := l.leaveRequestRepository.GetByEmployeeID(sessionCtx, employee.ID)
+				if err != nil {
+					return nil, err
+				}
+
+				// Cập nhật số ngày nghỉ còn lại
+				leaveRequestData.RemainingDays += leaveRequestData.TotalLeaveDays
+				err = l.leaveRequestRepository.UpdateRemainingLeaveDays(sessionCtx, employee.ID, leaveRequestData.RemainingDays)
+				if err != nil {
+					return nil, err
+				}
+			}
+			return nil, nil
+		}
+
+		// Chạy transaction cho batch hiện tại
+		if _, err := session.WithTransaction(ctx, callback); err != nil {
+			return err // Trả về lỗi ngay khi transaction fail
+		}
+	}
+
+	return nil
 }
 
 func (l *leaveRequestUseCase) GetByID(ctx context.Context, id string) (leaverequestdomain.Output, error) {
@@ -249,4 +315,88 @@ func (l *leaveRequestUseCase) GetAll(ctx context.Context) ([]leaverequestdomain.
 	}
 
 	return outputs, nil
+}
+
+func calculatedRequestDays(startDate, endDate time.Time) (int, error) {
+	if endDate.Before(startDate) {
+		return 0, errors.New("end date cannot before start date")
+	}
+
+	days := int(endDate.Sub(startDate).Hours() / 24)
+	return days + 1, nil
+}
+
+func (l *leaveRequestUseCase) submitLeaveRequest(ctx context.Context, employeeID string, startDate, endDate time.Time) (string, error) {
+	requestedDays, err := calculatedRequestDays(startDate, endDate)
+	if err != nil {
+		return "", err
+	}
+
+	idEmployee, err := primitive.ObjectIDFromHex(employeeID)
+	if err != nil {
+		return "", err
+	}
+
+	// Get remaining days from database
+	remainingLeaveDays, err := l.leaveRequestRepository.GetRemainingLeaveDays(ctx, idEmployee)
+	if err != nil {
+		return "", err
+	}
+
+	if requestedDays > remainingLeaveDays {
+		return "insufficient leave balance", err
+	}
+
+	return "leave request submitted successfully", nil
+}
+
+func (l *leaveRequestUseCase) approvedLeaveRequest(ctx context.Context, requestID string) error {
+	idRequest, err := primitive.ObjectIDFromHex(requestID)
+	if err != nil {
+		return err
+	}
+
+	session, err := l.client.StartSession()
+	if err != nil {
+		return err
+	}
+	defer session.EndSession(context.Background())
+
+	callback := func(sessionCtx mongo.SessionContext) (interface{}, error) {
+		requestData, err := l.leaveRequestRepository.GetByID(sessionCtx, idRequest)
+		if err != nil {
+			return nil, err
+		}
+
+		remainingDays, err := l.leaveRequestRepository.GetRemainingLeaveDays(sessionCtx, requestData.EmployeeID)
+		if err != nil {
+			return nil, err
+
+		}
+
+		if requestData.RemainingDays > remainingDays {
+			return nil, errors.New("insufficient leave balance to approve this request")
+		}
+
+		err = l.leaveRequestRepository.UpdateRemainingLeaveDays(sessionCtx,
+			requestData.EmployeeID, remainingDays-requestData.RemainingDays)
+		if err != nil {
+			return nil, err
+		}
+
+		err = l.leaveRequestRepository.UpdateStatus(sessionCtx, requestData.EmployeeID, "Approved")
+		if err != nil {
+			return nil, err
+		}
+
+		return nil, nil
+	}
+
+	// Run the transaction
+	_, err = session.WithTransaction(ctx, callback)
+	if err != nil {
+		return err
+	}
+
+	return session.CommitTransaction(ctx)
 }
