@@ -1,10 +1,8 @@
-{{define "base"}}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    {{template "style" .}}
     <title>{{ .Subject }}</title>
     <style>
         /* Căn giữa nội dung email */
@@ -12,29 +10,29 @@
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4; /* Màu nền nhẹ cho toàn bộ email */
-            text-align: center; /* Căn giữa nội dung toàn bộ body */
+            background-color: #f4f4f4;
+            text-align: center;
         }
         table {
             border-collapse: collapse;
             width: 100%;
-            margin: 0 auto; /* Căn giữa table trong email */
+            margin: 0 auto;
         }
         .container {
             width: 100%;
-            max-width: 600px; /* Kích thước tối đa của email */
-            margin: 0 auto; /* Căn giữa container trong table */
-            background-color: #ffffff; /* Nền trắng cho container */
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
             padding: 20px;
-            border-radius: 8px; /* Bo tròn góc cho container */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng nhẹ */
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         .header {
-            background-color: #007bff; /* Màu nền của header */
-            text-align: center; /* Căn giữa nội dung footer */
-            color: #ffffff; /* Màu chữ trong header */
+            background-color: #007bff;
+            text-align: center;
+            color: #ffffff;
             padding: 20px;
-            border-radius: 6px 6px 0 0; /* Bo tròn góc trên của header */
+            border-radius: 6px 6px 0 0;
             font-size: 24px;
             font-weight: bold;
         }
@@ -45,38 +43,32 @@
         }
         .content {
             padding: 20px;
-            text-align: left; /* Đảm bảo nội dung chính được căn trái */
+            text-align: left;
         }
         .footer {
             margin-top: 20px;
             padding-top: 10px;
             border-top: 1px solid #dddddd;
-            text-align: center; /* Căn giữa nội dung footer */
+            text-align: center;
             font-size: 12px;
-            color: #777777; /* Màu chữ của footer */
+            color: #777777;
         }
         .verification-code {
             font-size: 24px;
             font-weight: bold;
-            color: #007bff; /* Màu chữ của mã xác thực */
+            color: #007bff;
         }
         .footer a {
-            color: #007bff; /* Màu liên kết trong footer */
-            text-decoration: none; /* Không gạch chân liên kết */
+            color: #007bff;
+            text-decoration: none;
         }
         .footer a:hover {
-            text-decoration: underline; /* Gạch chân khi di chuột qua */
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-<table
-        role="presentation"
-        border="0"
-        cellpadding="0"
-        cellspacing="0"
-        class="body"
->
+<table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
     <tr>
         <td class="container">
             <div class="header">
@@ -84,7 +76,13 @@
             </div>
             <div class="content">
                 <!-- START CENTERED WHITE CONTAINER -->
-                {{block "content" .}}{{end}}
+                <p style="margin: 0 0 10px;">Hi {{ .FullName }},</p>
+                <p style="margin: 0 0 10px;">We have received a request to sign up for your account.</p>
+                <p style="margin: 0 0 10px;">Please use the verification code below to proceed with Create A New Account:</p>
+                <p class="verification-code" style="font-size: 24px; font-weight: bold; color: #007bff; margin: 0 0 10px;">{{ .Code }}</p>
+                <p style="margin: 0 0 10px;">If you did not make this request, please ignore this email or contact us immediately.</p>
+                <p style="margin: 0;">Thank you,</p>
+                <p style="margin: 0;">The Kuro Team</p>
                 <!-- END CENTERED WHITE CONTAINER -->
             </div>
             <div class="footer">
@@ -95,4 +93,3 @@
 </table>
 </body>
 </html>
-{{end}}

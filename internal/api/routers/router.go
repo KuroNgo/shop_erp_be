@@ -1,6 +1,7 @@
 package routers
 
 import (
+	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -19,6 +20,11 @@ func SetUp(env *config.Database, timeout time.Duration, db *mongo.Database, clie
 	accounting_management.SetUp(env, timeout, db, gin)
 	sales_and_distributing_management.SetUp(env, timeout, db, gin, cacheTTL)
 	warehouse_management.SetUp(env, timeout, db, gin, cacheTTL)
+
+	err := DataSeeds(context.Background(), client)
+	if err != nil {
+		fmt.Print("data seed is error")
+	}
 
 	// Đếm các route
 	routeCount := countRoutes(gin)

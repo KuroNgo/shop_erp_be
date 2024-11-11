@@ -1,11 +1,11 @@
-package data_seeder
+package user_seeder
 
 import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	userdomain "shop_erp_mono/domain/human_resource_management/user"
+	userdomain "shop_erp_mono/internal/domain/human_resource_management/user"
 	"shop_erp_mono/pkg/shared/password"
 	"time"
 )

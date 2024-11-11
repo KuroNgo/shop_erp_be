@@ -45,7 +45,7 @@ func (u *userUseCase) SignUp(ctx context.Context, file *multipart.FileHeader, in
 	defer session.EndSession(ctx)
 
 	callback := func(sessionCtx mongo_driven.SessionContext) (interface{}, error) {
-		if err := validate.User(input); err != nil {
+		if err = validate.User(input); err != nil {
 			return nil, err
 		}
 
@@ -67,7 +67,7 @@ func (u *userUseCase) SignUp(ctx context.Context, file *multipart.FileHeader, in
 				Email:        input.Email,
 				PasswordHash: hashedPassword,
 				Verified:     false,
-				Provider:     "fe-it",
+				Provider:     "inside",
 				CreatedAt:    time.Now(),
 				UpdatedAt:    time.Now(),
 			}
@@ -88,18 +88,18 @@ func (u *userUseCase) SignUp(ctx context.Context, file *multipart.FileHeader, in
 			}
 
 			// Update User in Database
-			err = u.userRepository.UpdateVerify(sessionCtx, &updUser)
+			err = u.userRepository.UpdateVerificationCode(sessionCtx, &updUser)
 			if err != nil {
 				return nil, err
 			}
 
 			emailData := handles.EmailData{
-				Code:      code,
-				FirstName: newUser.Username,
-				Subject:   "Your account verification code",
+				Code:     code,
+				FullName: newUser.Username,
+				Subject:  "Your account verification code: " + code,
 			}
 
-			err = handles.SendEmail(&emailData, newUser.Email, "sign_in_first_time.html")
+			err = handles.SendEmail(&emailData, newUser.Email, "user.sign_up.html")
 			if err != nil {
 				return nil, err
 			}
@@ -131,7 +131,7 @@ func (u *userUseCase) SignUp(ctx context.Context, file *multipart.FileHeader, in
 			Email:        input.Email,
 			PasswordHash: hashedPassword,
 			Verified:     false,
-			Provider:     "fe-it",
+			Provider:     "app",
 			Role:         "user",
 			Phone:        input.Phone,
 			CreatedAt:    time.Now(),
@@ -140,6 +140,33 @@ func (u *userUseCase) SignUp(ctx context.Context, file *multipart.FileHeader, in
 
 		// thực hiện đăng ký người dùng
 		err = u.userRepository.CreateOne(sessionCtx, &newUser)
+		if err != nil {
+			return nil, err
+		}
+
+		var code string
+		code = randstr.Dec(6)
+
+		updUser := userdomain.User{
+			ID:               newUser.ID,
+			VerificationCode: code,
+			Verified:         false,
+			UpdatedAt:        time.Now(),
+		}
+
+		// Update User in Database
+		err = u.userRepository.UpdateVerificationCode(sessionCtx, &updUser)
+		if err != nil {
+			return nil, err
+		}
+
+		emailData := handles.EmailData{
+			Code:     code,
+			FullName: newUser.Username,
+			Subject:  "Your account verification code: " + code,
+		}
+
+		err = handles.SendEmail(&emailData, newUser.Email, "user.sign_up.html")
 		if err != nil {
 			return nil, err
 		}
@@ -163,10 +190,6 @@ func (u *userUseCase) GetByVerificationCode(ctx context.Context, verificationCod
 
 	user, err := u.userRepository.GetByVerificationCode(ctx, verificationCode)
 	if err != nil {
-		return userdomain.Output{}, err
-	}
-
-	if user.Verified != true {
 		return userdomain.Output{}, err
 	}
 
@@ -382,12 +405,12 @@ func (u *userUseCase) ForgetPassword(ctx context.Context, email string) error {
 		}
 
 		emailData := handles.EmailData{
-			Code:      code,
-			FirstName: user.Username,
-			Subject:   "Khôi phục mật khẩu",
+			Code:     code,
+			FullName: user.Username,
+			Subject:  "Khôi phục mật khẩu",
 		}
 
-		err = handles.SendEmail(&emailData, user.Email, "forget_password.html")
+		err = handles.SendEmail(&emailData, user.Email, "user.forget_password.html")
 		if err != nil {
 			return nil, err
 		}
@@ -430,6 +453,7 @@ func (u *userUseCase) LoginGoogle(ctx context.Context, code string) (*userdomain
 
 	// Giả sử userInfo là một map[string]interface{}
 	email := userInfo["email"].(string)
+	phone := userInfo["phone"].(string)
 	fullName := userInfo["name"].(string)
 	avatarURL := userInfo["picture"].(string)
 	verifiedEmail := userInfo["verified_email"].(bool)
@@ -437,10 +461,12 @@ func (u *userUseCase) LoginGoogle(ctx context.Context, code string) (*userdomain
 	user := &userdomain.User{
 		ID:        primitive.NewObjectID(),
 		Email:     email,
+		Phone:     phone,
 		Username:  fullName,
 		AvatarURL: avatarURL,
 		Provider:  "google",
 		Verified:  verifiedEmail,
+		Role:      "guess",
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}

@@ -6,7 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	budgetsdomain "shop_erp_mono/domain/accounting_management/budgets"
+	budgetsdomain "shop_erp_mono/internal/domain/accounting_management/budgets"
 	"time"
 )
 

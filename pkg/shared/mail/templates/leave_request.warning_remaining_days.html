@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Leave Request Notification</title>
+</head>
+<body>
+<h1>Leave Request Notification</h1>
+<p>Dear {{.FullName}},</p>
+<p>Your leave request has been reviewed. Unfortunately, the requested leave period exceeds your available leave balance.</p>
+<p>Please consider adjusting your leave period or contact HR for further assistance.</p>
+
+<form action="{{.ActionURL}}" method="post">
+    <input type="hidden" name="employee_id" value="{{.EmployeeID}}">
+    <button type="submit" name="action" value="accept">Accept Adjustment</button>
+</form>
+
+<p>
+    <strong>HR Contact:</strong><br>
+    Email: <a href="mailto:{{.HREmail}}">{{.HREmail}}</a>
+</p>
+
+<p>Thank you for your attention to this matter.</p>
+<p>Sincerely,<br>HR Department</p>
+</body>
+</html>

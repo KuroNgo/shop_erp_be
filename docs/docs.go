@@ -2400,6 +2400,27 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/api/v1/leave-requests/update/_id": {
+            "put": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Updates the leave request's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Leave Request"
+                ],
+                "summary": "Update Leave Request Information",
+                "responses": {}
+            }
+        },
         "/api/v1/leave-requests/update/remaining": {
             "put": {
                 "security": [
@@ -4706,7 +4727,7 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/api/v1/users/register": {
+        "/api/v1/users/signup": {
             "post": {
                 "security": [
                     {
@@ -4755,15 +4776,13 @@ const docTemplate = `{
                         "example": "\"http://example.com/avatar.jpg\"",
                         "description": "Avatar URL of the user",
                         "name": "avatarUrl",
-                        "in": "formData",
-                        "required": true
+                        "in": "formData"
                     },
                     {
                         "type": "file",
                         "description": "Image file to upload",
                         "name": "file",
-                        "in": "formData",
-                        "required": true
+                        "in": "formData"
                     },
                     {
                         "type": "string",

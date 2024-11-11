@@ -9,7 +9,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	userdomain "shop_erp_mono/internal/domain/human_resource_management/user"
-	"sync"
 )
 
 type userRepository struct {
@@ -20,11 +19,6 @@ type userRepository struct {
 func NewUserRepository(db *mongo.Database, collectionUser string) userdomain.IUserRepository {
 	return &userRepository{database: db, collectionUser: collectionUser}
 }
-
-var (
-	wg sync.WaitGroup
-	mu sync.Mutex
-)
 
 func (r *userRepository) FetchMany(ctx context.Context) ([]userdomain.User, error) {
 	collectionUser := r.database.Collection(r.collectionUser)
@@ -170,7 +164,28 @@ func (r *userRepository) UpdateVerify(ctx context.Context, user *userdomain.User
 	collectionUser := r.database.Collection(r.collectionUser)
 
 	filter := bson.M{"_id": user.ID}
-	update := bson.M{"$set": bson.M{"verify": user.Verified}}
+	update := bson.M{"$set": bson.M{
+		"verify":     user.Verified,
+		"updated_at": user.UpdatedAt,
+	}}
+
+	_, err := collectionUser.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return errors.New(err.Error() + "error in the updating user's data into database")
+	}
+
+	return nil
+}
+
+func (r *userRepository) UpdateVerificationCode(ctx context.Context, user *userdomain.User) error {
+	collectionUser := r.database.Collection(r.collectionUser)
+
+	filter := bson.M{"_id": user.ID}
+	update := bson.M{"$set": bson.M{
+		"verify":            user.Verified,
+		"verification_code": user.VerificationCode,
+		"updated_at":        user.UpdatedAt,
+	}}
 
 	_, err := collectionUser.UpdateOne(ctx, filter, update)
 	if err != nil {

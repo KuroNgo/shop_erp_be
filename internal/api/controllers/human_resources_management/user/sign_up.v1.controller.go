@@ -16,11 +16,11 @@ import (
 // @Param email formData string true "Email of the user" example("john.doe@example.com")
 // @Param password formData string true "Password of the user" example("securepassword123")
 // @Param fullName formData string true "Full name of the user" example("John Doe")
-// @Param avatarUrl formData string true "Avatar URL of the user" example("http://example.com/avatar.jpg")
-// @Param file formData file true "Image file to upload"
+// @Param avatarUrl formData string false "Avatar URL of the user" example("http://example.com/avatar.jpg")
+// @Param file formData file false "Image file to upload"
 // @Param phone formData string true "Phone number of the user" example("+1234567890")
 // @Security ApiKeyAuth
-// @Router /api/v1/users/register [post]
+// @Router /api/v1/users/signup [post]
 func (u *UserController) SignUp(ctx *gin.Context) {
 	emailForm := ctx.Request.FormValue("email")
 	passwordForm := ctx.Request.FormValue("password")

@@ -7,7 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	invoicesdomain "shop_erp_mono/domain/accounting_management/invoices"
+	invoicesdomain "shop_erp_mono/internal/domain/accounting_management/invoices"
 	"time"
 )
 

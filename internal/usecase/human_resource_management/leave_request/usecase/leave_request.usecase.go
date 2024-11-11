@@ -11,6 +11,8 @@ import (
 	employeesdomain "shop_erp_mono/internal/domain/human_resource_management/employees"
 	leaverequestdomain "shop_erp_mono/internal/domain/human_resource_management/leave_request"
 	"shop_erp_mono/internal/usecase/human_resource_management/leave_request/validate"
+	"shop_erp_mono/pkg/shared/mail/handles"
+	"sync"
 	"time"
 )
 
@@ -44,7 +46,7 @@ func (l *leaveRequestUseCase) CreateOne(ctx context.Context, input *leaverequest
 		return err
 	}
 
-	result, err := l.submitLeaveRequest(ctx, employeeData.ID.String(), input.StartDate, input.EndDate)
+	result, err := l.submitLeaveRequest(ctx, employeeData.ID, input)
 	if err != nil {
 		log.Printf("%s", result)
 		return err
@@ -56,15 +58,16 @@ func (l *leaveRequestUseCase) CreateOne(ctx context.Context, input *leaverequest
 	}
 
 	leaveRequest := &leaverequestdomain.LeaveRequest{
-		ID:         primitive.NewObjectID(),
-		EmployeeID: employeeData.ID,
-		ApprovesID: approvesData.ID,
-		LeaveType:  input.LeaveType,
-		StartDate:  input.StartDate,
-		EndDate:    input.EndDate,
-		Status:     input.Status,
-		CreatedAt:  time.Now(),
-		UpdatedAt:  time.Now(),
+		ID:          primitive.NewObjectID(),
+		EmployeeID:  employeeData.ID,
+		ApprovesID:  approvesData.ID,
+		LeaveType:   input.LeaveType,
+		StartDate:   input.StartDate,
+		EndDate:     input.EndDate,
+		RequestDays: time.Now(),
+		Status:      input.Status,
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
 	}
 
 	_ = l.cache.Delete("leaveRequests")
@@ -326,28 +329,91 @@ func calculatedRequestDays(startDate, endDate time.Time) (int, error) {
 	return days + 1, nil
 }
 
-func (l *leaveRequestUseCase) submitLeaveRequest(ctx context.Context, employeeID string, startDate, endDate time.Time) (string, error) {
-	requestedDays, err := calculatedRequestDays(startDate, endDate)
+func (uc *leaveRequestUseCase) submitLeaveRequest(ctx context.Context, employeeID primitive.ObjectID, input *leaverequestdomain.Input) (string, error) {
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
+	requestedDays, err := calculatedRequestDays(input.StartDate, input.EndDate)
 	if err != nil {
 		return "", err
 	}
 
-	idEmployee, err := primitive.ObjectIDFromHex(employeeID)
+	remainingLeaveDays, err := uc.leaveRequestRepository.GetRemainingLeaveDays(ctx, employeeID)
 	if err != nil {
 		return "", err
 	}
 
-	// Get remaining days from database
-	remainingLeaveDays, err := l.leaveRequestRepository.GetRemainingLeaveDays(ctx, idEmployee)
+	employeeData, err := uc.employeeRepository.GetByID(ctx, employeeID)
 	if err != nil {
 		return "", err
 	}
 
-	if requestedDays > remainingLeaveDays {
-		return "insufficient leave balance", err
-	}
+	errCh := make(chan error, 1)
+	var wg sync.WaitGroup
 
-	return "leave request submitted successfully", nil
+	// Check leave balance
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		if requestedDays > remainingLeaveDays {
+			emailData := handles.EmailData{
+				FullName: employeeData.FirstName + employeeData.LastName,
+				HREmail:  "kurongo.test@gmail.com",
+			}
+			if err := handles.SendEmail(&emailData, employeeData.Email, "leave_request.warning_remaining_days.html"); err != nil {
+				errCh <- err
+			} else {
+				errCh <- errors.New("insufficient leave balance")
+			}
+			cancel() // Cancel other goroutines if leave balance is insufficient
+		}
+	}()
+
+	// Send email based on leave type
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		leaveTypeMapping := map[string]string{
+			"Sick Leave":   "sick",
+			"Annual Leave": "annual",
+			"Maternity":    "maternity",
+			"Unpaid Leave": "unpaid",
+		}
+		leaveType, exists := leaveTypeMapping[input.LeaveType]
+		if exists {
+			emailData := handles.EmailData{
+				FullName:  employeeData.FirstName + employeeData.LastName,
+				HREmail:   "kurongo.test@gmail.com",
+				LeaveType: leaveType,
+			}
+			if err := handles.SendEmail(&emailData, employeeData.Email, "leave_request.leave_type.html"); err != nil {
+				errCh <- err
+				cancel() // Cancel other goroutines if email sending fails
+			}
+		}
+	}()
+
+	// Close the error channel once all goroutines are done
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	// Use select to handle errors as soon as they occur
+	for {
+		select {
+		case err, ok := <-errCh:
+			if ok && err != nil {
+				return "", err
+			}
+		case <-ctx.Done():
+			return "", ctx.Err()
+		default:
+			if len(errCh) == 0 {
+				return "leave request submitted successfully", nil
+			}
+		}
+	}
 }
 
 func (l *leaveRequestUseCase) approvedLeaveRequest(ctx context.Context, requestID string) error {

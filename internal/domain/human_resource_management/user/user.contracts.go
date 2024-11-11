@@ -15,6 +15,7 @@ type IUserRepository interface {
 	UpdateOne(ctx context.Context, user *User) error
 	UpdatePassword(ctx context.Context, user *User) error
 	UpdateVerify(ctx context.Context, user *User) error
+	UpdateVerificationCode(ctx context.Context, user *User) error
 	UpsertOne(ctx context.Context, user *User) (*User, error)
 	UpdateImage(ctx context.Context, user *User) error
 

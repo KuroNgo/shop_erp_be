@@ -3,10 +3,10 @@ package constant
 const (
 	BCCAdmin3 = "hoaiphong01012002@gmail.com"
 
-	Mailer1  = "hoaiphong01012002@gmail.com"
+	Mailer1  = "kurongo.test@gmail.com"
 	MailTest = "2011423@dlu.edu.vn"
 
-	Password1 = "iguhalllohlaewge"
+	Password1 = "mnnzlcqmoueoysqr"
 
 	Admin = "admin"
 	User  = "user"

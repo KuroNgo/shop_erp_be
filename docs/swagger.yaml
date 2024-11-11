@@ -2040,6 +2040,19 @@ paths:
       summary: Update Leave Request Information
       tags:
       - Leave Request
+  /api/v1/leave-requests/update/_id:
+    put:
+      consumes:
+      - application/json
+      description: Updates the leave request's information
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Update Leave Request Information
+      tags:
+      - Leave Request
   /api/v1/leave-requests/update/remaining:
     put:
       consumes:
@@ -3562,7 +3575,7 @@ paths:
       summary: Change password
       tags:
       - User
-  /api/v1/users/register:
+  /api/v1/users/signup:
     post:
       consumes:
       - application/x-www-form-urlencoded
@@ -3591,12 +3604,10 @@ paths:
         example: '"http://example.com/avatar.jpg"'
         in: formData
         name: avatarUrl
-        required: true
         type: string
       - description: Image file to upload
         in: formData
         name: file
-        required: true
         type: file
       - description: Phone number of the user
         example: '"+1234567890"'

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Leave Type Notification</title>
+</head>
+<body>
+<h1>Leave Type Notification</h1>
+
+<p>Dear {{.FullName}},</p>
+<p>Your leave request has been received and is currently under review.</p>
+
+{{if eq .LeaveType "sick"}}
+<p>You have selected <strong>Sick Leave</strong> as your leave type. Please note that for sick leave, a medical certificate or report from a hospital or doctor is required to support your request.</p>
+{{else if eq .LeaveType "annual"}}
+<p>You have selected <strong>Annual Leave</strong>. No additional documentation is required.</p>
+{{else if eq .LeaveType "maternity"}}
+<p>You have selected <strong>Maternity Leave</strong>. Please provide any relevant documents as per company policy.</p>
+{{else}}
+<p>You have selected <strong>Other</strong> leave type. Please ensure you meet all requirements specific to this leave type.</p>
+{{end}}
+
+<p>If you have any questions, please feel free to contact HR for further assistance.</p>
+
+<p>
+    <strong>HR Contact:</strong><br>
+    Email: <a href="mailto:{{.HREmail}}">{{.HREmail}}</a><br>
+    Phone: <a href="tel:{{.HRPhone}}">{{.HRPhone}}</a>
+</p>
+
+<p>Thank you for your attention to this matter.</p>
+<p>Sincerely,<br>HR Department</p>
+</body>
+</html>

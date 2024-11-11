@@ -4,7 +4,7 @@ import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	transaction_categories_domain "shop_erp_mono/domain/accounting_management/transaction_categories"
+	transaction_categories_domain "shop_erp_mono/internal/domain/accounting_management/transaction_categories"
 )
 
 type transactionCategoryRepository struct {

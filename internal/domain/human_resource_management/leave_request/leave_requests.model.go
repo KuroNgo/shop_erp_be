@@ -18,7 +18,7 @@ type LeaveRequest struct {
 	LeaveType      string             `bson:"leave_type" json:"leave_type"` // Example: "Sick Leave", "Annual Leave", "Unpaid Leave"
 	StartDate      time.Time          `bson:"start_date" json:"start_date"`
 	EndDate        time.Time          `bson:"end_date" json:"end_date"`
-	RequestDays    int                `bson:"request_days" json:"request_days"`
+	RequestDays    time.Time          `bson:"request_days" json:"request_days"`
 	RemainingDays  int                `bson:"remaining_days" json:"remaining_days"`
 	TotalLeaveDays int                `bson:"total_leave_days" json:"total_leave_days"`
 	Status         string             `bson:"status" json:"status"` // Example: "Approved", "Pending", "Rejected"
@@ -29,10 +29,11 @@ type LeaveRequest struct {
 type Input struct {
 	EmployeeEmail string    `bson:"employee" json:"employee" example:"admin@admin.com"`
 	ApprovesEmail string    `bson:"approves" json:"approves"`
-	LeaveType     string    `bson:"leave_type" json:"leave_type" example:"Sick Leave"` // Example: "Sick Leave", "Annual Leave", "Unpaid Leave"
+	LeaveType     string    `bson:"leave_type" json:"leave_type" example:"Sick Leave"`
 	StartDate     time.Time `bson:"start_date" json:"start_date" example:"20/07/2024"`
 	EndDate       time.Time `bson:"end_date" json:"end_date" example:"20/07/2024"`
 	RemainingDays int       `bson:"remaining_days" json:"remaining_days"`
+	RequestDays   time.Time `bson:"request_days" json:"request_days"`
 	Status        string    `bson:"status" json:"status" example:"Approved"` // Example: "Approved", "Pending", "Rejected"
 }
 
