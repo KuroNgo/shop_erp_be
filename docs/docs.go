@@ -5267,6 +5267,10 @@ const docTemplate = `{
                     "type": "string",
                     "example": "Responsible for managing employee relations, recruitment, and company culture."
                 },
+                "level": {
+                    "type": "integer",
+                    "example": 1
+                },
                 "managerEmail": {
                     "type": "string",
                     "example": "admin@admin.com"
@@ -5274,6 +5278,10 @@ const docTemplate = `{
                 "name": {
                     "type": "string",
                     "example": "Human Resources"
+                },
+                "parentID": {
+                    "description": "tên phòng ban cha",
+                    "type": "string"
                 }
             }
         },
@@ -5468,12 +5476,14 @@ const docTemplate = `{
                     "example": "20/07/2024"
                 },
                 "leave_type": {
-                    "description": "Example: \"Sick Leave\", \"Annual Leave\", \"Unpaid Leave\"",
                     "type": "string",
                     "example": "Sick Leave"
                 },
                 "remaining_days": {
                     "type": "integer"
+                },
+                "request_days": {
+                    "type": "string"
                 },
                 "start_date": {
                     "type": "string",

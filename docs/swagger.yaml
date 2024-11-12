@@ -106,11 +106,17 @@ definitions:
         example: Responsible for managing employee relations, recruitment, and company
           culture.
         type: string
+      level:
+        example: 1
+        type: integer
       managerEmail:
         example: admin@admin.com
         type: string
       name:
         example: Human Resources
+        type: string
+      parentID:
+        description: tên phòng ban cha
         type: string
     type: object
   employees_domain.Input:
@@ -242,11 +248,12 @@ definitions:
         example: 20/07/2024
         type: string
       leave_type:
-        description: 'Example: "Sick Leave", "Annual Leave", "Unpaid Leave"'
         example: Sick Leave
         type: string
       remaining_days:
         type: integer
+      request_days:
+        type: string
       start_date:
         example: 20/07/2024
         type: string

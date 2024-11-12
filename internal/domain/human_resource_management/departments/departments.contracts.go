@@ -22,7 +22,7 @@ type IDepartmentRepository interface {
 type IDepartmentUseCase interface {
 	CreateOne(ctx context.Context, input *Input) error
 	CreateDepartmentWithManager(ctx context.Context, departmentInput *Input, employeeInput *employees_domain.Input) error
-	DeleteOne(ctx context.Context, id string) error
+	DeleteOne(ctx context.Context, id string, userID string) error
 	UpdateOne(ctx context.Context, id string, input *Input) error
 	GetByID(ctx context.Context, id string) (Output, error)
 	GetByName(ctx context.Context, name string) (Output, error)

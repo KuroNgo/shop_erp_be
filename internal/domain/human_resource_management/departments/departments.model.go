@@ -10,20 +10,23 @@ const (
 	CollectionDepartment = "department"
 )
 
-// Department struct represents a department within the company.
 type Department struct {
 	ID          primitive.ObjectID `bson:"_id,omitempty"`
 	ManagerID   primitive.ObjectID `bson:"manager_id"`
 	Name        string             `bson:"name"`
 	Description string             `bson:"description"`
+	ParentID    primitive.ObjectID `bson:"parent_id,omitempty"` // phòng ban cha
+	Level       int                `bson:"level"`               // cấp bậc phòng ban
 	CreatedAt   time.Time          `bson:"created_at"`
 	UpdatedAt   time.Time          `bson:"updated_at"`
 }
 
 type Input struct {
-	Name         string `bson:"name" example:"Human Resources"`
-	Description  string `bson:"description" example:"Responsible for managing employee relations, recruitment, and company culture."`
-	ManagerEmail string `bson:"manager_email" example:"admin@admin.com"`
+	Name         string             `bson:"name" example:"Human Resources"`
+	Level        int                `bson:"level" example:"1"`
+	ParentID     primitive.ObjectID `bson:"parent_id,omitempty"` // tên phòng ban cha
+	Description  string             `bson:"description" example:"Responsible for managing employee relations, recruitment, and company culture."`
+	ManagerEmail string             `bson:"manager_email" example:"admin@admin.com"`
 }
 
 // Output struct represents a department within the company.

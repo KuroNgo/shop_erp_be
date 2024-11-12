@@ -9,7 +9,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	departmentsdomain "shop_erp_mono/internal/domain/human_resource_management/departments"
 	employeesdomain "shop_erp_mono/internal/domain/human_resource_management/employees"
+	userdomain "shop_erp_mono/internal/domain/human_resource_management/user"
 	"shop_erp_mono/internal/usecase/human_resource_management/department/validate"
+	"shop_erp_mono/pkg/shared/constant"
+	"strconv"
+	"sync"
 	"time"
 )
 
@@ -17,17 +21,18 @@ type departmentUseCase struct {
 	contextTimeout       time.Duration
 	departmentRepository departmentsdomain.IDepartmentRepository
 	employeeRepository   employeesdomain.IEmployeeRepository
+	userRepository       userdomain.IUserRepository
 	client               *mongo.Client
 	cache                *bigcache.BigCache
 }
 
 func NewDepartmentUseCase(contextTimeout time.Duration, departmentRepository departmentsdomain.IDepartmentRepository,
-	employeeRepository employeesdomain.IEmployeeRepository, cacheTTL time.Duration, client *mongo.Client) departmentsdomain.IDepartmentUseCase {
+	employeeRepository employeesdomain.IEmployeeRepository, userRepository userdomain.IUserRepository, cacheTTL time.Duration, client *mongo.Client) departmentsdomain.IDepartmentUseCase {
 	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
 	if err != nil {
 		return nil
 	}
-	return &departmentUseCase{contextTimeout: contextTimeout, cache: cache, departmentRepository: departmentRepository, employeeRepository: employeeRepository, client: client}
+	return &departmentUseCase{contextTimeout: contextTimeout, cache: cache, departmentRepository: departmentRepository, userRepository: userRepository, employeeRepository: employeeRepository, client: client}
 }
 
 func (d *departmentUseCase) CreateOne(ctx context.Context, input *departmentsdomain.Input) error {
@@ -48,10 +53,33 @@ func (d *departmentUseCase) CreateOne(ctx context.Context, input *departmentsdom
 		return errors.New("name of department is exist")
 	}
 
+	if input.Level == 1 {
+		if input.ParentID != primitive.NilObjectID {
+			return errors.New("a department with Level 1 cannot have a ParentID")
+		}
+	} else {
+		// Nếu có ParentID, kiểm tra tính hợp lệ
+		if input.ParentID != primitive.NilObjectID {
+			parentDept, err := d.departmentRepository.GetByID(ctx, input.ParentID)
+			if err != nil {
+				return errors.New("parent department not found")
+			}
+
+			// Kiểm tra điều kiện hợp lệ cho Level
+			if parentDept.Level != input.Level-1 {
+				return errors.New("invalid level: parent department must have a level of " + strconv.Itoa(input.Level-1))
+			}
+		} else {
+			return errors.New("a department with Level " + strconv.Itoa(input.Level) + " requires a valid ParentID")
+		}
+	}
+
 	department := &departmentsdomain.Department{
 		ID:          primitive.NewObjectID(),
 		Name:        input.Name,
 		Description: input.Description,
+		ParentID:    input.ParentID,
+		Level:       input.Level,
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
 	}
@@ -74,15 +102,6 @@ func (d *departmentUseCase) CreateDepartmentWithManager(ctx context.Context, dep
 	defer session.EndSession(ctx)
 
 	callback := func(sessionCtx mongo.SessionContext) (interface{}, error) {
-		// Step 1: Create department
-		department := &departmentsdomain.Department{
-			ID:          primitive.NewObjectID(),
-			Name:        departmentInput.Name,
-			Description: departmentInput.Description,
-			CreatedAt:   time.Now(),
-			UpdatedAt:   time.Now(),
-		}
-
 		// Không được trùng tên department
 		count, err := d.departmentRepository.CountDepartmentWithName(sessionCtx, departmentInput.Name)
 		if err != nil {
@@ -91,6 +110,42 @@ func (d *departmentUseCase) CreateDepartmentWithManager(ctx context.Context, dep
 
 		if count > 0 {
 			return nil, errors.New("name of department is exist")
+		}
+
+		if count > 0 {
+			return nil, errors.New("name of department is exist")
+		}
+
+		if departmentInput.Level == 1 {
+			if departmentInput.ParentID != primitive.NilObjectID {
+				return nil, errors.New("a department with Level 1 cannot have a ParentID")
+			}
+		} else {
+			// Nếu có ParentID, kiểm tra tính hợp lệ
+			if departmentInput.ParentID != primitive.NilObjectID {
+				parentDept, err := d.departmentRepository.GetByID(ctx, departmentInput.ParentID)
+				if err != nil {
+					return nil, errors.New("parent department not found")
+				}
+
+				// Kiểm tra điều kiện hợp lệ cho Level
+				if parentDept.Level != departmentInput.Level-1 {
+					return nil, errors.New("invalid level: parent department must have a level of " + strconv.Itoa(departmentInput.Level-1))
+				}
+			} else {
+				return nil, errors.New("a department with Level " + strconv.Itoa(departmentInput.Level) + " requires a valid ParentID")
+			}
+		}
+
+		// Step 1: Create department
+		department := &departmentsdomain.Department{
+			ID:          primitive.NewObjectID(),
+			Name:        departmentInput.Name,
+			Description: departmentInput.Description,
+			ParentID:    departmentInput.ParentID,
+			Level:       departmentInput.Level,
+			CreatedAt:   time.Now(),
+			UpdatedAt:   time.Now(),
 		}
 
 		err = d.departmentRepository.CreateOne(sessionCtx, department)
@@ -164,19 +219,44 @@ func (d *departmentUseCase) CreateDepartmentWithManager(ctx context.Context, dep
 	return session.CommitTransaction(ctx)
 }
 
-func (d *departmentUseCase) DeleteOne(ctx context.Context, id string) error {
+func (d *departmentUseCase) DeleteOne(ctx context.Context, id string, userid string) error {
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
 
 	departmentID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
+		return errors.New("invalid department ID format")
+	}
+
+	userID, err := primitive.ObjectIDFromHex(userid)
+	if err != nil {
+		return errors.New("invalid user ID format")
+	}
+
+	userData, err := d.userRepository.GetByID(ctx, userID)
+	if err != nil {
+		return errors.New("user not found")
+	}
+
+	if userData.Role != constant.RoleSuperAdmin {
+		return errors.New("permission denied: only users with the highest role can delete departments")
+	}
+
+	departmentData, err := d.departmentRepository.GetByID(ctx, departmentID)
+	if err != nil {
+		return errors.New("department not found")
+	}
+
+	if departmentData.ManagerID == primitive.NilObjectID {
+		return errors.New("cannot delete department with null manager")
+	}
+
+	if err = d.departmentRepository.DeleteOne(ctx, departmentID); err != nil {
 		return err
 	}
 
 	_ = d.cache.Delete("departments")
-	_ = d.cache.Delete("departments")
-
-	return d.departmentRepository.DeleteOne(ctx, departmentID)
+	return nil
 }
 
 func (d *departmentUseCase) UpdateOne(ctx context.Context, id string, input *departmentsdomain.Input) error {
@@ -235,8 +315,6 @@ func (d *departmentUseCase) UpdateOne(ctx context.Context, id string, input *dep
 	}
 
 	_ = d.cache.Delete("departments")
-	_ = d.cache.Delete("departments")
-
 	return session.CommitTransaction(ctx)
 }
 
@@ -327,8 +405,15 @@ func (d *departmentUseCase) GetAll(ctx context.Context) ([]departmentsdomain.Out
 	if data != nil {
 		var response []departmentsdomain.Output
 		err = json.Unmarshal(data, &response)
+		if err != nil {
+			return nil, err
+		}
 		return response, nil
 	}
+
+	errCh := make(chan error, 1)
+	var wg sync.WaitGroup
+	var mutex sync.Mutex // Mutex để đồng bộ thao tác với slice outputs
 
 	departmentsData, err := d.departmentRepository.GetAll(ctx)
 	if err != nil {
@@ -337,18 +422,43 @@ func (d *departmentUseCase) GetAll(ctx context.Context) ([]departmentsdomain.Out
 
 	var outputs []departmentsdomain.Output
 	outputs = make([]departmentsdomain.Output, 0, len(departmentsData))
+
 	for _, departmentData := range departmentsData {
-		managerData, err := d.employeeRepository.GetByID(ctx, departmentData.ManagerID)
+		wg.Add(1)
+		go func(departmentData departmentsdomain.Department) {
+			defer wg.Done()
+
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				managerData, err := d.employeeRepository.GetByID(ctx, departmentData.ManagerID)
+				if err != nil {
+					errCh <- err
+					return
+				}
+
+				output := departmentsdomain.Output{
+					Department: departmentData,
+					Manager:    *managerData,
+				}
+
+				mutex.Lock()
+				outputs = append(outputs, output)
+				mutex.Unlock()
+			}
+		}(departmentData)
+	}
+
+	wg.Wait()
+	close(errCh)
+
+	select {
+	case err = <-errCh:
 		if err != nil {
 			return nil, err
 		}
-
-		output := departmentsdomain.Output{
-			Department: departmentData,
-			Manager:    *managerData,
-		}
-
-		outputs = append(outputs, output)
+	default:
 	}
 
 	data, err = json.Marshal(outputs)
