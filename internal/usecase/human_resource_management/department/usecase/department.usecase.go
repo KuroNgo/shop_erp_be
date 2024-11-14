@@ -318,6 +318,28 @@ func (d *departmentUseCase) UpdateOne(ctx context.Context, id string, input *dep
 	return session.CommitTransaction(ctx)
 }
 
+func (d *departmentUseCase) UpdateManager(ctx context.Context, id string, managerID string) error {
+	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
+	defer cancel()
+
+	departmentID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return errors.New("invalid department ID format")
+	}
+
+	idManager, err := primitive.ObjectIDFromHex(managerID)
+	if err != nil {
+		return errors.New("invalid employee ID format")
+	}
+
+	managerData, err := d.employeeRepository.GetByID(ctx, idManager)
+	if err != nil {
+		return err
+	}
+
+	return d.departmentRepository.UpdateManager(ctx, departmentID, managerData.ID)
+}
+
 func (d *departmentUseCase) GetByID(ctx context.Context, id string) (departmentsdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()

@@ -32,7 +32,7 @@ type IUserUseCase interface {
 
 	UpdateOne(ctx context.Context, userID string, input *Input, file *multipart.FileHeader) error
 	UpdateVerify(ctx context.Context, id string, input *Input) error
-	UpdateImage(ctx context.Context, id string, input *Input, file *multipart.FileHeader) error
+	UpdateImage(ctx context.Context, id string, file *multipart.FileHeader) error
 
 	SignUp(ctx context.Context, file *multipart.FileHeader, input *Input) error
 	LoginUser(ctx context.Context, signIn *SignIn) (OutputLogin, error)

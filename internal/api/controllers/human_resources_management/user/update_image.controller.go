@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-// UpdateUser updates the user's information
+// UpdateImage updates the user's information
 // @Summary Update User Information
 // @Description Updates the user's first name, last name, and username
 // @Tags User

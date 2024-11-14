@@ -513,16 +513,12 @@ func (u *userUseCase) LoginGoogle(ctx context.Context, code string) (*userdomain
 	return output, output2, nil
 }
 
-func (u *userUseCase) UpdateImage(ctx context.Context, id string, input *userdomain.Input, file *multipart.FileHeader) error {
+func (u *userUseCase) UpdateImage(ctx context.Context, id string, file *multipart.FileHeader) error {
 	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
 	defer cancel()
 
 	idUser, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
-		return err
-	}
-
-	if err = validate.User(input); err != nil {
 		return err
 	}
 
@@ -562,8 +558,8 @@ func (u *userUseCase) UpdateImage(ctx context.Context, id string, input *userdom
 
 		user := userdomain.User{
 			ID:        idUser,
-			AvatarURL: input.AvatarURL,
-			AssetURL:  input.AssetURL,
+			AvatarURL: imageURL.ImageURL,
+			AssetURL:  imageURL.AssetID,
 			UpdatedAt: time.Now(),
 		}
 
