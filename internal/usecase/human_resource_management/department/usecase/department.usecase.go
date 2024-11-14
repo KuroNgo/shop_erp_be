@@ -7,6 +7,7 @@ import (
 	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"log"
 	departmentsdomain "shop_erp_mono/internal/domain/human_resource_management/departments"
 	employeesdomain "shop_erp_mono/internal/domain/human_resource_management/employees"
 	userdomain "shop_erp_mono/internal/domain/human_resource_management/user"
@@ -84,7 +85,9 @@ func (d *departmentUseCase) CreateOne(ctx context.Context, input *departmentsdom
 		UpdatedAt:   time.Now(),
 	}
 
-	_ = d.cache.Delete("departments")
+	if err = d.cache.Delete("departments"); err != nil {
+		log.Printf("failed to delete departments cache: %v", err)
+	}
 
 	return d.departmentRepository.CreateOne(ctx, department)
 }
@@ -214,7 +217,9 @@ func (d *departmentUseCase) CreateDepartmentWithManager(ctx context.Context, dep
 		return err
 	}
 
-	_ = d.cache.Delete("departments")
+	if err = d.cache.Delete("departments"); err != nil {
+		log.Printf("failed to delete departments cache: %v", err)
+	}
 
 	return session.CommitTransaction(ctx)
 }
@@ -251,11 +256,17 @@ func (d *departmentUseCase) DeleteOne(ctx context.Context, id string, userid str
 		return errors.New("cannot delete department with null manager")
 	}
 
+	var mu sync.Mutex
+	mu.Lock()
+	defer mu.Unlock()
 	if err = d.departmentRepository.DeleteOne(ctx, departmentID); err != nil {
 		return err
 	}
 
-	_ = d.cache.Delete("departments")
+	if err = d.cache.Delete("departments"); err != nil {
+		log.Printf("failed to delete departments cache: %v", err)
+	}
+
 	return nil
 }
 
@@ -314,7 +325,10 @@ func (d *departmentUseCase) UpdateOne(ctx context.Context, id string, input *dep
 		return err
 	}
 
-	_ = d.cache.Delete("departments")
+	if err = d.cache.Delete("departments"); err != nil {
+		log.Printf("failed to delete departments cache: %v", err)
+	}
+
 	return session.CommitTransaction(ctx)
 }
 
@@ -337,6 +351,10 @@ func (d *departmentUseCase) UpdateManager(ctx context.Context, id string, manage
 		return err
 	}
 
+	if err = d.cache.Delete("departments"); err != nil {
+		log.Printf("failed to delete departments cache: %v", err)
+	}
+
 	return d.departmentRepository.UpdateManager(ctx, departmentID, managerData.ID)
 }
 
@@ -346,7 +364,7 @@ func (d *departmentUseCase) GetByID(ctx context.Context, id string) (departments
 
 	data, err := d.cache.Get(id)
 	if err != nil {
-		return departmentsdomain.Output{}, err
+		log.Printf("failed to get departments cache: %v", err)
 	}
 
 	if data != nil {
@@ -376,7 +394,7 @@ func (d *departmentUseCase) GetByID(ctx context.Context, id string) (departments
 
 	err = d.cache.Set(id, data)
 	if err != nil {
-		return departmentsdomain.Output{}, err
+		log.Printf("failed to set departments cache: %v", err)
 	}
 
 	return output, nil
@@ -388,7 +406,7 @@ func (d *departmentUseCase) GetByName(ctx context.Context, name string) (departm
 
 	data, err := d.cache.Get(name)
 	if err != nil {
-		return departmentsdomain.Output{}, err
+		log.Printf("failed to get departments cache: %v", err)
 	}
 
 	if data != nil {
@@ -413,8 +431,9 @@ func (d *departmentUseCase) GetByName(ctx context.Context, name string) (departm
 
 	err = d.cache.Set(name, data)
 	if err != nil {
-		return departmentsdomain.Output{}, err
+		log.Printf("failed to set departments cache: %v", err)
 	}
+
 	return output, nil
 }
 
@@ -424,6 +443,10 @@ func (d *departmentUseCase) GetAll(ctx context.Context) ([]departmentsdomain.Out
 	defer cancel()
 
 	data, err := d.cache.Get("departments")
+	if err != nil {
+		log.Printf("failed to get departments cache: %v", err)
+	}
+
 	if data != nil {
 		var response []departmentsdomain.Output
 		err = json.Unmarshal(data, &response)
@@ -490,7 +513,7 @@ func (d *departmentUseCase) GetAll(ctx context.Context) ([]departmentsdomain.Out
 
 	err = d.cache.Set("departments", data)
 	if err != nil {
-		return nil, err
+		log.Printf("failed to set departments cache: %v", err)
 	}
 
 	return outputs, nil

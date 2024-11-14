@@ -1,6 +1,7 @@
 package department_controller
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -15,9 +16,17 @@ import (
 // @Router /api/v1/departments/delete/_id [delete]
 // @Security CookieAuth
 func (d *DepartmentController) DeleteOne(ctx *gin.Context) {
+	currentUser, exist := ctx.Get("currentUser")
+	if !exist {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"status":  "error",
+			"message": "You are not login!",
+		})
+		return
+	}
 	departmentID := ctx.Query("_id")
 
-	if err := d.DepartmentUseCase.DeleteOne(ctx, departmentID); err != nil {
+	if err := d.DepartmentUseCase.DeleteOne(ctx, departmentID, fmt.Sprintf("%s", currentUser)); err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{
 			"status":  "error",
 			"message": err.Error(),

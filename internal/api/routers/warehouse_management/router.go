@@ -28,7 +28,7 @@ func SetUp(env *config.Database, timeout time.Duration, db *mongo.Database, gin 
 
 	// Middleware
 	publicRouter.Use(
-		middlewares.CORSPublic(),
+		middlewares.CORSPrivate(),
 		middlewares.Recover(),
 		gzip.Gzip(gzip.DefaultCompression,
 			gzip.WithExcludedPaths([]string{",*"})),
