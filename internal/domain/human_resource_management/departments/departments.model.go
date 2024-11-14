@@ -15,8 +15,8 @@ type Department struct {
 	ManagerID   primitive.ObjectID `bson:"manager_id"`
 	Name        string             `bson:"name"`
 	Description string             `bson:"description"`
-	ParentID    primitive.ObjectID `bson:"parent_id,omitempty"` // phòng ban cha
-	Level       int                `bson:"level"`               // cấp bậc phòng ban
+	ParentID    primitive.ObjectID `bson:"parent_id,omitempty"`
+	Level       int                `bson:"level"`
 	CreatedAt   time.Time          `bson:"created_at"`
 	UpdatedAt   time.Time          `bson:"updated_at"`
 }
@@ -24,7 +24,7 @@ type Department struct {
 type Input struct {
 	Name         string             `bson:"name" example:"Human Resources"`
 	Level        int                `bson:"level" example:"1"`
-	ParentID     primitive.ObjectID `bson:"parent_id,omitempty"` // tên phòng ban cha
+	ParentID     primitive.ObjectID `bson:"parent_id,omitempty"`
 	Description  string             `bson:"description" example:"Responsible for managing employee relations, recruitment, and company culture."`
 	ManagerEmail string             `bson:"manager_email" example:"admin@admin.com"`
 }

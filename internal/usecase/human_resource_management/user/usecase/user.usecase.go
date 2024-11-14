@@ -123,6 +123,13 @@ func (u *userUseCase) SignUp(ctx context.Context, file *multipart.FileHeader, in
 			return nil, err
 		}
 
+		// Đảm bảo xóa ảnh trên Cloudinary nếu xảy ra lỗi sau khi tải lên thành công
+		defer func() {
+			if err != nil {
+				_, _ = imagescloudinary.DeleteToCloudinary(imageURL.AssetID)
+			}
+		}()
+
 		newUser := userdomain.User{
 			ID:           primitive.NewObjectID(),
 			Username:     input.Username,
@@ -200,7 +207,7 @@ func (u *userUseCase) GetByVerificationCode(ctx context.Context, verificationCod
 	}
 
 	// Update User in Database
-	err = u.userRepository.UpdateVerify(ctx, &updUser)
+	err = u.userRepository.UpdateVerificationCode(ctx, &updUser)
 	if err != nil {
 		return userdomain.Output{}, err
 	}
@@ -506,9 +513,75 @@ func (u *userUseCase) LoginGoogle(ctx context.Context, code string) (*userdomain
 	return output, output2, nil
 }
 
-func (u *userUseCase) UpdateImage(ctx context.Context, id string, input *userdomain.Input) error {
-	//TODO implement me
-	panic("implement me")
+func (u *userUseCase) UpdateImage(ctx context.Context, id string, input *userdomain.Input, file *multipart.FileHeader) error {
+	ctx, cancel := context.WithTimeout(ctx, u.contextTimeout)
+	defer cancel()
+
+	idUser, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+
+	if err = validate.User(input); err != nil {
+		return err
+	}
+
+	session, err := u.client.StartSession()
+	if err != nil {
+		return err
+	}
+	defer session.EndSession(ctx)
+
+	callback := func(sessionCtx mongo_driven.SessionContext) (interface{}, error) {
+		if file == nil {
+			return nil, errors.New("images not nil")
+		}
+
+		// Kiểm tra xem file có phải là hình ảnh không
+		if !helper2.IsImage(file.Filename) {
+			return nil, err
+		}
+
+		f, err := file.Open()
+		if err != nil {
+			return nil, err
+		}
+		defer f.Close()
+
+		imageURL, err := imagescloudinary.UploadImageToCloudinary(f, file.Filename, u.database.CloudinaryUploadFolderUser)
+		if err != nil {
+			return nil, err
+		}
+
+		// Đảm bảo xóa ảnh trên Cloudinary nếu xảy ra lỗi sau khi tải lên thành công
+		defer func() {
+			if err != nil {
+				_, _ = imagescloudinary.DeleteToCloudinary(imageURL.AssetID)
+			}
+		}()
+
+		user := userdomain.User{
+			ID:        idUser,
+			AvatarURL: input.AvatarURL,
+			AssetURL:  input.AssetURL,
+			UpdatedAt: time.Now(),
+		}
+
+		err = u.userRepository.UpdateImage(sessionCtx, &user)
+		if err != nil {
+			return nil, err
+		}
+
+		return nil, nil
+	}
+
+	// Run the transaction
+	_, err = session.WithTransaction(ctx, callback)
+	if err != nil {
+		return err
+	}
+
+	return session.CommitTransaction(ctx)
 }
 
 func (u *userUseCase) DeleteOne(ctx context.Context, idUser string) error {

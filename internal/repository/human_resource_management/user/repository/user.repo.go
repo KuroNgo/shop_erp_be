@@ -230,7 +230,10 @@ func (r *userRepository) UpdateImage(ctx context.Context, user *userdomain.User)
 	collectionUser := r.database.Collection(r.collectionUser)
 
 	filter := bson.M{"_id": user.ID}
-	update := bson.M{"$set": bson.M{"avatar_url": user.AvatarURL}}
+	update := bson.M{"$set": bson.M{
+		"avatar_url": user.AvatarURL,
+		"asset_url":  user.AssetURL,
+	}}
 
 	_, err := collectionUser.UpdateOne(ctx, filter, update)
 	if err != nil {

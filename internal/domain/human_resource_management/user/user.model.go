@@ -33,6 +33,7 @@ type Input struct {
 	Username         string `bson:"username" json:"username"`
 	PasswordHash     string `bson:"password_hash" json:"password_hash"` // Hash of the password
 	AvatarURL        string `bson:"avatar_url"  json:"avatar_url"`
+	AssetURL         string `bson:"asset_url"  json:"asset_url"`
 	Email            string `bson:"email" json:"email"`
 	Phone            string `json:"phone" bson:"phone"`
 	Verified         bool   `bson:"verify"   json:"verify"`
