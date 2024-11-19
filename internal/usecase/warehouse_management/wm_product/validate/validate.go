@@ -17,10 +17,6 @@ func Product(input *productdomain.Input) error {
 		return errors.New("the wm_product's information do not nil")
 	}
 
-	if input.QuantityInStock < 0 {
-		return errors.New("the wm_product's information do not valid")
-	}
-
 	if input.Price < 0 {
 		return errors.New("the wm_product's information do not valid")
 	}

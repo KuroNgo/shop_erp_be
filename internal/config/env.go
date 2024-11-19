@@ -52,7 +52,7 @@ type Database struct {
 
 func NewEnv() *Database {
 	env := Database{}
-	viper.SetConfigFile("app.env")
+	viper.SetConfigFile("internal/config/app.env")
 
 	err := viper.ReadInConfig()
 	if err != nil {

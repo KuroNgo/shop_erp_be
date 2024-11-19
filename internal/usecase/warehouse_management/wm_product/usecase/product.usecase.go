@@ -40,14 +40,13 @@ func (p *productUseCase) CreateOne(ctx context.Context, input *productdomain.Inp
 	}
 
 	product := productdomain.Product{
-		ID:              primitive.NewObjectID(),
-		CategoryID:      categoryData.ID,
-		ProductName:     input.ProductName,
-		Description:     input.Description,
-		Price:           input.Price,
-		QuantityInStock: input.QuantityInStock,
-		UpdatedAt:       time.Now(),
-		CreatedAt:       time.Now(),
+		ID:          primitive.NewObjectID(),
+		CategoryID:  categoryData.ID,
+		ProductName: input.ProductName,
+		Description: input.Description,
+		Price:       input.Price,
+		UpdatedAt:   time.Now(),
+		CreatedAt:   time.Now(),
 	}
 
 	return p.productRepository.CreateOne(ctx, product)
@@ -72,14 +71,13 @@ func (p *productUseCase) UpdateOne(ctx context.Context, id string, input *produc
 	}
 
 	product := productdomain.Product{
-		ID:              primitive.NewObjectID(),
-		CategoryID:      categoryData.ID,
-		ProductName:     input.ProductName,
-		Description:     input.Description,
-		Price:           input.Price,
-		QuantityInStock: input.QuantityInStock,
-		UpdatedAt:       time.Now(),
-		CreatedAt:       time.Now(),
+		ID:          primitive.NewObjectID(),
+		CategoryID:  categoryData.ID,
+		ProductName: input.ProductName,
+		Description: input.Description,
+		Price:       input.Price,
+		UpdatedAt:   time.Now(),
+		CreatedAt:   time.Now(),
 	}
 
 	return p.productRepository.UpdateOne(ctx, productID, product)

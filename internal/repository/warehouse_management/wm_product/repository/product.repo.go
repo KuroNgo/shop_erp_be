@@ -35,12 +35,11 @@ func (p *productRepository) UpdateOne(ctx context.Context, id primitive.ObjectID
 
 	filter := bson.M{"_id": id}
 	update := bson.M{"$set": bson.M{
-		"product_name":      product.ProductName,
-		"description":       product.Description,
-		"price":             product.Price,
-		"quantity_in_stock": product.QuantityInStock,
-		"category_id":       product.CategoryID,
-		"updated_at":        time.Now(),
+		"product_name": product.ProductName,
+		"description":  product.Description,
+		"price":        product.Price,
+		"category_id":  product.CategoryID,
+		"updated_at":   time.Now(),
 	}}
 
 	_, err := productCollection.UpdateOne(ctx, filter, update)
