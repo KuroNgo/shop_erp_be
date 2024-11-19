@@ -2,12 +2,15 @@ package inventory_usecase
 
 import (
 	"context"
+	"errors"
 	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"log"
 	inventory_domain "shop_erp_mono/internal/domain/warehouse_management/inventory"
 	productdomain "shop_erp_mono/internal/domain/warehouse_management/product"
 	warehousedomain "shop_erp_mono/internal/domain/warehouse_management/warehouse"
 	"shop_erp_mono/internal/usecase/warehouse_management/inventory/validate"
+	"shop_erp_mono/pkg/shared/mail/handles"
 	"time"
 )
 
@@ -268,6 +271,62 @@ func (i *inventoryUseCase) CheckInventoryAvailability(ctx context.Context, produ
 	}
 
 	return i.inventoryRepository.CheckAvailability(ctx, idProduct, idWarehouse, requiredQuantity)
+}
+
+func (i *inventoryUseCase) CheckStockAvailability(ctx context.Context, productID string, quantity int) (bool, error) {
+	ctx, cancel := context.WithTimeout(ctx, i.contextTimeout)
+	defer cancel()
+
+	idProduct, err := primitive.ObjectIDFromHex(productID)
+	if err != nil {
+		return false, err
+	}
+
+	stock, err := i.inventoryRepository.CheckQuantity(ctx, idProduct, quantity)
+	if err != nil {
+		return false, err
+	}
+
+	if stock == false {
+		return false, errors.New("out of stock")
+	}
+
+	return true, nil
+}
+
+func (i *inventoryUseCase) CheckAndNotifyWarning(ctx context.Context) error {
+	products, err := i.inventoryRepository.WarningOutOfStock(ctx)
+	if err != nil {
+		log.Printf("Error checking inventory warnings: %v", err)
+		return err
+	}
+
+	var productWarnings []string
+	productWarnings = make([]string, 0, len(products))
+	if len(products) > 0 {
+		for _, product := range products {
+			productWarning, err := i.productRepository.GetByID(ctx, product.ProductID)
+			if err != nil {
+				return err
+			}
+
+			productWarnings = append(productWarnings, productWarning.ProductName)
+		}
+	}
+
+	emailData := handles.EmailData{
+		Subject:     "Warning: Products Running Low on Stock",
+		ProductList: productWarnings,
+	}
+
+	bossEmail := "hoaiphong01012002@gmail.com"
+	err = handles.SendEmail(&emailData, bossEmail, "inventory.warning_product.html")
+	if err != nil {
+		return err
+	}
+
+	log.Println("Warning email sent successfully!")
+	return nil
 }
 
 func (i *inventoryUseCase) ListAllInventories(ctx context.Context) ([]inventory_domain.InventoryResponse, error) {

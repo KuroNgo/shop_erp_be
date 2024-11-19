@@ -1,24 +1,56 @@
-package cron
+package cronjob
 
 import (
+	"context"
 	"fmt"
-	"github.com/robfig/cron"
+	"github.com/robfig/cron/v3"
+	"log"
 )
 
-func InitCronScheduler() *cron.Cron {
-	//Create a new cron instance
-	c := cron.New()
+type CronScheduler struct {
+	c        *cron.Cron
+	entryMap map[string]cron.EntryID
+}
 
-	// Add a cron job that runs every 10 seconds
-	err := c.AddFunc("@weekly", func() {
-		fmt.Println("Cron scheduler is running...")
+func NewCronScheduler() *CronScheduler {
+	return &CronScheduler{
+		c:        cron.New(),
+		entryMap: make(map[string]cron.EntryID),
+	}
+}
+
+func (cs *CronScheduler) Start() {
+	// Bắt đầu cron scheduler
+	log.Println("Starting cron scheduler...")
+	cs.c.Start()
+}
+
+func (cs *CronScheduler) AddCronJob(name, cronExpression string, taskFunc func(ctx context.Context) error) cron.EntryID {
+	entryID, err := cs.c.AddFunc(cronExpression, func() {
+		err := taskFunc(context.Background())
+		if err != nil {
+			log.Printf("Error in cron job: %v", err)
+		}
 	})
+
 	if err != nil {
-		return nil
+		log.Printf("Error adding cron job: %v", err)
 	}
 
-	c.Start()
+	cs.entryMap[name] = entryID
+	return entryID
+}
 
-	fmt.Println("Cron scheduler initialized")
-	return c
+func (cs *CronScheduler) RemoveJob(name string) error {
+	if entryID, exists := cs.entryMap[name]; exists {
+		cs.c.Remove(entryID)
+		delete(cs.entryMap, name)
+		log.Printf("Removed job: %s", name)
+		return nil
+	}
+	return fmt.Errorf("job '%s' not found", name)
+}
+
+func (cs *CronScheduler) GetJobCount() int {
+	return len(cs.entryMap)
 }

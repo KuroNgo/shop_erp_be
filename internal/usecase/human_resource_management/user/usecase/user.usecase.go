@@ -13,7 +13,7 @@ import (
 	"shop_erp_mono/internal/config"
 	userdomain "shop_erp_mono/internal/domain/human_resource_management/user"
 	"shop_erp_mono/internal/usecase/human_resource_management/user/validate"
-	imagescloudinary "shop_erp_mono/pkg/interface/cloud/cloudinary/utils/images"
+	"shop_erp_mono/pkg/interface/cloudinary/utils/images"
 	"shop_erp_mono/pkg/interface/oauth2/google"
 	helper2 "shop_erp_mono/pkg/shared/helper"
 	"shop_erp_mono/pkg/shared/mail/handles"
@@ -118,7 +118,7 @@ func (u *userUseCase) SignUp(ctx context.Context, file *multipart.FileHeader, in
 		}
 		defer f.Close()
 
-		imageURL, err := imagescloudinary.UploadImageToCloudinary(f, file.Filename, u.database.CloudinaryUploadFolderUser)
+		imageURL, err := images_cloudinary.UploadImageToCloudinary(f, file.Filename, u.database.CloudinaryUploadFolderUser)
 		if err != nil {
 			return nil, err
 		}
@@ -126,7 +126,7 @@ func (u *userUseCase) SignUp(ctx context.Context, file *multipart.FileHeader, in
 		// Đảm bảo xóa ảnh trên Cloudinary nếu xảy ra lỗi sau khi tải lên thành công
 		defer func() {
 			if err != nil {
-				_, _ = imagescloudinary.DeleteToCloudinary(imageURL.AssetID)
+				_, _ = images_cloudinary.DeleteToCloudinary(imageURL.AssetID)
 			}
 		}()
 
@@ -544,7 +544,7 @@ func (u *userUseCase) UpdateImage(ctx context.Context, id string, file *multipar
 		}
 		defer f.Close()
 
-		imageURL, err := imagescloudinary.UploadImageToCloudinary(f, file.Filename, u.database.CloudinaryUploadFolderUser)
+		imageURL, err := images_cloudinary.UploadImageToCloudinary(f, file.Filename, u.database.CloudinaryUploadFolderUser)
 		if err != nil {
 			return nil, err
 		}
@@ -552,7 +552,7 @@ func (u *userUseCase) UpdateImage(ctx context.Context, id string, file *multipar
 		// Đảm bảo xóa ảnh trên Cloudinary nếu xảy ra lỗi sau khi tải lên thành công
 		defer func() {
 			if err != nil {
-				_, _ = imagescloudinary.DeleteToCloudinary(imageURL.AssetID)
+				_, _ = images_cloudinary.DeleteToCloudinary(imageURL.AssetID)
 			}
 		}()
 

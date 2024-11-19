@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-// Logger methods interface
+// ILogger methods interface
 //
 //go:generate mockery --name ILogger
 type ILogger interface {

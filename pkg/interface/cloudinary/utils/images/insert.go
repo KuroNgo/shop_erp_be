@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"mime/multipart"
-	"shop_erp_mono/pkg/interface/cloud/cloudinary"
-	"shop_erp_mono/pkg/interface/cloud/cloudinary/models"
+	"shop_erp_mono/pkg/interface/cloudinary"
+	"shop_erp_mono/pkg/interface/cloudinary/models"
 )
 
 func UploadImageToCloudinary(file multipart.File, filePath string, folder string) (models_cloudinary.UploadImage, error) {

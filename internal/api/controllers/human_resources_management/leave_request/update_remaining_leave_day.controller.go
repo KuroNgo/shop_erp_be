@@ -14,14 +14,7 @@ import (
 // @Router /api/v1/leave-requests/update/remaining [put]
 // @Security CookieAuth
 func (l *LeaveRequestController) UpdateRemainingLeaveDays(ctx *gin.Context) {
-	err := l.LeaveRequestUseCase.StartSchedulerUpdateRemainingLeaveDays()
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"status":  "error",
-			"message": err.Error(),
-		})
-		return
-	}
+	l.LeaveRequestUseCase.StartSchedulerUpdateRemainingLeaveDays(l.CronJob)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"status": "success",

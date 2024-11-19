@@ -13,18 +13,23 @@ const (
 
 // Inventory represents the stock of a wm_product in a warehouse.
 type Inventory struct {
-	ID          primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
-	ProductID   primitive.ObjectID `bson:"product_id" json:"product_id"`
-	WarehouseID primitive.ObjectID `bson:"warehouse_id" json:"warehouse_id"`
-	Quantity    int                `bson:"quantity" json:"quantity"`
-	CreatedAt   time.Time          `bson:"created_at" json:"created_at"`
-	UpdatedAt   time.Time          `bson:"updated_at" json:"updated_at"`
+	ID              primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
+	ProductID       primitive.ObjectID `bson:"product_id" json:"product_id"`
+	WarehouseID     primitive.ObjectID `bson:"warehouse_id" json:"warehouse_id"`
+	Quantity        int                `bson:"quantity" json:"quantity"`
+	QuantityWarning int                `bson:"quantity_warning" json:"quantity_warning"`
+	ExpiryDate      *time.Time         `bson:"expiry_date,omitempty" json:"expiry_date,omitempty"` // if applicable
+	Status          string             `bson:"status,omitempty" json:"status,omitempty"`           // e.g., "in stock", "out of stock"
+	CreatedAt       time.Time          `bson:"created_at" json:"created_at"`
+	UpdatedAt       time.Time          `bson:"updated_at" json:"updated_at"`
 }
 
 type Input struct {
-	ProductName   string `bson:"product_id" json:"product_id"`
-	WarehouseName string `bson:"warehouse_id" json:"warehouse_id"`
-	Quantity      int    `bson:"quantity" json:"quantity"`
+	ProductName   string     `bson:"product_id" json:"product_id"`
+	WarehouseName string     `bson:"warehouse_id" json:"warehouse_id"`
+	Quantity      int        `bson:"quantity" json:"quantity"`
+	ExpiryDate    *time.Time `bson:"expiry_date,omitempty" json:"expiry_date,omitempty"` // if applicable
+	Status        string     `bson:"status,omitempty" json:"status,omitempty"`           // e.g., "in stock", "out of stock"
 }
 
 type InventoryResponse struct {

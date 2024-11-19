@@ -3,7 +3,7 @@ package images_cloudinary
 import (
 	"context"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
-	"shop_erp_mono/pkg/interface/cloud/cloudinary"
+	"shop_erp_mono/pkg/interface/cloudinary"
 )
 
 func DeleteToCloudinary(assetID string) (string, error) {

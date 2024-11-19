@@ -28,7 +28,8 @@ type departmentUseCase struct {
 }
 
 func NewDepartmentUseCase(contextTimeout time.Duration, departmentRepository departmentsdomain.IDepartmentRepository,
-	employeeRepository employeesdomain.IEmployeeRepository, userRepository userdomain.IUserRepository, cacheTTL time.Duration, client *mongo.Client) departmentsdomain.IDepartmentUseCase {
+	employeeRepository employeesdomain.IEmployeeRepository, userRepository userdomain.IUserRepository,
+	cacheTTL time.Duration, client *mongo.Client) departmentsdomain.IDepartmentUseCase {
 	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
 	if err != nil {
 		return nil
@@ -109,10 +110,6 @@ func (d *departmentUseCase) CreateDepartmentWithManager(ctx context.Context, dep
 		count, err := d.departmentRepository.CountDepartmentWithName(sessionCtx, departmentInput.Name)
 		if err != nil {
 			return nil, err
-		}
-
-		if count > 0 {
-			return nil, errors.New("name of department is exist")
 		}
 
 		if count > 0 {

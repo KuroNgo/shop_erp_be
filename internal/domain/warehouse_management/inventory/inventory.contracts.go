@@ -17,6 +17,9 @@ type InventoryRepository interface {
 
 	CheckAvailability(ctx context.Context, productID primitive.ObjectID, warehouseID primitive.ObjectID, requiredQuantity int) (bool, error)
 	AdjustQuantity(ctx context.Context, id primitive.ObjectID, adjustment int) (*Inventory, error)
+	CheckQuantity(ctx context.Context, productID primitive.ObjectID, quantity int) (bool, error)
+
+	WarningOutOfStock(ctx context.Context) ([]Inventory, error)
 }
 
 type InventoryUseCase interface {
@@ -31,4 +34,6 @@ type InventoryUseCase interface {
 
 	AdjustInventoryQuantity(ctx context.Context, id string, adjustment int) (*InventoryResponse, error)
 	CheckInventoryAvailability(ctx context.Context, productID string, warehouseID string, requiredQuantity int) (bool, error)
+	CheckStockAvailability(ctx context.Context, productID string, quantity int) (bool, error)
+	CheckAndNotifyWarning(ctx context.Context) error
 }

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warning: Low Stock Alert</title>
+</head>
+<body>
+<h2 style="color: #d9534f;">Warning: Products Running Low on Stock</h2>
+<p>Hello,</p>
+<p>The following products are running low on stock:</p>
+<ul>
+    {{range .ProductList}}
+    <li>{{.}}</li>
+    {{end}}
+</ul>
+
+<p style="font-weight: bold;">Please restock these items as soon as possible to avoid running out of stock.</p>
+<p>Best regards,</p>
+<p><strong>Inventory Management System</strong></p>
+</body>
+</html>

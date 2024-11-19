@@ -3,6 +3,7 @@ package leave_request_domain
 import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	cronjob "shop_erp_mono/pkg/interface/cron"
 )
 
 type ILeaveRequestRepository interface {
@@ -26,5 +27,5 @@ type ILeaveRequestUseCase interface {
 	GetByEmailEmployee(ctx context.Context, name string) (Output, error)
 	UpdateRemainingLeaveDays(ctx context.Context) error
 	GetAll(ctx context.Context) ([]Output, error)
-	StartSchedulerUpdateRemainingLeaveDays() error
+	StartSchedulerUpdateRemainingLeaveDays(cs *cronjob.CronScheduler)
 }
