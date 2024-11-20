@@ -21,7 +21,8 @@ type stockAdjustmentUseCase struct {
 }
 
 func NewStockAdjustmentUseCase(contextTimeout time.Duration, stockAdjustmentRepository stockadjustmentdomain.IStockAdjustmentRepository,
-	productRepository productdomain.IProductRepository, warehouseRepository warehousedomain.IWarehouseRepository, cacheTTL time.Duration) stockadjustmentdomain.IStockAdjustmentUseCase {
+	productRepository productdomain.IProductRepository, warehouseRepository warehousedomain.IWarehouseRepository,
+	cacheTTL time.Duration) stockadjustmentdomain.IStockAdjustmentUseCase {
 	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
 	if err != nil {
 		return nil

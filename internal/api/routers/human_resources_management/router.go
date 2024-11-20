@@ -17,10 +17,11 @@ import (
 	salaryroute "shop_erp_mono/internal/api/routers/human_resources_management/salary"
 	userroute "shop_erp_mono/internal/api/routers/human_resources_management/user"
 	"shop_erp_mono/internal/config"
+	cronjob "shop_erp_mono/pkg/interface/cron"
 	"time"
 )
 
-func SetUp(env *config.Database, timeout time.Duration, db *mongo.Database, client *mongo.Client, gin *gin.Engine, cacheTTL time.Duration) {
+func SetUp(env *config.Database, cr *cronjob.CronScheduler, timeout time.Duration, db *mongo.Database, client *mongo.Client, gin *gin.Engine, cacheTTL time.Duration) {
 	publicRouterV1 := gin.Group("/api/v1")
 	publicRouterV2 := gin.Group("/api/v2")
 	publicRouter := gin.Group("/api")
@@ -47,7 +48,7 @@ func SetUp(env *config.Database, timeout time.Duration, db *mongo.Database, clie
 	employeeroute.EmployeeRouter(env, timeout, db, publicRouterV1, cacheTTL)
 	benefitroute.BenefitRouter(env, timeout, db, publicRouterV1, cacheTTL)
 	contractroute.ContractRouter(env, timeout, db, publicRouterV1, cacheTTL)
-	leaverequestroute.LeaveRequestRouter(env, timeout, db, client, publicRouterV1, cacheTTL)
+	leaverequestroute.LeaveRequestRouter(env, cr, timeout, db, client, publicRouterV1, cacheTTL)
 	performancereviewroute.PerformanceReviewRouterV1(env, timeout, db, publicRouterV1, cacheTTL)
 	candidateroute.CandidateRouter(env, timeout, db, client, publicRouter, cacheTTL)
 

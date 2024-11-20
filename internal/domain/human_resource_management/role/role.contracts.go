@@ -17,10 +17,12 @@ type IRoleRepository interface {
 
 type IRoleUseCase interface {
 	CreateOne(ctx context.Context, input *Input) error
+
+	UpdateOne(ctx context.Context, id string, input *Input) error
+	DeleteOne(ctx context.Context, id string) error
+
+	CountRole(ctx context.Context) (int64, error)
 	GetByTitle(ctx context.Context, title string) (Output, error)
 	GetByID(ctx context.Context, id string) (Output, error)
 	GetAll(ctx context.Context) ([]Output, error)
-	UpdateOne(ctx context.Context, id string, input *Input) error
-	DeleteOne(ctx context.Context, id string) error
-	CountRole(ctx context.Context) (int64, error)
 }

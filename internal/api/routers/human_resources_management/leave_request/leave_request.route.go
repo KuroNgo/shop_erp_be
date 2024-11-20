@@ -10,15 +10,17 @@ import (
 	employeerepository "shop_erp_mono/internal/repository/human_resource_management/employee/repository"
 	leaverequestrepository "shop_erp_mono/internal/repository/human_resource_management/leave_request/repository"
 	leave_request_usecase "shop_erp_mono/internal/usecase/human_resource_management/leave_request/usecase"
+	cronjob "shop_erp_mono/pkg/interface/cron"
 	"time"
 )
 
-func LeaveRequestRouter(env *config.Database, timeout time.Duration, db *mongo.Database, client *mongo.Client, group *gin.RouterGroup, cacheTTL time.Duration) {
+func LeaveRequestRouter(env *config.Database, cr *cronjob.CronScheduler, timeout time.Duration, db *mongo.Database, client *mongo.Client, group *gin.RouterGroup, cacheTTL time.Duration) {
 	lr := leaverequestrepository.NewLeaveRequestRepository(db, leaverequestdomain.CollectionLeaveRequest)
 	em := employeerepository.NewEmployeeRepository(db, employees_domain.CollectionEmployee)
 	leaveRequest := &leaverequestcontroller.LeaveRequestController{
 		LeaveRequestUseCase: leave_request_usecase.NewLeaveRequestUseCase(timeout, lr, em, cacheTTL, client),
 		Database:            env,
+		CronJob:             cr,
 	}
 
 	router := group.Group("/leave-requests")

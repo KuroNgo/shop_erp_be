@@ -15,7 +15,8 @@ type roleUseCase struct {
 	cache          *bigcache.BigCache
 }
 
-func NewRoleUseCase(contextTimeout time.Duration, roleRepository roledomain.IRoleRepository, cacheTTL time.Duration) roledomain.IRoleUseCase {
+func NewRoleUseCase(contextTimeout time.Duration, roleRepository roledomain.IRoleRepository,
+	cacheTTL time.Duration) roledomain.IRoleUseCase {
 	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
 	if err != nil {
 		return nil

@@ -25,7 +25,8 @@ type candidateUseCase struct {
 }
 
 func NewCandidateUseCase(contextTimeout time.Duration, candidateRepository candidatedomain.ICandidateRepository,
-	employeeRepository employeesdomain.IEmployeeRepository, cacheTTL time.Duration, client *mongo_driven.Client) candidatedomain.ICandidateUseCase {
+	employeeRepository employeesdomain.IEmployeeRepository, cacheTTL time.Duration,
+	client *mongo_driven.Client) candidatedomain.ICandidateUseCase {
 	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
 	if err != nil {
 		return nil

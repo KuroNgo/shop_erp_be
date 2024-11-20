@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	employees_domain "shop_erp_mono/internal/domain/human_resource_management/employees"
+	employeesdomain "shop_erp_mono/internal/domain/human_resource_management/employees"
 	performancereviewdomain "shop_erp_mono/internal/domain/human_resource_management/performance_review"
 	"shop_erp_mono/internal/usecase/human_resource_management/performance_review/validate"
 	"time"
@@ -14,12 +14,12 @@ import (
 type performanceReviewUseCase struct {
 	contextTimeout              time.Duration
 	performanceReviewRepository performancereviewdomain.IPerformanceReviewRepository
-	employeeRepository          employees_domain.IEmployeeRepository
+	employeeRepository          employeesdomain.IEmployeeRepository
 	cache                       *bigcache.BigCache
 }
 
 func NewPerformanceReviewUseCase(contextTimeout time.Duration, performanceReviewRepository performancereviewdomain.IPerformanceReviewRepository,
-	employeeRepository employees_domain.IEmployeeRepository, cacheTTL time.Duration) performancereviewdomain.IPerformanceReviewUseCase {
+	employeeRepository employeesdomain.IEmployeeRepository, cacheTTL time.Duration) performancereviewdomain.IPerformanceReviewUseCase {
 	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
 	if err != nil {
 		return nil

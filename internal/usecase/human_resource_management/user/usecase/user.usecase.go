@@ -29,7 +29,8 @@ type userUseCase struct {
 	client         *mongo_driven.Client
 }
 
-func NewUserUseCase(database *config.Database, contextTimeout time.Duration, userRepository userdomain.IUserRepository, client *mongo_driven.Client) userdomain.IUserUseCase {
+func NewUserUseCase(database *config.Database, contextTimeout time.Duration, userRepository userdomain.IUserRepository,
+	client *mongo_driven.Client) userdomain.IUserUseCase {
 	return &userUseCase{database: database, contextTimeout: contextTimeout, userRepository: userRepository, client: client}
 }
 

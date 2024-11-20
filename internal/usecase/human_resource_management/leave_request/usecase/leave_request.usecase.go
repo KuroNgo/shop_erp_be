@@ -25,7 +25,8 @@ type leaveRequestUseCase struct {
 }
 
 func NewLeaveRequestUseCase(contextTimeout time.Duration, leaveRequestRepository leaverequestdomain.ILeaveRequestRepository,
-	employeeRepository employeesdomain.IEmployeeRepository, cacheTTL time.Duration, client *mongo.Client) leaverequestdomain.ILeaveRequestUseCase {
+	employeeRepository employeesdomain.IEmployeeRepository, cacheTTL time.Duration,
+	client *mongo.Client) leaverequestdomain.ILeaveRequestUseCase {
 	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
 	if err != nil {
 		return nil

@@ -6,6 +6,7 @@ import (
 	"errors"
 	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"log"
 	contractsdomain "shop_erp_mono/internal/domain/human_resource_management/contracts"
 	employeesdomain "shop_erp_mono/internal/domain/human_resource_management/employees"
 	"shop_erp_mono/internal/usecase/human_resource_management/contract/validate"
@@ -57,7 +58,9 @@ func (c *contractUseCase) CreateOne(ctx context.Context, input *contractsdomain.
 		UpdatedAt:    time.Now(),
 	}
 
-	_ = c.cache.Delete("contracts")
+	if err = c.cache.Delete("contracts"); err != nil {
+		log.Printf("failed to delete contracts cache: %v", err)
+	}
 
 	return c.contractRepository.CreateOne(ctx, &contract)
 }
@@ -71,8 +74,12 @@ func (c *contractUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
-	_ = c.cache.Delete(id)
-	_ = c.cache.Delete("contracts")
+	if err = c.cache.Delete(id); err != nil {
+		log.Printf("failed to delete contract's id cache: %v", err)
+	}
+	if err = c.cache.Delete("contracts"); err != nil {
+		log.Printf("failed to delete contracts cache: %v", err)
+	}
 
 	return c.contractRepository.DeleteOne(ctx, contractID)
 }
@@ -108,8 +115,12 @@ func (c *contractUseCase) UpdateOne(ctx context.Context, id string, input *contr
 		Status:       input.Status,
 	}
 
-	_ = c.cache.Delete(id)
-	_ = c.cache.Delete("contracts")
+	if err = c.cache.Delete(id); err != nil {
+		log.Printf("failed to delete contract's id cache: %v", err)
+	}
+	if err = c.cache.Delete("contracts"); err != nil {
+		log.Printf("failed to delete contracts cache: %v", err)
+	}
 
 	return c.contractRepository.UpdateOne(ctx, contractID, &contract)
 }
@@ -118,7 +129,10 @@ func (c *contractUseCase) GetByID(ctx context.Context, id string) (contractsdoma
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
-	data, _ := c.cache.Get(id)
+	data, err := c.cache.Get(id)
+	if err != nil {
+		log.Printf("failed to get contract's id cache: %v", err)
+	}
 	if data != nil {
 		var response contractsdomain.Output
 		err := json.Unmarshal(data, &response)
@@ -159,7 +173,7 @@ func (c *contractUseCase) GetByID(ctx context.Context, id string) (contractsdoma
 
 	err = c.cache.Set(id, data)
 	if err != nil {
-		return contractsdomain.Output{}, err
+		log.Printf("failed to delete id cache: %v", err)
 	}
 	return output, nil
 }
@@ -168,7 +182,10 @@ func (c *contractUseCase) GetByEmail(ctx context.Context, email string) (contrac
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
-	data, _ := c.cache.Get(email)
+	data, err := c.cache.Get(email)
+	if err != nil {
+		log.Printf("failed to delete contract's email cache: %v", err)
+	}
 	if data != nil {
 		var response contractsdomain.Output
 		err := json.Unmarshal(data, &response)
@@ -204,7 +221,7 @@ func (c *contractUseCase) GetByEmail(ctx context.Context, email string) (contrac
 
 	err = c.cache.Set(email, data)
 	if err != nil {
-		return contractsdomain.Output{}, err
+		log.Printf("failed to delete contract's email cache: %v", err)
 	}
 
 	return output, nil
@@ -214,7 +231,10 @@ func (c *contractUseCase) GetAll(ctx context.Context) ([]contractsdomain.Output,
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
-	data, _ := c.cache.Get("contracts")
+	data, err := c.cache.Get("contracts")
+	if err != nil {
+		log.Printf("failed to delete contracts cache: %v", err)
+	}
 	if data != nil {
 		var response []contractsdomain.Output
 		err := json.Unmarshal(data, &response)
@@ -252,7 +272,7 @@ func (c *contractUseCase) GetAll(ctx context.Context) ([]contractsdomain.Output,
 
 	err = c.cache.Set("contracts", data)
 	if err != nil {
-		return nil, err
+		log.Printf("failed to delete contracts cache: %v", err)
 	}
 
 	return outputs, nil

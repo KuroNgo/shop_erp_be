@@ -16,7 +16,8 @@ type customerUseCase struct {
 	cache              *bigcache.BigCache
 }
 
-func NewCustomerUseCase(contextTimeout time.Duration, customerRepository customerdomain.ICustomerRepository, cacheTTL time.Duration) customerdomain.ICustomerUseCase {
+func NewCustomerUseCase(contextTimeout time.Duration, customerRepository customerdomain.ICustomerRepository,
+	cacheTTL time.Duration) customerdomain.ICustomerUseCase {
 	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
 	if err != nil {
 		return nil
@@ -204,4 +205,39 @@ func (c *customerUseCase) GetAll(ctx context.Context) ([]customerdomain.Customer
 		return nil, err
 	}
 	return responses, nil
+}
+
+func (c *customerUseCase) GetCustomersByStatus(ctx context.Context, status string) ([]customerdomain.CustomerResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c *customerUseCase) GetCustomersByLocation(ctx context.Context, location string) ([]customerdomain.CustomerResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c *customerUseCase) UpdateCustomerStatus(ctx context.Context, id string, status string) error {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c *customerUseCase) GetCustomerByEmail(ctx context.Context, email string) (*customerdomain.CustomerResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c *customerUseCase) GetCustomersByPurchaseHistory(ctx context.Context, minPurchases int) ([]customerdomain.CustomerResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c *customerUseCase) GetByLocation(ctx context.Context, location string) ([]customerdomain.CustomerResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c *customerUseCase) GetByEmail(ctx context.Context, email string) (*customerdomain.CustomerResponse, error) {
+	//TODO implement me
+	panic("implement me")
 }

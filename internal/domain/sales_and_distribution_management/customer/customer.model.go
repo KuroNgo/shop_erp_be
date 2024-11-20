@@ -34,5 +34,6 @@ type Input struct {
 }
 
 type CustomerResponse struct {
-	Customer Customer `bson:"customer" json:"customer"`
+	Customer             Customer `bson:"customer" json:"customer"`
+	CountPurchaseHistory int      `bson:"count_purchase_history" json:"count_purchase_history"`
 }

@@ -6,6 +6,7 @@ import (
 	_ "net/http/pprof"
 	"shop_erp_mono/internal/api/routers"
 	"shop_erp_mono/internal/infrastructor/mongo"
+	cronjob "shop_erp_mono/pkg/interface/cron"
 	"time"
 )
 
@@ -26,16 +27,17 @@ func main() {
 	db := app.MongoDB.Database(env.DBName)
 	defer app.CloseDBConnection()
 
+	cr := cronjob.NewCronScheduler()
+
 	timeout := time.Duration(env.ContextTimeout) * time.Second
 	cacheTTL := time.Minute * 5
 
 	_gin := gin.Default()
 
-	routers.SetUp(env, timeout, db, client, _gin, cacheTTL)
+	routers.SetUp(env, cr, timeout, db, client, _gin, cacheTTL)
 	fmt.Println("Location Server Web of us: http://localhost:8080")
 	err := _gin.Run(env.ServerAddress)
 	if err != nil {
 		return
 	}
-
 }

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"log"
 	invoices_domain "shop_erp_mono/internal/domain/sales_and_distribution_management/invoices"
 	sale_orders_domain "shop_erp_mono/internal/domain/sales_and_distribution_management/sale_orders"
 	"shop_erp_mono/internal/usecase/sales_and_distribution_management/invoices/validate"
@@ -52,7 +53,9 @@ func (i *invoiceUseCase) CreateOne(ctx context.Context, input *invoices_domain.I
 		UpdatedAt:   time.Now(),
 	}
 
-	_ = i.cache.Delete("invoices")
+	if err = i.cache.Delete("invoices"); err != nil {
+		log.Printf("failed to delete invoices cache: %v", err)
+	}
 
 	return i.invoiceRepository.CreateOne(ctx, invoice)
 }
@@ -63,7 +66,7 @@ func (i *invoiceUseCase) GetByID(ctx context.Context, id string) (*invoices_doma
 
 	data, err := i.cache.Get(id)
 	if err != nil {
-		return nil, err
+		log.Printf("failed to get invoice's id cache: %v", err)
 	}
 	if data != nil {
 		var response *invoices_domain.InvoiceResponse
@@ -94,7 +97,7 @@ func (i *invoiceUseCase) GetByID(ctx context.Context, id string) (*invoices_doma
 	data, err = json.Marshal(response)
 	err = i.cache.Set(id, data)
 	if err != nil {
-		return nil, err
+		log.Printf("failed to set invoice's id cache: %v", err)
 	}
 
 	return response, nil
@@ -106,7 +109,7 @@ func (i *invoiceUseCase) GetByOrderID(ctx context.Context, orderID string) ([]in
 
 	data, err := i.cache.Get(orderID)
 	if err != nil {
-		return nil, err
+		log.Printf("failed to set invoice's orderID cache: %v", err)
 	}
 	if data != nil {
 		var response []invoices_domain.InvoiceResponse
@@ -143,7 +146,7 @@ func (i *invoiceUseCase) GetByOrderID(ctx context.Context, orderID string) ([]in
 	data, err = json.Marshal(responses)
 	err = i.cache.Set("invoices", data)
 	if err != nil {
-		return nil, err
+		log.Printf("failed to set invoices cache: %v", err)
 	}
 	return responses, nil
 }
@@ -154,7 +157,7 @@ func (i *invoiceUseCase) GetByStatus(ctx context.Context, status string) ([]invo
 
 	data, err := i.cache.Get(status)
 	if err != nil {
-		return nil, err
+		log.Printf("failed to set invoice's status cache: %v", err)
 	}
 	if data != nil {
 		var response []invoices_domain.InvoiceResponse
@@ -186,7 +189,7 @@ func (i *invoiceUseCase) GetByStatus(ctx context.Context, status string) ([]invo
 	data, err = json.Marshal(responses)
 	err = i.cache.Set("invoices", data)
 	if err != nil {
-		return nil, err
+		log.Printf("failed to set invoices cache: %v", err)
 	}
 	return responses, nil
 }
@@ -220,8 +223,12 @@ func (i *invoiceUseCase) UpdateOne(ctx context.Context, id string, input *invoic
 		UpdatedAt:   time.Now(),
 	}
 
-	_ = i.cache.Delete(id)
-	_ = i.cache.Delete("invoices")
+	if err = i.cache.Delete(id); err != nil {
+		log.Printf("failed to delete invoice's id cache: %v", err)
+	}
+	if err = i.cache.Delete("invoices"); err != nil {
+		log.Printf("failed to delete invoices cache: %v", err)
+	}
 
 	return i.invoiceRepository.UpdateOne(ctx, invoice)
 }
@@ -235,8 +242,12 @@ func (i *invoiceUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
-	_ = i.cache.Delete(id)
-	_ = i.cache.Delete("invoices")
+	if err = i.cache.Delete(id); err != nil {
+		log.Printf("failed to delete invoice's id cache: %v", err)
+	}
+	if err = i.cache.Delete("invoices"); err != nil {
+		log.Printf("failed to delete invoices cache: %v", err)
+	}
 
 	return i.invoiceRepository.DeleteOne(ctx, invoiceID)
 }
@@ -245,7 +256,10 @@ func (i *invoiceUseCase) GetAll(ctx context.Context) ([]invoices_domain.InvoiceR
 	ctx, cancel := context.WithTimeout(ctx, i.contextTimeout)
 	defer cancel()
 
-	data, _ := i.cache.Get("invoices")
+	data, err := i.cache.Get("invoices")
+	if err != nil {
+		log.Printf("failed to get invoices cache: %v", err)
+	}
 	if data != nil {
 		var response []invoices_domain.InvoiceResponse
 		err := json.Unmarshal(data, &response)
@@ -281,7 +295,7 @@ func (i *invoiceUseCase) GetAll(ctx context.Context) ([]invoices_domain.InvoiceR
 	}
 	err = i.cache.Set("invoices", data)
 	if err != nil {
-		return nil, err
+		log.Printf("failed to set invoices cache: %v", err)
 	}
 
 	return responses, nil

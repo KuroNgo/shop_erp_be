@@ -21,11 +21,13 @@ type ILeaveRequestRepository interface {
 type ILeaveRequestUseCase interface {
 	CreateOne(ctx context.Context, input *Input) error
 	DeleteOne(ctx context.Context, id string) error
+
 	UpdateOne(ctx context.Context, id string, input *Input) error
 	UpdateOneWithApproved(ctx context.Context, requestID string) error
+	UpdateRemainingLeaveDays(ctx context.Context) error
+
 	GetByID(ctx context.Context, id string) (Output, error)
 	GetByEmailEmployee(ctx context.Context, name string) (Output, error)
-	UpdateRemainingLeaveDays(ctx context.Context) error
 	GetAll(ctx context.Context) ([]Output, error)
 	StartSchedulerUpdateRemainingLeaveDays(cs *cronjob.CronScheduler)
 }

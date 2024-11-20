@@ -17,9 +17,12 @@ type IPerformanceReviewRepository interface {
 type IPerformanceReviewUseCase interface {
 	CreateOneWithEmailEmployee(ctx context.Context, input *Input1) error
 	CreateOneWithIDEmployee(ctx context.Context, input *Input2) error
+
 	DeleteOne(ctx context.Context, id string) error
+
 	UpdateOneWithEmailEmployee(ctx context.Context, id string, input *Input1) error
 	UpdateOneWithIDEmployee(ctx context.Context, id string, input *Input2) error
+
 	GetByID(ctx context.Context, id string) (Output, error)
 	GetByEmailEmployee(ctx context.Context, name string) (Output, error)
 	GetAll(ctx context.Context) ([]Output, error)

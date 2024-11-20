@@ -11,12 +11,13 @@ import (
 	swaggerroute "shop_erp_mono/internal/api/routers/swagger"
 	"shop_erp_mono/internal/api/routers/warehouse_management"
 	"shop_erp_mono/internal/config"
+	cronjob "shop_erp_mono/pkg/interface/cron"
 	"time"
 )
 
-func SetUp(env *config.Database, timeout time.Duration, db *mongo.Database, client *mongo.Client, gin *gin.Engine, cacheTTL time.Duration) {
+func SetUp(env *config.Database, cr *cronjob.CronScheduler, timeout time.Duration, db *mongo.Database, client *mongo.Client, gin *gin.Engine, cacheTTL time.Duration) {
 	swaggerroute.SwaggerRouter(env, timeout, db, gin.Group(""))
-	human_resources_management.SetUp(env, timeout, db, client, gin, cacheTTL)
+	human_resources_management.SetUp(env, cr, timeout, db, client, gin, cacheTTL)
 	accounting_management.SetUp(env, timeout, db, gin)
 	sales_and_distributing_management.SetUp(env, timeout, db, gin, cacheTTL)
 	warehouse_management.SetUp(env, timeout, db, gin, cacheTTL)
