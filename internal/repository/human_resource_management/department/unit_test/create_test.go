@@ -4,9 +4,9 @@ import (
 	"context"
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	departmentsdomain "shop_erp_mono/domain/human_resource_management/departments"
-	"shop_erp_mono/infrastructor"
-	departmentrepository "shop_erp_mono/repository/human_resource_management/department/repository"
+	departmentsdomain "shop_erp_mono/internal/domain/human_resource_management/departments"
+	infrastructor "shop_erp_mono/internal/infrastructor/mongo"
+	departmentrepository "shop_erp_mono/internal/repository/human_resource_management/department/repository"
 	"testing"
 	"time"
 )
@@ -14,6 +14,21 @@ import (
 func TestCreateOneDepartment(t *testing.T) {
 	client, database := infrastructor.SetupTestDatabase(t)
 	defer infrastructor.TearDownTestDatabase(client, t)
+
+	// Function to clear the employee collection before each test case
+	clearDepartmentCollection := func() {
+		err := database.Collection(Department).Drop(context.Background())
+		if err != nil {
+			t.Fatalf("Failed to clear employee collection: %v", err)
+		}
+	}
+
+	clearEmployeeCollection := func() {
+		err := database.Collection(Staff).Drop(context.Background())
+		if err != nil {
+			t.Fatalf("Failed to clear employee collection: %v", err)
+		}
+	}
 
 	mockDepartment := &departmentsdomain.Department{
 		ID:          primitive.NewObjectID(),
@@ -32,12 +47,16 @@ func TestCreateOneDepartment(t *testing.T) {
 	}
 
 	t.Run("success", func(t *testing.T) {
+		clearDepartmentCollection()
+		clearEmployeeCollection()
 		ur := departmentrepository.NewDepartmentRepository(database, Department)
 		err := ur.CreateOne(context.Background(), mockDepartment)
 		assert.Nil(t, err)
 	})
 
 	t.Run("error with empty fields", func(t *testing.T) {
+		clearDepartmentCollection()
+		clearEmployeeCollection()
 		ur := departmentrepository.NewDepartmentRepository(database, Department)
 		err := ur.CreateOne(context.Background(), mockEmptyDepartment)
 		assert.Error(t, err)

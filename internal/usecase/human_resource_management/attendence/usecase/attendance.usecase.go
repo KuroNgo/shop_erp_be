@@ -6,6 +6,7 @@ import (
 	"errors"
 	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"log"
 	attendancedomain "shop_erp_mono/internal/domain/human_resource_management/attendance"
 	employeesdomain "shop_erp_mono/internal/domain/human_resource_management/employees"
 	"shop_erp_mono/internal/usecase/human_resource_management/attendence/validate"
@@ -54,7 +55,9 @@ func (a *attendanceUseCase) CreateOne(ctx context.Context, input *attendancedoma
 		UpdatedAt:    time.Now(),
 	}
 
-	_ = a.cache.Delete("attendances")
+	if err = a.cache.Delete("attendances"); err != nil {
+		log.Printf("failed to delete attendances cache: %v", err)
+	}
 
 	return a.attendanceRepository.CreateOne(ctx, &attendance)
 }
@@ -68,8 +71,12 @@ func (a *attendanceUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
-	_ = a.cache.Delete(id)
-	_ = a.cache.Delete("attendances")
+	if err = a.cache.Delete(id); err != nil {
+		log.Printf("failed to delete a attendance's id cache: %v", err)
+	}
+	if err = a.cache.Delete("attendances"); err != nil {
+		log.Printf("failed to delete attendances cache: %v", err)
+	}
 
 	return a.attendanceRepository.DeleteOne(ctx, attendanceID)
 }
@@ -107,8 +114,12 @@ func (a *attendanceUseCase) UpdateOne(ctx context.Context, id string, input *att
 		UpdatedAt:    time.Now(),
 	}
 
-	_ = a.cache.Delete(id)
-	_ = a.cache.Delete("attendances")
+	if err = a.cache.Delete(id); err != nil {
+		log.Printf("failed to delete a attendance's id cache: %v", err)
+	}
+	if err = a.cache.Delete("attendances"); err != nil {
+		log.Printf("failed to delete attendances cache: %v", err)
+	}
 
 	return a.attendanceRepository.UpdateOne(ctx, &attendance)
 }
@@ -117,7 +128,10 @@ func (a *attendanceUseCase) GetByID(ctx context.Context, id string) (attendanced
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
-	data, _ := a.cache.Get(id)
+	data, err := a.cache.Get(id)
+	if err != nil {
+		log.Printf("failed to get attendances cache: %v", err)
+	}
 	if data != nil {
 		var response attendancedomain.Output
 		err := json.Unmarshal(data, &response)
@@ -153,7 +167,7 @@ func (a *attendanceUseCase) GetByID(ctx context.Context, id string) (attendanced
 	}
 	err = a.cache.Set(id, data)
 	if err != nil {
-		return attendancedomain.Output{}, err
+		log.Printf("failed to set attendances cache: %v", err)
 	}
 
 	return output, nil
@@ -163,7 +177,10 @@ func (a *attendanceUseCase) GetByEmail(ctx context.Context, email string) (atten
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
-	data, _ := a.cache.Get(email)
+	data, err := a.cache.Get(email)
+	if err != nil {
+		log.Printf("failed to get attendances cache: %v", err)
+	}
 	if data != nil {
 		var response attendancedomain.Output
 		err := json.Unmarshal(data, &response)
@@ -194,7 +211,7 @@ func (a *attendanceUseCase) GetByEmail(ctx context.Context, email string) (atten
 	}
 	err = a.cache.Set(email, data)
 	if err != nil {
-		return attendancedomain.Output{}, err
+		log.Printf("failed to set attendances cache: %v", err)
 	}
 
 	return output, nil
@@ -204,7 +221,10 @@ func (a *attendanceUseCase) GetAll(ctx context.Context) ([]attendancedomain.Outp
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
 
-	data, _ := a.cache.Get("attendances")
+	data, err := a.cache.Get("attendances")
+	if err != nil {
+		log.Printf("failed to get attendances cache: %v", err)
+	}
 	if data != nil {
 		var response []attendancedomain.Output
 		err := json.Unmarshal(data, &response)
@@ -243,7 +263,7 @@ func (a *attendanceUseCase) GetAll(ctx context.Context) ([]attendancedomain.Outp
 	}
 	err = a.cache.Set("attendances", data)
 	if err != nil {
-		return nil, err
+		log.Printf("failed to set attendances cache: %v", err)
 	}
 
 	return outputs, nil

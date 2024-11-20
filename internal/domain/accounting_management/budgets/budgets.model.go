@@ -2,7 +2,7 @@ package budgets_domain
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	transaction_categories_domain "shop_erp_mono/domain/accounting_management/transaction_categories"
+	transaction_categories_domain "shop_erp_mono/internal/domain/accounting_management/transaction_categories"
 	"time"
 )
 

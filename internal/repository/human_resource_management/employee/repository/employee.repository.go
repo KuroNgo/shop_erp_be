@@ -73,6 +73,7 @@ func (e *employeeRepository) UpdateOne(ctx context.Context, id primitive.ObjectI
 		"last_name":     employee.LastName,
 		"gender":        employee.Gender,
 		"address":       employee.Address,
+		"avatar_url":    employee.AvatarURL,
 		"date_of_birth": employee.DateOfBirth,
 		"day_of_work":   employee.DayOfWork,
 		"department_id": employee.DepartmentID,

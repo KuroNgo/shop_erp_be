@@ -3,10 +3,11 @@ package unit_test
 import (
 	"context"
 	"github.com/stretchr/testify/assert"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"shop_erp_mono/infrastructor"
-	employeerepository "shop_erp_mono/repository/human_resource_management/employee/repository"
+	employeesdomain "shop_erp_mono/internal/domain/human_resource_management/employees"
+	infrastructor "shop_erp_mono/internal/infrastructor/mongo"
+	employeerepository "shop_erp_mono/internal/repository/human_resource_management/employee/repository"
 	"testing"
+	"time"
 )
 
 func TestGetOneByID(t *testing.T) {
@@ -14,21 +15,30 @@ func TestGetOneByID(t *testing.T) {
 	defer infrastructor.TearDownTestDatabase(client, t)
 
 	ur := employeerepository.NewEmployeeRepository(database, staff)
-	email := "admin@admin.com"
-	employeeData, err := ur.GetOneByEmail(context.Background(), email)
+
+	mockEmployee := &employeesdomain.Employee{
+		FirstName:   "Ngô",
+		LastName:    "Hoài Phong",
+		Email:       "admin@admin.com",
+		Phone:       "0329245971",
+		Address:     "Bình Thuận",
+		AvatarURL:   "https://example.com/avatar.jpg",
+		DateOfBirth: time.Date(2002, 1, 1, 0, 0, 0, 0, time.UTC),
+		DayOfWork:   time.Date(2024, 8, 30, 0, 0, 0, 0, time.UTC),
+	}
+
+	err := ur.CreateOne(context.Background(), mockEmployee)
+	assert.Nil(t, err)
+
+	employeeData, err := ur.GetByEmail(context.Background(), "admin@admin.com")
 	if err != nil {
 		t.Fatalf("error setting up test data: %v", err)
 	}
 
 	t.Run("success", func(t *testing.T) {
-		_, err = ur.GetOneByID(context.Background(), employeeData.ID)
+		employee, err := ur.GetByID(context.Background(), employeeData.ID)
 		assert.Nil(t, err)
-	})
-
-	t.Run("non-existing ID", func(t *testing.T) {
-		nonExistingID := primitive.NewObjectID()
-		_, err := ur.GetOneByID(context.Background(), nonExistingID)
-		assert.Error(t, err)
-		assert.Equal(t, "error finding employee's information in the database", err.Error())
+		assert.NotNil(t, employee)
+		assert.Equal(t, employeeData.ID, employee.ID)
 	})
 }

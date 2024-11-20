@@ -2,7 +2,7 @@ package validate
 
 import (
 	"errors"
-	budgets_domain "shop_erp_mono/domain/accounting_management/budgets"
+	budgets_domain "shop_erp_mono/internal/domain/accounting_management/budgets"
 )
 
 func Budget(input *budgets_domain.Input) error {
