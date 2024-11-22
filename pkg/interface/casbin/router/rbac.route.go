@@ -2,12 +2,13 @@ package casbin_router
 
 import (
 	"github.com/gin-gonic/gin"
+	"shop_erp_mono/internal/config"
 	handler2 "shop_erp_mono/pkg/interface/casbin/handler"
 	"shop_erp_mono/pkg/interface/casbin/principle"
 )
 
-func CasbinRouter(group *gin.RouterGroup) {
-	r := principle.SetUp()
+func CasbinRouter(group *gin.RouterGroup, env *config.Database) {
+	r := principle.SetUp(env)
 	cbGroup := group.Group("/casbin")
 	cbGroup.POST("/add", handler2.AddRole)
 	cbGroup.POST("/add/user", handler2.AddRoleForUser)

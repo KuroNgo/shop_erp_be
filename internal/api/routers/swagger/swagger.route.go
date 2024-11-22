@@ -36,7 +36,7 @@ func SwaggerRouter(env *config.Database, timeout time.Duration, db *mongo.Databa
 
 	docs.SwaggerInfo.BasePath = ""
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	casbin_router.CasbinRouter(router)
+	casbin_router.CasbinRouter(router, env)
 
 	//route automatically
 	//Thực hiện tự động chuyển hướng khi chạy chương trình

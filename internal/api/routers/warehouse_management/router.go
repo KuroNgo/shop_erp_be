@@ -24,7 +24,7 @@ func SetUp(env *config.Database, timeout time.Duration, db *mongo.Database, gin 
 	publicRouter := gin.Group("/api/v1")
 
 	// Khởi tạo Casbin enforcer
-	enforcer := principle.SetUp()
+	enforcer := principle.SetUp(env)
 
 	// Middleware
 	publicRouter.Use(

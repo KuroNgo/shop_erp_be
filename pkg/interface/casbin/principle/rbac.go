@@ -1,15 +1,17 @@
 package principle
 
 import (
+	"fmt"
 	"github.com/casbin/casbin/v2"
 	mongodbadapter "github.com/casbin/mongodb-adapter/v3"
 	"log"
+	"shop_erp_mono/internal/config"
 )
 
 var Rbac *casbin.Enforcer
 
-func SetUp() *casbin.Enforcer {
-	a, err := mongodbadapter.NewAdapter("mongodb://localhost:27017/")
+func SetUp(env *config.Database) *casbin.Enforcer {
+	a, err := mongodbadapter.NewAdapter(fmt.Sprintf("mongodb+srv://%s:%s@andrew.8ulkv.mongodb.net/?retryWrites=true&w=majority", env.DBUser, env.DBPassword))
 	if err != nil {
 		log.Fatalln(err)
 	}

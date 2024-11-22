@@ -17,6 +17,8 @@ import (
 	salaryroute "shop_erp_mono/internal/api/routers/human_resources_management/salary"
 	userroute "shop_erp_mono/internal/api/routers/human_resources_management/user"
 	"shop_erp_mono/internal/config"
+	casbin "shop_erp_mono/pkg/interface/casbin/middlewares"
+	"shop_erp_mono/pkg/interface/casbin/principle"
 	cronjob "shop_erp_mono/pkg/interface/cron"
 	"time"
 )
@@ -27,12 +29,16 @@ func SetUp(env *config.Database, cr *cronjob.CronScheduler, timeout time.Duratio
 	publicRouter := gin.Group("/api")
 	router := gin.Group("")
 
+	// Khởi tạo Casbin enforcer
+	enforcer := principle.SetUp(env)
+
 	// Middleware
-	publicRouterV1.Use(
+	publicRouter.Use(
 		middlewares.CORSPrivate(),
 		middlewares.Recover(),
 		gzip.Gzip(gzip.DefaultCompression,
 			gzip.WithExcludedPaths([]string{",*"})),
+		casbin.Authorize(enforcer),
 		//middlewares.StructuredLogger(&log.Logger, value),
 	)
 
