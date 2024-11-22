@@ -13,15 +13,13 @@ import (
 	salereportsroute "shop_erp_mono/internal/api/routers/sales_and_distributing_management/sale_reports"
 	shippingroute "shop_erp_mono/internal/api/routers/sales_and_distributing_management/shipping"
 	"shop_erp_mono/internal/config"
-	casbin "shop_erp_mono/pkg/interface/casbin/middlewares"
-	"shop_erp_mono/pkg/interface/casbin/principle"
 	"time"
 )
 
 func SetUp(env *config.Database, timeout time.Duration, db *mongo.Database, gin *gin.Engine, cacheTTL time.Duration) {
 	publicRouter := gin.Group("/api/v1")
 
-	enforcer := principle.SetUp(env)
+	//enforcer := principle.SetUp(env)
 
 	// Middleware
 	publicRouter.Use(
@@ -29,7 +27,7 @@ func SetUp(env *config.Database, timeout time.Duration, db *mongo.Database, gin 
 		middlewares.Recover(),
 		gzip.Gzip(gzip.DefaultCompression,
 			gzip.WithExcludedPaths([]string{",*"})),
-		casbin.Authorize(enforcer),
+		//casbin.Authorize(enforcer),
 		//middlewares.StructuredLogger(&log.Logger, value),
 	)
 
