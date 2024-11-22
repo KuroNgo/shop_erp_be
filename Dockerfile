@@ -38,6 +38,8 @@ RUN go build -o main .
 FROM alpine:3.18
 WORKDIR /app
 COPY --from=build /app/main .
+COPY --from=build /app/internal/config /app/internal/config
+
 
 EXPOSE 8080
 CMD ["./main"]
