@@ -81,6 +81,21 @@ func (a *attendanceRepository) GetByID(ctx context.Context, id primitive.ObjectI
 	return attendance, nil
 }
 
+func (a *attendanceRepository) GetByStatus(ctx context.Context, status string) ([]attendancedomain.Attendance, error) {
+	collectionAttendance := a.database.Collection(a.collectionAttendance)
+
+	filter := bson.M{"status": status}
+	var attendance []attendancedomain.Attendance
+	if err := collectionAttendance.FindOne(ctx, filter).Decode(&attendance); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	return attendance, nil
+}
+
 func (a *attendanceRepository) GetByEmployeeID(ctx context.Context, idEmployee primitive.ObjectID) (attendancedomain.Attendance, error) {
 	collectionAttendance := a.database.Collection(a.collectionAttendance)
 

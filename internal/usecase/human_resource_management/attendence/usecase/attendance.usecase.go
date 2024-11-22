@@ -173,6 +173,52 @@ func (a *attendanceUseCase) GetByID(ctx context.Context, id string) (attendanced
 	return output, nil
 }
 
+func (a *attendanceUseCase) GetByStatus(ctx context.Context, status string) ([]attendancedomain.Output, error) {
+	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
+	defer cancel()
+
+	data, err := a.cache.Get(status)
+	if err != nil {
+		log.Printf("failed to get attendances cache: %v", err)
+	}
+	if data != nil {
+		var response []attendancedomain.Output
+		err := json.Unmarshal(data, &response)
+		if err != nil {
+			return nil, err
+		}
+		return response, nil
+	}
+
+	attendanceData, err := a.attendanceRepository.GetByStatus(ctx, status)
+	if err != nil {
+		return nil, err
+	}
+
+	var attendances []attendancedomain.Output
+	attendances = make([]attendancedomain.Output, 0, len(attendanceData))
+	for _, attendance := range attendanceData {
+		employeeData, err := a.employeeRepository.GetByID(ctx, attendance.EmployeeID)
+		if err != nil {
+			return nil, err
+		}
+
+		output := attendancedomain.Output{
+			Attendance: attendance,
+			Employee:   *employeeData,
+		}
+
+		attendances = append(attendances, output)
+	}
+
+	err = a.cache.Set(status, data)
+	if err != nil {
+		log.Printf("failed to set attendances cache: %v", err)
+	}
+
+	return attendances, nil
+}
+
 func (a *attendanceUseCase) GetByEmail(ctx context.Context, email string) (attendancedomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
