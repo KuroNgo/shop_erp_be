@@ -1,5 +1,3 @@
-# Dockerfile
-# Use Build Multistage
 # Stage 1: Build stage
 FROM golang:1.22-alpine AS build
 
@@ -12,11 +10,14 @@ RUN go build -o main .
 
 # Stage 2: Run stage
 FROM alpine:3.18
+
 WORKDIR /app
+
+# Copy binary từ giai đoạn build
 COPY --from=build /app/main .
+
+# Sao chép thư mục internal/config vào container
+COPY --from=build /app/internal/config /app/internal/config
 
 EXPOSE 8080
 CMD ["./main"]
-
-# docker build -t shoperp .
-# docker run -v "$(pwd)/app.env:/app/app.env" -p 8080:8080 shoperp
