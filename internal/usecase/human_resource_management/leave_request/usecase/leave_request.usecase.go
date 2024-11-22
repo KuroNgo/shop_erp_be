@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"log"
+	departmentsdomain "shop_erp_mono/internal/domain/human_resource_management/departments"
 	employeesdomain "shop_erp_mono/internal/domain/human_resource_management/employees"
 	leaverequestdomain "shop_erp_mono/internal/domain/human_resource_management/leave_request"
 	"shop_erp_mono/internal/usecase/human_resource_management/leave_request/validate"
@@ -20,18 +21,20 @@ type leaveRequestUseCase struct {
 	contextTimeout         time.Duration
 	leaveRequestRepository leaverequestdomain.ILeaveRequestRepository
 	employeeRepository     employeesdomain.IEmployeeRepository
+	departmentRepository   departmentsdomain.IDepartmentRepository
 	cache                  *bigcache.BigCache
 	client                 *mongo.Client
 }
 
 func NewLeaveRequestUseCase(contextTimeout time.Duration, leaveRequestRepository leaverequestdomain.ILeaveRequestRepository,
-	employeeRepository employeesdomain.IEmployeeRepository, cacheTTL time.Duration,
+	employeeRepository employeesdomain.IEmployeeRepository, cacheTTL time.Duration, departmentRepository departmentsdomain.IDepartmentRepository,
 	client *mongo.Client) leaverequestdomain.ILeaveRequestUseCase {
 	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
 	if err != nil {
 		return nil
 	}
-	return &leaveRequestUseCase{contextTimeout: contextTimeout, client: client, cache: cache, leaveRequestRepository: leaveRequestRepository, employeeRepository: employeeRepository}
+	return &leaveRequestUseCase{contextTimeout: contextTimeout, client: client, cache: cache, leaveRequestRepository: leaveRequestRepository,
+		employeeRepository: employeeRepository, departmentRepository: departmentRepository}
 }
 
 func (l *leaveRequestUseCase) CreateOne(ctx context.Context, input *leaverequestdomain.Input) error {
@@ -71,7 +74,9 @@ func (l *leaveRequestUseCase) CreateOne(ctx context.Context, input *leaverequest
 		UpdatedAt:   time.Now(),
 	}
 
-	_ = l.cache.Delete("leaveRequests")
+	if err := l.cache.Delete("leaveRequests"); err != nil {
+		log.Printf("failed to delete leaveRequests cache: %v", err)
+	}
 
 	return l.leaveRequestRepository.CreateOne(ctx, leaveRequest)
 }
@@ -85,8 +90,14 @@ func (l *leaveRequestUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
-	_ = l.cache.Delete(id)
-	_ = l.cache.Delete("leaveRequests")
+	err = l.cache.Delete(id)
+	if err != nil {
+		log.Printf("failed to delete leaveRequests cache: %v", err)
+	}
+	err = l.cache.Delete("leaveRequests")
+	if err != nil {
+		log.Printf("failed to delete leaveRequests cache: %v", err)
+	}
 
 	return l.leaveRequestRepository.DeleteOne(ctx, leaveRequestID)
 }
@@ -120,8 +131,14 @@ func (l *leaveRequestUseCase) UpdateOne(ctx context.Context, id string, input *l
 		UpdatedAt:  time.Now(),
 	}
 
-	_ = l.cache.Delete(id)
-	_ = l.cache.Delete("leaveRequests")
+	err = l.cache.Delete(id)
+	if err != nil {
+		log.Printf("failed to delete leaveRequests cache: %v", err)
+	}
+	err = l.cache.Delete("leaveRequests")
+	if err != nil {
+		log.Printf("failed to delete leaveRequests cache: %v", err)
+	}
 
 	return l.leaveRequestRepository.UpdateOne(ctx, leaveRequestID, leaveRequest)
 }
@@ -188,7 +205,10 @@ func (l *leaveRequestUseCase) GetByID(ctx context.Context, id string) (leaverequ
 	ctx, cancel := context.WithTimeout(ctx, l.contextTimeout)
 	defer cancel()
 
-	data, _ := l.cache.Get(id)
+	data, err := l.cache.Get(id)
+	if err != nil {
+		log.Printf("failed to get leaveRequests cache: %v", err)
+	}
 	if data != nil {
 		var response leaverequestdomain.Output
 		err := json.Unmarshal(data, &response)
@@ -225,7 +245,7 @@ func (l *leaveRequestUseCase) GetByID(ctx context.Context, id string) (leaverequ
 
 	err = l.cache.Set(id, data)
 	if err != nil {
-		return leaverequestdomain.Output{}, err
+		log.Printf("failed to set leaveRequests cache: %v", err)
 	}
 
 	return output, nil
@@ -235,7 +255,10 @@ func (l *leaveRequestUseCase) GetByEmailEmployee(ctx context.Context, email stri
 	ctx, cancel := context.WithTimeout(ctx, l.contextTimeout)
 	defer cancel()
 
-	data, _ := l.cache.Get(email)
+	data, err := l.cache.Get(email)
+	if err != nil {
+		log.Printf("failed to get leaveRequests cache: %v", err)
+	}
 	if data != nil {
 		var response leaverequestdomain.Output
 		err := json.Unmarshal(data, &response)
@@ -267,7 +290,7 @@ func (l *leaveRequestUseCase) GetByEmailEmployee(ctx context.Context, email stri
 
 	err = l.cache.Set(email, data)
 	if err != nil {
-		return leaverequestdomain.Output{}, err
+		log.Printf("failed to get leaveRequests cache: %v", err)
 	}
 
 	return output, nil
@@ -277,7 +300,10 @@ func (l *leaveRequestUseCase) GetAll(ctx context.Context) ([]leaverequestdomain.
 	ctx, cancel := context.WithTimeout(ctx, l.contextTimeout)
 	defer cancel()
 
-	data, _ := l.cache.Get("leaveRequests")
+	data, err := l.cache.Get("leaveRequests")
+	if err != nil {
+		log.Printf("failed to get leaveRequests cache: %v", err)
+	}
 	if data != nil {
 		var response []leaverequestdomain.Output
 		err := json.Unmarshal(data, &response)
@@ -315,7 +341,7 @@ func (l *leaveRequestUseCase) GetAll(ctx context.Context) ([]leaverequestdomain.
 
 	err = l.cache.Set("leaveRequests", data)
 	if err != nil {
-		return nil, err
+		log.Printf("failed to set leaveRequests cache: %v", err)
 	}
 
 	return outputs, nil

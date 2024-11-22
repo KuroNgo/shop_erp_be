@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"log"
 	employeesdomain "shop_erp_mono/internal/domain/human_resource_management/employees"
 	performancereviewdomain "shop_erp_mono/internal/domain/human_resource_management/performance_review"
 	"shop_erp_mono/internal/usecase/human_resource_management/performance_review/validate"
@@ -55,7 +56,9 @@ func (p *performanceReviewUseCase) CreateOneWithEmailEmployee(ctx context.Contex
 		UpdatedAt:        time.Now(),
 	}
 
-	_ = p.cache.Delete("performanceReviews")
+	if err := p.cache.Delete("performanceReviews"); err != nil {
+		log.Printf("failed to delete performance review cache %s", err)
+	}
 
 	return p.performanceReviewRepository.CreateOne(ctx, performanceReview)
 }
@@ -98,7 +101,9 @@ func (p *performanceReviewUseCase) CreateOneWithIDEmployee(ctx context.Context, 
 		UpdatedAt:        time.Now(),
 	}
 
-	_ = p.cache.Delete("performanceReviews")
+	if err := p.cache.Delete("performanceReviews"); err != nil {
+		log.Printf("failed to delete performance review cache %s", err)
+	}
 
 	return p.performanceReviewRepository.CreateOne(ctx, performanceReview)
 }
@@ -112,8 +117,14 @@ func (p *performanceReviewUseCase) DeleteOne(ctx context.Context, id string) err
 		return err
 	}
 
-	_ = p.cache.Delete("performanceReviews")
-	_ = p.cache.Delete(id)
+	err = p.cache.Delete("performanceReviews")
+	if err != nil {
+		log.Printf("failed to delete performance review cache %s", err)
+	}
+	err = p.cache.Delete(id)
+	if err != nil {
+		log.Printf("failed to delete performance review cache %s", err)
+	}
 
 	return p.performanceReviewRepository.DeleteOne(ctx, performanceReviewID)
 }
@@ -146,8 +157,14 @@ func (p *performanceReviewUseCase) UpdateOneWithEmailEmployee(ctx context.Contex
 		UpdatedAt:        time.Now(),
 	}
 
-	_ = p.cache.Delete("performanceReviews")
-	_ = p.cache.Delete(id)
+	err = p.cache.Delete("performanceReviews")
+	if err != nil {
+		log.Printf("failed to delete performance review cache %s", err)
+	}
+	err = p.cache.Delete(id)
+	if err != nil {
+		log.Printf("failed to delete performance review cache %s", err)
+	}
 
 	return p.performanceReviewRepository.UpdateOne(ctx, performanceReviewID, performanceReview)
 }
@@ -190,8 +207,14 @@ func (p *performanceReviewUseCase) UpdateOneWithIDEmployee(ctx context.Context, 
 		UpdatedAt:        time.Now(),
 	}
 
-	_ = p.cache.Delete("performanceReviews")
-	_ = p.cache.Delete(id)
+	err = p.cache.Delete("performanceReviews")
+	if err != nil {
+		log.Printf("failed to delete performance review cache %s", err)
+	}
+	err = p.cache.Delete(id)
+	if err != nil {
+		log.Printf("failed to delete performance review cache %s", err)
+	}
 
 	return p.performanceReviewRepository.UpdateOne(ctx, performanceReviewID, performanceReview)
 }
@@ -200,7 +223,11 @@ func (p *performanceReviewUseCase) GetByID(ctx context.Context, id string) (perf
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
-	data, _ := p.cache.Get(id)
+	data, err := p.cache.Get(id)
+	if err != nil {
+		log.Printf("failed to get performance review cache %s", err)
+	}
+
 	if data != nil {
 		var response performancereviewdomain.Output
 		err := json.Unmarshal(data, &response)
@@ -243,7 +270,7 @@ func (p *performanceReviewUseCase) GetByID(ctx context.Context, id string) (perf
 
 	err = p.cache.Set(id, data)
 	if err != nil {
-		return performancereviewdomain.Output{}, err
+		log.Printf("failed to set performance review cache %s", err)
 	}
 
 	return output, nil
@@ -253,7 +280,10 @@ func (p *performanceReviewUseCase) GetByEmailEmployee(ctx context.Context, email
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
-	data, _ := p.cache.Get(email)
+	data, err := p.cache.Get(email)
+	if err != nil {
+		log.Printf("failed to get performance review cache %s", err)
+	}
 	if data != nil {
 		var response performancereviewdomain.Output
 		err := json.Unmarshal(data, &response)
@@ -291,7 +321,7 @@ func (p *performanceReviewUseCase) GetByEmailEmployee(ctx context.Context, email
 
 	err = p.cache.Set(email, data)
 	if err != nil {
-		return performancereviewdomain.Output{}, err
+		log.Printf("failed to set performance review cache %s", err)
 	}
 
 	return output, nil
@@ -301,7 +331,10 @@ func (p *performanceReviewUseCase) GetAll(ctx context.Context) ([]performancerev
 	ctx, cancel := context.WithTimeout(ctx, p.contextTimeout)
 	defer cancel()
 
-	data, _ := p.cache.Get("performanceReviews")
+	data, err := p.cache.Get("performanceReviews")
+	if err != nil {
+		log.Printf("failed to get performance review cache %s", err)
+	}
 	if data != nil {
 		var response []performancereviewdomain.Output
 		err := json.Unmarshal(data, &response)
@@ -345,7 +378,7 @@ func (p *performanceReviewUseCase) GetAll(ctx context.Context) ([]performancerev
 
 	err = p.cache.Set("performanceReviews", data)
 	if err != nil {
-		return nil, err
+		log.Printf("failed to delete performance review cache %s", err)
 	}
 
 	return outputs, nil

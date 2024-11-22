@@ -7,6 +7,7 @@ import (
 	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	mongo_driven "go.mongodb.org/mongo-driver/mongo"
+	"log"
 	candidatedomain "shop_erp_mono/internal/domain/human_resource_management/candidate"
 	employeesdomain "shop_erp_mono/internal/domain/human_resource_management/employees"
 	"shop_erp_mono/internal/repository"
@@ -42,7 +43,9 @@ func (c *candidateUseCase) CreateOne(ctx context.Context, candidate *candidatedo
 		return err
 	}
 
-	_ = c.cache.Delete("candidates")
+	if err := c.cache.Delete("candidates"); err != nil {
+		log.Printf("failed to delete candidates cache: %v", err)
+	}
 
 	return c.candidateRepository.CreateOne(ctx, candidate)
 }
@@ -56,8 +59,14 @@ func (c *candidateUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
-	_ = c.cache.Delete("candidates")
-	_ = c.cache.Delete(id)
+	err = c.cache.Delete("candidates")
+	if err != nil {
+		log.Printf("failed to delete candidates cache: %v", err)
+	}
+	err = c.cache.Delete(id)
+	if err != nil {
+		log.Printf("failed to delete candidates cache: %v", err)
+	}
 
 	return c.candidateRepository.DeleteOne(ctx, candidateID)
 }
@@ -71,8 +80,14 @@ func (c *candidateUseCase) UpdateOne(ctx context.Context, id string, candidate *
 		return err
 	}
 
-	_ = c.cache.Delete("candidates")
-	_ = c.cache.Delete(id)
+	err = c.cache.Delete("candidates")
+	if err != nil {
+		log.Printf("failed to delete candidates cache: %v", err)
+	}
+	err = c.cache.Delete(id)
+	if err != nil {
+		log.Printf("failed to delete candidates cache: %v", err)
+	}
 
 	return c.candidateRepository.UpdateOne(ctx, candidateID, candidate)
 }
@@ -143,8 +158,14 @@ func (c *candidateUseCase) UpdateStatus(ctx context.Context, id string, status s
 		return err
 	}
 
-	_ = c.cache.Delete("candidates")
-	_ = c.cache.Delete(id)
+	err = c.cache.Delete("candidates")
+	if err != nil {
+		log.Printf("failed to delete candidates cache: %v", err)
+	}
+	err = c.cache.Delete(id)
+	if err != nil {
+		log.Printf("failed to delete candidates cache: %v", err)
+	}
 
 	return c.candidateRepository.UpdateStatus(ctx, candidateID, status)
 }
@@ -195,7 +216,10 @@ func (c *candidateUseCase) GetByID(ctx context.Context, id string) (*candidatedo
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
-	data, _ := c.cache.Get(id)
+	data, err := c.cache.Get(id)
+	if err != nil {
+		log.Printf("failed to get candidates cache: %v", err)
+	}
 	if data != nil {
 		var response *candidatedomain.Candidate
 		err := json.Unmarshal(data, response)
@@ -222,7 +246,7 @@ func (c *candidateUseCase) GetByID(ctx context.Context, id string) (*candidatedo
 
 	err = c.cache.Set(id, data)
 	if err != nil {
-		return nil, err
+		log.Printf("failed to set candidates cache: %v", err)
 	}
 
 	return response, nil
@@ -232,7 +256,10 @@ func (c *candidateUseCase) GetByEmail(ctx context.Context, email string) (*candi
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
-	data, _ := c.cache.Get(email)
+	data, err := c.cache.Get(email)
+	if err != nil {
+		log.Printf("failed to get candidates cache: %v", err)
+	}
 	if data != nil {
 		var response *candidatedomain.Candidate
 		err := json.Unmarshal(data, response)
@@ -254,7 +281,7 @@ func (c *candidateUseCase) GetByEmail(ctx context.Context, email string) (*candi
 
 	err = c.cache.Set(email, data)
 	if err != nil {
-		return nil, err
+		log.Printf("failed to set candidates cache: %v", err)
 	}
 
 	return candidateData, nil
@@ -264,7 +291,10 @@ func (c *candidateUseCase) GetAll(ctx context.Context) ([]candidatedomain.Candid
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
-	data, _ := c.cache.Get("candidates")
+	data, err := c.cache.Get("candidates")
+	if err != nil {
+		log.Printf("failed to get candidates cache: %v", err)
+	}
 	if data != nil {
 		var response []candidatedomain.Candidate
 		err := json.Unmarshal(data, &response)
@@ -286,7 +316,7 @@ func (c *candidateUseCase) GetAll(ctx context.Context) ([]candidatedomain.Candid
 
 	err = c.cache.Set("candidates", data)
 	if err != nil {
-		return nil, err
+		log.Printf("failed to set candidates cache: %v", err)
 	}
 
 	return candidateData, nil
@@ -296,7 +326,10 @@ func (c *candidateUseCase) GetAllWithPagination(ctx context.Context, pagination 
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
-	data, _ := c.cache.Get(pagination.Page)
+	data, err := c.cache.Get(pagination.Page)
+	if err != nil {
+		log.Printf("failed to get candidates cache: %v", err)
+	}
 	if data != nil {
 		var response []candidatedomain.Candidate
 		err := json.Unmarshal(data, &response)
@@ -318,7 +351,7 @@ func (c *candidateUseCase) GetAllWithPagination(ctx context.Context, pagination 
 
 	err = c.cache.Set(pagination.Page, data)
 	if err != nil {
-		return nil, err
+		log.Printf("failed to set candidates cache: %v", err)
 	}
 
 	return candidateData, nil

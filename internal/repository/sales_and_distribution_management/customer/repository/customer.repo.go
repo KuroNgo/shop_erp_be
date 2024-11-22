@@ -96,6 +96,21 @@ func (c *customerRepository) GetOneByName(ctx context.Context, name string) (*cu
 	return customer, nil
 }
 
+func (c *customerRepository) GetByLocation(ctx context.Context, location string) ([]customerdomain.CustomerResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c *customerRepository) GetByEmail(ctx context.Context, email string) (*customerdomain.CustomerResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c *customerRepository) GetByPurchaseHistory(ctx context.Context, minPurchases int) ([]customerdomain.CustomerResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
 func (c *customerRepository) GetAll(ctx context.Context) ([]customerdomain.Customer, error) {
 	customerCollection := c.database.Collection(c.customerCollection)
 

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"log"
 	benefitsdomain "shop_erp_mono/internal/domain/human_resource_management/benefits"
 	employeesdomain "shop_erp_mono/internal/domain/human_resource_management/employees"
 	"shop_erp_mono/internal/usecase/human_resource_management/benefit/validate"
@@ -51,7 +52,10 @@ func (b *benefitUseCase) CreateOne(ctx context.Context, input *benefitsdomain.In
 		UpdatedAt:   time.Now(),
 	}
 
-	_ = b.cache.Delete("benefits")
+	err = b.cache.Delete("benefits")
+	if err != nil {
+		log.Printf("failed to delete benefits cache: %v", err)
+	}
 
 	return b.benefitRepository.CreateOne(ctx, &benefit)
 }
@@ -70,8 +74,14 @@ func (b *benefitUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
-	_ = b.cache.Delete("benefits")
-	_ = b.cache.Delete(id)
+	err = b.cache.Delete("benefits")
+	if err != nil {
+		log.Printf("failed to delete benefits cache: %v", err)
+	}
+	err = b.cache.Delete(id)
+	if err != nil {
+		log.Printf("failed to delete benefits cache: %v", err)
+	}
 
 	return b.benefitRepository.DeleteOne(ctx, benefitID)
 }
@@ -102,8 +112,14 @@ func (b *benefitUseCase) UpdateOne(ctx context.Context, id string, input *benefi
 		EndDate:     input.EndDate,
 	}
 
-	_ = b.cache.Delete("benefits")
-	_ = b.cache.Delete(id)
+	err = b.cache.Delete("benefits")
+	if err != nil {
+		log.Printf("failed to delete benefits cache: %v", err)
+	}
+	err = b.cache.Delete(id)
+	if err != nil {
+		log.Printf("failed to delete benefits cache: %v", err)
+	}
 
 	return b.benefitRepository.UpdateOne(ctx, benefitID, &benefit)
 }
@@ -112,7 +128,10 @@ func (b *benefitUseCase) GetByID(ctx context.Context, id string) (benefitsdomain
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
-	data, _ := b.cache.Get(id)
+	data, err := b.cache.Get(id)
+	if err != nil {
+		log.Printf("failed to get benefits cache: %v", err)
+	}
 	if data != nil {
 		var response benefitsdomain.Output
 		err := json.Unmarshal(data, &response)
@@ -149,7 +168,7 @@ func (b *benefitUseCase) GetByID(ctx context.Context, id string) (benefitsdomain
 
 	err = b.cache.Set(id, data)
 	if err != nil {
-		return benefitsdomain.Output{}, err
+		log.Printf("failed to set benefits cache: %v", err)
 	}
 
 	return output, nil
@@ -159,7 +178,10 @@ func (b *benefitUseCase) GetByEmail(ctx context.Context, email string) (benefits
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
-	data, _ := b.cache.Get(email)
+	data, err := b.cache.Get(email)
+	if err != nil {
+		log.Printf("failed to get benefits cache: %v", err)
+	}
 	if data != nil {
 		var response benefitsdomain.Output
 		err := json.Unmarshal(data, &response)
@@ -191,7 +213,7 @@ func (b *benefitUseCase) GetByEmail(ctx context.Context, email string) (benefits
 
 	err = b.cache.Set(email, data)
 	if err != nil {
-		return benefitsdomain.Output{}, err
+		log.Printf("failed to set benefits cache: %v", err)
 	}
 
 	return output, nil
@@ -201,7 +223,10 @@ func (b *benefitUseCase) GetAll(ctx context.Context) ([]benefitsdomain.Output, e
 	ctx, cancel := context.WithTimeout(ctx, b.contextTimeout)
 	defer cancel()
 
-	data, _ := b.cache.Get("benefits")
+	data, err := b.cache.Get("benefits")
+	if err != nil {
+		log.Printf("failed to get benefits cache: %v", err)
+	}
 	if data != nil {
 		var response []benefitsdomain.Output
 		err := json.Unmarshal(data, &response)
@@ -239,7 +264,7 @@ func (b *benefitUseCase) GetAll(ctx context.Context) ([]benefitsdomain.Output, e
 
 	err = b.cache.Set("benefits", data)
 	if err != nil {
-		return nil, err
+		log.Printf("failed to set benefits cache: %v", err)
 	}
 
 	return outputs, nil
