@@ -1,0 +1,1 @@
+package department_usecase

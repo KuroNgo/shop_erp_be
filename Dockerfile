@@ -18,6 +18,5 @@ COPY --from=build /app/main .
 
 # Sao chép thư mục internal/config vào container
 COPY --from=build /app/internal/config /app/internal/config
-
 EXPOSE 8080
 CMD ["./main"]

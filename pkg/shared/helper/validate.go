@@ -5,6 +5,12 @@ import (
 	"unicode"
 )
 
+func AlphabetOnlyRegex(s string) bool {
+	// Tạo biểu thức chính quy để kiểm tra chỉ chứa ký tự chữ
+	re := regexp.MustCompile(`^[A-Za-z]+$`)
+	return re.MatchString(s)
+}
+
 // EmailValid Không trả về json
 func EmailValid(email string) bool {
 	// Biểu thức chính quy kiểm tra địa chỉ email theo định dạng thông thường

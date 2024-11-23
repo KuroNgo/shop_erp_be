@@ -3,10 +3,11 @@ package validate
 import (
 	"errors"
 	departmentsdomain "shop_erp_mono/internal/domain/human_resource_management/departments"
+	"shop_erp_mono/pkg/shared/helper"
 )
 
 func Department(department *departmentsdomain.Input) error {
-	if department.Name == "" {
+	if helper.AlphabetOnlyRegex(department.Name) {
 		return errors.New("the department's information do not null")
 	}
 

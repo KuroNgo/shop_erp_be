@@ -15,6 +15,7 @@ type Role struct {
 	Title          string             `bson:"title"`
 	Description    string             `bson:"description"`
 	NumberOfPeople int16              `bson:"number_of_people"`
+	Level          int                `bson:"level"`
 	CreatedAt      time.Time          `bson:"created_at"`
 	UpdatedAt      time.Time          `bson:"updated_at"`
 }

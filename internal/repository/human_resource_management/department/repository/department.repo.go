@@ -51,6 +51,27 @@ func (d *departmentRepository) DeleteOne(ctx context.Context, id primitive.Objec
 	return nil
 }
 
+func (d *departmentRepository) DeleteSoftOne(ctx context.Context, id primitive.ObjectID, idUser primitive.ObjectID) error {
+	collectionDepartment := d.database.Collection(d.collectionDepartment)
+
+	if id == primitive.NilObjectID {
+		return errors.New("error in the department's ID with delete in database, this is do not nil")
+	}
+
+	filter := bson.M{"_id": id}
+	update := bson.M{
+		"enable":      0,
+		"who_deleted": idUser,
+	}
+
+	_, err := collectionDepartment.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (d *departmentRepository) UpdateOne(ctx context.Context, id primitive.ObjectID, department *departmentsdomain.Department) error {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
@@ -94,10 +115,31 @@ func (d *departmentRepository) UpdateManager(ctx context.Context, id primitive.O
 	return nil
 }
 
+func (d *departmentRepository) UpdateStatus(ctx context.Context, id primitive.ObjectID, status string) error {
+	collectionDepartment := d.database.Collection(d.collectionDepartment)
+
+	if id == primitive.NilObjectID {
+		return errors.New("id do not nil")
+	}
+
+	filter := bson.M{"_id": id}
+	update := bson.M{"$set": bson.M{
+		"status":     status,
+		"updated_at": time.Now(),
+	}}
+
+	_, err := collectionDepartment.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (d *departmentRepository) GetByID(ctx context.Context, id primitive.ObjectID) (departmentsdomain.Department, error) {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
-	filter := bson.M{"_id": id}
+	filter := bson.M{"_id": id, "enable": 1, "status": "active"}
 	var department departmentsdomain.Department
 	if err := collectionDepartment.FindOne(ctx, filter).Decode(&department); err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
@@ -112,7 +154,7 @@ func (d *departmentRepository) GetByID(ctx context.Context, id primitive.ObjectI
 func (d *departmentRepository) GetByName(ctx context.Context, name string) (departmentsdomain.Department, error) {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
-	filter := bson.M{"name": name}
+	filter := bson.M{"name": name, "enable": 1, "status": "active"}
 	var department departmentsdomain.Department
 	if err := collectionDepartment.FindOne(ctx, filter).Decode(&department); err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
@@ -124,10 +166,78 @@ func (d *departmentRepository) GetByName(ctx context.Context, name string) (depa
 	return department, nil
 }
 
+func (d *departmentRepository) GetByStatus(ctx context.Context, status string) ([]departmentsdomain.Department, error) {
+	collectionDepartment := d.database.Collection(d.collectionDepartment)
+
+	filter := bson.M{"status": status, "enable": 1}
+	cursor, err := collectionDepartment.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer func(cursor *mongo.Cursor, ctx context.Context) {
+		err = cursor.Close(ctx)
+		if err != nil {
+			return
+		}
+	}(cursor, ctx)
+
+	var departments []departmentsdomain.Department
+	departments = make([]departmentsdomain.Department, 0, cursor.RemainingBatchLength())
+	for cursor.Next(ctx) {
+		var department departmentsdomain.Department
+		if err = cursor.Decode(&department); err != nil {
+			return nil, err
+		}
+
+		departments = append(departments, department)
+	}
+
+	// Check for any errors encountered during iteration
+	if err = cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return departments, nil
+}
+
 func (d *departmentRepository) GetAll(ctx context.Context) ([]departmentsdomain.Department, error) {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
-	filter := bson.M{}
+	filter := bson.M{"status": "active", "enable": 1}
+	cursor, err := collectionDepartment.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer func(cursor *mongo.Cursor, ctx context.Context) {
+		err = cursor.Close(ctx)
+		if err != nil {
+			return
+		}
+	}(cursor, ctx)
+
+	var departments []departmentsdomain.Department
+	departments = make([]departmentsdomain.Department, 0, cursor.RemainingBatchLength())
+	for cursor.Next(ctx) {
+		var department departmentsdomain.Department
+		if err = cursor.Decode(&department); err != nil {
+			return nil, err
+		}
+
+		departments = append(departments, department)
+	}
+
+	// Check for any errors encountered during iteration
+	if err = cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return departments, nil
+}
+
+func (d *departmentRepository) GetAllSoftDelete(ctx context.Context) ([]departmentsdomain.Department, error) {
+	collectionDepartment := d.database.Collection(d.collectionDepartment)
+
+	filter := bson.M{"enable": 0}
 	cursor, err := collectionDepartment.Find(ctx, filter)
 	if err != nil {
 		return nil, err
@@ -161,7 +271,7 @@ func (d *departmentRepository) GetAll(ctx context.Context) ([]departmentsdomain.
 func (d *departmentRepository) CountManagerExist(ctx context.Context, managerID primitive.ObjectID) (int64, error) {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
-	filter := bson.M{"manager_id": managerID}
+	filter := bson.M{"manager_id": managerID, "status": "active", "enable": 1}
 	count, err := collectionDepartment.CountDocuments(ctx, filter)
 	if err != nil {
 		return 0, err
@@ -173,7 +283,7 @@ func (d *departmentRepository) CountManagerExist(ctx context.Context, managerID 
 func (d *departmentRepository) CountDepartment(ctx context.Context) (int64, error) {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
-	filter := bson.M{}
+	filter := bson.M{"status": "active", "enable": 1}
 	count, err := collectionDepartment.CountDocuments(ctx, filter)
 	if err != nil {
 		return 0, err
@@ -185,7 +295,7 @@ func (d *departmentRepository) CountDepartment(ctx context.Context) (int64, erro
 func (d *departmentRepository) CountDepartmentWithName(ctx context.Context, name string) (int64, error) {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
-	filter := bson.M{"name": name}
+	filter := bson.M{"name": name, "status": "active", "enable": 1}
 	count, err := collectionDepartment.CountDocuments(ctx, filter)
 	if err != nil {
 		return 0, err

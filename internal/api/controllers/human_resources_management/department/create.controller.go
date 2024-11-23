@@ -1,6 +1,7 @@
 package department_controller
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	departmentsdomain "shop_erp_mono/internal/domain/human_resource_management/departments"
@@ -16,6 +17,15 @@ import (
 // @Router /api/v1/departments/create [post]
 // @Security CookieAuth
 func (d *DepartmentController) CreateOne(ctx *gin.Context) {
+	currentUser, exists := ctx.Get("currentUser")
+	if !exists {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"status":  "fail",
+			"message": "You are not logged in!",
+		})
+		return
+	}
+
 	var input departmentsdomain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
@@ -25,7 +35,7 @@ func (d *DepartmentController) CreateOne(ctx *gin.Context) {
 		return
 	}
 
-	err := d.DepartmentUseCase.CreateOne(ctx, &input)
+	err := d.DepartmentUseCase.CreateOne(ctx, &input, fmt.Sprintf("%s", currentUser))
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",

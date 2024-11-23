@@ -15,6 +15,7 @@ type IEmployeeRepository interface {
 	GetAll(ctx context.Context) ([]Employee, error)
 	CountEmployeeByEmail(ctx context.Context, email string) (int64, error)
 	CountEmployee(ctx context.Context) (int64, error)
+	CountEmployeeByDepartmentID(ctx context.Context, departmentID primitive.ObjectID) (int64, error)
 }
 
 type IEmployeeUseCase interface {

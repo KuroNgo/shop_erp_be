@@ -1,6 +1,7 @@
 package department_controller
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	departmentsdomain "shop_erp_mono/internal/domain/human_resource_management/departments"
@@ -22,6 +23,15 @@ type DepartmentWithManagerInput struct {
 // @Router /api/v1/departments/create/manager [post]
 // @Security CookieAuth
 func (d *DepartmentController) CreateOneWithManager(ctx *gin.Context) {
+	currentUser, exists := ctx.Get("currentUser")
+	if !exists {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"status":  "fail",
+			"message": "You are not logged in!",
+		})
+		return
+	}
+
 	var input DepartmentWithManagerInput
 	// Bind JSON input
 	if err := ctx.ShouldBindJSON(&input); err != nil {
@@ -33,7 +43,7 @@ func (d *DepartmentController) CreateOneWithManager(ctx *gin.Context) {
 	}
 
 	// Call use case to create department with manager
-	err := d.DepartmentUseCase.CreateDepartmentWithManager(ctx, &input.Department, &input.Manager)
+	err := d.DepartmentUseCase.CreateDepartmentWithManager(ctx, &input.Department, &input.Manager, fmt.Sprintf("%s", currentUser))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",

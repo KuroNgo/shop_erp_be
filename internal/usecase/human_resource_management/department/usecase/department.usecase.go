@@ -10,6 +10,7 @@ import (
 	"log"
 	departmentsdomain "shop_erp_mono/internal/domain/human_resource_management/departments"
 	employeesdomain "shop_erp_mono/internal/domain/human_resource_management/employees"
+	roledomain "shop_erp_mono/internal/domain/human_resource_management/role"
 	userdomain "shop_erp_mono/internal/domain/human_resource_management/user"
 	"shop_erp_mono/internal/usecase/human_resource_management/department/validate"
 	"shop_erp_mono/pkg/shared/constant"
@@ -22,24 +23,58 @@ type departmentUseCase struct {
 	contextTimeout       time.Duration
 	departmentRepository departmentsdomain.IDepartmentRepository
 	employeeRepository   employeesdomain.IEmployeeRepository
+	roleRepository       roledomain.IRoleRepository
 	userRepository       userdomain.IUserRepository
 	client               *mongo.Client
 	cache                *bigcache.BigCache
 }
 
 func NewDepartmentUseCase(contextTimeout time.Duration, departmentRepository departmentsdomain.IDepartmentRepository,
-	employeeRepository employeesdomain.IEmployeeRepository, userRepository userdomain.IUserRepository,
+	employeeRepository employeesdomain.IEmployeeRepository, userRepository userdomain.IUserRepository, roleRepository roledomain.IRoleRepository,
 	cacheTTL time.Duration, client *mongo.Client) departmentsdomain.IDepartmentUseCase {
 	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
 	if err != nil {
 		return nil
 	}
-	return &departmentUseCase{contextTimeout: contextTimeout, cache: cache, departmentRepository: departmentRepository, userRepository: userRepository, employeeRepository: employeeRepository, client: client}
+	return &departmentUseCase{contextTimeout: contextTimeout, cache: cache, departmentRepository: departmentRepository, userRepository: userRepository, roleRepository: roleRepository, employeeRepository: employeeRepository, client: client}
 }
 
-func (d *departmentUseCase) CreateOne(ctx context.Context, input *departmentsdomain.Input) error {
+func (d *departmentUseCase) checkRoleLevelFromUserID(ctx context.Context, idUser string) (int, error) {
+	userID, err := primitive.ObjectIDFromHex(idUser)
+	if err != nil {
+		log.Printf("error of convert id to hex %s", err)
+	}
+
+	userData, err := d.userRepository.GetByID(ctx, userID)
+	if err != nil {
+		return 0, err
+	}
+
+	employeeData, err := d.employeeRepository.GetByID(ctx, userData.EmployeeID)
+	if err != nil {
+		return 0, err
+	}
+
+	roleLevel, err := d.roleRepository.GetByID(ctx, employeeData.RoleID)
+	if err != nil {
+		return 0, err
+	}
+
+	return roleLevel.Level, nil
+}
+
+func (d *departmentUseCase) CreateOne(ctx context.Context, input *departmentsdomain.Input, idUser string) error {
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
+
+	level, err := d.checkRoleLevelFromUserID(ctx, idUser)
+	if err != nil {
+		return err
+	}
+
+	if level >= 3 {
+		return errors.New("permission denied")
+	}
 
 	if err := validate.Department(input); err != nil {
 		return err
@@ -86,18 +121,32 @@ func (d *departmentUseCase) CreateOne(ctx context.Context, input *departmentsdom
 		UpdatedAt:   time.Now(),
 	}
 
+	err = d.departmentRepository.CreateOne(ctx, department)
+	if err != nil {
+		return err
+	}
+
 	if err = d.cache.Delete("departments"); err != nil {
 		log.Printf("failed to delete departments cache: %v", err)
 	}
 
-	return d.departmentRepository.CreateOne(ctx, department)
+	return nil
 }
 
 func (d *departmentUseCase) CreateDepartmentWithManager(ctx context.Context, departmentInput *departmentsdomain.Input,
-	employeeInput *employeesdomain.Input) error {
+	employeeInput *employeesdomain.Input, idUser string) error {
 
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
+
+	level, err := d.checkRoleLevelFromUserID(ctx, idUser)
+	if err != nil {
+		return err
+	}
+
+	if level >= 3 {
+		return errors.New("permission denied")
+	}
 
 	session, err := d.client.StartSession()
 	if err != nil {
@@ -225,6 +274,15 @@ func (d *departmentUseCase) DeleteOne(ctx context.Context, id string, userid str
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
 
+	level, err := d.checkRoleLevelFromUserID(ctx, userid)
+	if err != nil {
+		return err
+	}
+
+	if level != 1 {
+		return errors.New("permission denied")
+	}
+
 	departmentID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return errors.New("invalid department ID format")
@@ -267,9 +325,51 @@ func (d *departmentUseCase) DeleteOne(ctx context.Context, id string, userid str
 	return nil
 }
 
-func (d *departmentUseCase) UpdateOne(ctx context.Context, id string, input *departmentsdomain.Input) error {
+func (d *departmentUseCase) DeleteSoftOne(ctx context.Context, id string, userID string) error {
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
+
+	level, err := d.checkRoleLevelFromUserID(ctx, userID)
+	if err != nil {
+		return err
+	}
+
+	if level >= 3 {
+		return errors.New("permission denied")
+	}
+
+	departmentID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return errors.New("invalid department ID format")
+	}
+
+	idUser, err := primitive.ObjectIDFromHex(userID)
+	if err != nil {
+		return errors.New("invalid user ID format")
+	}
+
+	var mu sync.Mutex
+	mu.Lock()
+	defer mu.Unlock()
+	if err = d.departmentRepository.DeleteSoftOne(ctx, departmentID, idUser); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (d *departmentUseCase) UpdateOne(ctx context.Context, id string, input *departmentsdomain.Input, idUser string) error {
+	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
+	defer cancel()
+
+	level, err := d.checkRoleLevelFromUserID(ctx, idUser)
+	if err != nil {
+		return err
+	}
+
+	if level >= 3 {
+		return errors.New("permission denied")
+	}
 
 	if err := validate.Department(input); err != nil {
 		return err
@@ -329,9 +429,18 @@ func (d *departmentUseCase) UpdateOne(ctx context.Context, id string, input *dep
 	return session.CommitTransaction(ctx)
 }
 
-func (d *departmentUseCase) UpdateManager(ctx context.Context, id string, managerID string) error {
+func (d *departmentUseCase) UpdateManager(ctx context.Context, id string, managerID string, idUser string) error {
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
+
+	level, err := d.checkRoleLevelFromUserID(ctx, idUser)
+	if err != nil {
+		return err
+	}
+
+	if level != 1 {
+		return errors.New("permission denied")
+	}
 
 	departmentID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -348,11 +457,46 @@ func (d *departmentUseCase) UpdateManager(ctx context.Context, id string, manage
 		return err
 	}
 
+	err = d.departmentRepository.UpdateManager(ctx, departmentID, managerData.ID)
+	if err != nil {
+		return err
+	}
+
 	if err = d.cache.Delete("departments"); err != nil {
 		log.Printf("failed to delete departments cache: %v", err)
 	}
 
-	return d.departmentRepository.UpdateManager(ctx, departmentID, managerData.ID)
+	return nil
+}
+
+func (d *departmentUseCase) UpdateStatus(ctx context.Context, id string, status string, idUser string) error {
+	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
+	defer cancel()
+
+	level, err := d.checkRoleLevelFromUserID(ctx, idUser)
+	if err != nil {
+		return err
+	}
+
+	if level > 2 {
+		return errors.New("permission denied")
+	}
+
+	departmentID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return errors.New("invalid department ID format")
+	}
+
+	err = d.departmentRepository.UpdateStatus(ctx, departmentID, status)
+	if err != nil {
+		return err
+	}
+
+	if err = d.cache.Delete("departments"); err != nil {
+		log.Printf("failed to delete departments cache: %v", err)
+	}
+
+	return nil
 }
 
 func (d *departmentUseCase) GetByID(ctx context.Context, id string) (departmentsdomain.Output, error) {
@@ -363,7 +507,6 @@ func (d *departmentUseCase) GetByID(ctx context.Context, id string) (departments
 	if err != nil {
 		log.Printf("failed to get departments cache: %v", err)
 	}
-
 	if data != nil {
 		var response departmentsdomain.Output
 		err = json.Unmarshal(data, &response)
@@ -380,8 +523,20 @@ func (d *departmentUseCase) GetByID(ctx context.Context, id string) (departments
 		return departmentsdomain.Output{}, err
 	}
 
+	employeeData, err := d.employeeRepository.GetByID(ctx, departmentData.ManagerID)
+	if err != nil {
+		return departmentsdomain.Output{}, err
+	}
+
+	amountOfEmployee, err := d.employeeRepository.CountEmployeeByDepartmentID(ctx, departmentID)
+	if err != nil {
+		return departmentsdomain.Output{}, err
+	}
+
 	output := departmentsdomain.Output{
-		Department: departmentData,
+		Department:    departmentData,
+		Manager:       *employeeData,
+		CountEmployee: amountOfEmployee,
 	}
 
 	data, err = json.Marshal(output)
@@ -417,8 +572,20 @@ func (d *departmentUseCase) GetByName(ctx context.Context, name string) (departm
 		return departmentsdomain.Output{}, err
 	}
 
+	employeeData, err := d.employeeRepository.GetByID(ctx, departmentData.ManagerID)
+	if err != nil {
+		return departmentsdomain.Output{}, err
+	}
+
+	amountOfEmployee, err := d.employeeRepository.CountEmployeeByDepartmentID(ctx, departmentData.ID)
+	if err != nil {
+		return departmentsdomain.Output{}, err
+	}
+
 	output := departmentsdomain.Output{
-		Department: departmentData,
+		Department:    departmentData,
+		Manager:       *employeeData,
+		CountEmployee: amountOfEmployee,
 	}
 
 	data, err = json.Marshal(output)
@@ -434,7 +601,92 @@ func (d *departmentUseCase) GetByName(ctx context.Context, name string) (departm
 	return output, nil
 }
 
-// GetAll không cần phân trang vì không có công ty nào có tới 1000 phòng ban
+func (d *departmentUseCase) GetByStatus(ctx context.Context, status string) ([]departmentsdomain.Output, error) {
+	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
+	defer cancel()
+
+	data, err := d.cache.Get("status")
+	if err != nil {
+		log.Printf("failed to get departments cache: %v", err)
+	}
+
+	if data != nil {
+		var response []departmentsdomain.Output
+		err = json.Unmarshal(data, &response)
+		if err != nil {
+			return nil, err
+		}
+		return response, nil
+	}
+
+	errCh := make(chan error, 1)
+	var wg sync.WaitGroup
+	var mutex sync.Mutex // Mutex để đồng bộ thao tác với slice outputs
+
+	departmentsData, err := d.departmentRepository.GetByStatus(ctx, status)
+	if err != nil {
+		return nil, err
+	}
+
+	var outputs []departmentsdomain.Output
+	outputs = make([]departmentsdomain.Output, 0, len(departmentsData))
+	for _, departmentData := range departmentsData {
+		wg.Add(1)
+		go func(departmentData departmentsdomain.Department) {
+			defer wg.Done()
+
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				managerData, err := d.employeeRepository.GetByID(ctx, departmentData.ManagerID)
+				if err != nil {
+					errCh <- err
+					return
+				}
+
+				amountOfEmployee, err := d.employeeRepository.CountEmployeeByDepartmentID(ctx, departmentData.ID)
+				if err != nil {
+					return
+				}
+
+				output := departmentsdomain.Output{
+					Department:    departmentData,
+					Manager:       *managerData,
+					CountEmployee: amountOfEmployee,
+				}
+
+				mutex.Lock()
+				outputs = append(outputs, output)
+				mutex.Unlock()
+			}
+		}(departmentData)
+	}
+
+	wg.Wait()
+	close(errCh)
+
+	select {
+	case err = <-errCh:
+		if err != nil {
+			return nil, err
+		}
+	default:
+	}
+
+	data, err = json.Marshal(outputs)
+	if err != nil {
+		return nil, err
+	}
+
+	err = d.cache.Set("status", data)
+	if err != nil {
+		log.Printf("failed to set departments cache: %v", err)
+	}
+
+	return outputs, nil
+}
+
 func (d *departmentUseCase) GetAll(ctx context.Context) ([]departmentsdomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
@@ -480,9 +732,15 @@ func (d *departmentUseCase) GetAll(ctx context.Context) ([]departmentsdomain.Out
 					return
 				}
 
+				amountOfEmployee, err := d.employeeRepository.CountEmployeeByDepartmentID(ctx, departmentData.ID)
+				if err != nil {
+					return
+				}
+
 				output := departmentsdomain.Output{
-					Department: departmentData,
-					Manager:    *managerData,
+					Department:    departmentData,
+					Manager:       *managerData,
+					CountEmployee: amountOfEmployee,
 				}
 
 				mutex.Lock()
@@ -516,6 +774,93 @@ func (d *departmentUseCase) GetAll(ctx context.Context) ([]departmentsdomain.Out
 	return outputs, nil
 }
 
+func (d *departmentUseCase) GetAllSoftDelete(ctx context.Context) ([]departmentsdomain.Output, error) {
+	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
+	defer cancel()
+
+	data, err := d.cache.Get("departments_deleted")
+	if err != nil {
+		log.Printf("failed to get departments cache: %v", err)
+	}
+
+	if data != nil {
+		var response []departmentsdomain.Output
+		err = json.Unmarshal(data, &response)
+		if err != nil {
+			return nil, err
+		}
+		return response, nil
+	}
+
+	errCh := make(chan error, 1)
+	var wg sync.WaitGroup
+	var mutex sync.Mutex // Mutex để đồng bộ thao tác với slice outputs
+
+	departmentsData, err := d.departmentRepository.GetAllSoftDelete(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var outputs []departmentsdomain.Output
+	outputs = make([]departmentsdomain.Output, 0, len(departmentsData))
+
+	for _, departmentData := range departmentsData {
+		wg.Add(1)
+		go func(departmentData departmentsdomain.Department) {
+			defer wg.Done()
+
+			select {
+			case <-ctx.Done():
+				return
+			default:
+				managerData, err := d.employeeRepository.GetByID(ctx, departmentData.ManagerID)
+				if err != nil {
+					errCh <- err
+					return
+				}
+
+				amountOfEmployee, err := d.employeeRepository.CountEmployeeByDepartmentID(ctx, departmentData.ID)
+				if err != nil {
+					return
+				}
+
+				output := departmentsdomain.Output{
+					Department:    departmentData,
+					Manager:       *managerData,
+					CountEmployee: amountOfEmployee,
+				}
+
+				mutex.Lock()
+				outputs = append(outputs, output)
+				mutex.Unlock()
+			}
+		}(departmentData)
+	}
+
+	wg.Wait()
+	close(errCh)
+
+	select {
+	case err = <-errCh:
+		if err != nil {
+			return nil, err
+		}
+	default:
+	}
+
+	data, err = json.Marshal(outputs)
+	if err != nil {
+		return nil, err
+	}
+
+	err = d.cache.Set("departments_deleted", data)
+	if err != nil {
+		log.Printf("failed to set departments cache: %v", err)
+	}
+
+	return outputs, nil
+}
+
 func (d *departmentUseCase) CountManagerExist(ctx context.Context, managerID primitive.ObjectID) (int64, error) {
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
@@ -528,4 +873,9 @@ func (d *departmentUseCase) CountDepartment(ctx context.Context) (int64, error) 
 	defer cancel()
 
 	return d.departmentRepository.CountDepartment(ctx)
+}
+
+func (d *departmentUseCase) LifecycleDepartment(ctx context.Context) error {
+	return nil
+	// need to write
 }

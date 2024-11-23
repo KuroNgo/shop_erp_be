@@ -17,6 +17,9 @@ type Department struct {
 	Description string             `bson:"description"`
 	ParentID    primitive.ObjectID `bson:"parent_id,omitempty"`
 	Level       int                `bson:"level"`
+	Status      bool               `bson:"status"`
+	Enable      int                `bson:"enable"`
+	WhoDeleted  primitive.ObjectID `bson:"who_deleted"`
 	CreatedAt   time.Time          `bson:"created_at"`
 	UpdatedAt   time.Time          `bson:"updated_at"`
 }
@@ -29,8 +32,8 @@ type Input struct {
 	ManagerEmail string             `bson:"manager_email" example:"admin@admin.com"`
 }
 
-// Output struct represents a department within the company.
 type Output struct {
-	Department Department                `bson:"department" json:"department"`
-	Manager    employees_domain.Employee `bson:"manager" json:"manager"`
+	Department    Department                `json:"department"`
+	Manager       employees_domain.Employee `json:"manager"`
+	CountEmployee int64                     `json:"count_employee"`
 }

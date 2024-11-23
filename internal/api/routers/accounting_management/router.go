@@ -8,6 +8,8 @@ import (
 	account_route "shop_erp_mono/internal/api/routers/accounting_management/account"
 	budget_route "shop_erp_mono/internal/api/routers/accounting_management/budget"
 	"shop_erp_mono/internal/config"
+	casbin "shop_erp_mono/pkg/interface/casbin/middlewares"
+	"shop_erp_mono/pkg/interface/casbin/principle"
 	"time"
 )
 
@@ -15,7 +17,7 @@ func SetUp(env *config.Database, timeout time.Duration, db *mongo.Database, gin 
 	publicRouter := gin.Group("/api/v1")
 
 	// Khởi tạo Casbin enforcer
-	//enforcer := principle.SetUp(env)
+	enforcer := principle.SetUp(env)
 
 	// Middleware
 	publicRouter.Use(
@@ -23,7 +25,7 @@ func SetUp(env *config.Database, timeout time.Duration, db *mongo.Database, gin 
 		middlewares.Recover(),
 		gzip.Gzip(gzip.DefaultCompression,
 			gzip.WithExcludedPaths([]string{",*"})),
-		//casbin.Authorize(enforcer),
+		casbin.Authorize(enforcer),
 		//middlewares.StructuredLogger(&log.Logger, value),
 	)
 
