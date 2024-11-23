@@ -116,7 +116,6 @@ definitions:
         example: Human Resources
         type: string
       parentID:
-        description: tên phòng ban cha
         type: string
     type: object
   employees_domain.Input:
@@ -214,10 +213,16 @@ definitions:
     type: object
   inventory_domain.Input:
     properties:
+      expiry_date:
+        description: if applicable
+        type: string
       product_id:
         type: string
       quantity:
         type: integer
+      status:
+        description: e.g., "in stock", "out of stock"
+        type: string
       warehouse_id:
         type: string
     type: object
@@ -320,11 +325,9 @@ definitions:
     properties:
       asset_url:
         type: string
-      avatar_url:
-        type: string
       description:
         type: string
-      expiry_date:
+      image_url:
         type: string
       price:
         type: number
@@ -332,8 +335,6 @@ definitions:
         type: string
       product_name:
         type: string
-      quantity_in_stock:
-        type: integer
     type: object
   purchase_order_detail_domain.Input:
     properties:
@@ -1510,6 +1511,24 @@ paths:
       summary: Delete Department Information
       tags:
       - Department
+    patch:
+      consumes:
+      - application/json
+      description: Deletes the department's information
+      parameters:
+      - description: Department ID
+        in: query
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Delete Department Information
+      tags:
+      - Department
   /api/v1/departments/get:
     get:
       consumes:
@@ -1542,6 +1561,19 @@ paths:
       summary: Get Department Information
       tags:
       - Department
+  /api/v1/departments/get/all/deleted:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the department's information
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get Department Information
+      tags:
+      - Department
   /api/v1/departments/get/name:
     get:
       consumes:
@@ -1559,6 +1591,25 @@ paths:
       security:
       - CookieAuth: []
       summary: Get Department Information By Name
+      tags:
+      - Department
+  /api/v1/departments/get/status:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the department's information name
+      parameters:
+      - description: Status
+        in: query
+        name: status
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get Department Information By ID
       tags:
       - Department
   /api/v1/departments/update:

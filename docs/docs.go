@@ -1576,6 +1576,34 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {}
+            },
+            "patch": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Deletes the department's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Department"
+                ],
+                "summary": "Delete Department Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Department ID",
+                        "name": "_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
             }
         },
         "/api/v1/departments/get": {
@@ -1629,6 +1657,27 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/api/v1/departments/get/all/deleted": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the department's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Department"
+                ],
+                "summary": "Get Department Information",
+                "responses": {}
+            }
+        },
         "/api/v1/departments/get/name": {
             "get": {
                 "security": [
@@ -1652,6 +1701,36 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Contract ID",
                         "name": "name",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/departments/get/status": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the department's information name",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Department"
+                ],
+                "summary": "Get Department Information By ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Status",
+                        "name": "status",
                         "in": "query",
                         "required": true
                     }
@@ -5280,7 +5359,6 @@ const docTemplate = `{
                     "example": "Human Resources"
                 },
                 "parentID": {
-                    "description": "tên phòng ban cha",
                     "type": "string"
                 }
             }
@@ -5426,11 +5504,19 @@ const docTemplate = `{
         "inventory_domain.Input": {
             "type": "object",
             "properties": {
+                "expiry_date": {
+                    "description": "if applicable",
+                    "type": "string"
+                },
                 "product_id": {
                     "type": "string"
                 },
                 "quantity": {
                     "type": "integer"
+                },
+                "status": {
+                    "description": "e.g., \"in stock\", \"out of stock\"",
+                    "type": "string"
                 },
                 "warehouse_id": {
                     "type": "string"
@@ -5584,13 +5670,10 @@ const docTemplate = `{
                 "asset_url": {
                     "type": "string"
                 },
-                "avatar_url": {
-                    "type": "string"
-                },
                 "description": {
                     "type": "string"
                 },
-                "expiry_date": {
+                "image_url": {
                     "type": "string"
                 },
                 "price": {
@@ -5601,9 +5684,6 @@ const docTemplate = `{
                 },
                 "product_name": {
                     "type": "string"
-                },
-                "quantity_in_stock": {
-                    "type": "integer"
                 }
             }
         },

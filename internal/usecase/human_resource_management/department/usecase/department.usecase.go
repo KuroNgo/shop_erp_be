@@ -705,10 +705,6 @@ func (d *departmentUseCase) GetAll(ctx context.Context) ([]departmentsdomain.Out
 		return response, nil
 	}
 
-	errCh := make(chan error, 1)
-	var wg sync.WaitGroup
-	var mutex sync.Mutex // Mutex để đồng bộ thao tác với slice outputs
-
 	departmentsData, err := d.departmentRepository.GetAll(ctx)
 	if err != nil {
 		return nil, err
@@ -716,49 +712,27 @@ func (d *departmentUseCase) GetAll(ctx context.Context) ([]departmentsdomain.Out
 
 	var outputs []departmentsdomain.Output
 	outputs = make([]departmentsdomain.Output, 0, len(departmentsData))
-
 	for _, departmentData := range departmentsData {
-		wg.Add(1)
-		go func(departmentData departmentsdomain.Department) {
-			defer wg.Done()
+		if departmentData.ManagerID == primitive.NilObjectID {
+			return nil, errors.New("error to entity manager data is nil, need to update the manager data")
+		}
 
-			select {
-			case <-ctx.Done():
-				return
-			default:
-				managerData, err := d.employeeRepository.GetByID(ctx, departmentData.ManagerID)
-				if err != nil {
-					errCh <- err
-					return
-				}
-
-				amountOfEmployee, err := d.employeeRepository.CountEmployeeByDepartmentID(ctx, departmentData.ID)
-				if err != nil {
-					return
-				}
-
-				output := departmentsdomain.Output{
-					Department:    departmentData,
-					Manager:       *managerData,
-					CountEmployee: amountOfEmployee,
-				}
-
-				mutex.Lock()
-				outputs = append(outputs, output)
-				mutex.Unlock()
-			}
-		}(departmentData)
-	}
-
-	wg.Wait()
-	close(errCh)
-
-	select {
-	case err = <-errCh:
+		managerData, err := d.employeeRepository.GetByID(ctx, departmentData.ManagerID)
 		if err != nil {
 			return nil, err
 		}
-	default:
+
+		amountOfEmployee, err := d.employeeRepository.CountEmployeeByDepartmentID(ctx, departmentData.ID)
+		if err != nil {
+			return nil, err
+		}
+
+		output := departmentsdomain.Output{
+			Department:    departmentData,
+			Manager:       *managerData,
+			CountEmployee: amountOfEmployee,
+		}
+		outputs = append(outputs, output)
 	}
 
 	data, err = json.Marshal(outputs)
@@ -803,7 +777,6 @@ func (d *departmentUseCase) GetAllSoftDelete(ctx context.Context) ([]departments
 
 	var outputs []departmentsdomain.Output
 	outputs = make([]departmentsdomain.Output, 0, len(departmentsData))
-
 	for _, departmentData := range departmentsData {
 		wg.Add(1)
 		go func(departmentData departmentsdomain.Department) {

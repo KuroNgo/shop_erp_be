@@ -17,7 +17,7 @@ type Department struct {
 	Description string             `bson:"description"`
 	ParentID    primitive.ObjectID `bson:"parent_id,omitempty"`
 	Level       int                `bson:"level"`
-	Status      bool               `bson:"status"`
+	Status      string             `bson:"status"`
 	Enable      int                `bson:"enable"`
 	WhoDeleted  primitive.ObjectID `bson:"who_deleted"`
 	CreatedAt   time.Time          `bson:"created_at"`

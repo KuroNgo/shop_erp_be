@@ -16,7 +16,7 @@ import (
 func (d *DepartmentController) GetAll(ctx *gin.Context) {
 	data, err := d.DepartmentUseCase.GetAll(ctx)
 	if err != nil {
-		ctx.JSON(http.StatusNotFound, gin.H{
+		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",
 			"message": err.Error(),
 		})

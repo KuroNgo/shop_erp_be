@@ -4,6 +4,9 @@
 This project was inspired by the structure and ideas from [Clean-Architecture](https://github.com/amitshekhariitbhu/go-backend-clean-architecture).
 All code in this project was written from scratch and does not directly copy any part of the original source.
 
+## About
+This project is learn how to build Clean Architecture, ERP system and use Services Layer Design (Software Architecture) isolated business/application logic for scalable and maintainable
+
 ## Run Programming
 How to run this project?
 We can run this Go Backend Clean Architecture project with or without Docker. Here, I am providing both ways to run this project.
