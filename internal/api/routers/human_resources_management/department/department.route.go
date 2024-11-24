@@ -29,10 +29,15 @@ func DepartmentRouter(env *config.Database, timeout time.Duration, db *mongo.Dat
 
 	router := group.Group("/departments")
 	router.GET("/get/_id", department.GetByID)
+	router.GET("/get/status", department.GetByStatus)
+	router.GET("/get/delete", department.GetAllSoftDelete)
 	router.GET("/get/name", department.GetByName)
 	router.GET("/get/all", department.GetAll)
 	router.POST("/create", department.CreateOne)
 	router.POST("/create/manager", department.CreateOneWithManager)
 	router.PUT("/update", department.UpdateOne)
+	router.PUT("/update/manager", department.UpdateManager)
+	router.PUT("/update/status", department.UpdateStatus)
 	router.DELETE("/delete/_id", department.DeleteOne)
+	router.PATCH("/delete/_id", department.DeleteSoftOne)
 }

@@ -235,7 +235,7 @@ func (l *leaveRequestUseCase) GetByID(ctx context.Context, id string) (leaverequ
 
 	output := leaverequestdomain.Output{
 		LeaveRequest: leaveRequestData,
-		Employee:     *employeeData,
+		Employee:     employeeData,
 	}
 
 	data, err = json.Marshal(output)
@@ -280,7 +280,7 @@ func (l *leaveRequestUseCase) GetByEmailEmployee(ctx context.Context, email stri
 
 	output := leaverequestdomain.Output{
 		LeaveRequest: leaveRequestData,
-		Employee:     *employeeData,
+		Employee:     employeeData,
 	}
 
 	data, err = json.Marshal(output)
@@ -328,7 +328,7 @@ func (l *leaveRequestUseCase) GetAll(ctx context.Context) ([]leaverequestdomain.
 
 		output := leaverequestdomain.Output{
 			LeaveRequest: leaveRequest,
-			Employee:     *employeeData,
+			Employee:     employeeData,
 		}
 
 		outputs = append(outputs, output)

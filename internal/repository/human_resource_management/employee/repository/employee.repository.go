@@ -120,37 +120,37 @@ func (e *employeeRepository) UpdateStatus(ctx context.Context, id primitive.Obje
 	return nil
 }
 
-func (e *employeeRepository) GetByID(ctx context.Context, id primitive.ObjectID) (*employeesdomain.Employee, error) {
+func (e *employeeRepository) GetByID(ctx context.Context, id primitive.ObjectID) (employeesdomain.Employee, error) {
 	collectionEmployee := e.database.Collection(e.collectionEmployee)
 
 	var employee employeesdomain.Employee
 	filter := bson.M{"_id": id}
 	if err := collectionEmployee.FindOne(ctx, filter).Decode(&employee); err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
-			return nil, nil
+			return employeesdomain.Employee{}, nil
 		}
-		return nil, errors.New("error finding employee's information in the database")
+		return employeesdomain.Employee{}, errors.New("error finding employee's information in the database")
 	}
 
-	return &employee, nil
+	return employee, nil
 }
 
-func (e *employeeRepository) GetByName(ctx context.Context, name string) (*employeesdomain.Employee, error) {
+func (e *employeeRepository) GetByName(ctx context.Context, name string) (employeesdomain.Employee, error) {
 	collectionEmployee := e.database.Collection(e.collectionEmployee)
 
 	var employee employeesdomain.Employee
 	filter := bson.M{"last_name": name}
 	if err := collectionEmployee.FindOne(ctx, filter).Decode(&employee); err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
-			return nil, nil
+			return employeesdomain.Employee{}, nil
 		}
-		return nil, errors.New("error finding employee information in database")
+		return employeesdomain.Employee{}, errors.New("error finding employee information in database")
 	}
 
-	return &employee, nil
+	return employee, nil
 }
 
-func (e *employeeRepository) GetByEmail(ctx context.Context, email string) (*employeesdomain.Employee, error) {
+func (e *employeeRepository) GetByEmail(ctx context.Context, email string) (employeesdomain.Employee, error) {
 	collectionEmployee := e.database.Collection(e.collectionEmployee)
 
 	filter := bson.M{"email": email}
@@ -158,12 +158,12 @@ func (e *employeeRepository) GetByEmail(ctx context.Context, email string) (*emp
 	err := collectionEmployee.FindOne(ctx, filter).Decode(&employee)
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
-			return nil, nil
+			return employeesdomain.Employee{}, nil
 		}
-		return nil, err
+		return employeesdomain.Employee{}, err
 	}
 
-	return &employee, nil
+	return employee, nil
 }
 
 func (e *employeeRepository) GetAll(ctx context.Context) ([]employeesdomain.Employee, error) {

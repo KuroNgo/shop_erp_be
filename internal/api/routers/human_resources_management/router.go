@@ -39,6 +39,27 @@ func SetUp(env *config.Database, cr *cronjob.CronScheduler, timeout time.Duratio
 		gzip.Gzip(gzip.DefaultCompression,
 			gzip.WithExcludedPaths([]string{",*"})),
 		casbin.Authorize(enforcer),
+		middlewares.DeserializeUser(),
+		//middlewares.StructuredLogger(&log.Logger, value),
+	)
+
+	publicRouterV1.Use(
+		middlewares.CORSPrivate(),
+		middlewares.Recover(),
+		gzip.Gzip(gzip.DefaultCompression,
+			gzip.WithExcludedPaths([]string{",*"})),
+		casbin.Authorize(enforcer),
+		middlewares.DeserializeUser(),
+		//middlewares.StructuredLogger(&log.Logger, value),
+	)
+
+	publicRouterV2.Use(
+		middlewares.CORSPrivate(),
+		middlewares.Recover(),
+		gzip.Gzip(gzip.DefaultCompression,
+			gzip.WithExcludedPaths([]string{",*"})),
+		casbin.Authorize(enforcer),
+		middlewares.DeserializeUser(),
 		//middlewares.StructuredLogger(&log.Logger, value),
 	)
 

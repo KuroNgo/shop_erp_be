@@ -158,7 +158,7 @@ func (b *benefitUseCase) GetByID(ctx context.Context, id string) (benefitsdomain
 
 	output := benefitsdomain.Output{
 		Benefit:  benefitData,
-		Employee: *employeeData,
+		Employee: employeeData,
 	}
 
 	data, err = json.Marshal(output)
@@ -203,7 +203,7 @@ func (b *benefitUseCase) GetByEmail(ctx context.Context, email string) (benefits
 
 	output := benefitsdomain.Output{
 		Benefit:  benefitData,
-		Employee: *employeeData,
+		Employee: employeeData,
 	}
 
 	data, err = json.Marshal(output)
@@ -251,7 +251,7 @@ func (b *benefitUseCase) GetAll(ctx context.Context) ([]benefitsdomain.Output, e
 
 		output := benefitsdomain.Output{
 			Benefit:  benefit,
-			Employee: *employeeData,
+			Employee: employeeData,
 		}
 
 		outputs = append(outputs, output)

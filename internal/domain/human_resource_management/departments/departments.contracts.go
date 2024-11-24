@@ -40,7 +40,7 @@ type IDepartmentUseCase interface {
 	GetByID(ctx context.Context, id string) (Output, error)
 	GetByName(ctx context.Context, name string) (Output, error)
 	GetByStatus(ctx context.Context, status string) ([]Output, error)
-	GetAll(ctx context.Context) ([]Output, error)
+	GetAll(ctx context.Context, idUser string) ([]Output, error)
 	GetAllSoftDelete(ctx context.Context) ([]Output, error)
 
 	CountManagerExist(ctx context.Context, managerID primitive.ObjectID) (int64, error)

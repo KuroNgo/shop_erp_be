@@ -33,6 +33,7 @@ func SetUp(env *config.Database, timeout time.Duration, db *mongo.Database, gin 
 		gzip.Gzip(gzip.DefaultCompression,
 			gzip.WithExcludedPaths([]string{",*"})),
 		casbin.Authorize(enforcer),
+		middlewares.DeserializeUser(),
 		//middlewares.StructuredLogger(&log.Logger, value),
 	)
 
