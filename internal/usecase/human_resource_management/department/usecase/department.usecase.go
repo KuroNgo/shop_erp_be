@@ -74,7 +74,7 @@ func (d *departmentUseCase) CreateOne(ctx context.Context, input *departmentsdom
 	}
 
 	if level >= 3 {
-		return errors.New("permission denied")
+		return errors.New(constant.MsgUnauthorized)
 	}
 
 	if err := validate.Department(input); err != nil {
@@ -88,7 +88,7 @@ func (d *departmentUseCase) CreateOne(ctx context.Context, input *departmentsdom
 	}
 
 	if count > 0 {
-		return errors.New("name of department is exist")
+		return errors.New(constant.MsgConflict)
 	}
 
 	if input.Level == 1 {
@@ -100,7 +100,7 @@ func (d *departmentUseCase) CreateOne(ctx context.Context, input *departmentsdom
 		if input.ParentID != primitive.NilObjectID {
 			parentDept, err := d.departmentRepository.GetByID(ctx, input.ParentID)
 			if err != nil {
-				return errors.New("parent department not found")
+				return errors.New(constant.MsgDepartmentParentNotFound)
 			}
 
 			// Kiểm tra điều kiện hợp lệ cho Level
@@ -146,7 +146,7 @@ func (d *departmentUseCase) CreateDepartmentWithManager(ctx context.Context, dep
 	}
 
 	if level >= 3 {
-		return errors.New("permission denied")
+		return errors.New(constant.MsgForbidden)
 	}
 
 	session, err := d.client.StartSession()
@@ -163,19 +163,19 @@ func (d *departmentUseCase) CreateDepartmentWithManager(ctx context.Context, dep
 		}
 
 		if count > 0 {
-			return nil, errors.New("name of department is exist")
+			return nil, errors.New(constant.MsgConflict)
 		}
 
 		if departmentInput.Level == 1 {
 			if departmentInput.ParentID != primitive.NilObjectID {
-				return nil, errors.New("a department with Level 1 cannot have a ParentID")
+				return nil, errors.New("a department with level 1 cannot have a ParentID")
 			}
 		} else {
 			// Nếu có ParentID, kiểm tra tính hợp lệ
 			if departmentInput.ParentID != primitive.NilObjectID {
 				parentDept, err := d.departmentRepository.GetByID(ctx, departmentInput.ParentID)
 				if err != nil {
-					return nil, errors.New("parent department not found")
+					return nil, errors.New(constant.MsgDepartmentParentNotFound)
 				}
 
 				// Kiểm tra điều kiện hợp lệ cho Level
@@ -281,7 +281,7 @@ func (d *departmentUseCase) DeleteOne(ctx context.Context, id string, userid str
 	}
 
 	if level != 1 {
-		return errors.New("permission denied")
+		return errors.New(constant.MsgForbidden)
 	}
 
 	departmentID, err := primitive.ObjectIDFromHex(id)
@@ -296,11 +296,11 @@ func (d *departmentUseCase) DeleteOne(ctx context.Context, id string, userid str
 
 	userData, err := d.userRepository.GetByID(ctx, userID)
 	if err != nil {
-		return errors.New("user not found")
+		return errors.New(constant.MsgDataNotFound)
 	}
 
 	if userData.Role != constant.RoleSuperAdmin {
-		return errors.New("permission denied: only users with the highest role can delete departments")
+		return errors.New(constant.MsgForbidden)
 	}
 
 	//departmentData, err := d.departmentRepository.GetByID(ctx, departmentID)
@@ -341,7 +341,7 @@ func (d *departmentUseCase) DeleteSoftOne(ctx context.Context, id string, userID
 	}
 
 	if level >= 3 {
-		return errors.New("permission denied")
+		return errors.New(constant.MsgForbidden)
 	}
 
 	departmentID, err := primitive.ObjectIDFromHex(id)
@@ -374,7 +374,7 @@ func (d *departmentUseCase) UpdateOne(ctx context.Context, id string, input *dep
 	}
 
 	if level >= 3 {
-		return errors.New("permission denied")
+		return errors.New(constant.MsgForbidden)
 	}
 
 	if err := validate.Department(input); err != nil {
@@ -445,7 +445,7 @@ func (d *departmentUseCase) UpdateManager(ctx context.Context, id string, manage
 	}
 
 	if level != 1 {
-		return errors.New("permission denied")
+		return errors.New(constant.MsgForbidden)
 	}
 
 	departmentID, err := primitive.ObjectIDFromHex(id)
@@ -485,7 +485,7 @@ func (d *departmentUseCase) UpdateStatus(ctx context.Context, id string, status 
 	}
 
 	if level > 2 {
-		return errors.New("permission denied")
+		return errors.New(constant.MsgForbidden)
 	}
 
 	departmentID, err := primitive.ObjectIDFromHex(id)

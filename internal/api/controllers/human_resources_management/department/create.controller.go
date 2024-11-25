@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	departmentsdomain "shop_erp_mono/internal/domain/human_resource_management/departments"
+	"shop_erp_mono/pkg/shared/constant"
 )
 
 // CreateOne create the department's information
@@ -21,26 +22,39 @@ func (d *DepartmentController) CreateOne(ctx *gin.Context) {
 	if !exists {
 		ctx.JSON(http.StatusUnauthorized, gin.H{
 			"status":  "fail",
-			"message": "You are not logged in!",
+			"message": constant.MsgAPIUnauthorized,
 		})
 		return
 	}
 
 	var input departmentsdomain.Input
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{
+		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status":  "error",
-			"message": err.Error(),
+			"message": constant.MsgAPIBadRequest,
 		})
 		return
 	}
 
 	err := d.DepartmentUseCase.CreateOne(ctx, &input, fmt.Sprintf("%s", currentUser))
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"status":  "error",
-			"message": err.Error(),
-		})
+		switch err.Error() {
+		case constant.MsgForbidden:
+			ctx.JSON(http.StatusForbidden, gin.H{
+				"status":  "error",
+				"message": constant.MsgAPIForbidden,
+			})
+		case constant.MsgConflict:
+			ctx.JSON(http.StatusForbidden, gin.H{
+				"status":  "error",
+				"message": constant.MsgAPIConflict,
+			})
+		default:
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"status":  "error",
+				"message": constant.MsgAPIBadRequest,
+			})
+		}
 		return
 	}
 

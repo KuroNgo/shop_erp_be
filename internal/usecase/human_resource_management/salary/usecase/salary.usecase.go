@@ -34,7 +34,7 @@ func (s *salaryUseCase) CreateOne(ctx context.Context, input *salarydomain.Input
 		return err
 	}
 
-	roleData, err := s.roleRepository.GetByTitle(ctx, input.Role)
+	roleData, err := s.roleRepository.GetByName(ctx, input.Role)
 	if err != nil {
 		return err
 	}
@@ -82,7 +82,7 @@ func (s *salaryUseCase) UpdateOne(ctx context.Context, id string, input *salaryd
 		return err
 	}
 
-	roleData, err := s.roleRepository.GetByTitle(ctx, input.Role)
+	roleData, err := s.roleRepository.GetByName(ctx, input.Role)
 	if err != nil {
 		return err
 	}
@@ -135,7 +135,7 @@ func (s *salaryUseCase) GetByRoleTitle(ctx context.Context, roleTitle string) (s
 	ctx, cancel := context.WithTimeout(ctx, s.contextTimeout)
 	defer cancel()
 
-	roleData, err := s.roleRepository.GetByTitle(ctx, roleTitle)
+	roleData, err := s.roleRepository.GetByName(ctx, roleTitle)
 	if err != nil {
 		return salarydomain.Output{}, err
 	}

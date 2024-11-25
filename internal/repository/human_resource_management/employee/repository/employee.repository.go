@@ -239,3 +239,15 @@ func (e *employeeRepository) CountEmployee(ctx context.Context) (int64, error) {
 
 	return count, nil
 }
+
+func (e *employeeRepository) CountEmployeeByRoleID(ctx context.Context, roleID primitive.ObjectID) (int64, error) {
+	collectionEmployee := e.database.Collection(e.collectionEmployee)
+
+	filter := bson.M{"role_id": roleID}
+	count, err := collectionEmployee.CountDocuments(ctx, filter)
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}

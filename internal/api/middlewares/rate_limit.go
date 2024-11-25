@@ -3,6 +3,7 @@ package middlewares
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"shop_erp_mono/pkg/shared/constant"
 	"sync"
 	"time"
 )
@@ -13,7 +14,7 @@ const (
 )
 
 var (
-	ipRequestsCounts = make(map[string]int) // can use some distrubuted db
+	ipRequestsCounts = make(map[string]int) // can use some distributed db
 	mutex            = &sync.Mutex{}
 )
 
@@ -25,8 +26,8 @@ func RateLimiter() gin.HandlerFunc {
 		count := ipRequestsCounts[ip]
 		if count >= maxRequests {
 			ctx.AbortWithStatusJSON(http.StatusTooManyRequests, gin.H{
-				"message": "Gửi quá nhiều request, vui lòng đợi 15 giây để thực hiện request tiếp theo!",
 				"status":  "fail",
+				"message": constant.MsgAPIRateLimitExceeded,
 			})
 			return
 		}

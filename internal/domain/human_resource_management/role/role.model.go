@@ -9,23 +9,24 @@ const (
 	CollectionRole = "role"
 )
 
-// Role struct represents a role or job role.
 type Role struct {
-	ID             primitive.ObjectID `bson:"_id,omitempty"`
-	Title          string             `bson:"title"`
-	Description    string             `bson:"description"`
-	NumberOfPeople int16              `bson:"number_of_people"`
-	Level          int                `bson:"level"`
-	CreatedAt      time.Time          `bson:"created_at"`
-	UpdatedAt      time.Time          `bson:"updated_at"`
+	ID          primitive.ObjectID `bson:"_id,omitempty"`
+	Name        string             `bson:"name"`
+	Description string             `bson:"description"`
+	Level       int                `bson:"level"`
+	Enable      int                `bson:"enable"`
+	CreatedAt   time.Time          `bson:"created_at"`
+	UpdatedAt   time.Time          `bson:"updated_at"`
 }
 
 type Input struct {
-	Title       string `bson:"title" example:"Admin"`
+	Name        string `bson:"name" example:"Admin"`
 	Description string `bson:"description" example:"The admin role has full access and control over the system."`
+	Level       int    `bson:"level"  example:"1"`
+	Enable      int    `bson:"enable" example:"1"`
 }
 
-// Output struct represents a role or job role.
 type Output struct {
-	Role Role `bson:"role"`
+	Role           Role  `bson:"role"`
+	NumberOfPeople int16 `bson:"number_of_people"` // anti-corruption
 }

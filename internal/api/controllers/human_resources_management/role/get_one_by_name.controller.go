@@ -17,7 +17,7 @@ import (
 func (r *RoleController) GetByTitle(ctx *gin.Context) {
 	title := ctx.Query("title")
 
-	data, err := r.RoleUseCase.GetByTitle(ctx, title)
+	data, err := r.RoleUseCase.GetByName(ctx, title)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",

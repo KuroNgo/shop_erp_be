@@ -48,7 +48,7 @@ func (e *employeeUseCase) CreateOne(ctx context.Context, input *employeesdomain.
 		return err
 	}
 
-	roleData, err := e.roleRepository.GetByTitle(ctx, input.Role)
+	roleData, err := e.roleRepository.GetByName(ctx, input.Role)
 	if err != nil {
 		return err
 	}
@@ -130,7 +130,7 @@ func (e *employeeUseCase) UpdateOne(ctx context.Context, id string, input *emplo
 		return err
 	}
 
-	roleData, err := e.roleRepository.GetByTitle(ctx, input.Role)
+	roleData, err := e.roleRepository.GetByName(ctx, input.Role)
 	if err != nil {
 		return err
 	}

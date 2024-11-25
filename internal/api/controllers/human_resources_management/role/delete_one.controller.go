@@ -1,8 +1,10 @@
 package role_controller
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"shop_erp_mono/pkg/shared/constant"
 )
 
 // DeleteOne delete the role's information
@@ -15,9 +17,18 @@ import (
 // @Router /api/v1/roles/delete [delete]
 // @Security CookieAuth
 func (r *RoleController) DeleteOne(ctx *gin.Context) {
+	currentUser, exists := ctx.Get("currentUser")
+	if !exists {
+		ctx.JSON(http.StatusUnauthorized, gin.H{
+			"status":  "fail",
+			"message": constant.MsgAPIUnauthorized,
+		})
+		return
+	}
+
 	id := ctx.Query("_id")
 
-	err := r.RoleUseCase.DeleteOne(ctx, id)
+	err := r.RoleUseCase.DeleteOne(ctx, id, fmt.Sprintf("%s", currentUser))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",

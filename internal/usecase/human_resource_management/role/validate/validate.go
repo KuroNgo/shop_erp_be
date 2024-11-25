@@ -36,7 +36,7 @@ func IsNilID(id string) error {
 }
 
 func Role(input *roledomain.Input) error {
-	if input.Title == "" {
+	if input.Name == "" {
 		return errors.New("the role's information do not nil")
 	}
 
