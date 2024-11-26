@@ -3,7 +3,6 @@ package employees_domain
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	roledomain "shop_erp_mono/internal/domain/human_resource_management/role"
-	salarydomain "shop_erp_mono/internal/domain/human_resource_management/salary"
 	"time"
 )
 
@@ -25,7 +24,6 @@ type Employee struct {
 	DayOfWork    time.Time          `bson:"date_of_work"`
 	DepartmentID primitive.ObjectID `bson:"department_id"`
 	RoleID       primitive.ObjectID `bson:"role_id"`
-	SalaryID     primitive.ObjectID `bson:"salary"`
 	StartDate    time.Time          `bson:"start_date"`
 	EndDate      time.Time          `bson:"end_date"`
 	IsActive     bool               `bson:"is_active"`
@@ -48,8 +46,7 @@ type Input struct {
 }
 
 type Output struct {
-	Employee       Employee            `bson:"employee"`
-	DepartmentName string              `bson:"department"`
-	RoleID         roledomain.Role     `bson:"role"`
-	Salary         salarydomain.Salary `bson:"salary"`
+	Employee       Employee        `bson:"employee"`
+	DepartmentName string          `bson:"department"`
+	RoleID         roledomain.Role `bson:"role"`
 }

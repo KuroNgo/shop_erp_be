@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"shop_erp_mono/internal/infrastructor/mongo"
+	"shop_erp_mono/pkg/shared/constant"
 	"shop_erp_mono/pkg/shared/token"
 )
 
@@ -15,7 +16,7 @@ func Authorize(enforcer *casbin.Enforcer) gin.HandlerFunc {
 		cookie, err := c.Cookie("access_token")
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-				"message": "You are not login!",
+				"message": constant.MsgAPIUnauthorized,
 			})
 			return
 		}
@@ -27,7 +28,7 @@ func Authorize(enforcer *casbin.Enforcer) gin.HandlerFunc {
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"status":  "fail",
-				"message": err.Error(),
+				"message": constant.MsgAPIUnauthorized + err.Error(),
 			})
 			return
 		}
@@ -45,7 +46,6 @@ func Authorize(enforcer *casbin.Enforcer) gin.HandlerFunc {
 		object := "http://localhost:8080" + c.Request.URL.Path
 		action := c.Request.Method
 		ok, err := enforcer.Enforce(fmt.Sprint(sub), object, action)
-
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 				"message": "Error occurred when authorizing user",
@@ -55,7 +55,7 @@ func Authorize(enforcer *casbin.Enforcer) gin.HandlerFunc {
 
 		if !ok {
 			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
-				"message": "You are not authorized!",
+				"message": constant.MsgAPIForbidden,
 			})
 			return
 		}

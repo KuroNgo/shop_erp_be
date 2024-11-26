@@ -14,6 +14,7 @@ type Role struct {
 	Name        string             `bson:"name"`
 	Description string             `bson:"description"`
 	Level       int                `bson:"level"`
+	Status      string             `bson:"status"`
 	Enable      int                `bson:"enable"`
 	CreatedAt   time.Time          `bson:"created_at"`
 	UpdatedAt   time.Time          `bson:"updated_at"`
@@ -28,5 +29,5 @@ type Input struct {
 
 type Output struct {
 	Role           Role  `bson:"role"`
-	NumberOfPeople int16 `bson:"number_of_people"` // anti-corruption
+	NumberOfPeople int64 `bson:"number_of_people"` // anti-corruption
 }

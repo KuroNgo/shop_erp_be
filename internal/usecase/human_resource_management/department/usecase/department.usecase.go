@@ -673,14 +673,14 @@ func (d *departmentUseCase) GetAll(ctx context.Context, idUser string) ([]depart
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
 
-	level, err := d.checkRoleLevelFromUserID(ctx, idUser)
-	if err != nil {
-		return nil, err
-	}
-
-	if level >= 4 {
-		return nil, errors.New("permission denied")
-	}
+	//level, err := d.checkRoleLevelFromUserID(ctx, idUser)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//
+	//if level >= 4 {
+	//	return nil, errors.New("permission denied")
+	//}
 
 	data, err := d.cache.Get("departments")
 	if err != nil {

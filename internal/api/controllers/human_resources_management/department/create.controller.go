@@ -45,7 +45,7 @@ func (d *DepartmentController) CreateOne(ctx *gin.Context) {
 				"message": constant.MsgAPIForbidden,
 			})
 		case constant.MsgConflict:
-			ctx.JSON(http.StatusForbidden, gin.H{
+			ctx.JSON(http.StatusConflict, gin.H{
 				"status":  "error",
 				"message": constant.MsgAPIConflict,
 			})
@@ -59,6 +59,7 @@ func (d *DepartmentController) CreateOne(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{
-		"status": "success",
+		"status":  "success",
+		"message": constant.MsgDataCreationSuccess,
 	})
 }

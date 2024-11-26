@@ -10,9 +10,11 @@ type IRoleRepository interface {
 	GetByName(ctx context.Context, name string) (Role, error)
 	GetByLevel(ctx context.Context, level int) ([]Role, error)
 	GetByEnable(ctx context.Context, enable int) ([]Role, error)
+	GetByStatus(ctx context.Context, status string) ([]Role, error)
 	GetByID(ctx context.Context, id primitive.ObjectID) (Role, error)
 	GetAll(ctx context.Context) ([]Role, error)
 	UpdateOne(ctx context.Context, id primitive.ObjectID, role *Role) error
+	UpdateStatus(ctx context.Context, id primitive.ObjectID, status string) error
 	DeleteOne(ctx context.Context, id primitive.ObjectID) error
 	DeleteSoft(ctx context.Context, id primitive.ObjectID) error
 	CountRole(ctx context.Context) (int64, error)
@@ -21,6 +23,7 @@ type IRoleRepository interface {
 type IRoleUseCase interface {
 	CreateOne(ctx context.Context, input *Input, idUser string) error
 	UpdateOne(ctx context.Context, id string, input *Input, idUser string) error
+	UpdateStatus(ctx context.Context, id string, status string, idUser string) error
 	DeleteOne(ctx context.Context, id string, idUser string) error
 	DeleteSoft(ctx context.Context, id string, idUser string) error
 	CountRole(ctx context.Context) (int64, error)
@@ -29,5 +32,6 @@ type IRoleUseCase interface {
 	GetByName(ctx context.Context, name string) (Output, error)
 	GetByID(ctx context.Context, id string) (Output, error)
 	GetAll(ctx context.Context) ([]Output, error)
+	GetByStatus(ctx context.Context, status string) ([]Output, error)
 	Lifecycle(ctx context.Context) error
 }

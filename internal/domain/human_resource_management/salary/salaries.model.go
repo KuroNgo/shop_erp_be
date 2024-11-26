@@ -2,6 +2,7 @@ package salary_domain
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	employees_domain "shop_erp_mono/internal/domain/human_resource_management/employees"
 	roledomain "shop_erp_mono/internal/domain/human_resource_management/role"
 	"time"
 )
@@ -14,6 +15,7 @@ const (
 type Salary struct {
 	ID           primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
 	RoleID       primitive.ObjectID `bson:"role_id" json:"role_id"`
+	EmployeeID   primitive.ObjectID `bson:"employee_id" json:"employee_id"`
 	UnitCurrency string             `bson:"unit_currency" json:"unit_currency"`
 	BaseSalary   float64            `bson:"base_salary" json:"base_salary"`
 	Bonus        float64            `bson:"bonus" json:"bonus"`
@@ -32,6 +34,7 @@ type Input struct {
 }
 
 type Output struct {
-	Salary Salary          `bson:"salary" json:"salary"`
-	Role   roledomain.Role `bson:"role" json:"role"`
+	Employee employees_domain.Employee `bson:"employee" json:"employee"`
+	Salary   Salary                    `bson:"salary" json:"salary"`
+	Role     roledomain.Role           `bson:"role" json:"role"`
 }

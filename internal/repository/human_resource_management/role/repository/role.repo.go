@@ -60,6 +60,40 @@ func (r *roleRepository) GetByID(ctx context.Context, id primitive.ObjectID) (ro
 	return role, nil
 }
 
+func (r *roleRepository) GetByStatus(ctx context.Context, status string) ([]roledomain.Role, error) {
+	collectionRole := r.database.Collection(r.collectionRole)
+
+	filter := bson.M{"status": status}
+	cursor, err := collectionRole.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer func(cursor *mongo.Cursor, ctx context.Context) {
+		err = cursor.Close(ctx)
+		if err != nil {
+			return
+		}
+	}(cursor, ctx)
+
+	var roles []roledomain.Role
+	roles = make([]roledomain.Role, 0, cursor.RemainingBatchLength())
+	for cursor.Next(ctx) {
+		var role roledomain.Role
+		if err = cursor.Decode(&role); err != nil {
+			return nil, err
+		}
+
+		roles = append(roles, role)
+	}
+
+	// Check for any errors encountered during iteration
+	if err = cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return roles, nil
+}
+
 func (r *roleRepository) GetByName(ctx context.Context, name string) (roledomain.Role, error) {
 	collectionRole := r.database.Collection(r.collectionRole)
 
@@ -189,6 +223,26 @@ func (r *roleRepository) UpdateOne(ctx context.Context, id primitive.ObjectID, r
 		"name":        role.Name,
 		"description": role.Description,
 		"updated_at":  time.Now(),
+	}}
+	_, err := collectionRole.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return errors.New(err.Error() + "error in the updating role's information into database ")
+	}
+
+	return nil
+}
+
+func (r *roleRepository) UpdateStatus(ctx context.Context, id primitive.ObjectID, status string) error {
+	collectionRole := r.database.Collection(r.collectionRole)
+
+	if id == primitive.NilObjectID {
+		return errors.New("id do not nil")
+	}
+
+	filter := bson.M{"_id": id}
+	update := bson.M{"$set": bson.M{
+		"status":     status,
+		"updated_at": time.Now(),
 	}}
 	_, err := collectionRole.UpdateOne(ctx, filter, update)
 	if err != nil {

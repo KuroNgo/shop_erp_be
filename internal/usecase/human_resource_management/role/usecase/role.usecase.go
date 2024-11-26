@@ -2,6 +2,7 @@ package role_usecase
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -72,20 +73,49 @@ func (r *roleUseCase) CreateOne(ctx context.Context, input *roledomain.Input, id
 		UpdatedAt:   time.Now(),
 	}
 
-	return r.roleRepository.CreateOne(ctx, role)
+	err := r.roleRepository.CreateOne(ctx, role)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (r *roleUseCase) GetByName(ctx context.Context, name string) (roledomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
 
+	data, err := r.cache.Get(name)
+	if err != nil {
+		log.Printf("failed to get roles cache: %v", err)
+	}
+	if data != nil {
+		var role roledomain.Output
+		err = json.Unmarshal(data, &role)
+		if err != nil {
+			log.Printf("failed to unmarshal roles cache: %v", err)
+		}
+	}
+
 	roleData, err := r.roleRepository.GetByName(ctx, name)
 	if err != nil {
 		return roledomain.Output{}, err
 	}
 
+	countEmployee, err := r.employeeRepository.CountEmployeeByRoleID(ctx, roleData.ID)
+	if err != nil {
+		return roledomain.Output{}, err
+	}
+
 	output := roledomain.Output{
-		Role: roleData,
+		Role:           roleData,
+		NumberOfPeople: countEmployee,
+	}
+
+	data, err = json.Marshal(output)
+	err = r.cache.Set(name, data)
+	if err != nil {
+		log.Printf("failed to get roles cache: %v", err)
 	}
 
 	return output, nil
@@ -155,6 +185,28 @@ func (r *roleUseCase) GetByLevel(ctx context.Context, level int) ([]roledomain.O
 	return outputs, nil
 }
 
+func (r *roleUseCase) GetByStatus(ctx context.Context, status string) ([]roledomain.Output, error) {
+	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
+	defer cancel()
+
+	roleData, err := r.roleRepository.GetByStatus(ctx, status)
+	if err != nil {
+		return nil, err
+	}
+
+	var outputs []roledomain.Output
+	outputs = make([]roledomain.Output, 0, len(roleData))
+	for _, role := range roleData {
+		output := roledomain.Output{
+			Role: role,
+		}
+
+		outputs = append(outputs, output)
+	}
+
+	return outputs, nil
+}
+
 func (r *roleUseCase) GetAll(ctx context.Context) ([]roledomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
@@ -199,7 +251,24 @@ func (r *roleUseCase) UpdateOne(ctx context.Context, id string, input *roledomai
 		UpdatedAt:   time.Now(),
 	}
 
-	return r.roleRepository.UpdateOne(ctx, roleID, role)
+	err = r.roleRepository.UpdateOne(ctx, roleID, role)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *roleUseCase) UpdateStatus(ctx context.Context, id string, status string, idUser string) error {
+	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
+	defer cancel()
+
+	roleID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+
+	return r.roleRepository.UpdateStatus(ctx, roleID, status)
 }
 
 func (r *roleUseCase) DeleteOne(ctx context.Context, id string, idUser string) error {
@@ -219,7 +288,12 @@ func (r *roleUseCase) DeleteOne(ctx context.Context, id string, idUser string) e
 		return errors.New(constant.MsgDataDeletionFailure)
 	}
 
-	return r.roleRepository.DeleteOne(ctx, roleID)
+	err = r.roleRepository.DeleteOne(ctx, roleID)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (r *roleUseCase) DeleteSoft(ctx context.Context, id string, idUser string) error {
@@ -239,7 +313,12 @@ func (r *roleUseCase) DeleteSoft(ctx context.Context, id string, idUser string) 
 		return errors.New(constant.MsgDataDeletionFailure)
 	}
 
-	return r.roleRepository.DeleteSoft(ctx, roleID)
+	err = r.roleRepository.DeleteSoft(ctx, roleID)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (r *roleUseCase) CountRole(ctx context.Context) (int64, error) {

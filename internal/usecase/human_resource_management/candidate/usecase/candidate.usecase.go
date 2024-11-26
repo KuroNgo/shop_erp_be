@@ -32,7 +32,8 @@ func NewCandidateUseCase(contextTimeout time.Duration, candidateRepository candi
 	if err != nil {
 		return nil
 	}
-	return &candidateUseCase{contextTimeout: contextTimeout, cache: cache, candidateRepository: candidateRepository, employeeRepository: employeeRepository, client: client}
+	return &candidateUseCase{contextTimeout: contextTimeout, cache: cache, candidateRepository: candidateRepository,
+		employeeRepository: employeeRepository, client: client}
 }
 
 func (c *candidateUseCase) CreateOne(ctx context.Context, candidate *candidatedomain.Candidate) error {

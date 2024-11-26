@@ -25,6 +25,7 @@ import (
 
 func SetUp(env *config.Database, cr *cronjob.CronScheduler, timeout time.Duration, db *mongo.Database, client *mongo.Client, gin *gin.Engine, cacheTTL time.Duration) {
 	publicRouterV1 := gin.Group("/api/v1")
+	userRouter := gin.Group("/api/v1")
 	publicRouterV2 := gin.Group("/api/v2")
 	publicRouter := gin.Group("/api")
 	router := gin.Group("")
@@ -41,6 +42,13 @@ func SetUp(env *config.Database, cr *cronjob.CronScheduler, timeout time.Duratio
 		casbin.Authorize(enforcer),
 		middlewares.DeserializeUser(),
 		//middlewares.StructuredLogger(&log.Logger, value),
+	)
+
+	userRouter.Use(
+		middlewares.CORSPrivate(),
+		middlewares.Recover(),
+		gzip.Gzip(gzip.DefaultCompression,
+			gzip.WithExcludedPaths([]string{",*"})),
 	)
 
 	publicRouterV1.Use(
@@ -67,7 +75,7 @@ func SetUp(env *config.Database, cr *cronjob.CronScheduler, timeout time.Duratio
 	router.OPTIONS("/*path", middlewares.OptionMessages)
 
 	// All Public APIs v1
-	userroute.UserRouter(env, timeout, db, client, publicRouterV1)
+	userroute.UserRouter(env, timeout, db, client, userRouter)
 	roleroute.RoleRouter(env, timeout, db, publicRouterV1, cacheTTL)
 	departmentroute.DepartmentRouter(env, timeout, db, client, publicRouterV1, cacheTTL)
 	salaryroute.SalaryRouter(env, timeout, db, publicRouterV1, cacheTTL)

@@ -11,7 +11,7 @@ import (
 var Rbac *casbin.Enforcer
 
 func SetUp(env *config.Database) *casbin.Enforcer {
-	a, err := mongodbadapter.NewAdapter(fmt.Sprintf("mongodb+srv://%s:%s@andrew.8ulkv.mongodb.net/?retryWrites=true&w=majority", env.DBUser, env.DBPassword))
+	a, err := mongodbadapter.NewAdapter(fmt.Sprintf("mongodb://%s:%s", env.DBHost, env.DBPort))
 	if err != nil {
 		log.Fatalln(err)
 	}

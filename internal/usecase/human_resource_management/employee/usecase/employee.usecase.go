@@ -43,17 +43,13 @@ func (e *employeeUseCase) CreateOne(ctx context.Context, input *employeesdomain.
 		return err
 	}
 
+	// process create employee
 	departmentData, err := e.departmentRepository.GetByName(ctx, input.Department)
 	if err != nil {
 		return err
 	}
 
 	roleData, err := e.roleRepository.GetByName(ctx, input.Role)
-	if err != nil {
-		return err
-	}
-
-	salaryData, err := e.salaryRepository.GetByRoleID(ctx, roleData.ID)
 	if err != nil {
 		return err
 	}
@@ -70,7 +66,6 @@ func (e *employeeUseCase) CreateOne(ctx context.Context, input *employeesdomain.
 		DateOfBirth:  input.DateOfBirth,
 		DayOfWork:    input.DayOfWork,
 		DepartmentID: departmentData.ID,
-		SalaryID:     salaryData.ID,
 		RoleID:       roleData.ID,
 		IsActive:     true,
 		CreatedAt:    time.Now(),
@@ -86,11 +81,16 @@ func (e *employeeUseCase) CreateOne(ctx context.Context, input *employeesdomain.
 		return errors.New("the employee's data is exist")
 	}
 
+	err = e.employeeRepository.CreateOne(ctx, employeeData)
+	if err != nil {
+		return err
+	}
+
 	if err = e.cache.Delete("employees"); err != nil {
 		log.Printf("failed to delete employees cache: %v", err)
 	}
 
-	return e.employeeRepository.CreateOne(ctx, employeeData)
+	return nil
 }
 
 func (e *employeeUseCase) DeleteOne(ctx context.Context, id string) error {
@@ -102,6 +102,11 @@ func (e *employeeUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
+	err = e.employeeRepository.DeleteOne(ctx, employeeID)
+	if err != nil {
+		return err
+	}
+
 	if err := e.cache.Delete(id); err != nil {
 		log.Printf("failed to delete a employee's id cache: %v", err)
 	}
@@ -109,7 +114,7 @@ func (e *employeeUseCase) DeleteOne(ctx context.Context, id string) error {
 		log.Printf("failed to delete employees cache: %v", err)
 	}
 
-	return e.employeeRepository.DeleteOne(ctx, employeeID)
+	return nil
 }
 
 func (e *employeeUseCase) UpdateOne(ctx context.Context, id string, input *employeesdomain.Input) error {
@@ -135,11 +140,6 @@ func (e *employeeUseCase) UpdateOne(ctx context.Context, id string, input *emplo
 		return err
 	}
 
-	salaryData, err := e.salaryRepository.GetByID(ctx, roleData.ID)
-	if err != nil {
-		return err
-	}
-
 	employee := &employeesdomain.Employee{
 		FirstName:    input.FirstName,
 		LastName:     input.LastName,
@@ -152,25 +152,10 @@ func (e *employeeUseCase) UpdateOne(ctx context.Context, id string, input *emplo
 		DayOfWork:    input.DayOfWork,
 		DepartmentID: departmentData.ID,
 		RoleID:       roleData.ID,
-		SalaryID:     salaryData.ID,
 		UpdatedAt:    time.Now(),
 	}
 
-	if err := e.cache.Delete(id); err != nil {
-		log.Printf("failed to delete a employee's id cache: %v", err)
-	}
-	if err = e.cache.Delete("employees"); err != nil {
-		log.Printf("failed to delete employees cache: %v", err)
-	}
-
-	return e.employeeRepository.UpdateOne(ctx, employeeID, employee)
-}
-
-func (e *employeeUseCase) UpdateStatus(ctx context.Context, id string, isActive bool) error {
-	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
-	defer cancel()
-
-	employeeID, err := primitive.ObjectIDFromHex(id)
+	err = e.employeeRepository.UpdateOne(ctx, employeeID, employee)
 	if err != nil {
 		return err
 	}
@@ -182,7 +167,31 @@ func (e *employeeUseCase) UpdateStatus(ctx context.Context, id string, isActive 
 		log.Printf("failed to delete employees cache: %v", err)
 	}
 
-	return e.employeeRepository.UpdateStatus(ctx, employeeID, isActive)
+	return nil
+}
+
+func (e *employeeUseCase) UpdateStatus(ctx context.Context, id string, isActive bool) error {
+	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
+	defer cancel()
+
+	employeeID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+
+	err = e.employeeRepository.UpdateStatus(ctx, employeeID, isActive)
+	if err != nil {
+		return err
+	}
+
+	if err := e.cache.Delete(id); err != nil {
+		log.Printf("failed to delete a employee's id cache: %v", err)
+	}
+	if err = e.cache.Delete("employees"); err != nil {
+		log.Printf("failed to delete employees cache: %v", err)
+	}
+
+	return nil
 }
 
 func (e *employeeUseCase) GetByID(ctx context.Context, id string) (employeesdomain.Output, error) {
