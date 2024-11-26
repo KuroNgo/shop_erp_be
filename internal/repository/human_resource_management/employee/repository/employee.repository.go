@@ -78,7 +78,6 @@ func (e *employeeRepository) UpdateOne(ctx context.Context, id primitive.ObjectI
 		"day_of_work":   employee.DayOfWork,
 		"department_id": employee.DepartmentID,
 		"role_id":       employee.RoleID,
-		"salary_id":     employee.SalaryID,
 		"updated_at":    employee.UpdatedAt,
 		"is_active":     employee.IsActive,
 	}}
