@@ -28,10 +28,6 @@ var (
 func (e *employeeRepository) CreateOne(ctx context.Context, employee *employeesdomain.Employee) error {
 	collectionEmployee := e.database.Collection(e.collectionEmployee)
 
-	// Sử dụng defer để đảm bảo mutex luôn được mở khóa
-	mutex.Lock()
-	defer mutex.Unlock()
-
 	_, err := collectionEmployee.InsertOne(ctx, employee)
 	if err != nil {
 		return err
@@ -47,10 +43,6 @@ func (e *employeeRepository) DeleteOne(ctx context.Context, id primitive.ObjectI
 		return errors.New("employee ID cannot be null")
 	}
 	filter := bson.M{"_id": id}
-
-	// Sử dụng defer để đảm bảo mutex luôn được mở khóa
-	mutex.Lock()
-	defer mutex.Unlock()
 
 	_, err := collectionEmployee.DeleteOne(ctx, filter)
 	if err != nil {
@@ -82,10 +74,6 @@ func (e *employeeRepository) UpdateOne(ctx context.Context, id primitive.ObjectI
 		"is_active":     employee.IsActive,
 	}}
 
-	// Sử dụng defer để đảm bảo mutex luôn được mở khóa
-	mutex.Lock()
-	defer mutex.Unlock()
-
 	_, err := collectionEmployee.UpdateOne(ctx, filter, update)
 	if err != nil {
 		return errors.New(err.Error() + "error in the updating role's information into database ")
@@ -106,10 +94,6 @@ func (e *employeeRepository) UpdateStatus(ctx context.Context, id primitive.Obje
 		"updated_at": time.Now(),
 		"is_active":  isActive,
 	}}
-
-	// Sử dụng defer để đảm bảo mutex luôn được mở khóa
-	mutex.Lock()
-	defer mutex.Unlock()
 
 	_, err := collectionEmployee.UpdateOne(ctx, filter, update)
 	if err != nil {

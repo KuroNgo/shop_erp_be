@@ -28,7 +28,6 @@ func main() {
 	defer app.CloseDBConnection()
 
 	cr := cronjob.NewCronScheduler()
-	cr.Start()
 
 	timeout := time.Duration(env.ContextTimeout) * time.Second
 	cacheTTL := time.Minute * 5

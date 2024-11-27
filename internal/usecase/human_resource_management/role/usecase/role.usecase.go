@@ -12,6 +12,7 @@ import (
 	userdomain "shop_erp_mono/internal/domain/human_resource_management/user"
 	"shop_erp_mono/internal/usecase/human_resource_management/role/validate"
 	"shop_erp_mono/pkg/shared/constant"
+	"strconv"
 	"time"
 )
 
@@ -125,6 +126,18 @@ func (r *roleUseCase) GetByID(ctx context.Context, id string) (roledomain.Output
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
 
+	data, err := r.cache.Get(id)
+	if err != nil {
+		log.Printf("failed to get roles cache: %v", err)
+	}
+	if data != nil {
+		var role roledomain.Output
+		err = json.Unmarshal(data, &role)
+		if err != nil {
+			log.Printf("failed to unmarshal roles cache: %v", err)
+		}
+	}
+
 	roleID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return roledomain.Output{}, err
@@ -138,12 +151,31 @@ func (r *roleUseCase) GetByID(ctx context.Context, id string) (roledomain.Output
 	output := roledomain.Output{
 		Role: roleData,
 	}
+
+	data, err = json.Marshal(output)
+	err = r.cache.Set(id, data)
+	if err != nil {
+		log.Printf("failed to get roles cache: %v", err)
+	}
+
 	return output, nil
 }
 
 func (r *roleUseCase) GetByEnable(ctx context.Context, enable int) ([]roledomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
+
+	data, err := r.cache.Get(strconv.Itoa(enable))
+	if err != nil {
+		log.Printf("failed to get roles cache: %v", err)
+	}
+	if data != nil {
+		var role roledomain.Output
+		err = json.Unmarshal(data, &role)
+		if err != nil {
+			log.Printf("failed to unmarshal roles cache: %v", err)
+		}
+	}
 
 	roleData, err := r.roleRepository.GetByEnable(ctx, enable)
 	if err != nil {
@@ -160,12 +192,30 @@ func (r *roleUseCase) GetByEnable(ctx context.Context, enable int) ([]roledomain
 		outputs = append(outputs, output)
 	}
 
+	data, err = json.Marshal(outputs)
+	err = r.cache.Set(strconv.Itoa(enable), data)
+	if err != nil {
+		log.Printf("failed to get roles cache: %v", err)
+	}
+
 	return outputs, nil
 }
 
 func (r *roleUseCase) GetByLevel(ctx context.Context, level int) ([]roledomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
+
+	data, err := r.cache.Get(strconv.Itoa(level))
+	if err != nil {
+		log.Printf("failed to get roles cache: %v", err)
+	}
+	if data != nil {
+		var role roledomain.Output
+		err = json.Unmarshal(data, &role)
+		if err != nil {
+			log.Printf("failed to unmarshal roles cache: %v", err)
+		}
+	}
 
 	roleData, err := r.roleRepository.GetByLevel(ctx, level)
 	if err != nil {
@@ -182,12 +232,30 @@ func (r *roleUseCase) GetByLevel(ctx context.Context, level int) ([]roledomain.O
 		outputs = append(outputs, output)
 	}
 
+	data, err = json.Marshal(outputs)
+	err = r.cache.Set(strconv.Itoa(level), data)
+	if err != nil {
+		log.Printf("failed to get roles cache: %v", err)
+	}
+
 	return outputs, nil
 }
 
 func (r *roleUseCase) GetByStatus(ctx context.Context, status string) ([]roledomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
+
+	data, err := r.cache.Get(status)
+	if err != nil {
+		log.Printf("failed to get roles cache: %v", err)
+	}
+	if data != nil {
+		var role roledomain.Output
+		err = json.Unmarshal(data, &role)
+		if err != nil {
+			log.Printf("failed to unmarshal roles cache: %v", err)
+		}
+	}
 
 	roleData, err := r.roleRepository.GetByStatus(ctx, status)
 	if err != nil {
@@ -204,12 +272,30 @@ func (r *roleUseCase) GetByStatus(ctx context.Context, status string) ([]roledom
 		outputs = append(outputs, output)
 	}
 
+	data, err = json.Marshal(outputs)
+	err = r.cache.Set(status, data)
+	if err != nil {
+		log.Printf("failed to get roles cache: %v", err)
+	}
+
 	return outputs, nil
 }
 
 func (r *roleUseCase) GetAll(ctx context.Context) ([]roledomain.Output, error) {
 	ctx, cancel := context.WithTimeout(ctx, r.contextTimeout)
 	defer cancel()
+
+	data, err := r.cache.Get("roles")
+	if err != nil {
+		log.Printf("failed to get roles cache: %v", err)
+	}
+	if data != nil {
+		var role roledomain.Output
+		err = json.Unmarshal(data, &role)
+		if err != nil {
+			log.Printf("failed to unmarshal roles cache: %v", err)
+		}
+	}
 
 	roleData, err := r.roleRepository.GetAll(ctx)
 	if err != nil {
@@ -224,6 +310,12 @@ func (r *roleUseCase) GetAll(ctx context.Context) ([]roledomain.Output, error) {
 		}
 
 		outputs = append(outputs, output)
+	}
+
+	data, err = json.Marshal(outputs)
+	err = r.cache.Set("roles", data)
+	if err != nil {
+		log.Printf("failed to get roles cache: %v", err)
 	}
 
 	return outputs, nil
@@ -256,6 +348,21 @@ func (r *roleUseCase) UpdateOne(ctx context.Context, id string, input *roledomai
 		return err
 	}
 
+	err = r.cache.Delete("roles")
+	if err != nil {
+		log.Printf("failed to delete roles cache: %v", err)
+	}
+
+	err = r.cache.Delete(strconv.Itoa(input.Level))
+	if err != nil {
+		log.Printf("failed to delete roles cache: %v", err)
+	}
+
+	err = r.cache.Delete(id)
+	if err != nil {
+		log.Printf("failed to delete roles cache: %v", err)
+	}
+
 	return nil
 }
 
@@ -268,7 +375,27 @@ func (r *roleUseCase) UpdateStatus(ctx context.Context, id string, status string
 		return err
 	}
 
-	return r.roleRepository.UpdateStatus(ctx, roleID, status)
+	err = r.roleRepository.UpdateStatus(ctx, roleID, status)
+	if err != nil {
+		return err
+	}
+
+	err = r.cache.Delete("roles")
+	if err != nil {
+		log.Printf("failed to delete roles cache: %v", err)
+	}
+
+	err = r.cache.Delete(status)
+	if err != nil {
+		log.Printf("failed to delete roles cache: %v", err)
+	}
+
+	err = r.cache.Delete(id)
+	if err != nil {
+		log.Printf("failed to delete roles cache: %v", err)
+	}
+
+	return nil
 }
 
 func (r *roleUseCase) DeleteOne(ctx context.Context, id string, idUser string) error {
@@ -291,6 +418,16 @@ func (r *roleUseCase) DeleteOne(ctx context.Context, id string, idUser string) e
 	err = r.roleRepository.DeleteOne(ctx, roleID)
 	if err != nil {
 		return err
+	}
+
+	err = r.cache.Delete("roles")
+	if err != nil {
+		log.Printf("failed to delete roles cache: %v", err)
+	}
+
+	err = r.cache.Delete(id)
+	if err != nil {
+		log.Printf("failed to delete roles cache: %v", err)
 	}
 
 	return nil
@@ -316,6 +453,16 @@ func (r *roleUseCase) DeleteSoft(ctx context.Context, id string, idUser string) 
 	err = r.roleRepository.DeleteSoft(ctx, roleID)
 	if err != nil {
 		return err
+	}
+
+	err = r.cache.Delete("roles")
+	if err != nil {
+		log.Printf("failed to delete roles cache: %v", err)
+	}
+
+	err = r.cache.Delete(id)
+	if err != nil {
+		log.Printf("failed to delete roles cache: %v", err)
 	}
 
 	return nil

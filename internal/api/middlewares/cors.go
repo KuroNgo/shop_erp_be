@@ -5,6 +5,7 @@ import "github.com/gin-gonic/gin"
 var (
 	host1 = "http://localhost:3000"
 	host2 = "http://localhost:5173"
+	host3 = "https://shop-erp-fe.vercel.app"
 )
 
 func CORSPublic() gin.HandlerFunc {
@@ -28,17 +29,20 @@ func CORSPublic() gin.HandlerFunc {
 
 func CORSPrivate() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		ctx.Writer.Header().Set("Access-Control-Allow-Origin", host2)
-		ctx.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-		ctx.Writer.Header().Set("Access-Control-Allow-Headers", "Authorization,Content-Type,Content,Content-Length,Accept-Encoding")
-		ctx.Writer.Header().Set("Access-Control-Allow-Methods", "GET, PUT, PATCH, POST, DELETE, OPTIONS")
+		origin := ctx.Request.Header.Get("Origin")
+		if origin == host2 || origin == host3 {
+			ctx.Writer.Header().Set("Access-Control-Allow-Origin", origin)
+			ctx.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+			ctx.Writer.Header().Set("Access-Control-Allow-Headers", "Authorization,Content-Type,Content,Content-Length,Accept-Encoding")
+			ctx.Writer.Header().Set("Access-Control-Allow-Methods", "GET, PUT, PATCH, POST, DELETE, OPTIONS")
 
-		if ctx.Request.Method == "OPTIONS" {
-			ctx.AbortWithStatus(204)
-			return
+			if ctx.Request.Method == "OPTIONS" {
+				ctx.AbortWithStatus(204)
+				return
+			}
+
+			ctx.Next()
 		}
-
-		ctx.Next()
 	}
 }
 

@@ -7,6 +7,11 @@ import (
 	"log"
 )
 
+func init() {
+	c := NewCronScheduler()
+	c.Start()
+}
+
 type CronScheduler struct {
 	c        *cron.Cron
 	entryMap map[string]cron.EntryID
