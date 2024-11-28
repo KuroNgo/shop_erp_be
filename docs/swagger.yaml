@@ -25,6 +25,15 @@ definitions:
         description: 'Example values: "Present", "Leave", "Sick"'
         type: string
     type: object
+  base_salary_domain.Input:
+    properties:
+      base_salary:
+        type: number
+      role_id:
+        type: string
+      unit_currency:
+        type: string
+    type: object
   benefits_domain.Input:
     properties:
       amount:
@@ -192,14 +201,22 @@ definitions:
   handler.RoleData:
     properties:
       api:
+        example:
+        - '[''GET'''
+        - ' ''POST'''
+        - ' ''PUT'']'
         items:
           type: string
         type: array
       method:
+        example:
+        - '[''GET'''
+        - ' ''DELETE'']'
         items:
           type: string
         type: array
       role:
+        example: admin
         type: string
     type: object
   handler.UserRole:
@@ -368,7 +385,13 @@ definitions:
       description:
         example: The admin role has full access and control over the system.
         type: string
-      title:
+      enable:
+        example: 1
+        type: integer
+      level:
+        example: 1
+        type: integer
+      name:
         example: Admin
         type: string
     type: object
@@ -382,12 +405,12 @@ definitions:
         type: string
       deductions:
         type: number
+      employee_id:
+        type: string
       id:
         type: string
       net_salary:
         type: number
-      role_id:
-        type: string
       unit_currency:
         type: string
       updated_at:
@@ -758,6 +781,77 @@ paths:
       summary: Get Attendance Information By ID
       tags:
       - Attendance
+  /api/v1/base-salaries/create:
+    post:
+      consumes:
+      - application/json
+      description: Create new Base Salary
+      parameters:
+      - description: Base Salary data
+        in: body
+        name: Salary
+        required: true
+        schema:
+          $ref: '#/definitions/base_salary_domain.Input'
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: Create Base Salary
+      tags:
+      - Base Salary
+  /api/v1/base-salaries/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes the base salary's information
+      parameters:
+      - description: Base Salary ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Delete Base Salary Information
+      tags:
+      - Base Salary
+  /api/v1/base-salaries/get/_id:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the base salary's information id
+      parameters:
+      - description: Base Salary ID
+        in: path
+        name: _id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get Base Salary Information By ID
+      tags:
+      - Base Salary
+  /api/v1/base-salaries/get/all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the base salary's information
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get Base Salary Information
+      tags:
+      - Base Salary
   /api/v1/benefits/_id:
     delete:
       description: Deletes the benefit's information by ID
@@ -3015,7 +3109,7 @@ paths:
         name: Salary
         required: true
         schema:
-          $ref: '#/definitions/salary_domain.Salary'
+          $ref: '#/definitions/base_salary_domain.Input'
       - description: Employee ID
         in: path
         name: _id
@@ -3028,7 +3122,7 @@ paths:
       - CookieAuth: []
       summary: Update Salary Information
       tags:
-      - Salary
+      - Base Salary
   /api/v1/sales-orders/create:
     post:
       consumes:

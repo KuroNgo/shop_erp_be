@@ -408,6 +408,119 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/api/v1/base-salaries/create": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create new Base Salary",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Base Salary"
+                ],
+                "summary": "Create Base Salary",
+                "parameters": [
+                    {
+                        "description": "Base Salary data",
+                        "name": "Salary",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/base_salary_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/base-salaries/delete": {
+            "delete": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Deletes the base salary's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Base Salary"
+                ],
+                "summary": "Delete Base Salary Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Base Salary ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/base-salaries/get/_id": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the base salary's information id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Base Salary"
+                ],
+                "summary": "Get Base Salary Information By ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Base Salary ID",
+                        "name": "_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/base-salaries/get/all": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the base salary's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Base Salary"
+                ],
+                "summary": "Get Base Salary Information",
+                "responses": {}
+            }
+        },
         "/api/v1/benefits/_id": {
             "put": {
                 "security": [
@@ -3875,7 +3988,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Salary"
+                    "Base Salary"
                 ],
                 "summary": "Update Salary Information",
                 "parameters": [
@@ -3885,7 +3998,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/salary_domain.Salary"
+                            "$ref": "#/definitions/base_salary_domain.Input"
                         }
                     },
                     {
@@ -5225,6 +5338,20 @@ const docTemplate = `{
                 }
             }
         },
+        "base_salary_domain.Input": {
+            "type": "object",
+            "properties": {
+                "base_salary": {
+                    "type": "number"
+                },
+                "role_id": {
+                    "type": "string"
+                },
+                "unit_currency": {
+                    "type": "string"
+                }
+            }
+        },
         "benefits_domain.Input": {
             "type": "object",
             "properties": {
@@ -5474,16 +5601,26 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "type": "string"
-                    }
+                    },
+                    "example": [
+                        "['GET'",
+                        " 'POST'",
+                        " 'PUT']"
+                    ]
                 },
                 "method": {
                     "type": "array",
                     "items": {
                         "type": "string"
-                    }
+                    },
+                    "example": [
+                        "['GET'",
+                        " 'DELETE']"
+                    ]
                 },
                 "role": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "admin"
                 }
             }
         },
@@ -5735,7 +5872,15 @@ const docTemplate = `{
                     "type": "string",
                     "example": "The admin role has full access and control over the system."
                 },
-                "title": {
+                "enable": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "level": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
                     "type": "string",
                     "example": "Admin"
                 }
@@ -5756,14 +5901,14 @@ const docTemplate = `{
                 "deductions": {
                     "type": "number"
                 },
+                "employee_id": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "string"
                 },
                 "net_salary": {
                     "type": "number"
-                },
-                "role_id": {
-                    "type": "string"
                 },
                 "unit_currency": {
                     "type": "string"

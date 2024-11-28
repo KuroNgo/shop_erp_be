@@ -5,6 +5,15 @@ import (
 	"net/http"
 )
 
+// GetByID retrieves the base salary's information
+// @Summary Get Base Salary Information By ID
+// @Description Retrieves the base salary's information id
+// @Tags Base Salary
+// @Accept  json
+// @Produce  json
+// @Param _id path string true "Base Salary ID"
+// @Router /api/v1/base-salaries/get/_id [get]
+// @Security CookieAuth
 func (s *BaseSalaryController) GetByID(ctx *gin.Context) {
 	id := ctx.Query("_id")
 

@@ -5,6 +5,14 @@ import (
 	"net/http"
 )
 
+// GetAll retrieves the base salary's information
+// @Summary Get Base Salary Information
+// @Description Retrieves the base salary's information
+// @Tags Base Salary
+// @Accept  json
+// @Produce  json
+// @Router /api/v1/base-salaries/get/all [get]
+// @Security CookieAuth
 func (s *BaseSalaryController) GetAll(ctx *gin.Context) {
 	data, err := s.BaseSalaryUseCase.GetAll(ctx)
 	if err != nil {
