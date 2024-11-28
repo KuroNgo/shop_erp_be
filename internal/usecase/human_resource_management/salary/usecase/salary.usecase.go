@@ -34,17 +34,11 @@ func (s *salaryUseCase) CreateOne(ctx context.Context, input *salarydomain.Input
 		return err
 	}
 
-	roleData, err := s.roleRepository.GetByName(ctx, input.Role)
-	if err != nil {
-		return err
-	}
-
 	// Calculate net salary
 	netSalary := input.BaseSalary + input.Bonus - input.Deductions
 
 	salaryData := &salarydomain.Salary{
 		ID:           primitive.NewObjectID(),
-		RoleID:       roleData.ID,
 		UnitCurrency: input.UnitCurrency,
 		BaseSalary:   input.BaseSalary,
 		Bonus:        input.Bonus,
@@ -82,16 +76,10 @@ func (s *salaryUseCase) UpdateOne(ctx context.Context, id string, input *salaryd
 		return err
 	}
 
-	roleData, err := s.roleRepository.GetByName(ctx, input.Role)
-	if err != nil {
-		return err
-	}
-
 	// Calculate net salary
 	netSalary := input.BaseSalary + input.Bonus - input.Deductions
 
 	salaryData := &salarydomain.Salary{
-		RoleID:       roleData.ID,
 		UnitCurrency: input.UnitCurrency,
 		BaseSalary:   input.BaseSalary,
 		Bonus:        input.Bonus,
@@ -118,14 +106,8 @@ func (s *salaryUseCase) GetByID(ctx context.Context, id string) (salarydomain.Ou
 		return salarydomain.Output{}, err
 	}
 
-	roleData, err := s.roleRepository.GetByID(ctx, salaryData.RoleID)
-	if err != nil {
-		return salarydomain.Output{}, err
-	}
-
 	output := salarydomain.Output{
 		Salary: salaryData,
-		Role:   roleData,
 	}
 
 	return output, nil
@@ -165,13 +147,8 @@ func (s *salaryUseCase) GetAll(ctx context.Context) ([]salarydomain.Output, erro
 	var outputs []salarydomain.Output
 	outputs = make([]salarydomain.Output, 0, len(salaryData))
 	for _, salary := range salaryData {
-		roleData, err := s.roleRepository.GetByID(ctx, salary.RoleID)
-		if err != nil {
-			return nil, err
-		}
 		output := salarydomain.Output{
 			Salary: salary,
-			Role:   roleData,
 		}
 
 		outputs = append(outputs, output)

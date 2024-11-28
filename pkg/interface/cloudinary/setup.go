@@ -1,13 +1,12 @@
 package cloudinary
 
-import "github.com/cloudinary/cloudinary-go/v2"
+import (
+	"github.com/cloudinary/cloudinary-go/v2"
+	"shop_erp_mono/internal/config"
+)
 
-func SetupCloudinary() (*cloudinary.Cloudinary, error) {
-	cldSecret := "vbGeG7reX1mtT7isZPRU7ZWEHxM"
-	cldName := "df4zm1xjy"
-	cldKey := "138627467233122"
-
-	cld, err := cloudinary.NewFromParams(cldName, cldKey, cldSecret)
+func SetupCloudinary(env *config.Database) (*cloudinary.Cloudinary, error) {
+	cld, err := cloudinary.NewFromParams(env.CloudinaryCloudName, env.CloudinaryAPIKey, env.CloudinaryAPISecret)
 	if err != nil {
 		return nil, err
 	}

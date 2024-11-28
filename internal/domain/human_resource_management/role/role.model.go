@@ -10,14 +10,14 @@ const (
 )
 
 type Role struct {
-	ID          primitive.ObjectID `bson:"_id,omitempty"`
-	Name        string             `bson:"name"`
-	Description string             `bson:"description"`
-	Level       int                `bson:"level"`
-	Status      string             `bson:"status"`
-	Enable      int                `bson:"enable"`
-	CreatedAt   time.Time          `bson:"created_at"`
-	UpdatedAt   time.Time          `bson:"updated_at"`
+	ID          primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	Name        string             `bson:"name" json:"name"`
+	Description string             `bson:"description" json:"description"`
+	Level       int                `bson:"level" json:"level"`
+	Status      string             `bson:"status" json:"status"`
+	Enable      int                `bson:"enable" json:"enable"`
+	CreatedAt   time.Time          `bson:"created_at" json:"created_at"`
+	UpdatedAt   time.Time          `bson:"updated_at" json:"updated_at"`
 }
 
 type Input struct {

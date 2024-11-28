@@ -11,17 +11,17 @@ const (
 )
 
 type Department struct {
-	ID          primitive.ObjectID `bson:"_id,omitempty"`
-	ManagerID   primitive.ObjectID `bson:"manager_id"`
-	Name        string             `bson:"name"`
-	Description string             `bson:"description"`
-	ParentID    primitive.ObjectID `bson:"parent_id,omitempty"`
-	Level       int                `bson:"level"`
-	Status      string             `bson:"status"`
-	Enable      int                `bson:"enable"`
-	WhoDeleted  primitive.ObjectID `bson:"who_deleted"`
-	CreatedAt   time.Time          `bson:"created_at"`
-	UpdatedAt   time.Time          `bson:"updated_at"`
+	ID          primitive.ObjectID `bson:"_id,omitempty" json:"id"`
+	ManagerID   primitive.ObjectID `bson:"manager_id" json:"manager_id"`
+	Name        string             `bson:"name" json:"name"`
+	Description string             `bson:"description" json:"description"`
+	ParentID    primitive.ObjectID `bson:"parent_id,omitempty" json:"parent_id"`
+	Level       int                `bson:"level" json:"level"`
+	Status      string             `bson:"status" json:"status"`
+	Enable      int                `bson:"enable" json:"enable"`
+	WhoDeleted  primitive.ObjectID `bson:"who_deleted" json:"who_deleted"`
+	CreatedAt   time.Time          `bson:"created_at" json:"created_at"`
+	UpdatedAt   time.Time          `bson:"updated_at" json:"updated_at"`
 }
 
 type Input struct {

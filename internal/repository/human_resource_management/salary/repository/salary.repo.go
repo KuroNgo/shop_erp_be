@@ -57,7 +57,6 @@ func (s *salaryRepository) UpdateOne(ctx context.Context, id primitive.ObjectID,
 
 	filter := bson.M{"_id": id}
 	update := bson.M{"$set": bson.M{
-		"role_id":       salary.RoleID,
 		"unit_currency": salary.UnitCurrency,
 		"base_salary":   salary.BaseSalary,
 		"bonus":         salary.Bonus,

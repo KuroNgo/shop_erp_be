@@ -15,6 +15,7 @@ import (
 	performancereviewroute "shop_erp_mono/internal/api/routers/human_resources_management/performance_review"
 	roleroute "shop_erp_mono/internal/api/routers/human_resources_management/role"
 	salaryroute "shop_erp_mono/internal/api/routers/human_resources_management/salary"
+	salary_base_route "shop_erp_mono/internal/api/routers/human_resources_management/salary_base"
 	userroute "shop_erp_mono/internal/api/routers/human_resources_management/user"
 	"shop_erp_mono/internal/config"
 	casbin "shop_erp_mono/pkg/interface/casbin/middlewares"
@@ -56,8 +57,8 @@ func SetUp(env *config.Database, cr *cronjob.CronScheduler, timeout time.Duratio
 		middlewares.Recover(),
 		gzip.Gzip(gzip.DefaultCompression,
 			gzip.WithExcludedPaths([]string{",*"})),
-		casbin.Authorize(enforcer),
-		middlewares.DeserializeUser(),
+		//casbin.Authorize(enforcer),
+		//middlewares.DeserializeUser(),
 		//middlewares.StructuredLogger(&log.Logger, value),
 	)
 
@@ -79,6 +80,7 @@ func SetUp(env *config.Database, cr *cronjob.CronScheduler, timeout time.Duratio
 	roleroute.RoleRouter(env, timeout, db, publicRouterV1, cacheTTL)
 	departmentroute.DepartmentRouter(env, timeout, db, client, publicRouterV1, cacheTTL)
 	salaryroute.SalaryRouter(env, timeout, db, publicRouterV1, cacheTTL)
+	salary_base_route.BaseSalaryRouter(env, timeout, db, publicRouterV1, cacheTTL)
 	attendanceroute.AttendanceRouter(env, timeout, db, publicRouterV1, cacheTTL)
 	employeeroute.EmployeeRouter(env, timeout, db, publicRouterV1, cacheTTL)
 	benefitroute.BenefitRouter(env, timeout, db, publicRouterV1, cacheTTL)

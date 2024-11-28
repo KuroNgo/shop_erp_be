@@ -6,6 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	userdomain "shop_erp_mono/internal/domain/human_resource_management/user"
+	"shop_erp_mono/pkg/shared/constant"
 	"shop_erp_mono/pkg/shared/password"
 	"time"
 )
@@ -18,6 +19,7 @@ var user = userdomain.User{
 	Phone:        "0329245971",
 	Verified:     true,
 	Provider:     "app",
+	Role:         constant.RoleSuperAdmin,
 	CreatedAt:    time.Now(),
 	UpdatedAt:    time.Now(),
 }

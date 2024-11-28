@@ -1,7 +1,6 @@
 package department_controller
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -15,16 +14,16 @@ import (
 // @Router /api/v1/departments/get/all [get]
 // @Security CookieAuth
 func (d *DepartmentController) GetAll(ctx *gin.Context) {
-	currentUser, exists := ctx.Get("currentUser")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{
-			"status":  "fail",
-			"message": "You are not logged in!",
-		})
-		return
-	}
+	//currentUser, exists := ctx.Get("currentUser")
+	//if !exists {
+	//	ctx.JSON(http.StatusUnauthorized, gin.H{
+	//		"status":  "fail",
+	//		"message": "You are not logged in!",
+	//	})
+	//	return
+	//}
 
-	data, err := d.DepartmentUseCase.GetAll(ctx, fmt.Sprintf("%s", currentUser))
+	data, err := d.DepartmentUseCase.GetAll(ctx, "")
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"status":  "error",

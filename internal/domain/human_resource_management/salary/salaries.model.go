@@ -11,10 +11,8 @@ const (
 	CollectionSalary = "salary"
 )
 
-// Salary represents the salary information of an employee.
 type Salary struct {
 	ID           primitive.ObjectID `bson:"_id,omitempty" json:"id,omitempty"`
-	RoleID       primitive.ObjectID `bson:"role_id" json:"role_id"`
 	EmployeeID   primitive.ObjectID `bson:"employee_id" json:"employee_id"`
 	UnitCurrency string             `bson:"unit_currency" json:"unit_currency"`
 	BaseSalary   float64            `bson:"base_salary" json:"base_salary"`

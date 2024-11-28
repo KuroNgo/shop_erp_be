@@ -122,6 +122,10 @@ func (d *departmentUseCase) CreateOne(ctx context.Context, input *departmentsdom
 		UpdatedAt:   time.Now(),
 	}
 
+	var mutex sync.Mutex
+	mutex.Lock()
+	defer mutex.Unlock()
+
 	err = d.departmentRepository.CreateOne(ctx, department)
 	if err != nil {
 		return err
@@ -241,6 +245,10 @@ func (d *departmentUseCase) CreateDepartmentWithManager(ctx context.Context, dep
 				CreatedAt:    time.Now(),
 				UpdatedAt:    time.Now(),
 			}
+
+			var mutex sync.Mutex
+			mutex.Lock()
+			defer mutex.Unlock()
 
 			err = d.employeeRepository.CreateOne(sessionCtx, &employee)
 			if err != nil {
@@ -414,6 +422,9 @@ func (d *departmentUseCase) UpdateOne(ctx context.Context, id string, input *dep
 			UpdatedAt:   time.Now(),
 		}
 
+		var mutex sync.Mutex
+		mutex.Lock()
+		defer mutex.Unlock()
 		err = d.departmentRepository.UpdateOne(ctx, departmentID, department)
 		if err != nil {
 			return nil, err
@@ -463,6 +474,9 @@ func (d *departmentUseCase) UpdateManager(ctx context.Context, id string, manage
 		return err
 	}
 
+	var mutex sync.Mutex
+	mutex.Lock()
+	defer mutex.Unlock()
 	err = d.departmentRepository.UpdateManager(ctx, departmentID, managerData.ID)
 	if err != nil {
 		return err
@@ -493,6 +507,9 @@ func (d *departmentUseCase) UpdateStatus(ctx context.Context, id string, status 
 		return errors.New("invalid department ID format")
 	}
 
+	var mutex sync.Mutex
+	mutex.Lock()
+	defer mutex.Unlock()
 	err = d.departmentRepository.UpdateStatus(ctx, departmentID, status)
 	if err != nil {
 		return err
@@ -632,28 +649,51 @@ func (d *departmentUseCase) GetByStatus(ctx context.Context, status string) ([]d
 
 	var outputs []departmentsdomain.Output
 	outputs = make([]departmentsdomain.Output, 0, len(departmentsData))
+	var wg sync.WaitGroup
+	errCh := make(chan error, 1)
+
 	for _, departmentData := range departmentsData {
-		if departmentData.ManagerID == primitive.NilObjectID {
-			return nil, errors.New("error to entity manager data is nil, need to update the manager data")
-		}
+		wg.Add(1)
+		go func(departmentData departmentsdomain.Department) {
+			defer wg.Done()
+			if departmentData.ManagerID == primitive.NilObjectID {
+				log.Print("error to entity manager data is nil, need to update the manager data")
+			}
 
-		managerData, err := d.employeeRepository.GetByID(ctx, departmentData.ManagerID)
+			managerData, err := d.employeeRepository.GetByID(ctx, departmentData.ManagerID)
+			if err != nil {
+				errCh <- err
+				return
+			}
+
+			amountOfEmployee, err := d.employeeRepository.CountEmployeeByDepartmentID(ctx, departmentData.ID)
+			if err != nil {
+				errCh <- err
+				return
+			}
+
+			output := departmentsdomain.Output{
+				Department:    departmentData,
+				Manager:       managerData,
+				CountEmployee: amountOfEmployee,
+			}
+
+			outputs = append(outputs, output)
+		}(departmentData)
+	}
+
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	select {
+	case err = <-errCh:
 		if err != nil {
 			return nil, err
 		}
-
-		amountOfEmployee, err := d.employeeRepository.CountEmployeeByDepartmentID(ctx, departmentData.ID)
-		if err != nil {
-			return nil, err
-		}
-
-		output := departmentsdomain.Output{
-			Department:    departmentData,
-			Manager:       managerData,
-			CountEmployee: amountOfEmployee,
-		}
-
-		outputs = append(outputs, output)
+	case <-ctx.Done():
+		return nil, nil
 	}
 
 	data, err = json.Marshal(outputs)
@@ -703,27 +743,51 @@ func (d *departmentUseCase) GetAll(ctx context.Context, idUser string) ([]depart
 
 	var outputs []departmentsdomain.Output
 	outputs = make([]departmentsdomain.Output, 0, len(departmentsData))
+	var wg sync.WaitGroup
+	errCh := make(chan error, 1)
+
 	for _, departmentData := range departmentsData {
-		if departmentData.ManagerID == primitive.NilObjectID {
-			log.Printf("error to entity manager data is nil, need to update the manager data")
-		}
+		wg.Add(1)
+		go func(departmentData departmentsdomain.Department) {
+			defer wg.Done()
+			if departmentData.ManagerID == primitive.NilObjectID {
+				log.Printf("error to entity manager data is nil, need to update the manager data")
+			}
 
-		managerData, err := d.employeeRepository.GetByID(ctx, departmentData.ManagerID)
+			managerData, err := d.employeeRepository.GetByID(ctx, departmentData.ManagerID)
+			if err != nil {
+				errCh <- err
+				return
+			}
+
+			amountOfEmployee, err := d.employeeRepository.CountEmployeeByDepartmentID(ctx, departmentData.ID)
+			if err != nil {
+				errCh <- err
+				return
+			}
+
+			output := departmentsdomain.Output{
+				Department:    departmentData,
+				Manager:       managerData,
+				CountEmployee: amountOfEmployee,
+			}
+
+			outputs = append(outputs, output)
+		}(departmentData)
+	}
+
+	go func() {
+		wg.Wait()
+		close(errCh)
+	}()
+
+	select {
+	case err = <-errCh:
 		if err != nil {
 			return nil, err
 		}
-
-		amountOfEmployee, err := d.employeeRepository.CountEmployeeByDepartmentID(ctx, departmentData.ID)
-		if err != nil {
-			return nil, err
-		}
-
-		output := departmentsdomain.Output{
-			Department:    departmentData,
-			Manager:       managerData,
-			CountEmployee: amountOfEmployee,
-		}
-		outputs = append(outputs, output)
+	case <-ctx.Done():
+		return nil, nil
 	}
 
 	data, err = json.Marshal(outputs)

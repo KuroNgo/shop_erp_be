@@ -119,7 +119,7 @@ func (u *userUseCase) SignUp(ctx context.Context, file *multipart.FileHeader, in
 		}
 		defer f.Close()
 
-		imageURL, err := images_cloudinary.UploadImageToCloudinary(f, file.Filename, u.database.CloudinaryUploadFolderUser)
+		imageURL, err := images_cloudinary.UploadImageToCloudinary(f, file.Filename, u.database.CloudinaryUploadFolderUser, u.database)
 		if err != nil {
 			return nil, err
 		}
@@ -127,7 +127,7 @@ func (u *userUseCase) SignUp(ctx context.Context, file *multipart.FileHeader, in
 		// Đảm bảo xóa ảnh trên Cloudinary nếu xảy ra lỗi sau khi tải lên thành công
 		defer func() {
 			if err != nil {
-				_, _ = images_cloudinary.DeleteToCloudinary(imageURL.AssetID)
+				_, _ = images_cloudinary.DeleteToCloudinary(imageURL.AssetID, u.database)
 			}
 		}()
 
@@ -545,7 +545,7 @@ func (u *userUseCase) UpdateImage(ctx context.Context, id string, file *multipar
 		}
 		defer f.Close()
 
-		imageURL, err := images_cloudinary.UploadImageToCloudinary(f, file.Filename, u.database.CloudinaryUploadFolderUser)
+		imageURL, err := images_cloudinary.UploadImageToCloudinary(f, file.Filename, u.database.CloudinaryUploadFolderUser, u.database)
 		if err != nil {
 			return nil, err
 		}
@@ -553,7 +553,7 @@ func (u *userUseCase) UpdateImage(ctx context.Context, id string, file *multipar
 		// Đảm bảo xóa ảnh trên Cloudinary nếu xảy ra lỗi sau khi tải lên thành công
 		defer func() {
 			if err != nil {
-				_, _ = images_cloudinary.DeleteToCloudinary(imageURL.AssetID)
+				_, _ = images_cloudinary.DeleteToCloudinary(imageURL.AssetID, u.database)
 			}
 		}()
 

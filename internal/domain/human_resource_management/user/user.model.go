@@ -63,14 +63,14 @@ type Output struct {
 }
 
 type OutputLogin struct {
-	RefreshToken string `bson:"refresh_token"`
-	AccessToken  string `bson:"access_token"`
-	IsLogged     string `bson:"is_logged"`
+	RefreshToken string `bson:"refresh_token" json:"refresh_token"`
+	AccessToken  string `bson:"access_token" json:"access_token"`
+	IsLogged     string `bson:"is_logged" json:"is_logged"`
 }
 
 type OutputLoginGoogle struct {
-	RefreshToken string `bson:"refresh_token"`
-	AccessToken  string `bson:"access_token"`
-	IsLogged     string `bson:"is_logged"`
-	SignedToken  string `bson:"signed_token"`
+	RefreshToken string `bson:"refresh_token" json:"refresh_token""`
+	AccessToken  string `bson:"access_token" json:"access_token"`
+	IsLogged     string `bson:"is_logged" json:"is_logged"`
+	SignedToken  string `bson:"signed_token" json:"signed_token"`
 }
