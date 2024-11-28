@@ -21,13 +21,13 @@ type Role struct {
 }
 
 type Input struct {
-	Name        string `bson:"name" example:"Admin"`
-	Description string `bson:"description" example:"The admin role has full access and control over the system."`
-	Level       int    `bson:"level"  example:"1"`
-	Enable      int    `bson:"enable" example:"1"`
+	Name        string `bson:"name" json:"name"  example:"Admin"`
+	Description string `bson:"description" json:"description" example:"The admin role has full access and control over the system."`
+	Level       int    `bson:"level" json:"level"  example:"1"`
+	Enable      int    `bson:"enable" json:"enable" example:"1"`
 }
 
 type Output struct {
-	Role           Role  `bson:"role"`
-	NumberOfPeople int64 `bson:"number_of_people"` // anti-corruption
+	Role           Role  `json:"role"`
+	NumberOfPeople int64 `json:"number_of_people"` // anti-corruption
 }

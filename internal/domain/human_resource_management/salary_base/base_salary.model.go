@@ -23,3 +23,8 @@ type Input struct {
 	BaseSalary   float64            `bson:"base_salary" json:"base_salary" exmaple:"1500"`
 	UnitCurrency string             `bson:"unit_currency" json:"unit_currency" exmaple:"USD"`
 }
+
+type Response struct {
+	BaseSalary BaseSalary `json:"base_salary"`
+	Role       string     `json:"role"`
+}

@@ -73,6 +73,23 @@ func (s *salaryRepository) UpdateOne(ctx context.Context, id primitive.ObjectID,
 	return nil
 }
 
+func (s *salaryRepository) UpdateStatus(ctx context.Context, id primitive.ObjectID, status string) error {
+	collectionSalary := s.database.Collection(s.collectionSalary)
+
+	filter := bson.M{"_id": id}
+	update := bson.M{"$set": bson.M{
+		"status":     status,
+		"updated_at": time.Now(),
+	}}
+
+	_, err := collectionSalary.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return errors.New(err.Error() + "error in the creating salary's information into database")
+	}
+
+	return nil
+}
+
 func (s *salaryRepository) GetByID(ctx context.Context, id primitive.ObjectID) (salarydomain.Salary, error) {
 	collectionSalary := s.database.Collection(s.collectionSalary)
 
@@ -101,6 +118,40 @@ func (s *salaryRepository) GetByRoleID(ctx context.Context, roleID primitive.Obj
 	}
 
 	return salary, nil
+}
+
+func (s *salaryRepository) GetByStatus(ctx context.Context, status string) ([]salarydomain.Salary, error) {
+	collectionSalary := s.database.Collection(s.collectionSalary)
+
+	filter := bson.M{"status": status}
+	cursor, err := collectionSalary.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer func(cursor *mongo.Cursor, ctx context.Context) {
+		err = cursor.Close(ctx)
+		if err != nil {
+			return
+		}
+	}(cursor, ctx)
+
+	var salaries []salarydomain.Salary
+	salaries = make([]salarydomain.Salary, 0, cursor.RemainingBatchLength())
+	for cursor.Next(ctx) {
+		var salary salarydomain.Salary
+		if err = cursor.Decode(&salary); err != nil {
+			return nil, err
+		}
+
+		salaries = append(salaries, salary)
+	}
+
+	// Check for any errors encountered during iteration
+	if err = cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return salaries, nil
 }
 
 func (s *salaryRepository) GetAll(ctx context.Context) ([]salarydomain.Salary, error) {

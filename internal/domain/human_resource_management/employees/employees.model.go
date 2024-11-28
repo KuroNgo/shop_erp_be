@@ -45,7 +45,7 @@ type Input struct {
 }
 
 type Output struct {
-	Employee   Employee `bson:"employee"`
-	Department string   `bson:"department"`
-	Role       string   `bson:"role"`
+	Employee   Employee `bson:"employee" json:"employee"`
+	Department string   `bson:"department" json:"department"`
+	Role       string   `bson:"role" json:"role"`
 }
