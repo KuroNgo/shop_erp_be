@@ -8,8 +8,8 @@ import (
 	account_route "shop_erp_mono/internal/api/routers/accounting_management/account"
 	budget_route "shop_erp_mono/internal/api/routers/accounting_management/budget"
 	"shop_erp_mono/internal/config"
-	casbin "shop_erp_mono/pkg/interface/casbin/middlewares"
-	"shop_erp_mono/pkg/interface/casbin/principle"
+	"shop_erp_mono/pkg/interface/security/casbin/middlewares"
+	"shop_erp_mono/pkg/interface/security/casbin/principle"
 	"time"
 )
 

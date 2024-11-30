@@ -3,7 +3,7 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"shop_erp_mono/pkg/interface/casbin/principle"
+	"shop_erp_mono/pkg/interface/security/casbin/principle"
 )
 
 // AddRole godoc

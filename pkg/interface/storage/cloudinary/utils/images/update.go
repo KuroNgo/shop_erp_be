@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"shop_erp_mono/internal/config"
-	"shop_erp_mono/pkg/interface/cloudinary"
-	"shop_erp_mono/pkg/interface/cloudinary/models"
+	"shop_erp_mono/pkg/interface/storage/cloudinary"
+	"shop_erp_mono/pkg/interface/storage/cloudinary/models"
 )
 
 func UpdateToCloud(publicID string, filename string, env *config.Database) (interface{}, error) {
@@ -23,7 +23,7 @@ func UpdateToCloud(publicID string, filename string, env *config.Database) (inte
 		return "", err
 	}
 
-	resultRes := models_cloudinary.Update{
+	resultRes := models_cloudinary.models_cloudinary{
 		URL:       result.URL,
 		SecureURL: result.SecureURL,
 		CreateAt:  result.CreatedAt.String(),

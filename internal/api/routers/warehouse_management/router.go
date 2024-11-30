@@ -15,8 +15,8 @@ import (
 	supplierroute "shop_erp_mono/internal/api/routers/warehouse_management/supplier"
 	warehouseroute "shop_erp_mono/internal/api/routers/warehouse_management/warehouse"
 	"shop_erp_mono/internal/config"
-	casbin "shop_erp_mono/pkg/interface/casbin/middlewares"
-	"shop_erp_mono/pkg/interface/casbin/principle"
+	"shop_erp_mono/pkg/interface/security/casbin/middlewares"
+	"shop_erp_mono/pkg/interface/security/casbin/principle"
 	"time"
 )
 

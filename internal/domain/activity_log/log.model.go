@@ -1,4 +1,4 @@
-package activity_log
+package activity_log_domain
 
 import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -13,6 +13,7 @@ type ActivityLog struct {
 	LogID        primitive.ObjectID `json:"_id" bson:"_id"`
 	ClientIP     string             `json:"client_ip" bson:"client_ip"`
 	UserID       primitive.ObjectID `json:"user_id" bson:"user_id"`
+	Level        int                `json:"level" bson:"level"`
 	Method       string             `json:"method" bson:"method"`
 	StatusCode   int                `json:"status_code" bson:"status_code"`
 	BodySize     int                `json:"body_size" bson:"body_size"`
@@ -21,4 +22,10 @@ type ActivityLog struct {
 	Error        string             `json:"error" bson:"error"`
 	ActivityTime time.Time          `json:"activity_time" bson:"activity_time"`
 	ExpireAt     time.Time          `json:"expire_at" bson:"expire_at"`
+}
+
+type Response struct {
+	ActivityLog ActivityLog `json:"activity_log"`
+	Username    string      `json:"username"`
+	Employee    string      `json:"employee"`
 }

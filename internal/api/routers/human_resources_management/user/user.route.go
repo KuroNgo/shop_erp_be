@@ -9,7 +9,7 @@ import (
 	userdomain "shop_erp_mono/internal/domain/human_resource_management/user"
 	userrepository "shop_erp_mono/internal/repository/human_resource_management/user/repository"
 	userusecase "shop_erp_mono/internal/usecase/human_resource_management/user/usecase"
-	middlewares_cloudinary "shop_erp_mono/pkg/interface/cloudinary/middlewares"
+	"shop_erp_mono/pkg/interface/storage/cloudinary/middlewares"
 	"time"
 )
 

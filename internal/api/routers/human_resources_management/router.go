@@ -18,9 +18,9 @@ import (
 	salary_base_route "shop_erp_mono/internal/api/routers/human_resources_management/salary_base"
 	userroute "shop_erp_mono/internal/api/routers/human_resources_management/user"
 	"shop_erp_mono/internal/config"
-	casbin "shop_erp_mono/pkg/interface/casbin/middlewares"
-	"shop_erp_mono/pkg/interface/casbin/principle"
 	cronjob "shop_erp_mono/pkg/interface/cron"
+	"shop_erp_mono/pkg/interface/security/casbin/middlewares"
+	"shop_erp_mono/pkg/interface/security/casbin/principle"
 	"time"
 )
 

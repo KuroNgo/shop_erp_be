@@ -5,11 +5,11 @@ import (
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"mime/multipart"
 	"shop_erp_mono/internal/config"
-	"shop_erp_mono/pkg/interface/cloudinary"
-	"shop_erp_mono/pkg/interface/cloudinary/models"
+	"shop_erp_mono/pkg/interface/storage/cloudinary"
+	"shop_erp_mono/pkg/interface/storage/cloudinary/models"
 )
 
-func UploadImageToCloudinary(file multipart.File, filePath string, folder string, env *config.Database) (models_cloudinary.UploadImage, error) {
+func UploadImageToCloudinary(file multipart.File, filePath string, folder string, env *config.Database) (models_cloudinary.models_cloudinary, error) {
 	ctx := context.Background()
 	cld, err := cloudinary.SetupCloudinary(env)
 	if err != nil {

@@ -13,8 +13,8 @@ import (
 	salereportsroute "shop_erp_mono/internal/api/routers/sales_and_distributing_management/sale_reports"
 	shippingroute "shop_erp_mono/internal/api/routers/sales_and_distributing_management/shipping"
 	"shop_erp_mono/internal/config"
-	casbin "shop_erp_mono/pkg/interface/casbin/middlewares"
-	"shop_erp_mono/pkg/interface/casbin/principle"
+	"shop_erp_mono/pkg/interface/security/casbin/middlewares"
+	"shop_erp_mono/pkg/interface/security/casbin/principle"
 	"time"
 )
 

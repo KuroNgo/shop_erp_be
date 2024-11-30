@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"shop_erp_mono/internal/config"
-	"shop_erp_mono/pkg/interface/cloudinary"
+	"shop_erp_mono/pkg/interface/storage/cloudinary"
 )
 
 func DeleteToCloudinary(assetID string, env *config.Database) (string, error) {

@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"shop_erp_mono/docs"
 	"shop_erp_mono/internal/config"
-	"shop_erp_mono/pkg/interface/casbin/router"
+	"shop_erp_mono/pkg/interface/security/casbin/router"
 	"time"
 )
 
@@ -36,7 +36,7 @@ func SwaggerRouter(env *config.Database, timeout time.Duration, db *mongo.Databa
 
 	docs.SwaggerInfo.BasePath = ""
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	casbin_router.CasbinRouter(router, env)
+	casbin_router.casbin_router.CasbinRouter(router, env)
 
 	//route automatically
 	//Thực hiện tự động chuyển hướng khi chạy chương trình
