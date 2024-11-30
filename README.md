@@ -1,5 +1,3 @@
-## Về dự án
-
 ## Acknowledgments
 This project was inspired by the structure and ideas from [Clean-Architecture](https://github.com/amitshekhariitbhu/go-backend-clean-architecture).
 All code in this project was written from scratch and does not directly copy any part of the original source.
