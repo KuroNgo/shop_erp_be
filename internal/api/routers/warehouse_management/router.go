@@ -3,8 +3,10 @@ package warehouse_management
 import (
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog/log"
 	"go.mongodb.org/mongo-driver/mongo"
 	"shop_erp_mono/internal/api/middlewares"
+	"shop_erp_mono/internal/api/routers/log_activity"
 	inventoryroute "shop_erp_mono/internal/api/routers/warehouse_management/inventory"
 	productroute "shop_erp_mono/internal/api/routers/warehouse_management/product"
 	productcategoryroute "shop_erp_mono/internal/api/routers/warehouse_management/product_category"
@@ -20,11 +22,12 @@ import (
 	"time"
 )
 
-func SetUp(env *config.Database, timeout time.Duration, db *mongo.Database, gin *gin.Engine, cacheTTL time.Duration) {
+func SetUp(env *config.Database, client *mongo.Client, timeout time.Duration, db *mongo.Database, gin *gin.Engine, cacheTTL time.Duration) {
 	publicRouter := gin.Group("/api/v1")
 
 	// Khởi tạo Casbin enforcer
 	enforcer := principle.SetUp(env)
+	value := log_activity.Activity(env, client, timeout, db, cacheTTL)
 
 	// Middleware
 	publicRouter.Use(
@@ -34,7 +37,7 @@ func SetUp(env *config.Database, timeout time.Duration, db *mongo.Database, gin 
 			gzip.WithExcludedPaths([]string{",*"})),
 		casbin.Authorize(enforcer),
 		middlewares.DeserializeUser(),
-		//middlewares.StructuredLogger(&log.Logger, value),
+		middlewares.StructuredLogger(&log.Logger, value),
 	)
 
 	// All Public APIs

@@ -3,6 +3,7 @@ package human_resources_management
 import (
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog/log"
 	"go.mongodb.org/mongo-driver/mongo"
 	"shop_erp_mono/internal/api/middlewares"
 	attendanceroute "shop_erp_mono/internal/api/routers/human_resources_management/attendance"
@@ -17,6 +18,7 @@ import (
 	salaryroute "shop_erp_mono/internal/api/routers/human_resources_management/salary"
 	salary_base_route "shop_erp_mono/internal/api/routers/human_resources_management/salary_base"
 	userroute "shop_erp_mono/internal/api/routers/human_resources_management/user"
+	"shop_erp_mono/internal/api/routers/log_activity"
 	"shop_erp_mono/internal/config"
 	cronjob "shop_erp_mono/pkg/interface/cron"
 	"shop_erp_mono/pkg/interface/security/casbin/middlewares"
@@ -33,6 +35,7 @@ func SetUp(env *config.Database, cr *cronjob.CronScheduler, timeout time.Duratio
 
 	// Khởi tạo Casbin enforcer
 	enforcer := principle.SetUp(env)
+	value := log_activity.Activity(env, client, timeout, db, cacheTTL)
 
 	// Middleware
 	publicRouter.Use(
@@ -42,7 +45,7 @@ func SetUp(env *config.Database, cr *cronjob.CronScheduler, timeout time.Duratio
 			gzip.WithExcludedPaths([]string{",*"})),
 		casbin.Authorize(enforcer),
 		middlewares.DeserializeUser(),
-		//middlewares.StructuredLogger(&log.Logger, value),
+		middlewares.StructuredLogger(&log.Logger, value),
 	)
 
 	userRouter.Use(
@@ -58,8 +61,8 @@ func SetUp(env *config.Database, cr *cronjob.CronScheduler, timeout time.Duratio
 		gzip.Gzip(gzip.DefaultCompression,
 			gzip.WithExcludedPaths([]string{",*"})),
 		//casbin.Authorize(enforcer),
-		//middlewares.DeserializeUser(),
-		//middlewares.StructuredLogger(&log.Logger, value),
+		middlewares.DeserializeUser(),
+		middlewares.StructuredLogger(&log.Logger, value),
 	)
 
 	publicRouterV2.Use(
@@ -69,7 +72,7 @@ func SetUp(env *config.Database, cr *cronjob.CronScheduler, timeout time.Duratio
 			gzip.WithExcludedPaths([]string{",*"})),
 		casbin.Authorize(enforcer),
 		middlewares.DeserializeUser(),
-		//middlewares.StructuredLogger(&log.Logger, value),
+		middlewares.StructuredLogger(&log.Logger, value),
 	)
 
 	// This is a CORS method for check IP validation

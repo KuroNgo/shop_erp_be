@@ -41,24 +41,6 @@ func (l *logRepository) DeleteOne(ctx context.Context, id primitive.ObjectID) er
 	return nil
 }
 
-func (l *logRepository) UpdateOne(ctx context.Context, id primitive.ObjectID, activityLog *activitylogdomain.ActivityLog) error {
-	logCollection := l.database.Collection(l.logCollection)
-
-	filter := bson.M{"_id": id}
-	update := bson.M{"$set": bson.M{
-		"client_ip": activityLog.ClientIP,
-		"user_id":   activityLog.UserID,
-		"level":     activityLog.Level,
-	}}
-
-	_, err := logCollection.UpdateOne(ctx, filter, update)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func (l *logRepository) GetByID(ctx context.Context, id primitive.ObjectID) (activitylogdomain.ActivityLog, error) {
 	logCollection := l.database.Collection(l.logCollection)
 

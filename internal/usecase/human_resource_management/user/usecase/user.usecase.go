@@ -13,7 +13,6 @@ import (
 	"shop_erp_mono/internal/config"
 	userdomain "shop_erp_mono/internal/domain/human_resource_management/user"
 	"shop_erp_mono/internal/usecase/human_resource_management/user/validate"
-	"shop_erp_mono/pkg/interface/oauth2/google"
 	"shop_erp_mono/pkg/interface/security/oauth2/google"
 	"shop_erp_mono/pkg/interface/storage/cloudinary/utils/images"
 	helper2 "shop_erp_mono/pkg/shared/helper"
@@ -120,7 +119,7 @@ func (u *userUseCase) SignUp(ctx context.Context, file *multipart.FileHeader, in
 		}
 		defer f.Close()
 
-		imageURL, err := images_cloudinary.images_cloudinary.UploadImageToCloudinary(f, file.Filename, u.database.CloudinaryUploadFolderUser, u.database)
+		imageURL, err := images_cloudinary.UploadImageToCloudinary(f, file.Filename, u.database.CloudinaryUploadFolderUser, u.database)
 		if err != nil {
 			return nil, err
 		}
@@ -454,7 +453,7 @@ func (u *userUseCase) LoginGoogle(ctx context.Context, code string) (*userdomain
 		return nil, nil, err
 	}
 
-	userInfo, err := google_oauth2.google_oauth2.GetUserInfo(tokenData.AccessToken)
+	userInfo, err := google_oauth2.GetUserInfo(tokenData.AccessToken)
 	if err != nil {
 		fmt.Println("Error getting user info: " + err.Error())
 		return nil, nil, err

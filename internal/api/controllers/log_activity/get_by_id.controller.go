@@ -1,1 +1,1 @@
-package log_activity
+package log_activity_controller
