@@ -5,18 +5,18 @@ import (
 	"net/http"
 )
 
-// GetByName retrieves the employee's information
+// GetByEmail retrieves the employee's information
 // @Summary Get Employee Information
 // @Description Retrieves the employee's information
 // @Tags Employee
 // @Produce  json
-// @Param name query string true "Employee"
-// @Router /api/v1/employees/get/name [get]
+// @Param email query string true "Employee Email"
+// @Router /api/v1/employees/get/email [get]
 // @Security CookieAuth
-func (e *EmployeeController) GetByName(ctx *gin.Context) {
-	employeeEmail := ctx.Query("name")
+func (e *EmployeeController) GetByEmail(ctx *gin.Context) {
+	email := ctx.Query("email")
 
-	data, err := e.EmployeeUseCase.GetByName(ctx, employeeEmail)
+	data, err := e.EmployeeUseCase.GetByEmail(ctx, email)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{
 			"status":  "error",

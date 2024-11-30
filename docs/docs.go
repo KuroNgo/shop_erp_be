@@ -1929,6 +1929,31 @@ const docTemplate = `{
                     }
                 ],
                 "responses": {}
+            },
+            "patch": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Deletes the employee's information",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "Delete Employee Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Employee ID",
+                        "name": "_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {}
             }
         },
         "/api/v1/employees/get/_id": {
@@ -1976,6 +2001,33 @@ const docTemplate = `{
                     "Employee"
                 ],
                 "summary": "Get Employee Information",
+                "responses": {}
+            }
+        },
+        "/api/v1/employees/get/email": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the employee's information",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "Get Employee Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Employee Email",
+                        "name": "email",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {}
             }
         },
@@ -2032,6 +2084,42 @@ const docTemplate = `{
                     {
                         "description": "Employee data",
                         "name": "attendance",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/employees_domain.Input"
+                        }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/v1/employees/update/status": {
+            "put": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Create the employee's information",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Employee"
+                ],
+                "summary": "Update Employee Information",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Employee ID",
+                        "name": "_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "Employee data",
+                        "name": "status",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -5909,6 +5997,9 @@ const docTemplate = `{
                 },
                 "net_salary": {
                     "type": "number"
+                },
+                "status": {
+                    "type": "string"
                 },
                 "unit_currency": {
                     "type": "string"

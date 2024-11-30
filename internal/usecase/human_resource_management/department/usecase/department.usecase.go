@@ -241,7 +241,7 @@ func (d *departmentUseCase) CreateDepartmentWithManager(ctx context.Context, dep
 				DateOfBirth:  employeeInput.DateOfBirth,
 				DayOfWork:    employeeInput.DayOfWork,
 				DepartmentID: department.ID,
-				IsActive:     true,
+				Active:       "active",
 				CreatedAt:    time.Now(),
 				UpdatedAt:    time.Now(),
 			}

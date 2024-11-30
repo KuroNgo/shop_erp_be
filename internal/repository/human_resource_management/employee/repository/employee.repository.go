@@ -52,6 +52,27 @@ func (e *employeeRepository) DeleteOne(ctx context.Context, id primitive.ObjectI
 	return nil
 }
 
+func (e *employeeRepository) DeleteSoft(ctx context.Context, id primitive.ObjectID) error {
+	collectionEmployee := e.database.Collection(e.collectionEmployee)
+
+	if id == primitive.NilObjectID {
+		return errors.New("id do not nil")
+	}
+
+	filter := bson.M{"_id": id}
+	update := bson.M{"$set": bson.M{
+		"updated_at": time.Now(),
+		"is_active":  "Inactive",
+	}}
+
+	_, err := collectionEmployee.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return errors.New(err.Error() + "error in the updating role's information into database ")
+	}
+
+	return nil
+}
+
 func (e *employeeRepository) UpdateOne(ctx context.Context, id primitive.ObjectID, employee *employeesdomain.Employee) error {
 	collectionEmployee := e.database.Collection(e.collectionEmployee)
 
@@ -71,7 +92,7 @@ func (e *employeeRepository) UpdateOne(ctx context.Context, id primitive.ObjectI
 		"department_id": employee.DepartmentID,
 		"role_id":       employee.RoleID,
 		"updated_at":    employee.UpdatedAt,
-		"is_active":     employee.IsActive,
+		"active":        employee.Active,
 	}}
 
 	_, err := collectionEmployee.UpdateOne(ctx, filter, update)
@@ -82,7 +103,7 @@ func (e *employeeRepository) UpdateOne(ctx context.Context, id primitive.ObjectI
 	return nil
 }
 
-func (e *employeeRepository) UpdateStatus(ctx context.Context, id primitive.ObjectID, isActive bool) error {
+func (e *employeeRepository) UpdateStatus(ctx context.Context, id primitive.ObjectID, active string) error {
 	collectionEmployee := e.database.Collection(e.collectionEmployee)
 
 	if id == primitive.NilObjectID {
@@ -92,7 +113,7 @@ func (e *employeeRepository) UpdateStatus(ctx context.Context, id primitive.Obje
 	filter := bson.M{"_id": id}
 	update := bson.M{"$set": bson.M{
 		"updated_at": time.Now(),
-		"is_active":  isActive,
+		"active":     active,
 	}}
 
 	_, err := collectionEmployee.UpdateOne(ctx, filter, update)
@@ -107,7 +128,7 @@ func (e *employeeRepository) GetByID(ctx context.Context, id primitive.ObjectID)
 	collectionEmployee := e.database.Collection(e.collectionEmployee)
 
 	var employee employeesdomain.Employee
-	filter := bson.M{"_id": id}
+	filter := bson.M{"_id": id, "active": "Active"}
 	if err := collectionEmployee.FindOne(ctx, filter).Decode(&employee); err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
 			return employeesdomain.Employee{}, nil
@@ -122,7 +143,7 @@ func (e *employeeRepository) GetByName(ctx context.Context, name string) (employ
 	collectionEmployee := e.database.Collection(e.collectionEmployee)
 
 	var employee employeesdomain.Employee
-	filter := bson.M{"last_name": name}
+	filter := bson.M{"last_name": name, "active": "Active"}
 	if err := collectionEmployee.FindOne(ctx, filter).Decode(&employee); err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
 			return employeesdomain.Employee{}, nil
@@ -136,7 +157,7 @@ func (e *employeeRepository) GetByName(ctx context.Context, name string) (employ
 func (e *employeeRepository) GetByEmail(ctx context.Context, email string) (employeesdomain.Employee, error) {
 	collectionEmployee := e.database.Collection(e.collectionEmployee)
 
-	filter := bson.M{"email": email}
+	filter := bson.M{"email": email, "active": "Active"}
 	var employee employeesdomain.Employee
 	err := collectionEmployee.FindOne(ctx, filter).Decode(&employee)
 	if err != nil {
@@ -149,10 +170,48 @@ func (e *employeeRepository) GetByEmail(ctx context.Context, email string) (empl
 	return employee, nil
 }
 
+func (e *employeeRepository) GetByStatus(ctx context.Context, status string) ([]employeesdomain.Employee, error) {
+	collectionEmployee := e.database.Collection(e.collectionEmployee)
+
+	filter := bson.M{"status": status, "active": "Active"}
+	cursor, err := collectionEmployee.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer func(cursor *mongo.Cursor, ctx context.Context) {
+		err = cursor.Close(ctx)
+		if err != nil {
+			return
+		}
+	}(cursor, ctx)
+
+	var employees []employeesdomain.Employee
+	employees = make([]employeesdomain.Employee, 0, cursor.RemainingBatchLength())
+	for cursor.Next(ctx) {
+		var employee employeesdomain.Employee
+		if err = cursor.Decode(&employee); err != nil {
+			return nil, errors.New("error decoding employee information from database")
+		}
+
+		employees = append(employees, employee)
+	}
+
+	if cursor.Err() != nil {
+		return nil, cursor.Err()
+	}
+
+	// Check for any errors encountered during iteration
+	if err = cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return employees, nil
+}
+
 func (e *employeeRepository) GetAll(ctx context.Context) ([]employeesdomain.Employee, error) {
 	collectionEmployee := e.database.Collection(e.collectionEmployee)
 
-	filter := bson.M{}
+	filter := bson.M{"active": "Active"}
 	cursor, err := collectionEmployee.Find(ctx, filter)
 	if err != nil {
 		return nil, err

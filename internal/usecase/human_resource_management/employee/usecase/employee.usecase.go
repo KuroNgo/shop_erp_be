@@ -39,6 +39,10 @@ func (e *employeeUseCase) CreateOne(ctx context.Context, input *employeesdomain.
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
 
+	if input.Role == "" {
+		input.Role = "Staff"
+	}
+
 	if err := validate.Employee(input); err != nil {
 		return err
 	}
@@ -67,7 +71,7 @@ func (e *employeeUseCase) CreateOne(ctx context.Context, input *employeesdomain.
 		DayOfWork:    input.DayOfWork,
 		DepartmentID: departmentData.ID,
 		RoleID:       roleData.ID,
-		IsActive:     true,
+		Active:       "active",
 		CreatedAt:    time.Now(),
 		UpdatedAt:    time.Now(),
 	}
@@ -103,6 +107,30 @@ func (e *employeeUseCase) DeleteOne(ctx context.Context, id string) error {
 	}
 
 	err = e.employeeRepository.DeleteOne(ctx, employeeID)
+	if err != nil {
+		return err
+	}
+
+	if err := e.cache.Delete(id); err != nil {
+		log.Printf("failed to delete a employee's id cache: %v", err)
+	}
+	if err = e.cache.Delete("employees"); err != nil {
+		log.Printf("failed to delete employees cache: %v", err)
+	}
+
+	return nil
+}
+
+func (e *employeeUseCase) DeleteSoft(ctx context.Context, id string) error {
+	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
+	defer cancel()
+
+	employeeID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+
+	err = e.employeeRepository.DeleteSoft(ctx, employeeID)
 	if err != nil {
 		return err
 	}
@@ -170,7 +198,7 @@ func (e *employeeUseCase) UpdateOne(ctx context.Context, id string, input *emplo
 	return nil
 }
 
-func (e *employeeUseCase) UpdateStatus(ctx context.Context, id string, isActive bool) error {
+func (e *employeeUseCase) UpdateStatus(ctx context.Context, id string, active string) error {
 	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
 	defer cancel()
 
@@ -179,7 +207,7 @@ func (e *employeeUseCase) UpdateStatus(ctx context.Context, id string, isActive 
 		return err
 	}
 
-	err = e.employeeRepository.UpdateStatus(ctx, employeeID, isActive)
+	err = e.employeeRepository.UpdateStatus(ctx, employeeID, active)
 	if err != nil {
 		return err
 	}
@@ -236,6 +264,90 @@ func (e *employeeUseCase) GetByID(ctx context.Context, id string) (employeesdoma
 	}
 
 	return output, nil
+}
+
+func (e *employeeUseCase) GetByName(ctx context.Context, name string) (employeesdomain.Output, error) {
+	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
+	defer cancel()
+
+	data, err := e.cache.Get(name)
+	if err != nil {
+		log.Printf("failed to get employees cache: %v", err)
+	}
+	if data != nil {
+		var response employeesdomain.Output
+		err := json.Unmarshal(data, &response)
+		if err != nil {
+			return employeesdomain.Output{}, err
+		}
+		return response, nil
+	}
+
+	employeeData, err := e.employeeRepository.GetByName(ctx, name)
+	if err != nil {
+		return employeesdomain.Output{}, err
+	}
+
+	output := employeesdomain.Output{
+		Employee: employeeData,
+	}
+
+	data, err = json.Marshal(output)
+	if err != nil {
+		return employeesdomain.Output{}, err
+	}
+
+	err = e.cache.Set(name, data)
+	if err != nil {
+		log.Printf("failed to set employees cache: %v", err)
+	}
+
+	return output, nil
+}
+
+func (e *employeeUseCase) GetByStatus(ctx context.Context, status string) ([]employeesdomain.Output, error) {
+	ctx, cancel := context.WithTimeout(ctx, e.contextTimeout)
+	defer cancel()
+
+	data, err := e.cache.Get(status)
+	if err != nil {
+		log.Printf("failed to get employees cache: %v", err)
+	}
+	if data != nil {
+		var response []employeesdomain.Output
+		err := json.Unmarshal(data, &response)
+		if err != nil {
+			return nil, err
+		}
+		return response, nil
+	}
+
+	employeeData, err := e.employeeRepository.GetByStatus(ctx, status)
+	if err != nil {
+		return nil, err
+	}
+
+	var outputs []employeesdomain.Output
+	outputs = make([]employeesdomain.Output, 0, len(employeeData))
+	for _, employee := range employeeData {
+		output := employeesdomain.Output{
+			Employee: employee,
+		}
+
+		outputs = append(outputs, output)
+	}
+
+	data, err = json.Marshal(outputs)
+	if err != nil {
+		return nil, err
+	}
+
+	err = e.cache.Set(status, data)
+	if err != nil {
+		log.Printf("failed to set employees cache: %v", err)
+	}
+
+	return outputs, nil
 }
 
 func (e *employeeUseCase) GetByEmail(ctx context.Context, name string) (employeesdomain.Output, error) {
@@ -327,4 +439,9 @@ func (e *employeeUseCase) CountEmployee(ctx context.Context) (int64, error) {
 	defer cancel()
 
 	return e.employeeRepository.CountEmployee(ctx)
+}
+
+func (e *employeeUseCase) LifeCycle(ctx context.Context) error {
+	//TODO implement me
+	panic("implement me")
 }

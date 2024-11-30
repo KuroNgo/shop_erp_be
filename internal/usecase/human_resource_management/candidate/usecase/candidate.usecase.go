@@ -139,7 +139,7 @@ func (c *candidateUseCase) UpdateStatus(ctx context.Context, id string, status s
 				RoleID:    candidate.RoleHire,
 				//DepartmentID: candidateID., get info from roleID
 				//SalaryID: candidate., get info from roleID
-				IsActive:  true,
+				Active:    "active",
 				CreatedAt: time.Now(),
 				UpdatedAt: time.Now(),
 			}
