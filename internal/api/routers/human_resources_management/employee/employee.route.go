@@ -29,9 +29,13 @@ func EmployeeRouter(env *config.Database, timeout time.Duration, db *mongo.Datab
 
 	router := group.Group("/employees")
 	router.GET("/get/_id", employee.GetByID)
+	router.GET("/get/name", employee.GetByName)
+	router.GET("/get/status", employee.GetByStatus)
 	router.GET("/get/email", employee.GetByEmail)
 	router.GET("/get/all", employee.GetAll)
 	router.POST("/create", employee.CreateOne)
 	router.PUT("/update", employee.UpdateOne)
-	router.DELETE("/delete", employee.DeleteOne)
+	router.PATCH("/update/status", employee.UpdateStatus)
+	router.PATCH("/delete-soft/_id", employee.DeleteSoft)
+	router.DELETE("/delete/_id", employee.DeleteOne)
 }

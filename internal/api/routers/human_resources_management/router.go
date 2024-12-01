@@ -20,9 +20,9 @@ import (
 	userroute "shop_erp_mono/internal/api/routers/human_resources_management/user"
 	"shop_erp_mono/internal/api/routers/log_activity"
 	"shop_erp_mono/internal/config"
-	cronjob "shop_erp_mono/pkg/interface/cron"
 	"shop_erp_mono/pkg/interface/security/casbin/middlewares"
 	"shop_erp_mono/pkg/interface/security/casbin/principle"
+	"shop_erp_mono/pkg/shared/cron"
 	"time"
 )
 
@@ -43,7 +43,6 @@ func SetUp(env *config.Database, cr *cronjob.CronScheduler, timeout time.Duratio
 		middlewares.Recover(),
 		gzip.Gzip(gzip.DefaultCompression,
 			gzip.WithExcludedPaths([]string{",*"})),
-		casbin.Authorize(enforcer),
 		middlewares.DeserializeUser(),
 		middlewares.StructuredLogger(&log.Logger, value),
 	)

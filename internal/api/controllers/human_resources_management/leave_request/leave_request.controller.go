@@ -3,7 +3,7 @@ package leave_request_controller
 import (
 	"shop_erp_mono/internal/config"
 	leaverequestdomain "shop_erp_mono/internal/domain/human_resource_management/leave_request"
-	cronjob "shop_erp_mono/pkg/interface/cron"
+	"shop_erp_mono/pkg/shared/cron"
 )
 
 type LeaveRequestController struct {

@@ -881,5 +881,4 @@ func (d *departmentUseCase) CountDepartment(ctx context.Context) (int64, error) 
 
 func (d *departmentUseCase) LifecycleDepartment(ctx context.Context) error {
 	return nil
-	// need to write
 }

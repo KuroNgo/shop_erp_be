@@ -6,7 +6,7 @@ import (
 	_ "net/http/pprof"
 	"shop_erp_mono/internal/api/routers"
 	"shop_erp_mono/internal/infrastructor/mongo"
-	cronjob "shop_erp_mono/pkg/interface/cron"
+	"shop_erp_mono/pkg/shared/cron"
 	"time"
 )
 

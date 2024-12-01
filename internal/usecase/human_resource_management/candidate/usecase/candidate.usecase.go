@@ -3,6 +3,7 @@ package candidate_usecase
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -44,11 +45,16 @@ func (c *candidateUseCase) CreateOne(ctx context.Context, candidate *candidatedo
 		return err
 	}
 
+	err := c.candidateRepository.CreateOne(ctx, candidate)
+	if err != nil {
+		return err
+	}
+
 	if err := c.cache.Delete("candidates"); err != nil {
 		log.Printf("failed to delete candidates cache: %v", err)
 	}
 
-	return c.candidateRepository.CreateOne(ctx, candidate)
+	return nil
 }
 
 func (c *candidateUseCase) DeleteOne(ctx context.Context, id string) error {
@@ -60,6 +66,11 @@ func (c *candidateUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
+	err = c.candidateRepository.DeleteOne(ctx, candidateID)
+	if err != nil {
+		return err
+	}
+
 	err = c.cache.Delete("candidates")
 	if err != nil {
 		log.Printf("failed to delete candidates cache: %v", err)
@@ -69,7 +80,7 @@ func (c *candidateUseCase) DeleteOne(ctx context.Context, id string) error {
 		log.Printf("failed to delete candidates cache: %v", err)
 	}
 
-	return c.candidateRepository.DeleteOne(ctx, candidateID)
+	return nil
 }
 
 func (c *candidateUseCase) UpdateOne(ctx context.Context, id string, candidate *candidatedomain.Candidate) error {
@@ -81,6 +92,20 @@ func (c *candidateUseCase) UpdateOne(ctx context.Context, id string, candidate *
 		return err
 	}
 
+	candidateData, err := c.candidateRepository.GetByID(ctx, candidateID)
+	if err != nil {
+		return err
+	}
+
+	if candidateData.Status == "onboarding" {
+		return errors.New("can not update with candidate have done process")
+	}
+
+	err = c.candidateRepository.UpdateOne(ctx, candidateID, candidate)
+	if err != nil {
+		return err
+	}
+
 	err = c.cache.Delete("candidates")
 	if err != nil {
 		log.Printf("failed to delete candidates cache: %v", err)
@@ -90,7 +115,7 @@ func (c *candidateUseCase) UpdateOne(ctx context.Context, id string, candidate *
 		log.Printf("failed to delete candidates cache: %v", err)
 	}
 
-	return c.candidateRepository.UpdateOne(ctx, candidateID, candidate)
+	return nil
 }
 
 func (c *candidateUseCase) UpdateStatus(ctx context.Context, id string, status string) error {
@@ -102,6 +127,15 @@ func (c *candidateUseCase) UpdateStatus(ctx context.Context, id string, status s
 		return err
 	}
 
+	candidateData, err := c.candidateRepository.GetByID(ctx, candidateID)
+	if err != nil {
+		return err
+	}
+
+	if candidateData.Status == "onboarding" {
+		return errors.New("can not update with candidate have done process")
+	}
+
 	session, err := c.client.StartSession()
 	if err != nil {
 		return err
@@ -111,7 +145,7 @@ func (c *candidateUseCase) UpdateStatus(ctx context.Context, id string, status s
 	callback := func(sessionCtx mongo_driven.SessionContext) (interface{}, error) {
 		if status == "onboarding" {
 			// Get a information candidate
-			candidate, err := c.candidateRepository.GetByID(ctx, candidateID)
+			candidate, err := c.candidateRepository.GetByID(sessionCtx, candidateID)
 			if err != nil {
 				return nil, err
 			}
@@ -144,7 +178,7 @@ func (c *candidateUseCase) UpdateStatus(ctx context.Context, id string, status s
 				UpdatedAt: time.Now(),
 			}
 
-			err = c.employeeRepository.CreateOne(ctx, &employee)
+			err = c.employeeRepository.CreateOne(sessionCtx, &employee)
 			if err != nil {
 				return nil, err
 			}
@@ -159,6 +193,16 @@ func (c *candidateUseCase) UpdateStatus(ctx context.Context, id string, status s
 		return err
 	}
 
+	err = session.CommitTransaction(ctx)
+	if err != nil {
+		return err
+	}
+
+	err = c.candidateRepository.UpdateStatus(ctx, candidateID, status)
+	if err != nil {
+		return err
+	}
+
 	err = c.cache.Delete("candidates")
 	if err != nil {
 		log.Printf("failed to delete candidates cache: %v", err)
@@ -168,7 +212,7 @@ func (c *candidateUseCase) UpdateStatus(ctx context.Context, id string, status s
 		log.Printf("failed to delete candidates cache: %v", err)
 	}
 
-	return c.candidateRepository.UpdateStatus(ctx, candidateID, status)
+	return nil
 }
 
 func (c *candidateUseCase) splitFullName(name string) (string, string, error) {

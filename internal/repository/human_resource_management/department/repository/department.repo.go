@@ -60,7 +60,7 @@ func (d *departmentRepository) DeleteSoftOne(ctx context.Context, id primitive.O
 
 	filter := bson.M{"_id": id}
 	update := bson.M{
-		"enable":      0,
+		"status":      "inactive",
 		"who_deleted": idUser,
 	}
 
@@ -139,7 +139,7 @@ func (d *departmentRepository) UpdateStatus(ctx context.Context, id primitive.Ob
 func (d *departmentRepository) GetByID(ctx context.Context, id primitive.ObjectID) (departmentsdomain.Department, error) {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
-	filter := bson.M{"_id": id, "enable": 1, "status": "active"}
+	filter := bson.M{"_id": id, "status": "active"}
 	var department departmentsdomain.Department
 	if err := collectionDepartment.FindOne(ctx, filter).Decode(&department); err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
@@ -154,7 +154,7 @@ func (d *departmentRepository) GetByID(ctx context.Context, id primitive.ObjectI
 func (d *departmentRepository) GetByName(ctx context.Context, name string) (departmentsdomain.Department, error) {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
-	filter := bson.M{"name": name, "enable": 1, "status": "active"}
+	filter := bson.M{"name": name, "status": "active"}
 	var department departmentsdomain.Department
 	if err := collectionDepartment.FindOne(ctx, filter).Decode(&department); err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
@@ -169,7 +169,7 @@ func (d *departmentRepository) GetByName(ctx context.Context, name string) (depa
 func (d *departmentRepository) GetByStatus(ctx context.Context, status string) ([]departmentsdomain.Department, error) {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
-	filter := bson.M{"status": status, "enable": 1}
+	filter := bson.M{"status": status}
 	cursor, err := collectionDepartment.Find(ctx, filter)
 	if err != nil {
 		return nil, err
@@ -203,7 +203,7 @@ func (d *departmentRepository) GetByStatus(ctx context.Context, status string) (
 func (d *departmentRepository) GetAll(ctx context.Context) ([]departmentsdomain.Department, error) {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
-	filter := bson.M{"status": "active", "enable": 1}
+	filter := bson.M{"status": "active"}
 	cursor, err := collectionDepartment.Find(ctx, filter)
 	if err != nil {
 		return nil, err
@@ -237,7 +237,47 @@ func (d *departmentRepository) GetAll(ctx context.Context) ([]departmentsdomain.
 func (d *departmentRepository) GetAllSoftDelete(ctx context.Context) ([]departmentsdomain.Department, error) {
 	collectionDepartment := d.database.Collection(d.collectionDepartment)
 
-	filter := bson.M{"enable": 0}
+	filter := bson.M{"status": "inactive"}
+	cursor, err := collectionDepartment.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer func(cursor *mongo.Cursor, ctx context.Context) {
+		err = cursor.Close(ctx)
+		if err != nil {
+			return
+		}
+	}(cursor, ctx)
+
+	var departments []departmentsdomain.Department
+	departments = make([]departmentsdomain.Department, 0, cursor.RemainingBatchLength())
+	for cursor.Next(ctx) {
+		var department departmentsdomain.Department
+		if err = cursor.Decode(&department); err != nil {
+			return nil, err
+		}
+
+		departments = append(departments, department)
+	}
+
+	// Check for any errors encountered during iteration
+	if err = cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return departments, nil
+}
+
+func (d *departmentRepository) GetAllDepartmentAlmostExpire(ctx context.Context) ([]departmentsdomain.Department, error) {
+	collectionDepartment := d.database.Collection(d.collectionDepartment)
+
+	thirtyDaysAgo := time.Now().AddDate(0, 0, -30)
+	filter := bson.M{
+		"updated_at": bson.M{
+			"$lte": thirtyDaysAgo,
+		},
+		"status": "inactive",
+	}
 	cursor, err := collectionDepartment.Find(ctx, filter)
 	if err != nil {
 		return nil, err

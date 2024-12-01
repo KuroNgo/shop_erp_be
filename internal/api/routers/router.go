@@ -12,7 +12,7 @@ import (
 	swaggerroute "shop_erp_mono/internal/api/routers/swagger"
 	"shop_erp_mono/internal/api/routers/warehouse_management"
 	"shop_erp_mono/internal/config"
-	cronjob "shop_erp_mono/pkg/interface/cron"
+	"shop_erp_mono/pkg/shared/cron"
 	"time"
 )
 

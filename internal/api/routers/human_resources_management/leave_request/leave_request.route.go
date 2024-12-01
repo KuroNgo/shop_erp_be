@@ -12,7 +12,7 @@ import (
 	employeerepository "shop_erp_mono/internal/repository/human_resource_management/employee/repository"
 	leaverequestrepository "shop_erp_mono/internal/repository/human_resource_management/leave_request/repository"
 	leave_request_usecase "shop_erp_mono/internal/usecase/human_resource_management/leave_request/usecase"
-	cronjob "shop_erp_mono/pkg/interface/cron"
+	"shop_erp_mono/pkg/shared/cron"
 	"time"
 )
 

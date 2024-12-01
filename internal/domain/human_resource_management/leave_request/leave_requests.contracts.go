@@ -3,7 +3,7 @@ package leave_request_domain
 import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	cronjob "shop_erp_mono/pkg/interface/cron"
+	"shop_erp_mono/pkg/shared/cron"
 )
 
 type ILeaveRequestRepository interface {

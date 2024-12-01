@@ -20,7 +20,8 @@ type IDepartmentRepository interface {
 	GetByName(ctx context.Context, name string) (Department, error)
 	GetAll(ctx context.Context) ([]Department, error)
 	GetAllSoftDelete(ctx context.Context) ([]Department, error)
-
+	GetAllDepartmentAlmostExpire(ctx context.Context) ([]Department, error)
+	
 	CountManagerExist(ctx context.Context, managerID primitive.ObjectID) (int64, error)
 	CountDepartment(ctx context.Context) (int64, error)
 	CountDepartmentWithName(ctx context.Context, name string) (int64, error)

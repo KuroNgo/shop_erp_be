@@ -25,7 +25,10 @@ func CandidateRouter(env *config.Database, timeout time.Duration, db *mongo.Data
 	router.GET("/get/_id", candidate.GetByID)
 	router.GET("/get/name", candidate.GetByName)
 	router.GET("/get/all", candidate.GetAll)
+	//router.GET("/get/all/pagination", candidate.GetAll)
 	router.POST("/create", candidate.CreateOne)
 	router.PUT("/update", candidate.UpdateOne)
+	router.PATCH("/update/status", candidate.UpdateStatus)
+	//router.PATCH("/delete/_id", candidate.D)
 	router.DELETE("/delete", candidate.DeleteOne)
 }

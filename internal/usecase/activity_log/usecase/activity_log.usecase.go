@@ -36,7 +36,13 @@ func NewActivityLogUseCase(contextTimeout time.Duration, activityLogRepository a
 func (a *activityLogUseCase) CreateOne(ctx context.Context, activityLog *activitylogdomain.ActivityLog) error {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
-	return a.activityLogRepository.CreateOne(ctx, activityLog)
+
+	err := a.activityLogRepository.CreateOne(ctx, activityLog)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (a *activityLogUseCase) DeleteOne(ctx context.Context, id string) error {
@@ -205,9 +211,11 @@ func (a *activityLogUseCase) GetAll(ctx context.Context) ([]activitylogdomain.Re
 	return outputs, nil
 }
 
-func (a *activityLogUseCase) LifeCycle(ctx context.Context) error {
-	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
-	defer cancel()
+func (a *activityLogUseCase) PrintLog(ctx context.Context) error {
+	//TODO implement me
+	panic("implement me")
+}
 
+func (a *activityLogUseCase) LifeCycle(ctx context.Context) error {
 	return nil
 }

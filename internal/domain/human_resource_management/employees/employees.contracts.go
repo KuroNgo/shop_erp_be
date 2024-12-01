@@ -19,6 +19,7 @@ type IEmployeeRepository interface {
 	CountEmployeeByEmail(ctx context.Context, email string) (int64, error)
 	CountEmployee(ctx context.Context) (int64, error)
 	CountEmployeeByDepartmentID(ctx context.Context, departmentID primitive.ObjectID) (int64, error)
+	CountEmployeeByDepartmentID2(ctx context.Context, departmentID primitive.ObjectID) (int64, error)
 	CountEmployeeByRoleID(ctx context.Context, roleID primitive.ObjectID) (int64, error)
 }
 
