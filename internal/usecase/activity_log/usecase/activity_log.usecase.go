@@ -54,7 +54,12 @@ func (a *activityLogUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
-	return a.activityLogRepository.DeleteOne(ctx, logID)
+	err = a.activityLogRepository.DeleteOne(ctx, logID)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (a *activityLogUseCase) GetByID(ctx context.Context, id string) (activitylogdomain.Response, error) {
@@ -71,20 +76,27 @@ func (a *activityLogUseCase) GetByID(ctx context.Context, id string) (activitylo
 		return activitylogdomain.Response{}, err
 	}
 
-	userData, err := a.userRepository.GetByID(ctx, data.UserID)
-	if err != nil {
-		return activitylogdomain.Response{}, err
-	}
+	var users []string
+	var employees []string
+	for _, userID := range data.UserID {
+		userData, err := a.userRepository.GetByID(ctx, userID)
+		if err != nil {
+			return activitylogdomain.Response{}, err
+		}
 
-	employeeData, err := a.employeeRepository.GetByID(ctx, userData.EmployeeID)
-	if err != nil {
-		return activitylogdomain.Response{}, err
+		employeeData, err := a.employeeRepository.GetByID(ctx, userData.EmployeeID)
+		if err != nil {
+			return activitylogdomain.Response{}, err
+		}
+
+		users = append(users, userData.Username)
+		employees = append(employees, employeeData.FirstName+employeeData.LastName)
 	}
 
 	response := activitylogdomain.Response{
 		ActivityLog: data,
-		Username:    userData.Username,
-		Employee:    employeeData.LastName + employeeData.FirstName,
+		Username:    users,
+		Employee:    employees,
 	}
 
 	return response, nil
@@ -119,22 +131,29 @@ func (a *activityLogUseCase) GetByEmployeeID(ctx context.Context, idEmployee str
 	}
 
 	var outputs []activitylogdomain.Response
+	var users []string
+	var employees []string
 	outputs = make([]activitylogdomain.Response, 0, len(activityData))
 	for _, activity := range activityData {
-		userData, err := a.userRepository.GetByID(ctx, activity.UserID)
-		if err != nil {
-			return nil, err
-		}
+		for _, userID := range activity.UserID {
+			userData, err := a.userRepository.GetByID(ctx, userID)
+			if err != nil {
+				return nil, err
+			}
 
-		employeeData, err := a.employeeRepository.GetByID(ctx, userData.EmployeeID)
-		if err != nil {
-			return nil, err
+			employeeData, err := a.employeeRepository.GetByID(ctx, userData.EmployeeID)
+			if err != nil {
+				return nil, err
+			}
+
+			users = append(users, userData.Username)
+			employees = append(employees, employeeData.FirstName+employeeData.LastName)
 		}
 
 		response := activitylogdomain.Response{
 			ActivityLog: activity,
-			Username:    userData.Username,
-			Employee:    employeeData.LastName + employeeData.FirstName,
+			Username:    users,
+			Employee:    employees,
 		}
 
 		outputs = append(outputs, response)
@@ -177,22 +196,29 @@ func (a *activityLogUseCase) GetAll(ctx context.Context) ([]activitylogdomain.Re
 	}
 
 	var outputs []activitylogdomain.Response
+	var users []string
+	var employees []string
 	outputs = make([]activitylogdomain.Response, 0, len(activityData))
 	for _, activity := range activityData {
-		userData, err := a.userRepository.GetByID(ctx, activity.UserID)
-		if err != nil {
-			return nil, err
-		}
+		for _, userID := range activity.UserID {
+			userData, err := a.userRepository.GetByID(ctx, userID)
+			if err != nil {
+				return nil, err
+			}
 
-		employeeData, err := a.employeeRepository.GetByID(ctx, userData.EmployeeID)
-		if err != nil {
-			return nil, err
+			employeeData, err := a.employeeRepository.GetByID(ctx, userData.EmployeeID)
+			if err != nil {
+				return nil, err
+			}
+
+			users = append(users, userData.Username)
+			employees = append(employees, employeeData.FirstName+employeeData.LastName)
 		}
 
 		response := activitylogdomain.Response{
 			ActivityLog: activity,
-			Username:    userData.Username,
-			Employee:    employeeData.LastName + employeeData.FirstName,
+			Username:    users,
+			Employee:    employees,
 		}
 
 		outputs = append(outputs, response)
@@ -211,7 +237,7 @@ func (a *activityLogUseCase) GetAll(ctx context.Context) ([]activitylogdomain.Re
 	return outputs, nil
 }
 
-func (a *activityLogUseCase) PrintLog(ctx context.Context) error {
+func (a *activityLogUseCase) PrintLog(ctx context.Context, mos ...int) error {
 	//TODO implement me
 	panic("implement me")
 }

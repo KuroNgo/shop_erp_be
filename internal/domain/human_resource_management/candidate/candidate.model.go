@@ -22,7 +22,8 @@ type Candidate struct {
 	RoleHire   primitive.ObjectID `bson:"role" json:"role"`
 	Experience []Experience       `bson:"experience" json:"experience"`
 	Education  []Education        `bson:"education" json:"education"`
-	Status     string             `bson:"status" json:"status"` // Applied Interviewing Hired Rejected, On Hold, Offer Sent, Offer Accepted, Offer Declined
+	Status     string             `bson:"status" json:"status"`             // Applied Interviewing Hired Rejected, On Hold, Offer Sent, Offer Accepted, Offer Declined
+	IsSentMail bool               `bson:"is_sent_mail" json:"is_sent_mail"` // use mail custom or system
 	CreatedAt  time.Time          `bson:"created_at" json:"created_at"`
 	UpdatedAt  time.Time          `bson:"updated_at" json:"updated_at"`
 }

@@ -19,6 +19,6 @@ type ILogUseCase interface {
 	GetByID(ctx context.Context, id string) (Response, error)
 	GetByEmployeeID(ctx context.Context, idEmployee string) ([]Response, error)
 	GetAll(ctx context.Context) ([]Response, error)
-	PrintLog(ctx context.Context) error
+	PrintLog(ctx context.Context, mos ...int) error
 	LifeCycle(ctx context.Context) error
 }

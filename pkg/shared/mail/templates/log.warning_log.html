@@ -2,9 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log Notifications</title>
 </head>
 <body>
-
+<h1>Log Notifications</h1>
+{{range .}}
+{{if eq .Level "Info"}}
+<div class="log-info">
+    <h2>Info Log</h2>
+    <p><strong>Info:</strong> {{.Message}}</p>
+</div>
+{{else if eq .Level "Warning"}}
+<div class="log-warning">
+    <h2>Warning Log</h2>
+    <p><strong>Warning:</strong> {{.Message}}</p>
+</div>
+{{else if eq .Level "Error"}}
+<div class="log-error">
+    <h2>Error Log</h2>
+    <p><strong>Error:</strong> {{.Message}}</p>
+</div>
+{{end}}
+{{end}}
+<footer>
+    <p>Best regards, <br> The System Management Team</p>
+</footer>
 </body>
 </html>

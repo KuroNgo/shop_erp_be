@@ -13,6 +13,7 @@ import (
 	employeesdomain "shop_erp_mono/internal/domain/human_resource_management/employees"
 	"shop_erp_mono/internal/repository"
 	"shop_erp_mono/internal/usecase/human_resource_management/candidate/validate"
+	"shop_erp_mono/pkg/shared/constant"
 	"strconv"
 	"strings"
 	"time"
@@ -50,8 +51,8 @@ func (c *candidateUseCase) CreateOne(ctx context.Context, candidate *candidatedo
 		return err
 	}
 
-	if err := c.cache.Delete("candidates"); err != nil {
-		log.Printf("failed to delete candidates cache: %v", err)
+	if err = c.cache.Delete(constant.CandidatesCache); err != nil {
+		log.Printf("%s: %v", constant.MsgCandidateDeleteCacheFailure, err)
 	}
 
 	return nil
@@ -71,13 +72,13 @@ func (c *candidateUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
-	err = c.cache.Delete("candidates")
+	err = c.cache.Delete(constant.CandidatesCache)
 	if err != nil {
-		log.Printf("failed to delete candidates cache: %v", err)
+		log.Printf("%s: %v", constant.MsgCandidateDeleteCacheFailure, err)
 	}
 	err = c.cache.Delete(id)
 	if err != nil {
-		log.Printf("failed to delete candidates cache: %v", err)
+		log.Printf("%s: %v", constant.MsgCandidateDeleteCacheFailure, err)
 	}
 
 	return nil
@@ -97,8 +98,8 @@ func (c *candidateUseCase) UpdateOne(ctx context.Context, id string, candidate *
 		return err
 	}
 
-	if candidateData.Status == "onboarding" {
-		return errors.New("can not update with candidate have done process")
+	if candidateData.Status == constant.MsgCandidateStatusOnboarding {
+		return errors.New(constant.MsgCandidateCannotUpdate)
 	}
 
 	err = c.candidateRepository.UpdateOne(ctx, candidateID, candidate)
@@ -106,13 +107,13 @@ func (c *candidateUseCase) UpdateOne(ctx context.Context, id string, candidate *
 		return err
 	}
 
-	err = c.cache.Delete("candidates")
+	err = c.cache.Delete(constant.CandidatesCache)
 	if err != nil {
-		log.Printf("failed to delete candidates cache: %v", err)
+		log.Printf("%s: %v", constant.MsgCandidateDeleteCacheFailure, err)
 	}
 	err = c.cache.Delete(id)
 	if err != nil {
-		log.Printf("failed to delete candidates cache: %v", err)
+		log.Printf("%s: %v", constant.MsgCandidateDeleteCacheFailure, err)
 	}
 
 	return nil
@@ -132,8 +133,8 @@ func (c *candidateUseCase) UpdateStatus(ctx context.Context, id string, status s
 		return err
 	}
 
-	if candidateData.Status == "onboarding" {
-		return errors.New("can not update with candidate have done process")
+	if candidateData.Status == constant.MsgCandidateStatusOnboarding {
+		return errors.New(constant.MsgCandidateCannotUpdate)
 	}
 
 	session, err := c.client.StartSession()
@@ -143,20 +144,26 @@ func (c *candidateUseCase) UpdateStatus(ctx context.Context, id string, status s
 	defer session.EndSession(ctx)
 
 	callback := func(sessionCtx mongo_driven.SessionContext) (interface{}, error) {
-		if status == "onboarding" {
-			// Get a information candidate
-			candidate, err := c.candidateRepository.GetByID(sessionCtx, candidateID)
+		if status == constant.MsgCandidateStatusApplied {
+
+		}
+
+		if status == constant.MsgCandidateStatusRejected {
+
+		}
+
+		if status == constant.MsgCandidateStatusOnHold {
+
+		}
+
+		if status == constant.MsgCandidateStatusOnboarding {
+			firstname, lastname, err := c.splitFullName(candidateData.Name)
 			if err != nil {
 				return nil, err
-			}
-
-			firstname, lastname, err := c.splitFullName(candidate.Name)
-			if err != nil {
-				return nil, err
 
 			}
 
-			email, err := c.createEmailEmployee(candidate.Name)
+			email, err := c.createEmailEmployee(candidateData.Name)
 			if err != nil {
 				return nil, err
 			}
@@ -165,12 +172,12 @@ func (c *candidateUseCase) UpdateStatus(ctx context.Context, id string, status s
 			employee := employeesdomain.Employee{
 				FirstName: firstname,
 				LastName:  lastname,
-				Gender:    candidate.Gender,
-				Address:   candidate.Address,
-				AvatarURL: candidate.ImageURL,
+				Gender:    candidateData.Gender,
+				Address:   candidateData.Address,
+				AvatarURL: candidateData.ImageURL,
 				Email:     email,
-				Phone:     candidate.Phone,
-				RoleID:    candidate.RoleHire,
+				Phone:     candidateData.Phone,
+				RoleID:    candidateData.RoleHire,
 				//DepartmentID: candidateID., get info from roleID
 				//SalaryID: candidate., get info from roleID
 				Active:    "active",
@@ -203,13 +210,13 @@ func (c *candidateUseCase) UpdateStatus(ctx context.Context, id string, status s
 		return err
 	}
 
-	err = c.cache.Delete("candidates")
+	err = c.cache.Delete(constant.CandidatesCache)
 	if err != nil {
-		log.Printf("failed to delete candidates cache: %v", err)
+		log.Printf("%s: %v", constant.MsgCandidateDeleteCacheFailure, err)
 	}
 	err = c.cache.Delete(id)
 	if err != nil {
-		log.Printf("failed to delete candidates cache: %v", err)
+		log.Printf("%s: %v", constant.MsgCandidateDeleteCacheFailure, err)
 	}
 
 	return nil
@@ -263,7 +270,7 @@ func (c *candidateUseCase) GetByID(ctx context.Context, id string) (*candidatedo
 
 	data, err := c.cache.Get(id)
 	if err != nil {
-		log.Printf("failed to get candidates cache: %v", err)
+		log.Printf("%s: %v", constant.MsgCandidateGetCacheFailure, err)
 	}
 	if data != nil {
 		var response *candidatedomain.Candidate
@@ -291,7 +298,7 @@ func (c *candidateUseCase) GetByID(ctx context.Context, id string) (*candidatedo
 
 	err = c.cache.Set(id, data)
 	if err != nil {
-		log.Printf("failed to set candidates cache: %v", err)
+		log.Printf("%s: %v", constant.MsgCandidateSetCacheFailure, err)
 	}
 
 	return response, nil
@@ -303,7 +310,7 @@ func (c *candidateUseCase) GetByEmail(ctx context.Context, email string) (*candi
 
 	data, err := c.cache.Get(email)
 	if err != nil {
-		log.Printf("failed to get candidates cache: %v", err)
+		log.Printf("%s: %v", constant.MsgCandidateGetCacheFailure, err)
 	}
 	if data != nil {
 		var response *candidatedomain.Candidate
@@ -326,7 +333,7 @@ func (c *candidateUseCase) GetByEmail(ctx context.Context, email string) (*candi
 
 	err = c.cache.Set(email, data)
 	if err != nil {
-		log.Printf("failed to set candidates cache: %v", err)
+		log.Printf("%s: %v", constant.MsgCandidateSetCacheFailure, err)
 	}
 
 	return candidateData, nil
@@ -336,9 +343,9 @@ func (c *candidateUseCase) GetAll(ctx context.Context) ([]candidatedomain.Candid
 	ctx, cancel := context.WithTimeout(ctx, c.contextTimeout)
 	defer cancel()
 
-	data, err := c.cache.Get("candidates")
+	data, err := c.cache.Get(constant.CandidatesCache)
 	if err != nil {
-		log.Printf("failed to get candidates cache: %v", err)
+		log.Printf("%s: %v", constant.MsgCandidateGetCacheFailure, err)
 	}
 	if data != nil {
 		var response []candidatedomain.Candidate
@@ -359,9 +366,9 @@ func (c *candidateUseCase) GetAll(ctx context.Context) ([]candidatedomain.Candid
 		return nil, err
 	}
 
-	err = c.cache.Set("candidates", data)
+	err = c.cache.Set(constant.CandidatesCache, data)
 	if err != nil {
-		log.Printf("failed to set candidates cache: %v", err)
+		log.Printf("%s: %v", constant.MsgCandidateSetCacheFailure, err)
 	}
 
 	return candidateData, nil
@@ -373,7 +380,7 @@ func (c *candidateUseCase) GetAllWithPagination(ctx context.Context, pagination 
 
 	data, err := c.cache.Get(pagination.Page)
 	if err != nil {
-		log.Printf("failed to get candidates cache: %v", err)
+		log.Printf("%s: %v", constant.MsgCandidateGetCacheFailure, err)
 	}
 	if data != nil {
 		var response []candidatedomain.Candidate
@@ -396,7 +403,7 @@ func (c *candidateUseCase) GetAllWithPagination(ctx context.Context, pagination 
 
 	err = c.cache.Set(pagination.Page, data)
 	if err != nil {
-		log.Printf("failed to set candidates cache: %v", err)
+		log.Printf("%s: %v", constant.MsgCandidateSetCacheFailure, err)
 	}
 
 	return candidateData, nil

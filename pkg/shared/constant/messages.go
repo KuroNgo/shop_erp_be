@@ -1,5 +1,6 @@
 package constant
 
+// General
 const (
 	MsgSuccess      = "operation completed successfully"
 	MsgFailed       = "operation failed"
@@ -10,7 +11,48 @@ const (
 	MsgServerError  = "internal server error please try again later"
 	MsgConflict     = "conflict detected resource already exists"
 	MsgInvalidInput = "invalid input provided"
+)
 
+// Api
+const (
+	MsgAPIInvalidRequest       = "invalid request parameters please check and try again"
+	MsgAPIResourceNotFound     = "requested resource not found"
+	MsgAPIForbidden            = "you do not have permission to access this resource"
+	MsgAPIUnauthorized         = "authorization required please log in to continue"
+	MsgAPIConflict             = "conflict detected the resource already exists"
+	MsgAPIBadRequest           = "bad request please verify the request data"
+	MsgAPIRequestTooLarge      = "request entity too large please reduce the data size and try again"
+	MsgAPIRateLimitExceeded    = "rate limit exceeded please wait and try again"
+	MsgAPIUnsupportedMediaType = "unsupported media type please check the content type and try again"
+)
+
+// Attendance
+const (
+	MsgAttendanceGetCacheFailure = "failed to get attendances cache"
+	MsgAttendanceSetCacheFailure = "failed to set attendances cache"
+)
+
+// Candidate
+const (
+	CandidatesCache = "candidates"
+
+	MsgCandidateGetCacheFailure    = "failed to get candidates cache"
+	MsgCandidateSetCacheFailure    = "failed to set candidates cache"
+	MsgCandidateDeleteCacheFailure = "failed to delete candidates cache"
+	MsgCandidateCannotUpdate       = "cannot update a candidate who has completed the process"
+
+	MsgCandidateStatusApplied       = "Applied"
+	MsgCandidateStatusInterviewing  = "Interviewing"
+	MsgCandidateStatusRejected      = "Rejected"
+	MsgCandidateStatusOnHold        = "On Hold"
+	MsgCandidateStatusOfferSent     = "Offer Sent"
+	MsgCandidateStatusOfferAccepted = "Offer Accepted"
+	MsgCandidateStatusOfferDeclined = "Offer Declined"
+	MsgCandidateStatusOnboarding    = "Onboarding"
+)
+
+// User
+const (
 	MsgUserRegistrationSuccess  = "user account has been successfully created"
 	MsgUserRegistrationFailure  = "failed to create user account please check the input and try again"
 	MsgUserLoginSuccess         = "login successful welcome back"
@@ -25,28 +67,25 @@ const (
 	MsgUserProfileUpdateSuccess = "profile updated successfully"
 	MsgUserProfileUpdateFailure = "failed to update profile please try again"
 	MsgUserAccountDeletion      = "user account has been deleted successfully"
+)
 
-	MsgAPIInvalidRequest       = "invalid request parameters please check and try again"
-	MsgAPIResourceNotFound     = "requested resource not found"
-	MsgAPIForbidden            = "you do not have permission to access this resource"
-	MsgAPIUnauthorized         = "authorization required please log in to continue"
-	MsgAPIConflict             = "conflict detected the resource already exists"
-	MsgAPIBadRequest           = "bad request please verify the request data"
-	MsgAPIRequestTooLarge      = "request entity too large please reduce the data size and try again"
-	MsgAPIRateLimitExceeded    = "rate limit exceeded please wait and try again"
-	MsgAPIUnsupportedMediaType = "unsupported media type please check the content type and try again"
+// Product
+const (
+	MsgProductAdded    = "product has been added successfully"
+	MsgProductUpdated  = "product has been updated"
+	MsgProductDeleted  = "product has been deleted"
+	MsgProductNotFound = "product not found"
+)
 
-	MsgDataCreationSuccess = "data has been created successfully"
-	MsgDataCreationFailure = "failed to create data please try again"
-	MsgDataUpdateSuccess   = "data has been updated successfully"
-	MsgDataUpdateFailure   = "failed to update data please try again"
-	MsgDataDeletionSuccess = "data has been deleted successfully"
-	MsgDataDeletionFailure = "failed to delete data please try again"
-	MsgDataNotFound        = "requested data not found"
-	MsgDataDuplicateEntry  = "duplicate entry the data already exists"
-	MsgDataInvalidFormat   = "invalid data format please verify and try again"
-	MsgDataProcessingError = "error processing data please contact support"
+// Order
+const (
+	MsgOrderPlaced    = "your order has been placed successfully"
+	MsgOrderCancelled = "your order has been cancelled"
+	MsgOrderNotFound  = "order not found"
+)
 
+// Action media type
+const (
 	MsgActionUploadSuccess     = "file uploaded successfully"
 	MsgActionUploadFailure     = "file upload failed please try again"
 	MsgActionDownloadSuccess   = "file downloaded successfully"
@@ -57,22 +96,31 @@ const (
 	MsgActionSendFailure       = "failed to send request please try again"
 	MsgActionProcessInProgress = "your request is being processed please wait"
 	MsgActionProcessCompleted  = "processing completed successfully"
+)
 
-	MsgGeneralSuccess      = "operation completed successfully"
-	MsgGeneralFailure      = "operation failed please try again"
-	MsgGeneralError        = "an error occurred please contact support"
-	MsgGeneralAccessDenied = "access denied you do not have the necessary permissions"
+// Data
+const (
+	MsgDataCreationSuccess = "data has been created successfully"
+	MsgDataCreationFailure = "failed to create data please try again"
+	MsgDataUpdateSuccess   = "data has been updated successfully"
+	MsgDataUpdateFailure   = "failed to update data please try again"
+	MsgDataDeletionSuccess = "data has been deleted successfully"
+	MsgDataDeletionFailure = "failed to delete data please try again"
+	MsgDataNotFound        = "requested data not found"
+	MsgDataDuplicateEntry  = "duplicate entry the data already exists"
+	MsgDataInvalidFormat   = "invalid data format please verify and try again"
+	MsgDataProcessingError = "error processing data please contact support"
+)
 
-	MsgProductAdded    = "product has been added successfully"
-	MsgProductUpdated  = "product has been updated"
-	MsgProductDeleted  = "product has been deleted"
-	MsgProductNotFound = "product not found"
-	MsgOrderPlaced     = "your order has been placed successfully"
-	MsgOrderCancelled  = "your order has been cancelled"
-	MsgOrderNotFound   = "order not found"
-
+// Department
+const (
 	MsgDepartmentParentNotFound = "parent department not found"
+	MsgDepartmentNotFound       = "department not found"
+)
 
+// Leave Request
+const (
 	MsgLeaveRequestApprove = "approved"
 	MsgLeaveRequestReject  = "rejected"
+	MsgLeaveRequestPending = "pending"
 )
