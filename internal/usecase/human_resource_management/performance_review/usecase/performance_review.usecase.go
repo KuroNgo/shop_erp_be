@@ -56,7 +56,7 @@ func (p *performanceReviewUseCase) CreateOneWithEmailEmployee(ctx context.Contex
 		UpdatedAt:        time.Now(),
 	}
 
-	if err := p.cache.Delete("performanceReviews"); err != nil {
+	if err = p.cache.Delete("performanceReviews"); err != nil {
 		log.Printf("failed to delete performance review cache %s", err)
 	}
 

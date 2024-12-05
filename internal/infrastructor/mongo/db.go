@@ -35,7 +35,6 @@ func NewMongoDatabase(env *config.Database) *mongo_driven.Client {
 	}
 
 	log.Println("Connected to MongoDB!")
-
 	return client
 }
 

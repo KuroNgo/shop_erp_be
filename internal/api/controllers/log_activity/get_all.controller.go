@@ -11,7 +11,7 @@ import (
 // @Tags Log
 // @Accept  json
 // @Produce  json
-// @Router /api/v1/activity-log/get/all [get]
+// @Router /api/v1/activity/get/all [get]
 // @Security CookieAuth
 func (a *ActivityController) GetAll(ctx *gin.Context) {
 	data, err := a.ActivityUseCase.GetAll(ctx)

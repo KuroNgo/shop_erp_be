@@ -6,6 +6,7 @@ import (
 	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"log"
+	customer_domain "shop_erp_mono/internal/domain/sales_and_distribution_management/customer"
 	invoices_domain "shop_erp_mono/internal/domain/sales_and_distribution_management/invoices"
 	sale_orders_domain "shop_erp_mono/internal/domain/sales_and_distribution_management/sale_orders"
 	"shop_erp_mono/internal/usecase/sales_and_distribution_management/invoices/validate"
@@ -16,16 +17,18 @@ type invoiceUseCase struct {
 	contextTimeout       time.Duration
 	invoiceRepository    invoices_domain.InvoiceRepository
 	salesOrderRepository sale_orders_domain.ISalesOrderRepository
+	customerRepository   customer_domain.ICustomerRepository
 	cache                *bigcache.BigCache
 }
 
 func NewInvoiceUseCase(contextTimeout time.Duration, invoiceRepository invoices_domain.InvoiceRepository,
-	salesOrderRepository sale_orders_domain.ISalesOrderRepository, cacheTTL time.Duration) invoices_domain.InvoiceUseCase {
+	salesOrderRepository sale_orders_domain.ISalesOrderRepository, customerRepository customer_domain.ICustomerRepository, cacheTTL time.Duration) invoices_domain.InvoiceUseCase {
 	cache, err := bigcache.New(context.Background(), bigcache.DefaultConfig(cacheTTL))
 	if err != nil {
 		return nil
 	}
-	return &invoiceUseCase{contextTimeout: contextTimeout, cache: cache, invoiceRepository: invoiceRepository, salesOrderRepository: salesOrderRepository}
+	return &invoiceUseCase{contextTimeout: contextTimeout, cache: cache, invoiceRepository: invoiceRepository,
+		salesOrderRepository: salesOrderRepository, customerRepository: customerRepository}
 }
 
 func (i *invoiceUseCase) CreateOne(ctx context.Context, input *invoices_domain.Input) error {

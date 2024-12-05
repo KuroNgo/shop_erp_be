@@ -7,7 +7,7 @@ This project is learn how to build Clean Architecture, ERP system and use Servic
 
 ## Run Programming
 How to run this project?
-We can run this Go Backend Clean Architecture project with or without Docker. Here, I am providing both ways to run this project.
+We can run this shop ERP project with or without Docker. Here, I am providing both ways to run this project.
 **For security reasons, you need to rename example.env to app.env and customize this file accordingly**
 
 #### Run without Docker

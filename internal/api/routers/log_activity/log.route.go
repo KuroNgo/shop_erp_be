@@ -42,5 +42,5 @@ func ActivityRoute(env *config.Database, timeout time.Duration, db *mongo.Databa
 	}
 
 	router := group.Group("/activity")
-	router.GET("/fetch", activity.GetAll)
+	router.GET("/get/all", activity.GetAll)
 }

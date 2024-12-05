@@ -1,1 +1,1 @@
-package usecase
+package company_usecase

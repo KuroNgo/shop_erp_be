@@ -237,7 +237,7 @@ const docTemplate = `{
                 "responses": {}
             }
         },
-        "/api/v1/activity-log/get/all": {
+        "/api/v1/activity/get/all": {
             "get": {
                 "security": [
                     {

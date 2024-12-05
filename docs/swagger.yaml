@@ -677,7 +677,7 @@ paths:
       summary: Create Inventory Information
       tags:
       - Inventory
-  /api/v1/activity-log/get/all:
+  /api/v1/activity/get/all:
     get:
       consumes:
       - application/json
