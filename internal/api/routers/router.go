@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 	"shop_erp_mono/internal/api/routers/accounting_management"
+	helper_route "shop_erp_mono/internal/api/routers/helper"
 	"shop_erp_mono/internal/api/routers/human_resources_management"
 	"shop_erp_mono/internal/api/routers/log_activity"
 	"shop_erp_mono/internal/api/routers/sales_and_distributing_management"
@@ -23,6 +24,7 @@ func SetUp(env *config.Database, cr *cronjob.CronScheduler, timeout time.Duratio
 	accounting_management.SetUp(env, client, timeout, db, gin, cacheTTL)
 	sales_and_distributing_management.SetUp(env, client, timeout, db, gin, cacheTTL)
 	warehouse_management.SetUp(env, client, timeout, db, gin, cacheTTL)
+	helper_route.HelperRouter(env, cr, gin.Group("/api/v1"))
 
 	err := DataSeeds(context.Background(), client)
 	if err != nil {

@@ -237,6 +237,27 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/api/v1/activity-log/get/all": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves the activity log's information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Log"
+                ],
+                "summary": "Get Activity Log Information",
+                "responses": {}
+            }
+        },
         "/api/v1/attendances/_id": {
             "put": {
                 "security": [
@@ -2127,6 +2148,27 @@ const docTemplate = `{
                         }
                     }
                 ],
+                "responses": {}
+            }
+        },
+        "/api/v1/helper/cron/count": {
+            "get": {
+                "security": [
+                    {
+                        "CookieAuth": []
+                    }
+                ],
+                "description": "Retrieves Number Of the Cron",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cronjob"
+                ],
+                "summary": "Get Number Of the Cron",
                 "responses": {}
             }
         },
@@ -5418,6 +5460,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "employee": {
+                    "type": "string"
+                },
+                "reason": {
                     "type": "string"
                 },
                 "status": {

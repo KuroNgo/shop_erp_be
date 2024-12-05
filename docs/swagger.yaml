@@ -21,6 +21,8 @@ definitions:
         type: string
       employee:
         type: string
+      reason:
+        type: string
       status:
         description: 'Example values: "Present", "Leave", "Sick"'
         type: string
@@ -675,6 +677,19 @@ paths:
       summary: Create Inventory Information
       tags:
       - Inventory
+  /api/v1/activity-log/get/all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the activity log's information
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get Activity Log Information
+      tags:
+      - Log
   /api/v1/attendances/_id:
     delete:
       description: Deletes the attendance's information by ID
@@ -1884,6 +1899,19 @@ paths:
       summary: Update Employee Information
       tags:
       - Employee
+  /api/v1/helper/cron/count:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves Number Of the Cron
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - CookieAuth: []
+      summary: Get Number Of the Cron
+      tags:
+      - Cronjob
   /api/v1/inventory/{_id}:
     get:
       consumes:

@@ -7,6 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	activitylogdomain "shop_erp_mono/internal/domain/activity_log"
+	"time"
 )
 
 type logRepository struct {
@@ -124,6 +125,38 @@ func (l *logRepository) GetAll(ctx context.Context) ([]activitylogdomain.Activit
 
 	// Check for any errors encountered during iteration
 	if err = cursor.Err(); err != nil {
+		return nil, err
+	}
+
+	return logs, nil
+}
+
+func (l *logRepository) GetAllByMonth(ctx context.Context, startDate time.Time, endDate time.Time) ([]activitylogdomain.ActivityLog, error) {
+	logCollection := l.database.Collection(l.logCollection)
+
+	filter := bson.M{
+		"timestamp": bson.M{
+			"$gte": startDate,
+			"$lt":  endDate,
+		},
+	}
+
+	cursor, err := logCollection.Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var logs []activitylogdomain.ActivityLog
+	for cursor.Next(ctx) {
+		var log activitylogdomain.ActivityLog
+		if err := cursor.Decode(&log); err != nil {
+			return nil, err
+		}
+		logs = append(logs, log)
+	}
+
+	if err := cursor.Err(); err != nil {
 		return nil, err
 	}
 

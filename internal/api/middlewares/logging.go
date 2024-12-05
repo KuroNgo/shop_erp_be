@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -31,8 +30,8 @@ func StructuredLogger(logger *zerolog.Logger, activity *log_activity_controller.
 		expireValue := currentTime.Add(expireDuration)
 
 		if ctx.Writer.Status() >= 500 || ctx.Errors != nil || (param.Method == "DELETE" && ctx.Writer.Status() == 200) {
-			currentUser, _ := ctx.Get("currentUser")
-			user, _ := activity.UserUseCase.GetByID(ctx, fmt.Sprintf("%s", currentUser))
+			//currentUser, _ := ctx.Get("currentUser")
+			//user, _ := activity.UserUseCase.GetByID(ctx, fmt.Sprintf("%s", currentUser))
 
 			param.Latency = time.Since(start).Truncate(time.Millisecond)
 			param.StatusCode = ctx.Writer.Status()
@@ -48,9 +47,9 @@ func StructuredLogger(logger *zerolog.Logger, activity *log_activity_controller.
 				Msg(param.ErrorMessage)
 
 			newLog := &activity_log_domain.ActivityLog{
-				LogID:        primitive.NewObjectID(),
-				UserID:       user.User.ID,
-				ClientIP:     param.ClientIP,
+				LogID: primitive.NewObjectID(),
+				//UserID:       user.User.ID,
+				//ClientIP:     param.ClientIP,
 				Method:       param.Method,
 				StatusCode:   param.StatusCode,
 				BodySize:     ctx.Writer.Size(),

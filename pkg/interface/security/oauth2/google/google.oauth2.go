@@ -35,7 +35,7 @@ func SignJWT(userInfo map[string]interface{}) (string, error) {
 		"verified_email": userInfo["verified_email"],
 		"locale":         userInfo["locale"],
 		"phone":          userInfo["phone"],
-		"iss":            "FEIT | Fluent English for IT",
+		"iss":            "KPA | ERP Solution",
 		"exp":            time.Now().Add(time.Hour * 24 * 30).Unix(), // 30 days
 		// Add other claims as needed
 	}

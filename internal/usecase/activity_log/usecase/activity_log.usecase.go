@@ -45,23 +45,6 @@ func (a *activityLogUseCase) CreateOne(ctx context.Context, activityLog *activit
 	return nil
 }
 
-func (a *activityLogUseCase) DeleteOne(ctx context.Context, id string) error {
-	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
-	defer cancel()
-
-	logID, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return err
-	}
-
-	err = a.activityLogRepository.DeleteOne(ctx, logID)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func (a *activityLogUseCase) GetByID(ctx context.Context, id string) (activitylogdomain.Response, error) {
 	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
 	defer cancel()
@@ -178,7 +161,7 @@ func (a *activityLogUseCase) GetAll(ctx context.Context) ([]activitylogdomain.Re
 
 	data, err := a.cache.Get("logs")
 	if err != nil {
-		log.Printf("failed to get departments cache: %v", err)
+		log.Printf("failed to get logs cache: %v", err)
 	}
 
 	if data != nil {
@@ -229,7 +212,75 @@ func (a *activityLogUseCase) GetAll(ctx context.Context) ([]activitylogdomain.Re
 		return nil, err
 	}
 
-	err = a.cache.Set("departments_deleted", data)
+	err = a.cache.Set("logs", data)
+	if err != nil {
+		log.Printf("failed to set logs cache: %v", err)
+	}
+
+	return outputs, nil
+}
+
+func (a *activityLogUseCase) GetAllByMonth(ctx context.Context, startDate time.Time, endDate time.Time) ([]activitylogdomain.Response, error) {
+	ctx, cancel := context.WithTimeout(ctx, a.contextTimeout)
+	defer cancel()
+
+	startDateStr := startDate.Format("2006-01-02 15:04:05")
+	endDateStr := endDate.Format("2006-01-02 15:04:05")
+
+	data, err := a.cache.Get(startDateStr + endDateStr)
+	if err != nil {
+		log.Printf("failed to get departments cache: %v", err)
+	}
+
+	if data != nil {
+		var response []activitylogdomain.Response
+		err = json.Unmarshal(data, &response)
+		if err != nil {
+			return nil, err
+		}
+		return response, nil
+	}
+
+	activityData, err := a.activityLogRepository.GetAllByMonth(ctx, startDate, endDate)
+	if err != nil {
+		return nil, err
+	}
+
+	var outputs []activitylogdomain.Response
+	var users []string
+	var employees []string
+	outputs = make([]activitylogdomain.Response, 0, len(activityData))
+	for _, activity := range activityData {
+		for _, userID := range activity.UserID {
+			userData, err := a.userRepository.GetByID(ctx, userID)
+			if err != nil {
+				return nil, err
+			}
+
+			employeeData, err := a.employeeRepository.GetByID(ctx, userData.EmployeeID)
+			if err != nil {
+				return nil, err
+			}
+
+			users = append(users, userData.Username)
+			employees = append(employees, employeeData.FirstName+employeeData.LastName)
+		}
+
+		response := activitylogdomain.Response{
+			ActivityLog: activity,
+			Username:    users,
+			Employee:    employees,
+		}
+
+		outputs = append(outputs, response)
+	}
+
+	data, err = json.Marshal(outputs)
+	if err != nil {
+		return nil, err
+	}
+
+	err = a.cache.Set(startDateStr+endDateStr, data)
 	if err != nil {
 		log.Printf("failed to set departments cache: %v", err)
 	}
