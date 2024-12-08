@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/allegro/bigcache/v3"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"log"
 	customerdomain "shop_erp_mono/internal/domain/sales_and_distribution_management/customer"
 	"shop_erp_mono/internal/usecase/sales_and_distribution_management/customer/validate"
 	"time"
@@ -45,9 +46,16 @@ func (c *customerUseCase) CreateOne(ctx context.Context, input *customerdomain.I
 		UpdatedAt:   time.Now(),
 	}
 
-	_ = c.cache.Delete("customers")
+	err := c.customerRepository.CreateOne(ctx, customer)
+	if err != nil {
+		return err
+	}
 
-	return c.customerRepository.CreateOne(ctx, customer)
+	if err = c.cache.Delete("customers"); err != nil {
+		log.Printf("failed to delete customer cache: %v", err)
+	}
+
+	return nil
 }
 
 func (c *customerUseCase) DeleteOne(ctx context.Context, id string) error {
@@ -59,10 +67,19 @@ func (c *customerUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
-	_ = c.cache.Delete(id)
-	_ = c.cache.Delete("customers")
+	err = c.customerRepository.DeleteOne(ctx, customerID)
+	if err != nil {
+		return err
+	}
 
-	return c.customerRepository.DeleteOne(ctx, customerID)
+	if err = c.cache.Delete(id); err != nil {
+		log.Printf("failed to delete customer cache: %v", err)
+	}
+	if err = c.cache.Delete("customers"); err != nil {
+		log.Printf("failed to delete customer cache: %v", err)
+	}
+
+	return nil
 }
 
 func (c *customerUseCase) UpdateOne(ctx context.Context, id string, input *customerdomain.Input) error {
@@ -90,10 +107,19 @@ func (c *customerUseCase) UpdateOne(ctx context.Context, id string, input *custo
 		UpdatedAt:   time.Now(),
 	}
 
-	_ = c.cache.Delete(id)
-	_ = c.cache.Delete("customers")
+	err = c.customerRepository.UpdateOne(ctx, customer)
+	if err != nil {
+		return err
+	}
 
-	return c.customerRepository.UpdateOne(ctx, customer)
+	if err = c.cache.Delete(id); err != nil {
+		log.Printf("failed to delete customer cache: %v", err)
+	}
+	if err = c.cache.Delete("customers"); err != nil {
+		log.Printf("failed to delete customer cache: %v", err)
+	}
+
+	return nil
 }
 
 func (c *customerUseCase) GetOneByID(ctx context.Context, id string) (*customerdomain.CustomerResponse, error) {

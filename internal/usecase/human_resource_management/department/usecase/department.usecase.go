@@ -869,14 +869,24 @@ func (d *departmentUseCase) CountManagerExist(ctx context.Context, managerID pri
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
 
-	return d.departmentRepository.CountManagerExist(ctx, managerID)
+	count, err := d.departmentRepository.CountManagerExist(ctx, managerID)
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
 }
 
 func (d *departmentUseCase) CountDepartment(ctx context.Context) (int64, error) {
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
 
-	return d.departmentRepository.CountDepartment(ctx)
+	countDepartment, err := d.departmentRepository.CountDepartment(ctx)
+	if err != nil {
+		return 0, err
+	}
+
+	return countDepartment, nil
 }
 
 func (d *departmentUseCase) LifecycleDepartment(ctx context.Context) error {

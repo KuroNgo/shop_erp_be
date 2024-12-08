@@ -58,11 +58,16 @@ func (c *contractUseCase) CreateOne(ctx context.Context, input *contractsdomain.
 		UpdatedAt:    time.Now(),
 	}
 
+	err = c.contractRepository.CreateOne(ctx, &contract)
+	if err != nil {
+		return err
+	}
+
 	if err = c.cache.Delete("contracts"); err != nil {
 		log.Printf("failed to delete contracts cache: %v", err)
 	}
 
-	return c.contractRepository.CreateOne(ctx, &contract)
+	return nil
 }
 
 func (c *contractUseCase) DeleteOne(ctx context.Context, id string) error {
@@ -74,6 +79,11 @@ func (c *contractUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
+	err = c.contractRepository.DeleteOne(ctx, contractID)
+	if err != nil {
+		return err
+	}
+
 	if err = c.cache.Delete(id); err != nil {
 		log.Printf("failed to delete contract's id cache: %v", err)
 	}
@@ -81,7 +91,7 @@ func (c *contractUseCase) DeleteOne(ctx context.Context, id string) error {
 		log.Printf("failed to delete contracts cache: %v", err)
 	}
 
-	return c.contractRepository.DeleteOne(ctx, contractID)
+	return nil
 }
 
 func (c *contractUseCase) UpdateOne(ctx context.Context, id string, input *contractsdomain.Input) error {
@@ -115,6 +125,11 @@ func (c *contractUseCase) UpdateOne(ctx context.Context, id string, input *contr
 		Status:       input.Status,
 	}
 
+	err = c.contractRepository.UpdateOne(ctx, contractID, &contract)
+	if err != nil {
+		return err
+	}
+
 	if err = c.cache.Delete(id); err != nil {
 		log.Printf("failed to delete contract's id cache: %v", err)
 	}
@@ -122,7 +137,7 @@ func (c *contractUseCase) UpdateOne(ctx context.Context, id string, input *contr
 		log.Printf("failed to delete contracts cache: %v", err)
 	}
 
-	return c.contractRepository.UpdateOne(ctx, contractID, &contract)
+	return nil
 }
 
 func (c *contractUseCase) GetByID(ctx context.Context, id string) (contractsdomain.Output, error) {

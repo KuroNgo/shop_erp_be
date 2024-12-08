@@ -55,11 +55,16 @@ func (a *attendanceUseCase) CreateOne(ctx context.Context, input *attendancedoma
 		UpdatedAt:    time.Now(),
 	}
 
+	err = a.attendanceRepository.CreateOne(ctx, &attendance)
+	if err != nil {
+		return err
+	}
+
 	if err = a.cache.Delete("attendances"); err != nil {
 		log.Printf("failed to delete attendances cache: %v", err)
 	}
 
-	return a.attendanceRepository.CreateOne(ctx, &attendance)
+	return nil
 }
 
 func (a *attendanceUseCase) DeleteOne(ctx context.Context, id string) error {
@@ -71,6 +76,11 @@ func (a *attendanceUseCase) DeleteOne(ctx context.Context, id string) error {
 		return err
 	}
 
+	err = a.attendanceRepository.DeleteOne(ctx, attendanceID)
+	if err != nil {
+		return err
+	}
+
 	if err = a.cache.Delete(id); err != nil {
 		log.Printf("failed to delete a attendance's id cache: %v", err)
 	}
@@ -78,7 +88,7 @@ func (a *attendanceUseCase) DeleteOne(ctx context.Context, id string) error {
 		log.Printf("failed to delete attendances cache: %v", err)
 	}
 
-	return a.attendanceRepository.DeleteOne(ctx, attendanceID)
+	return nil
 }
 
 func (a *attendanceUseCase) UpdateOne(ctx context.Context, id string, input *attendancedomain.Input) error {
@@ -114,6 +124,11 @@ func (a *attendanceUseCase) UpdateOne(ctx context.Context, id string, input *att
 		UpdatedAt:    time.Now(),
 	}
 
+	err = a.attendanceRepository.UpdateOne(ctx, &attendance)
+	if err != nil {
+		return err
+	}
+
 	if err = a.cache.Delete(id); err != nil {
 		log.Printf("failed to delete a attendance's id cache: %v", err)
 	}
@@ -121,7 +136,7 @@ func (a *attendanceUseCase) UpdateOne(ctx context.Context, id string, input *att
 		log.Printf("failed to delete attendances cache: %v", err)
 	}
 
-	return a.attendanceRepository.UpdateOne(ctx, &attendance)
+	return nil
 }
 
 func (a *attendanceUseCase) GetByID(ctx context.Context, id string) (attendancedomain.Output, error) {

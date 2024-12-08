@@ -59,3 +59,8 @@ func (cs *CronScheduler) RemoveJob(name string) error {
 func (cs *CronScheduler) GetJobCount() int {
 	return len(cs.entryMap)
 }
+
+func (cs *CronScheduler) GenerateCronExpression(day, month, hour, minute, dayOfWeek int) string {
+	log.Printf("Implemented job worker")
+	return fmt.Sprintf("%d %d %d %d %d", minute, hour, day, month, dayOfWeek)
+}

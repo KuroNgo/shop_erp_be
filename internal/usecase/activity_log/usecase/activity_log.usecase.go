@@ -91,7 +91,7 @@ func (a *activityLogUseCase) GetByEmployeeID(ctx context.Context, idEmployee str
 
 	data, err := a.cache.Get(idEmployee)
 	if err != nil {
-		log.Printf("failed to get departments cache: %v", err)
+		log.Printf("failed to get logs cache: %v", err)
 	}
 
 	if data != nil {
@@ -147,9 +147,9 @@ func (a *activityLogUseCase) GetByEmployeeID(ctx context.Context, idEmployee str
 		return nil, err
 	}
 
-	err = a.cache.Set("departments_deleted", data)
+	err = a.cache.Set(idEmployee, data)
 	if err != nil {
-		log.Printf("failed to set departments cache: %v", err)
+		log.Printf("failed to set logs cache: %v", err)
 	}
 
 	return outputs, nil
@@ -229,7 +229,7 @@ func (a *activityLogUseCase) GetAllByMonth(ctx context.Context, startDate time.T
 
 	data, err := a.cache.Get(startDateStr + endDateStr)
 	if err != nil {
-		log.Printf("failed to get departments cache: %v", err)
+		log.Printf("failed to get logs cache: %v", err)
 	}
 
 	if data != nil {
@@ -282,7 +282,7 @@ func (a *activityLogUseCase) GetAllByMonth(ctx context.Context, startDate time.T
 
 	err = a.cache.Set(startDateStr+endDateStr, data)
 	if err != nil {
-		log.Printf("failed to set departments cache: %v", err)
+		log.Printf("failed to set logs cache: %v", err)
 	}
 
 	return outputs, nil

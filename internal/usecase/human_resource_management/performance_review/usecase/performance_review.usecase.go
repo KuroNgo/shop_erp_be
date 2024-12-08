@@ -56,11 +56,16 @@ func (p *performanceReviewUseCase) CreateOneWithEmailEmployee(ctx context.Contex
 		UpdatedAt:        time.Now(),
 	}
 
+	err = p.performanceReviewRepository.CreateOne(ctx, performanceReview)
+	if err != nil {
+		return err
+	}
+
 	if err = p.cache.Delete("performanceReviews"); err != nil {
 		log.Printf("failed to delete performance review cache %s", err)
 	}
 
-	return p.performanceReviewRepository.CreateOne(ctx, performanceReview)
+	return nil
 }
 
 func (p *performanceReviewUseCase) CreateOneWithIDEmployee(ctx context.Context, input *performancereviewdomain.Input2) error {
@@ -101,11 +106,16 @@ func (p *performanceReviewUseCase) CreateOneWithIDEmployee(ctx context.Context, 
 		UpdatedAt:        time.Now(),
 	}
 
+	err = p.performanceReviewRepository.CreateOne(ctx, performanceReview)
+	if err != nil {
+		return err
+	}
+
 	if err := p.cache.Delete("performanceReviews"); err != nil {
 		log.Printf("failed to delete performance review cache %s", err)
 	}
 
-	return p.performanceReviewRepository.CreateOne(ctx, performanceReview)
+	return nil
 }
 
 func (p *performanceReviewUseCase) DeleteOne(ctx context.Context, id string) error {
@@ -121,12 +131,18 @@ func (p *performanceReviewUseCase) DeleteOne(ctx context.Context, id string) err
 	if err != nil {
 		log.Printf("failed to delete performance review cache %s", err)
 	}
+
+	err = p.performanceReviewRepository.DeleteOne(ctx, performanceReviewID)
+	if err != nil {
+		return err
+	}
+
 	err = p.cache.Delete(id)
 	if err != nil {
 		log.Printf("failed to delete performance review cache %s", err)
 	}
 
-	return p.performanceReviewRepository.DeleteOne(ctx, performanceReviewID)
+	return nil
 }
 
 func (p *performanceReviewUseCase) UpdateOneWithEmailEmployee(ctx context.Context, id string, input *performancereviewdomain.Input1) error {
@@ -157,6 +173,11 @@ func (p *performanceReviewUseCase) UpdateOneWithEmailEmployee(ctx context.Contex
 		UpdatedAt:        time.Now(),
 	}
 
+	err = p.performanceReviewRepository.UpdateOne(ctx, performanceReviewID, performanceReview)
+	if err != nil {
+		return err
+	}
+
 	err = p.cache.Delete("performanceReviews")
 	if err != nil {
 		log.Printf("failed to delete performance review cache %s", err)
@@ -166,7 +187,7 @@ func (p *performanceReviewUseCase) UpdateOneWithEmailEmployee(ctx context.Contex
 		log.Printf("failed to delete performance review cache %s", err)
 	}
 
-	return p.performanceReviewRepository.UpdateOne(ctx, performanceReviewID, performanceReview)
+	return nil
 }
 
 func (p *performanceReviewUseCase) UpdateOneWithIDEmployee(ctx context.Context, id string, input *performancereviewdomain.Input2) error {
@@ -207,6 +228,11 @@ func (p *performanceReviewUseCase) UpdateOneWithIDEmployee(ctx context.Context, 
 		UpdatedAt:        time.Now(),
 	}
 
+	err = p.performanceReviewRepository.UpdateOne(ctx, performanceReviewID, performanceReview)
+	if err != nil {
+		return err
+	}
+
 	err = p.cache.Delete("performanceReviews")
 	if err != nil {
 		log.Printf("failed to delete performance review cache %s", err)
@@ -216,7 +242,7 @@ func (p *performanceReviewUseCase) UpdateOneWithIDEmployee(ctx context.Context, 
 		log.Printf("failed to delete performance review cache %s", err)
 	}
 
-	return p.performanceReviewRepository.UpdateOne(ctx, performanceReviewID, performanceReview)
+	return nil
 }
 
 func (p *performanceReviewUseCase) GetByID(ctx context.Context, id string) (performancereviewdomain.Output, error) {

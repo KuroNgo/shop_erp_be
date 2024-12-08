@@ -52,12 +52,17 @@ func (b *benefitUseCase) CreateOne(ctx context.Context, input *benefitsdomain.In
 		UpdatedAt:   time.Now(),
 	}
 
+	err = b.benefitRepository.CreateOne(ctx, &benefit)
+	if err != nil {
+		return err
+	}
+
 	err = b.cache.Delete("benefits")
 	if err != nil {
 		log.Printf("failed to delete benefits cache: %v", err)
 	}
 
-	return b.benefitRepository.CreateOne(ctx, &benefit)
+	return nil
 }
 
 func (b *benefitUseCase) DeleteOne(ctx context.Context, id string) error {
@@ -65,6 +70,11 @@ func (b *benefitUseCase) DeleteOne(ctx context.Context, id string) error {
 	defer cancel()
 
 	benefitID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
+
+	err = b.benefitRepository.DeleteOne(ctx, benefitID)
 	if err != nil {
 		return err
 	}
@@ -83,7 +93,7 @@ func (b *benefitUseCase) DeleteOne(ctx context.Context, id string) error {
 		log.Printf("failed to delete benefits cache: %v", err)
 	}
 
-	return b.benefitRepository.DeleteOne(ctx, benefitID)
+	return nil
 }
 
 func (b *benefitUseCase) UpdateOne(ctx context.Context, id string, input *benefitsdomain.Input) error {
@@ -112,6 +122,11 @@ func (b *benefitUseCase) UpdateOne(ctx context.Context, id string, input *benefi
 		EndDate:     input.EndDate,
 	}
 
+	err = b.benefitRepository.UpdateOne(ctx, benefitID, &benefit)
+	if err != nil {
+		return err
+	}
+
 	err = b.cache.Delete("benefits")
 	if err != nil {
 		log.Printf("failed to delete benefits cache: %v", err)
@@ -121,7 +136,7 @@ func (b *benefitUseCase) UpdateOne(ctx context.Context, id string, input *benefi
 		log.Printf("failed to delete benefits cache: %v", err)
 	}
 
-	return b.benefitRepository.UpdateOne(ctx, benefitID, &benefit)
+	return nil
 }
 
 func (b *benefitUseCase) GetByID(ctx context.Context, id string) (benefitsdomain.Output, error) {
@@ -184,7 +199,7 @@ func (b *benefitUseCase) GetByEmail(ctx context.Context, email string) (benefits
 	}
 	if data != nil {
 		var response benefitsdomain.Output
-		err := json.Unmarshal(data, &response)
+		err = json.Unmarshal(data, &response)
 		if err != nil {
 			return benefitsdomain.Output{}, err
 		}

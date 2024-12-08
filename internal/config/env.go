@@ -24,6 +24,7 @@ type Database struct {
 	ServerAddress  string `mapstructure:"SERVER_ADDRESS"`
 	ContextTimeout int    `mapstructure:"CONTEXT_TIMEOUT"`
 
+	Token                  string        `mapstructure:"TOKEN"`
 	AccessTokenPrivateKey  string        `mapstructure:"ACCESS_TOKEN_PRIVATE_KEY"`
 	AccessTokenPublicKey   string        `mapstructure:"ACCESS_TOKEN_PUBLIC_KEY"`
 	RefreshTokenPrivateKey string        `mapstructure:"REFRESH_TOKEN_PRIVATE_KEY"`

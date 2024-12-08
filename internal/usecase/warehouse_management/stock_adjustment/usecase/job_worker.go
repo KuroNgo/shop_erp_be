@@ -1,0 +1,1 @@
+package stock_adjustment_usecase
